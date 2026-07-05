@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мовограй</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-mode="explain">
+  <main class="app">
+    <section id="menuScreen" class="screen active">
+      <div class="card center bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="decor-dot dot-c"></div>
+        <div class="card-inner">
+          <div class="logo">🎲</div>
+          <h1>Мовограй</h1>
+          <p class="subtitle">Оберіть режим гри й розпочніть веселу розмову.</p>
+
+          <div id="modeList" class="mode-grid"></div>
+
+          <div class="rules-box">
+            <h2>Правила</h2>
+            <p>
+              Один гравець бачить слово на екрані й пояснює його іншим.
+              Саме слово або його частини називати не можна.
+            </p>
+            <p>
+              Якщо слово вгадали — натисни “Вгадано”.
+              Якщо складне — “Пропустити”.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen">
+      <div class="settings-sticky-panel">
+        <div class="settings-action-row">
+          <button id="backToMenuBtn" class="secondary-btn settings-back-btn">Назад</button>
+          <button id="startRoundBtn" class="primary-btn settings-start-btn start-round-btn">Старт гри</button>
+        </div>
+        <p id="settingsMessage" class="message settings-message" role="alert" aria-live="polite"></p>
+      </div>
+
+      <div class="card bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1>Налаштування</h1>
+          <p id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</p>
+
+          <h2>Категорія</h2>
+          <div id="categoryList" class="button-grid"></div>
+
+          <h2>Складність</h2>
+          <div class="settings-chip-grid">
+            <button class="difficulty-btn setting-chip selected" data-difficulty="easy">Легко</button>
+            <button class="difficulty-btn setting-chip selected" data-difficulty="medium">Середньо</button>
+            <button class="difficulty-btn setting-chip selected" data-difficulty="hard">Складно</button>
+          </div>
+
+          <h2>Словосполучення</h2>
+          <div class="settings-chip-grid">
+            <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
+          </div>
+
+          <h2>Час раунду (сек)</h2>
+          <div class="settings-chip-grid">
+            <button class="duration-btn setting-chip" data-seconds="30">30</button>
+            <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
+            <button class="duration-btn setting-chip" data-seconds="90">90</button>
+            <button class="duration-btn setting-chip" data-seconds="120">120</button>
+          </div>
+
+          <h2>Ціль гри (кількість слів)</h2>
+          <div class="settings-chip-grid">
+            <button class="target-btn setting-chip" data-target="20">20</button>
+            <button class="target-btn setting-chip selected" data-target="30">30</button>
+            <button class="target-btn setting-chip" data-target="50">50</button>
+            <button class="target-btn setting-chip" data-target="100">100</button>
+          </div>
+
+          <h2>Команди</h2>
+          <div class="settings-chip-grid">
+            <button class="team-count-btn setting-chip selected" data-count="2">2</button>
+            <button class="team-count-btn setting-chip" data-count="3">3</button>
+            <button class="team-count-btn setting-chip" data-count="4">4</button>
+          </div>
+
+          <div id="teamNameFields" class="team-name-fields"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen">
+      <div class="game-layout bubble-panel">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-c"></div>
+        <div class="panel-inner">
+          <header class="game-header">
+            <div>
+              <span class="small-label">Режим</span>
+              <strong id="gameModeTitle">Поясни слово (Alias)</strong>
+            </div>
+
+            <div>
+              <span class="small-label">Команда</span>
+              <strong id="gameTeamName">Команда 1</strong>
+            </div>
+
+            <div>
+              <span class="small-label">Категорія</span>
+              <strong id="gameCategoryName">—</strong>
+            </div>
+
+            <div class="timer">
+              <span id="timerText">60</span>
+            </div>
+          </header>
+
+          <div class="score-row">
+            <div class="score-box">
+              <span id="scoreText">0</span>
+              <small>вгадано</small>
+            </div>
+
+            <div class="score-box">
+              <span id="skippedText">0</span>
+              <small>пропущено</small>
+            </div>
+          </div>
+
+          <div class="game-progress-block">
+            <div class="progress-meta">
+              <span id="teamProgressText">0 / 30</span>
+              <span class="progress-label">Ціль команди</span>
+            </div>
+            <div class="progress-bar"><span id="teamProgressFill"></span></div>
+          </div>
+
+          <div class="game-progress-block">
+            <div class="progress-meta">
+              <span id="roundProgressText">60 / 60</span>
+              <span class="progress-label">Час раунду</span>
+            </div>
+            <div class="progress-bar"><span id="roundProgressFill"></span></div>
+          </div>
+
+          <div id="teamScoreBoard" class="team-score-board"></div>
+
+          <div id="wordCard" class="word-card">
+            <span id="wordCategoryBadge" class="word-category-badge">Тема</span>
+            <p id="wordText">Слово</p>
+            <span class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>
+          </div>
+
+          <div class="game-buttons">
+            <button id="skipBtn" class="skip-btn">Пропустити</button>
+            <button id="correctBtn" class="correct-btn">Вгадано</button>
+          </div>
+
+          <button id="finishEarlyBtn" class="secondary-btn">Завершити раунд</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen">
+      <div class="card center bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1>Раунд завершено</h1>
+
+          <div class="result-grid">
+            <div class="result-item">
+              <span id="finalScoreText">0</span>
+              <small>вгадано</small>
+            </div>
+
+            <div class="result-item">
+              <span id="finalSkippedText">0</span>
+              <small>пропущено</small>
+            </div>
+          </div>
+
+          <p id="resultPhrase" class="subtitle"></p>
+
+          <div id="resultTeamScoreBoard" class="team-score-board"></div>
+
+          <button id="nextTeamBtn" class="primary-btn">Наступна команда</button>
+          <button id="resultToMenuBtn" class="secondary-btn">У головне меню</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="winnerScreen" class="screen">
+      <div class="card center bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1 id="winnerTitle">Гру завершено</h1>
+          <p id="winnerSubtitle" class="subtitle"></p>
+          <div id="winnerHero" class="winner-hero"></div>
+          <div id="winnerTeamsList" class="winner-teams-list"></div>
+          <div id="winnerScoreBoard" class="team-score-board"></div>
+          <button id="playAgainBtn" class="primary-btn">Нова гра</button>
+          <button id="winnerToMenuBtn" class="secondary-btn">У головне меню</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
