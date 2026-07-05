@@ -263,15 +263,6 @@ h2 {
   box-shadow: 0 8px 18px rgba(54, 49, 94, 0.14);
 }
 
-.menu-play-btn {
-  display: inline-flex;
-  width: auto;
-  min-width: 148px;
-  justify-content: center;
-  margin-top: 18px;
-  text-decoration: none;
-}
-
 .menu-mode-note {
   margin: 12px 0 0;
   color: var(--color-muted);
