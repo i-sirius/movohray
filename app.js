@@ -9,6 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
+const DATA_VERSION = "0.3.2";
 const modeCategoryCache = {};
 let selectedTeamCount = 2;
 let teamScores = [];
@@ -166,7 +167,8 @@ async function loadModeCategories(modeId = selectedMode) {
   }
 
   try {
-    const response = await fetch(mode.dataFile);
+    const dictionaryUrl = `${mode.dataFile}?v=${encodeURIComponent(DATA_VERSION)}`;
+    const response = await fetch(dictionaryUrl);
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
