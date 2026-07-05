@@ -3,6 +3,7 @@ let selectedCategory = null;
 let selectedCategories = [];
 let selectedDifficulties = ["easy", "medium", "hard"];
 let excludePhrases = false;
+let areCategoriesExpanded = false;
 let selectedCharadesFormat = "single";
 let selectedCharadesKind = "noun";
 let selectedDuration = 60;
@@ -38,6 +39,7 @@ const modeConfigs = [
     description: "Пояснюй слово, не називаючи його.",
     dataFile: "words.json",
     cardHint: "",
+    defaultNoPhrases: false,
     available: true,
   },
   {
@@ -46,6 +48,7 @@ const modeConfigs = [
     description: "Показуй завдання жестами. Говорити не можна.",
     dataFile: "crocodile.json",
     cardHint: "Показуй без слів",
+    defaultNoPhrases: true,
     available: true,
   },
   {
@@ -150,6 +153,7 @@ async function init() {
   renderTeamNameInputs();
   resetTeamScores();
   updateModeLabels();
+  syncPhraseFilterButton();
   setupEvents();
 }
 
@@ -238,8 +242,7 @@ function setupEvents() {
   if (phraseFilterBtn) {
     phraseFilterBtn.addEventListener("click", () => {
       excludePhrases = !excludePhrases;
-      phraseFilterBtn.classList.toggle("selected", excludePhrases);
-      phraseFilterBtn.setAttribute("aria-pressed", String(excludePhrases));
+      syncPhraseFilterButton();
       renderCategories();
       settingsMessage.textContent = "";
     });
@@ -417,6 +420,9 @@ function renderModes() {
       selectedMode = mode.id;
       selectedCategories = [];
       selectedCategory = null;
+      areCategoriesExpanded = false;
+      excludePhrases = Boolean(mode.defaultNoPhrases);
+      syncPhraseFilterButton();
       if (mode.id === "charades") {
         selectedCharadesFormat = "single";
         selectedCharadesKind = "noun";
@@ -494,18 +500,27 @@ function syncCharadesOptionButtons() {
   });
 }
 
+function syncPhraseFilterButton() {
+  if (!phraseFilterBtn) {
+    return;
+  }
+
+  phraseFilterBtn.classList.toggle("selected", excludePhrases);
+  phraseFilterBtn.setAttribute("aria-pressed", String(excludePhrases));
+}
+
 function renderCategories() {
   if (!categoryList) {
     return;
   }
 
   categoryList.innerHTML = "";
-  categoryList.className = "category-list";
+  categoryList.className = "category-picker";
 
   const allButton = document.createElement("button");
   allButton.className = "category-btn all-categories-btn";
   allButton.type = "button";
-  allButton.textContent = `Усі теми (${getAllCategoriesAvailableCount()})`;
+  allButton.textContent = "Усі теми";
 
   if (selectedCategories.length === 0) {
     allButton.classList.add("selected");
@@ -518,7 +533,33 @@ function renderCategories() {
     settingsMessage.textContent = "";
   });
 
-  categoryList.appendChild(allButton);
+  const toggleButton = document.createElement("button");
+  toggleButton.className = "category-toggle-btn setting-chip";
+  toggleButton.type = "button";
+  toggleButton.textContent = areCategoriesExpanded ? "Сховати теми" : "Змінити теми";
+  toggleButton.setAttribute("aria-expanded", String(areCategoriesExpanded));
+
+  toggleButton.addEventListener("click", () => {
+    areCategoriesExpanded = !areCategoriesExpanded;
+    renderCategories();
+  });
+
+  const summary = document.createElement("p");
+  summary.className = "category-status";
+  summary.textContent = getSelectedCategoryStatus();
+
+  const controls = document.createElement("div");
+  controls.className = "category-picker-controls";
+  controls.appendChild(allButton);
+  controls.appendChild(toggleButton);
+
+  const themesWrap = document.createElement("div");
+  themesWrap.className = "category-list";
+  themesWrap.hidden = !areCategoriesExpanded;
+
+  categoryList.appendChild(controls);
+  categoryList.appendChild(summary);
+  categoryList.appendChild(themesWrap);
 
   categories.forEach((category) => {
     const button = document.createElement("button");
@@ -550,8 +591,26 @@ function renderCategories() {
       settingsMessage.textContent = "";
     });
 
-    categoryList.appendChild(button);
+    themesWrap.appendChild(button);
   });
+}
+
+function getSelectedCategoryStatus() {
+  if (selectedCategories.length === 0) {
+    return "Усі теми";
+  }
+
+  const firstNames = selectedCategories.slice(0, 3).map((category) => category.name).join(", ");
+
+  if (selectedCategories.length === 1) {
+    return `1 тема вибрана: ${firstNames}`;
+  }
+
+  if (selectedCategories.length < 5) {
+    return `${selectedCategories.length} теми вибрано: ${firstNames}`;
+  }
+
+  return `${selectedCategories.length} тем вибрано: ${firstNames}…`;
 }
 
 function getSelectedCategoryLabel() {
@@ -572,6 +631,115 @@ function getSelectedCategoryLabel() {
   }
 
   return "Кілька тем";
+}
+
+function getCompactCategoryNames(maxVisible = 3) {
+  if (selectedCategories.length === 0) {
+    return "";
+  }
+
+  const visibleNames = selectedCategories.slice(0, maxVisible).map((category) => category.name);
+  const remainingCount = selectedCategories.length - visibleNames.length;
+  const suffix = remainingCount > 0 ? ` +${remainingCount}` : "";
+  return `${visibleNames.join(", ")}${suffix}`;
+}
+
+function getSelectedDifficultyLabel() {
+  if (selectedDifficulties.length === 0 || selectedDifficulties.length === difficultyLevels.length) {
+    return "";
+  }
+
+  return selectedDifficulties.map((difficultyId) => getDifficultyName(difficultyId)).join(", ");
+}
+
+function getTaskKindLabel(kind = selectedCharadesKind) {
+  if (!isCharades()) {
+    return "";
+  }
+
+  const labels = {
+    noun: "Іменники",
+    action: "Дії",
+    phrase: "Фрази",
+    all: "Усе",
+  };
+
+  return labels[kind] || "";
+}
+
+function getCategorySummaryTitle() {
+  if (selectedCategories.length === 0) {
+    return "Категорії: Усі категорії";
+  }
+
+  if (selectedCategories.length === 1) {
+    return "Категорії: 1 категорія";
+  }
+
+  if (selectedCategories.length >= 2 && selectedCategories.length <= 4) {
+    return `Категорії: ${selectedCategories.length} категорії`;
+  }
+
+  return `Категорії: ${selectedCategories.length} категорій`;
+}
+
+function getCategorySummaryList() {
+  return getCompactCategoryNames(3);
+}
+
+function renderGameSummary() {
+  if (!gameCategoryName) {
+    return;
+  }
+
+  gameCategoryName.innerHTML = "";
+
+  const title = document.createElement("span");
+  title.className = "summary-title";
+  title.textContent = getCategorySummaryTitle();
+  gameCategoryName.appendChild(title);
+
+  const categoryListText = getCategorySummaryList();
+  if (categoryListText) {
+    const list = document.createElement("span");
+    list.className = "summary-list";
+    list.textContent = categoryListText;
+    gameCategoryName.appendChild(list);
+  }
+
+  const kindLabel = getTaskKindLabel();
+  if (kindLabel && isCharades()) {
+    const kindBadge = document.createElement("span");
+    kindBadge.className = "summary-kind-badge";
+    kindBadge.textContent = kindLabel;
+    gameCategoryName.appendChild(kindBadge);
+  }
+}
+
+function renderWordMeta(entry) {
+  if (!wordCategoryBadge) {
+    return;
+  }
+
+  wordCategoryBadge.innerHTML = "";
+
+  const categoryBadge = document.createElement("span");
+  categoryBadge.className = "word-meta-badge word-meta-category";
+  categoryBadge.textContent = `Категорія: ${entry.categoryName || "Тема"}`;
+  wordCategoryBadge.appendChild(categoryBadge);
+
+  const difficultyBadge = document.createElement("span");
+  difficultyBadge.className = "word-meta-badge word-meta-difficulty";
+  difficultyBadge.textContent = `Складність: ${entry.difficultyName || getDifficultyName(entry.difficulty || "medium")}`;
+  wordCategoryBadge.appendChild(difficultyBadge);
+
+  const kindLabel = getTaskKindLabel(entry.kind);
+  if (kindLabel && isCharades()) {
+    const kindBadge = document.createElement("span");
+    kindBadge.className = "word-meta-badge word-meta-kind";
+    kindBadge.textContent = `Тип: ${kindLabel}`;
+    wordCategoryBadge.appendChild(kindBadge);
+  }
 }
 
 function getSelectedButton(buttons) {
@@ -662,10 +830,6 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
 
 function getCategoryAvailableCount(category) {
   return getWordsFromCategoryByFilters(category).length;
-}
-
-function getAllCategoriesAvailableCount() {
-  return categories.reduce((total, category) => total + getCategoryAvailableCount(category), 0);
 }
 
 function getEffectiveSelectedCategories() {
@@ -809,7 +973,7 @@ function startRound() {
 
   deck = shuffleArray([...wordPool]);
 
-  gameCategoryName.textContent = getSelectedCategoryLabel();
+  renderGameSummary();
 
   currentTeamIndex = getNextTeamIndex();
   updateCurrentTeamDisplay();
@@ -855,7 +1019,7 @@ function startSingleCardGame() {
   }
 
   deck = shuffleArray([...wordPool]);
-  gameCategoryName.textContent = getSelectedCategoryLabel();
+  renderGameSummary();
   updateModeLabels();
   settingsMessage.textContent = "";
 
@@ -872,7 +1036,7 @@ function showNextWord() {
   const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
   wordText.textContent = currentWord;
-  wordCategoryBadge.textContent = `${nextEntry.categoryName || "Тема"} · ${nextEntry.difficultyName || getDifficultyName(nextEntry.difficulty || "medium")}`;
+  renderWordMeta(nextEntry);
 
   if (wordModeHint) {
     wordModeHint.textContent = mode.cardHint || "";

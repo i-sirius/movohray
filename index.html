@@ -48,8 +48,8 @@
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-b"></div>
           <div class="card-inner">
-            <h1>Налаштування</h1>
-            <p id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</p>
+            <p class="settings-eyebrow">Налаштування гри</p>
+            <h1 id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</h1>
             <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
 
           <div id="charadesFormatSection" class="charades-only settings-option-section" hidden>
@@ -124,24 +124,19 @@
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
         <div class="panel-inner">
+          <h1 id="gameModeTitle" class="game-mode-title">Поясни слово (Alias)</h1>
           <header class="game-header">
-            <div>
-              <span class="small-label">Режим</span>
-              <strong id="gameModeTitle">Поясни слово (Alias)</strong>
-            </div>
-
             <div class="timed-game-ui">
               <span class="small-label">Команда</span>
               <strong id="gameTeamName">Команда 1</strong>
             </div>
 
-            <div>
-              <span class="small-label">Категорія</span>
-              <strong id="gameCategoryName">—</strong>
-            </div>
-
             <div class="timer timed-game-ui">
               <span id="timerText">60</span>
+            </div>
+
+          <div class="game-category-summary">
+              <div id="gameCategoryName" class="game-category-summary-content">—</div>
             </div>
           </header>
 
@@ -176,7 +171,7 @@
           <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
 
           <div id="wordCard" class="word-card">
-            <span id="wordCategoryBadge" class="word-category-badge">Тема</span>
+            <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
             <span id="wordModeHint" class="word-mode-hint" hidden></span>
             <p id="wordText">Слово</p>
             <span id="swipeHint" class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>

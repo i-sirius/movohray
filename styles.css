@@ -245,6 +245,7 @@ h2 {
 .phrase-filter-btn,
 .charades-format-btn,
 .charades-kind-btn,
+.category-toggle-btn,
 .category-btn,
 .team-count-btn {
   width: 100%;
@@ -411,7 +412,21 @@ h2 {
 .mode-title {
   color: var(--accent);
   font-weight: 800;
-  margin: 8px 0 6px;
+  font-size: clamp(26px, 6vw, 36px);
+  line-height: 1.08;
+  margin: 4px 0 8px;
+}
+
+.settings-eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.76);
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .mode-description {
@@ -434,11 +449,31 @@ h2 {
   align-items: center;
 }
 
+.category-picker {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.category-picker-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
 .category-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 6px;
+  padding-top: 4px;
+}
+
+.category-status {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.35;
 }
 
 .category-btn,
@@ -448,6 +483,7 @@ h2 {
 .phrase-filter-btn,
 .charades-format-btn,
 .charades-kind-btn,
+.category-toggle-btn,
 .team-count-btn {
   background: #fffaf0;
   color: var(--ink);
@@ -498,6 +534,7 @@ h2 {
 .phrase-filter-btn:hover,
 .charades-format-btn:hover,
 .charades-kind-btn:hover,
+.category-toggle-btn:hover,
 .team-count-btn:hover {
   transform: translateY(-1px);
 }
@@ -509,6 +546,7 @@ h2 {
 .phrase-filter-btn.selected,
 .charades-format-btn.selected,
 .charades-kind-btn.selected,
+.category-toggle-btn.selected,
 .team-count-btn.selected {
   background: var(--color-primary);
   color: white;
@@ -578,11 +616,21 @@ h2 {
   background: var(--panel-strong);
 }
 
+.game-mode-title {
+  margin: 0 0 10px;
+  color: var(--color-text);
+  font-size: clamp(22px, 5vw, 28px);
+  line-height: 1.12;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
 .game-header {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 10px;
   margin-bottom: 10px;
+  align-items: stretch;
 }
 
 .game-header > div:not(.timer) {
@@ -590,6 +638,46 @@ h2 {
   padding: 10px 12px;
   border-radius: 18px;
   border: 1px solid var(--color-border);
+}
+
+.game-category-summary {
+  grid-column: 1 / -1;
+}
+
+.game-category-summary-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.summary-title {
+  min-width: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.summary-list {
+  grid-column: 1 / -1;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.summary-kind-badge {
+  justify-self: end;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(214, 167, 91, 0.18);
+  color: #7b5b29;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .small-label {
@@ -669,7 +757,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px;
+  padding: 76px 28px 72px;
   text-align: center;
   user-select: none;
   touch-action: none;
@@ -684,21 +772,43 @@ h2 {
   position: absolute;
   top: 14px;
   left: 14px;
+  right: 14px;
   z-index: 4;
-  padding: 7px 11px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-start;
+  pointer-events: none;
+}
+
+.word-meta-badge {
+  padding: 7px 10px;
   border-radius: 999px;
-  background: var(--color-primary);
-  color: #ffffff;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 850;
   letter-spacing: 0;
-  box-shadow: 0 5px 12px rgba(39, 49, 79, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 5px 12px rgba(39, 49, 79, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.42);
+}
+
+.word-meta-category {
+  background: rgba(95, 147, 112, 0.18);
+  color: #3d7250;
+}
+
+.word-meta-difficulty {
+  background: rgba(111, 106, 168, 0.16);
+  color: #514d8f;
+}
+
+.word-meta-kind {
+  background: rgba(214, 167, 91, 0.18);
+  color: #7b5b29;
 }
 
 .word-mode-hint {
   position: absolute;
-  top: 14px;
+  bottom: 40px;
   right: 14px;
   z-index: 4;
   padding: 7px 11px;
