@@ -14,13 +14,18 @@ const modeCategoryCache = {};
 let selectedTeamCount = 2;
 let teamScores = [];
 let teamNames = [];
+let roundsPlayedByTeam = [];
 let currentTeamIndex = 0;
 let roundResults = null;
 let finalRoundActive = false;
-let finalRoundTeamsPlayed = 0;
+let playedRounds = 0;
 
 let deck = [];
 let currentWord = "";
+let currentEntry = null;
+let roundWords = [];
+let isAwaitingLastWordResult = false;
+let allowLastWordAfterTime = true;
 let score = 0;
 let skipped = 0;
 let timeLeft = 60;
@@ -83,12 +88,16 @@ const difficultyLevels = [
 
 const menuScreen = document.getElementById("menuScreen");
 const settingsScreen = document.getElementById("settingsScreen");
+const teamReadyScreen = document.getElementById("teamReadyScreen");
 const gameScreen = document.getElementById("gameScreen");
+const roundReviewScreen = document.getElementById("roundReviewScreen");
 const resultScreen = document.getElementById("resultScreen");
 const winnerScreen = document.getElementById("winnerScreen");
 
 const backToMenuBtn = document.getElementById("backToMenuBtn");
+const menuExitButtons = document.querySelectorAll(".menu-exit-btn");
 const startRoundButtons = document.querySelectorAll(".start-round-btn");
+const startTeamRoundBtn = document.getElementById("startTeamRoundBtn");
 
 const modeList = document.getElementById("modeList");
 const categoryList = document.getElementById("categoryList");
@@ -97,6 +106,8 @@ const durationButtons = document.querySelectorAll(".duration-btn");
 const targetButtons = document.querySelectorAll(".target-btn");
 const difficultyButtons = document.querySelectorAll(".difficulty-btn");
 const phraseFilterBtn = document.getElementById("phraseFilterBtn");
+const lastWordSection = document.getElementById("lastWordSection");
+const lastWordBtn = document.getElementById("lastWordBtn");
 const charadesFormatSection = document.getElementById("charadesFormatSection");
 const charadesKindSection = document.getElementById("charadesKindSection");
 const charadesFormatButtons = document.querySelectorAll(".charades-format-btn");
@@ -112,9 +123,9 @@ const gameCategoryName = document.getElementById("gameCategoryName");
 const timerText = document.getElementById("timerText");
 const scoreText = document.getElementById("scoreText");
 const skippedText = document.getElementById("skippedText");
+const roundTimeMessage = document.getElementById("roundTimeMessage");
 const teamProgressText = document.getElementById("teamProgressText");
 const teamProgressFill = document.getElementById("teamProgressFill");
-const roundProgressText = document.getElementById("roundProgressText");
 const roundProgressFill = document.getElementById("roundProgressFill");
 const wordText = document.getElementById("wordText");
 const wordCard = document.getElementById("wordCard");
@@ -124,7 +135,6 @@ const swipeHint = document.getElementById("swipeHint");
 const singleCardActions = document.getElementById("singleCardActions");
 const singleNextBtn = document.getElementById("singleNextBtn");
 const singleSettingsBtn = document.getElementById("singleSettingsBtn");
-const singleMenuBtn = document.getElementById("singleMenuBtn");
 
 const skipBtn = document.getElementById("skipBtn");
 const correctBtn = document.getElementById("correctBtn");
@@ -136,6 +146,13 @@ const resultPhrase = document.getElementById("resultPhrase");
 const playAgainBtn = document.getElementById("playAgainBtn");
 const nextTeamBtn = document.getElementById("nextTeamBtn");
 const resultToMenuBtn = document.getElementById("resultToMenuBtn");
+const teamReadyName = document.getElementById("readyTeamName");
+const teamReadyScore = document.getElementById("readyTeamScore");
+const roundReviewTeamName = document.getElementById("roundReviewTeamName");
+const roundReviewScore = document.getElementById("roundReviewScore");
+const roundReviewSkipped = document.getElementById("roundReviewSkipped");
+const roundReviewList = document.getElementById("roundReviewList");
+const confirmRoundBtn = document.getElementById("confirmRoundBtn");
 const winnerTitle = document.getElementById("winnerTitle");
 const winnerSubtitle = document.getElementById("winnerSubtitle");
 const winnerHero = document.getElementById("winnerHero");
@@ -155,6 +172,7 @@ async function init() {
   resetTeamScores();
   updateModeLabels();
   syncPhraseFilterButton();
+  syncLastWordButton();
   setupEvents();
 }
 
@@ -190,9 +208,19 @@ function setupEvents() {
     showScreen("menu");
   });
 
+  menuExitButtons.forEach((button) => {
+    button.addEventListener("click", handleMenuExitRequest);
+  });
+
   startRoundButtons.forEach((button) => {
     button.addEventListener("click", handleStartRound);
   });
+
+  if (startTeamRoundBtn) {
+    startTeamRoundBtn.addEventListener("click", () => {
+      beginPreparedRound();
+    });
+  }
 
   durationButtons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -246,6 +274,14 @@ function setupEvents() {
       excludePhrases = !excludePhrases;
       syncPhraseFilterButton();
       renderCategories();
+      settingsMessage.textContent = "";
+    });
+  }
+
+  if (lastWordBtn) {
+    lastWordBtn.addEventListener("click", () => {
+      allowLastWordAfterTime = !allowLastWordAfterTime;
+      syncLastWordButton();
       settingsMessage.textContent = "";
     });
   }
@@ -342,7 +378,7 @@ function setupEvents() {
   });
 
   finishEarlyBtn.addEventListener("click", () => {
-    finishRound();
+    finishRound("manual");
   });
 
   if (singleNextBtn) {
@@ -355,13 +391,6 @@ function setupEvents() {
     singleSettingsBtn.addEventListener("click", () => {
       resetSwipeState();
       showScreen("settings");
-    });
-  }
-
-  if (singleMenuBtn) {
-    singleMenuBtn.addEventListener("click", () => {
-      resetSwipeState();
-      showScreen("menu");
     });
   }
 
@@ -386,6 +415,12 @@ function setupEvents() {
   nextTeamBtn.addEventListener("click", () => {
     startNextTeamRound();
   });
+
+  if (confirmRoundBtn) {
+    confirmRoundBtn.addEventListener("click", () => {
+      confirmRoundResults();
+    });
+  }
 
   resultToMenuBtn.addEventListener("click", () => {
     showScreen("menu");
@@ -456,6 +491,9 @@ function updateModeLabels() {
     settingsModeDescription.textContent = mode.description;
   }
   gameModeTitle.textContent = mode.title;
+  if (lastWordSection) {
+    lastWordSection.hidden = isCharadesMode;
+  }
 
   if (charadesFormatSection) {
     charadesFormatSection.hidden = !isCharadesMode;
@@ -482,6 +520,16 @@ function updateModeLabels() {
       ? "Свайп вгору або вниз — наступне слово"
       : "Свайп вгору — вгадано, вниз — пропустити";
   }
+
+}
+
+function syncLastWordButton() {
+  if (!lastWordBtn) {
+    return;
+  }
+
+  lastWordBtn.classList.toggle("selected", allowLastWordAfterTime);
+  lastWordBtn.setAttribute("aria-pressed", String(allowLastWordAfterTime));
 }
 
 function isCharades() {
@@ -646,6 +694,19 @@ function getCompactCategoryNames(maxVisible = 3) {
   return `${visibleNames.join(", ")}${suffix}`;
 }
 
+
+function getHudCategoryLabel() {
+  if (selectedCategories.length === 0) {
+    return "Усі категорії";
+  }
+
+  if (selectedCategories.length === 1) {
+    return selectedCategories[0].name;
+  }
+
+  return `${selectedCategories[0].name} +${selectedCategories.length - 1}`;
+}
+
 function getSelectedDifficultyLabel() {
   if (selectedDifficulties.length === 0 || selectedDifficulties.length === difficultyLevels.length) {
     return "";
@@ -698,16 +759,8 @@ function renderGameSummary() {
 
   const title = document.createElement("span");
   title.className = "summary-title";
-  title.textContent = getCategorySummaryTitle();
+  title.textContent = getHudCategoryLabel();
   gameCategoryName.appendChild(title);
-
-  const categoryListText = getCategorySummaryList();
-  if (categoryListText) {
-    const list = document.createElement("span");
-    list.className = "summary-list";
-    list.textContent = categoryListText;
-    gameCategoryName.appendChild(list);
-  }
 
   const kindLabel = getTaskKindLabel();
   if (kindLabel && isCharades()) {
@@ -725,23 +778,33 @@ function renderWordMeta(entry) {
 
   wordCategoryBadge.innerHTML = "";
 
+  const leftGroup = document.createElement("div");
+  leftGroup.className = "word-meta-group word-meta-left";
+
+  const rightGroup = document.createElement("div");
+  rightGroup.className = "word-meta-group word-meta-right";
+
   const categoryBadge = document.createElement("span");
   categoryBadge.className = "word-meta-badge word-meta-category";
-  categoryBadge.textContent = `Категорія: ${entry.categoryName || "Тема"}`;
-  wordCategoryBadge.appendChild(categoryBadge);
+  categoryBadge.textContent = (entry.categoryName || "Тема").toUpperCase();
+  rightGroup.appendChild(categoryBadge);
 
+  const difficulty = entry.difficulty || "medium";
   const difficultyBadge = document.createElement("span");
-  difficultyBadge.className = "word-meta-badge word-meta-difficulty";
-  difficultyBadge.textContent = `Складність: ${entry.difficultyName || getDifficultyName(entry.difficulty || "medium")}`;
-  wordCategoryBadge.appendChild(difficultyBadge);
+  difficultyBadge.className = `word-meta-badge word-meta-difficulty word-meta-difficulty-${difficulty}`;
+  difficultyBadge.textContent = (entry.difficultyName || getDifficultyName(difficulty)).toUpperCase();
+  leftGroup.appendChild(difficultyBadge);
 
   const kindLabel = getTaskKindLabel(entry.kind);
   if (kindLabel && isCharades()) {
     const kindBadge = document.createElement("span");
     kindBadge.className = "word-meta-badge word-meta-kind";
-    kindBadge.textContent = `Тип: ${kindLabel}`;
-    wordCategoryBadge.appendChild(kindBadge);
+    kindBadge.textContent = kindLabel.toUpperCase();
+    leftGroup.appendChild(kindBadge);
   }
+
+  wordCategoryBadge.appendChild(leftGroup);
+  wordCategoryBadge.appendChild(rightGroup);
 }
 
 function getSelectedButton(buttons) {
@@ -957,12 +1020,73 @@ function resetSwipeState() {
   resetWordCardPosition();
 }
 
+function isScreenActive(screenElement) {
+  return Boolean(screenElement && screenElement.classList.contains("active"));
+}
+
+function hasActiveGameProgress() {
+  return teamScores.some((scoreValue) => scoreValue > 0)
+    || roundWords.length > 0
+    || score > 0
+    || skipped > 0
+    || playedRounds > 0
+    || finalRoundActive
+    || isScreenActive(teamReadyScreen)
+    || isScreenActive(gameScreen)
+    || isScreenActive(roundReviewScreen);
+}
+
+function resetActiveGameState() {
+  clearInterval(timerId);
+  timerId = null;
+  resetSwipeState();
+  score = 0;
+  skipped = 0;
+  timeLeft = selectedDuration;
+  roundResults = null;
+  roundWords = [];
+  currentEntry = null;
+  currentWord = "";
+  deck = [];
+  isAwaitingLastWordResult = false;
+  finalRoundActive = false;
+  playedRounds = 0;
+
+  if (roundTimeMessage) {
+    roundTimeMessage.textContent = "";
+  }
+
+  if (skipBtn) {
+    skipBtn.textContent = "Пропустити";
+  }
+
+  resetTeamScores();
+}
+
+function handleMenuExitRequest() {
+  if (hasActiveGameProgress()) {
+    const shouldExit = window.confirm("Вийти в головне меню? Поточний прогрес гри буде втрачено.");
+    if (!shouldExit) {
+      return;
+    }
+  }
+
+  resetActiveGameState();
+  showScreen("menu");
+}
+
 function startRound() {
   resetSwipeState();
   score = 0;
   skipped = 0;
   timeLeft = selectedDuration;
   roundResults = null;
+  roundWords = [];
+  currentEntry = null;
+  isAwaitingLastWordResult = false;
+  if (roundTimeMessage) {
+    roundTimeMessage.textContent = "";
+  }
 
   const wordPool = getCurrentWordPool();
   if (wordPool.length === 0) {
@@ -981,6 +1105,20 @@ function startRound() {
   updateCurrentTeamDisplay();
   updateModeLabels();
   settingsMessage.textContent = "";
+  updateTeamReadyScreen();
+
+  showScreen("teamReady");
+}
+
+function beginPreparedRound() {
+  resetSwipeState();
+  isAwaitingLastWordResult = false;
+  if (roundTimeMessage) {
+    roundTimeMessage.textContent = "";
+  }
+  if (skipBtn) {
+    skipBtn.textContent = "Пропустити";
+  }
 
   showScreen("game");
   showNextWord();
@@ -997,7 +1135,7 @@ function startTimer() {
     updateGameInfo();
 
     if (timeLeft <= 0) {
-      finishRound();
+      finishRound("time");
     }
   }, 1000);
 }
@@ -1035,6 +1173,7 @@ function showNextWord() {
   }
 
   const nextEntry = deck.pop();
+  currentEntry = nextEntry;
   const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
   wordText.textContent = currentWord;
@@ -1070,17 +1209,17 @@ function updateGameInfo() {
 
   const currentTeamScore = (teamScores[currentTeamIndex] || 0) + score;
   const progressPercent = Math.min(100, Math.round((currentTeamScore / selectedTargetScore) * 100));
-  teamProgressText.textContent = `${currentTeamScore} / ${selectedTargetScore}`;
+  teamProgressText.textContent = `${currentTeamScore}/${selectedTargetScore}`;
   teamProgressFill.style.width = `${progressPercent}%`;
 
   const maxTime = selectedDuration;
   const timeProgressPercent = Math.max(0, Math.round((timeLeft / maxTime) * 100));
-  roundProgressText.textContent = `${timeLeft} / ${maxTime}`;
   roundProgressFill.style.width = `${timeProgressPercent}%`;
 }
 
 function resetTeamScores() {
   teamScores = Array.from({ length: selectedTeamCount }, (_, index) => 0);
+  roundsPlayedByTeam = Array.from({ length: selectedTeamCount }, () => 0);
   currentTeamIndex = 0;
   updateCurrentTeamDisplay();
   updateTeamScoreBoard();
@@ -1274,7 +1413,6 @@ function startNextTeamRound() {
 
 function startExtraRound() {
   finalRoundActive = false;
-  finalRoundTeamsPlayed = 0;
   currentTeamIndex = (currentTeamIndex + 1) % selectedTeamCount;
   startRound();
 }
@@ -1282,52 +1420,201 @@ function startExtraRound() {
 function startNewGame() {
   resetTeamScores();
   finalRoundActive = false;
-  finalRoundTeamsPlayed = 0;
+  playedRounds = 0;
   showScreen("settings");
 }
 
-function finishRound() {
+
+function updateTeamReadyScreen() {
+  if (teamReadyName) {
+    teamReadyName.textContent = getTeamName(currentTeamIndex);
+  }
+
+  if (teamReadyScore) {
+    teamReadyScore.textContent = `\u041f\u043e\u0442\u043e\u0447\u043d\u0438\u0439 \u0440\u0430\u0445\u0443\u043d\u043e\u043a: ${teamScores[currentTeamIndex] || 0}`;
+  }
+}
+
+function recordRoundWord(result) {
+  if (!currentEntry) {
+    return;
+  }
+
+  const alreadyRecorded = roundWords.some((item) => item.entryId === currentEntry);
+  if (alreadyRecorded) {
+    return;
+  }
+
+  roundWords.push({
+    entryId: currentEntry,
+    word: currentEntry.word,
+    categoryName: currentEntry.categoryName,
+    difficulty: currentEntry.difficulty,
+    difficultyName: currentEntry.difficultyName,
+    result,
+  });
+}
+
+function recalculateRoundCounters() {
+  score = roundWords.filter((item) => item.result === "guessed").length;
+  skipped = roundWords.filter((item) => item.result === "skipped").length;
+}
+
+function shouldGuessLastWordAfterTime() {
+  return !isCharades() && allowLastWordAfterTime;
+}
+
+function finishRound(reason = "manual") {
+  clearInterval(timerId);
+
+  if (isAwaitingLastWordResult) {
+    return;
+  }
+
+  if (reason === "time" && currentEntry) {
+    if (shouldGuessLastWordAfterTime()) {
+      isAwaitingLastWordResult = true;
+      if (skipBtn) {
+        skipBtn.textContent = "Не вгадано";
+      }
+      if (roundTimeMessage) {
+        roundTimeMessage.textContent = "\u0427\u0430\u0441 \u0432\u0438\u0439\u0448\u043e\u0432. \u0417\u0430\u0432\u0435\u0440\u0448\u0456\u0442\u044c \u043f\u043e\u0442\u043e\u0447\u043d\u0435 \u0441\u043b\u043e\u0432\u043e.";
+      }
+      return;
+    }
+
+    // \u042f\u043a\u0449\u043e \u0434\u043e\u0432\u0433\u0430\u0434\u0443\u0432\u0430\u043d\u043d\u044f \u0432\u0438\u043c\u043a\u043d\u0435\u043d\u0435, \u0430\u043a\u0442\u0438\u0432\u043d\u0435 \u0441\u043b\u043e\u0432\u043e \u043f\u0456\u0441\u043b\u044f \u0441\u0438\u0433\u043d\u0430\u043b\u0443 \u0447\u0430\u0441\u0443 \u0432\u0432\u0430\u0436\u0430\u0454\u043c\u043e \u043d\u0435\u0432\u0433\u0430\u0434\u0430\u043d\u0438\u043c.
+    recordRoundWord("skipped");
+    recalculateRoundCounters();
+  }
+
+  showRoundReview();
+}
+
+function showRoundReview() {
   clearInterval(timerId);
   resetSwipeState();
+  recalculateRoundCounters();
+  renderRoundReview();
+  showScreen("roundReview");
+}
+
+function renderRoundReview() {
+  if (roundReviewTeamName) {
+    roundReviewTeamName.textContent = getTeamName(currentTeamIndex);
+  }
+
+  if (roundReviewScore) {
+    roundReviewScore.textContent = score;
+  }
+
+  if (roundReviewSkipped) {
+    roundReviewSkipped.textContent = skipped;
+  }
+
+  if (!roundReviewList) {
+    return;
+  }
+
+  roundReviewList.innerHTML = "";
+
+  if (roundWords.length === 0) {
+    const emptyState = document.createElement("p");
+    emptyState.className = "subtitle";
+    emptyState.textContent = "\u0423 \u0446\u044c\u043e\u043c\u0443 \u0440\u0430\u0443\u043d\u0434\u0456 \u0449\u0435 \u043d\u0435\u043c\u0430\u0454 \u0441\u043b\u0456\u0432.";
+    roundReviewList.appendChild(emptyState);
+    return;
+  }
+
+  roundWords.forEach((item) => {
+    const row = document.createElement("button");
+    row.type = "button";
+    row.className = `round-word-row ${item.result === "guessed" ? "is-guessed" : "is-skipped"}`;
+
+    const main = document.createElement("span");
+    main.className = "round-word-main";
+
+    const word = document.createElement("span");
+    word.className = "round-word-text";
+    word.textContent = item.word;
+
+    const meta = document.createElement("span");
+    meta.className = "round-word-meta";
+    meta.textContent = `${item.categoryName} \u00b7 ${item.difficultyName}`;
+
+    const status = document.createElement("span");
+    status.className = "round-word-status";
+    status.textContent = item.result === "guessed" ? "\u0412\u0433\u0430\u0434\u0430\u043d\u043e" : "\u041d\u0435 \u0432\u0433\u0430\u0434\u0430\u043d\u043e";
+
+    row.addEventListener("click", () => {
+      item.result = item.result === "guessed" ? "skipped" : "guessed";
+      recalculateRoundCounters();
+      renderRoundReview();
+    });
+
+    main.appendChild(word);
+    main.appendChild(meta);
+    row.appendChild(main);
+    row.appendChild(status);
+    roundReviewList.appendChild(row);
+  });
+}
+
+function getActiveRoundsPlayed() {
+  return roundsPlayedByTeam.slice(0, selectedTeamCount);
+}
+
+function hasAnyTeamReachedTarget() {
+  return teamScores.slice(0, selectedTeamCount).some((scoreValue) => scoreValue >= selectedTargetScore);
+}
+
+function haveActiveTeamsCompletedSameRound() {
+  const activeRounds = getActiveRoundsPlayed();
+  if (activeRounds.length === 0) {
+    return false;
+  }
+
+  return activeRounds.every((roundCount) => roundCount === activeRounds[0]);
+}
+
+function confirmRoundResults() {
+  recalculateRoundCounters();
+  playedRounds += 1;
 
   const teamName = getTeamName(currentTeamIndex);
   const pointsEarned = score;
   teamScores[currentTeamIndex] += pointsEarned;
+  roundsPlayedByTeam[currentTeamIndex] = (roundsPlayedByTeam[currentTeamIndex] || 0) + 1;
 
   roundResults = {
     teamName,
     score,
     skipped,
     pointsEarned,
+    words: roundWords.map(({ entryId, ...item }) => item),
   };
 
   finalScoreText.textContent = score;
   finalSkippedText.textContent = skipped;
 
   if (score >= 10) {
-    resultPhrase.textContent = `Сильно! ${teamName} впоралась дуже добре.`;
+    resultPhrase.textContent = `\u0421\u0438\u043b\u044c\u043d\u043e! ${teamName} \u0432\u043f\u043e\u0440\u0430\u043b\u0430\u0441\u044c \u0434\u0443\u0436\u0435 \u0434\u043e\u0431\u0440\u0435.`;
   } else if (score >= 5) {
-    resultPhrase.textContent = `${teamName} не зламалась. Наступний раунд буде ще кращим.`;
+    resultPhrase.textContent = `${teamName} \u043d\u0435 \u0437\u043b\u0430\u043c\u0430\u043b\u0430\u0441\u044c. \u041d\u0430\u0441\u0442\u0443\u043f\u043d\u0438\u0439 \u0440\u0430\u0443\u043d\u0434 \u0431\u0443\u0434\u0435 \u0449\u0435 \u043a\u0440\u0430\u0449\u0438\u043c.`;
   } else {
-    resultPhrase.textContent = `${teamName} має ще шанс. Наступний раунд буде кращим.`;
+    resultPhrase.textContent = `${teamName} \u043c\u0430\u0454 \u0449\u0435 \u0448\u0430\u043d\u0441. \u041d\u0430\u0441\u0442\u0443\u043f\u043d\u0438\u0439 \u0440\u0430\u0443\u043d\u0434 \u0431\u0443\u0434\u0435 \u0449\u0435 \u043a\u0440\u0430\u0449\u0438\u043c.`;
   }
 
-  updateTeamScoreBoard();
-  updateResultTeamScoreBoard();
-
-  if (!finalRoundActive && teamScores[currentTeamIndex] >= selectedTargetScore) {
+  if (!finalRoundActive && hasAnyTeamReachedTarget()) {
     finalRoundActive = true;
-    finalRoundTeamsPlayed = 1;
-  } else if (finalRoundActive) {
-    finalRoundTeamsPlayed += 1;
   }
 
-  if (finalRoundActive && finalRoundTeamsPlayed >= selectedTeamCount) {
+  if (finalRoundActive && haveActiveTeamsCompletedSameRound()) {
     showWinnerScreen();
     return;
   }
 
-  showScreen("result");
+  startNextTeamRound();
 }
 
 function showWinnerScreen() {
@@ -1364,7 +1651,9 @@ function showWinnerScreen() {
 function showScreen(screenName) {
   menuScreen.classList.remove("active");
   settingsScreen.classList.remove("active");
+  teamReadyScreen.classList.remove("active");
   gameScreen.classList.remove("active");
+  roundReviewScreen.classList.remove("active");
   resultScreen.classList.remove("active");
   winnerScreen.classList.remove("active");
 
@@ -1377,8 +1666,16 @@ function showScreen(screenName) {
     settingsScreen.classList.add("active");
   }
 
+  if (screenName === "teamReady") {
+    teamReadyScreen.classList.add("active");
+  }
+
   if (screenName === "game") {
     gameScreen.classList.add("active");
+  }
+
+  if (screenName === "roundReview") {
+    roundReviewScreen.classList.add("active");
   }
 
   if (screenName === "result") {
@@ -1423,21 +1720,7 @@ function markCorrect() {
     return;
   }
 
-  isSwipeLocked = true;
-
-  score++;
-  updateGameInfo();
-  updateTeamScoreBoard(true);
-  playCorrectSound();
-  animateWordCard("fly-up");
-
-  clearWordActionTimeout();
-  wordActionTimeoutId = setTimeout(() => {
-    showNextWord();
-    isSwipeLocked = false;
-    wordActionTimeoutId = null;
-    resetWordCardPosition();
-  }, 220);
+  handleRoundWordResult("guessed", "fly-up");
 }
 
 function markSkipped() {
@@ -1445,15 +1728,36 @@ function markSkipped() {
     return;
   }
 
+  handleRoundWordResult("skipped", "fly-down");
+}
+
+function handleRoundWordResult(result, animationClass) {
   isSwipeLocked = true;
 
-  skipped++;
+  recordRoundWord(result);
+  recalculateRoundCounters();
   updateGameInfo();
-  playSkipSound();
-  animateWordCard("fly-down");
+
+  if (result === "guessed") {
+    updateTeamScoreBoard(true);
+    playCorrectSound();
+  } else {
+    playSkipSound();
+  }
+
+  animateWordCard(animationClass);
 
   clearWordActionTimeout();
   wordActionTimeoutId = setTimeout(() => {
+    if (isAwaitingLastWordResult) {
+      isAwaitingLastWordResult = false;
+      wordActionTimeoutId = null;
+      resetWordCardPosition();
+      showRoundReview();
+      return;
+    }
+
+    currentEntry = null;
     showNextWord();
     isSwipeLocked = false;
     wordActionTimeoutId = null;

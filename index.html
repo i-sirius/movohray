@@ -89,6 +89,13 @@
             <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
           </div>
 
+          <div id="lastWordSection" class="settings-option-section">
+            <h2>Завершення раунду</h2>
+            <div class="settings-chip-grid">
+              <button id="lastWordBtn" class="setting-chip selected" type="button" aria-pressed="true">Довгадувати останнє слово після часу</button>
+            </div>
+          </div>
+
           <div class="timed-settings">
             <h2>Час раунду (сек)</h2>
             <div class="settings-chip-grid">
@@ -123,56 +130,58 @@
       </div>
     </section>
 
+    <section id="teamReadyScreen" class="screen">
+      <div class="card center bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <p class="settings-eyebrow">Раунд команди</p>
+          <div class="team-ready-summary">
+            <strong id="readyTeamName">Команда 1</strong>
+            <span id="readyTeamScore">Поточний рахунок: 0</span>
+          </div>
+          <p class="ready-instruction">Передайте телефон гравцю цієї команди. Коли будете готові — натисніть Почати.</p>
+          <button id="startTeamRoundBtn" class="primary-btn">Почати</button>
+          <button class="secondary-btn menu-exit-btn" type="button">У меню</button>
+        </div>
+      </div>
+    </section>
+
     <section id="gameScreen" class="screen">
       <div class="game-layout bubble-panel">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
         <div class="panel-inner">
           <h1 id="gameModeTitle" class="game-mode-title">Поясни слово (Alias)</h1>
-          <header class="game-header">
-            <div class="timed-game-ui">
-              <span class="small-label">Команда</span>
+          <header class="game-hud timed-game-ui">
+            <div class="game-hud-left">
               <strong id="gameTeamName">Команда 1</strong>
+              <span id="teamProgressText">0/30</span>
             </div>
 
-            <div class="timer timed-game-ui">
+            <div class="game-hud-timer" aria-label="Час раунду">
               <span id="timerText">60</span>
             </div>
 
-          <div class="game-category-summary">
-              <div id="gameCategoryName" class="game-category-summary-content">—</div>
+            <div class="game-hud-right">
+              <div id="gameCategoryName" class="game-category-summary-content">Усі категорії</div>
             </div>
           </header>
 
-          <div class="score-row timed-game-ui">
-            <div class="score-box">
-              <span id="scoreText">0</span>
-              <small>вгадано</small>
-            </div>
-
-            <div class="score-box">
-              <span id="skippedText">0</span>
-              <small>пропущено</small>
-            </div>
+          <div class="game-hud-progress timed-game-ui" aria-hidden="true">
+            <span id="roundProgressFill"></span>
           </div>
 
-          <div class="game-progress-block timed-game-ui">
-            <div class="progress-meta">
-              <span id="teamProgressText">0 / 30</span>
-              <span class="progress-label">Ціль команди</span>
-            </div>
+          <div class="round-mini-stats timed-game-ui">
+            <span>✓ <strong id="scoreText">0</strong></span>
+            <span>↷ <strong id="skippedText">0</strong></span>
+          </div>
+
+          <div class="team-mini-progress timed-game-ui">
             <div class="progress-bar"><span id="teamProgressFill"></span></div>
           </div>
 
-          <div class="game-progress-block timed-game-ui">
-            <div class="progress-meta">
-              <span id="roundProgressText">60 / 60</span>
-              <span class="progress-label">Час раунду</span>
-            </div>
-            <div class="progress-bar"><span id="roundProgressFill"></span></div>
-          </div>
-
-          <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
+          <div id="teamScoreBoard" class="team-score-board team-score-board-hidden timed-game-ui"></div>
 
           <div id="wordCard" class="word-card">
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
@@ -180,6 +189,8 @@
             <p id="wordText">Слово</p>
             <span id="swipeHint" class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>
           </div>
+
+          <p id="roundTimeMessage" class="message round-time-message" role="status" aria-live="polite"></p>
 
           <div class="game-buttons timed-game-ui">
             <button id="skipBtn" class="skip-btn">Пропустити</button>
@@ -189,10 +200,42 @@
           <div id="singleCardActions" class="single-card-actions" hidden>
             <button id="singleNextBtn" class="primary-btn single-next-btn" type="button">Наступне слово</button>
             <button id="singleSettingsBtn" class="secondary-btn" type="button">До налаштувань</button>
-            <button id="singleMenuBtn" class="secondary-btn" type="button">У меню</button>
+            <button id="singleMenuBtn" class="secondary-btn menu-exit-btn" type="button">У меню</button>
           </div>
 
-          <button id="finishEarlyBtn" class="secondary-btn timed-game-ui">Завершити раунд</button>
+          <div class="game-secondary-actions timed-game-ui">
+            <button id="finishEarlyBtn" class="secondary-btn">Завершити раунд</button>
+            <button class="secondary-btn menu-exit-btn" type="button">У меню</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roundReviewScreen" class="screen">
+      <div class="card center bubble-card round-review-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1>Раунд завершено</h1>
+          <p id="roundReviewTeamName" class="subtitle">Команда 1</p>
+
+          <div class="result-grid">
+            <div class="result-item">
+              <span id="roundReviewScore">0</span>
+              <small>вгадано</small>
+            </div>
+
+            <div class="result-item">
+              <span id="roundReviewSkipped">0</span>
+              <small>не вгадано</small>
+            </div>
+          </div>
+
+          <h2 class="round-review-heading">Слова раунду</h2>
+          <div id="roundReviewList" class="round-review-list"></div>
+
+          <button id="confirmRoundBtn" class="primary-btn">Зарахувати результат</button>
+          <button class="secondary-btn menu-exit-btn" type="button">У меню</button>
         </div>
       </div>
     </section>
