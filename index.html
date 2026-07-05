@@ -47,9 +47,28 @@
       <div class="card bubble-card">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-b"></div>
-        <div class="card-inner">
-          <h1>Налаштування</h1>
-          <p id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</p>
+          <div class="card-inner">
+            <h1>Налаштування</h1>
+            <p id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</p>
+            <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
+
+          <div id="charadesFormatSection" class="charades-only settings-option-section" hidden>
+            <h2>Формат гри</h2>
+            <div class="settings-chip-grid">
+              <button class="charades-format-btn setting-chip selected" data-format="single" type="button">Одне слово</button>
+              <button class="charades-format-btn setting-chip" data-format="timed" type="button">На час</button>
+            </div>
+          </div>
+
+          <div id="charadesKindSection" class="charades-only settings-option-section" hidden>
+            <h2>Тип завдань</h2>
+            <div class="settings-chip-grid">
+              <button class="charades-kind-btn setting-chip selected" data-kind="noun" type="button">Іменники</button>
+              <button class="charades-kind-btn setting-chip" data-kind="action" type="button">Дії</button>
+              <button class="charades-kind-btn setting-chip" data-kind="phrase" type="button">Фрази</button>
+              <button class="charades-kind-btn setting-chip" data-kind="all" type="button">Усе</button>
+            </div>
+          </div>
 
           <h2>Категорія</h2>
           <div id="categoryList" class="button-grid"></div>
@@ -66,30 +85,36 @@
             <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
           </div>
 
-          <h2>Час раунду (сек)</h2>
-          <div class="settings-chip-grid">
-            <button class="duration-btn setting-chip" data-seconds="30">30</button>
-            <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
-            <button class="duration-btn setting-chip" data-seconds="90">90</button>
-            <button class="duration-btn setting-chip" data-seconds="120">120</button>
+          <div class="timed-settings">
+            <h2>Час раунду (сек)</h2>
+            <div class="settings-chip-grid">
+              <button class="duration-btn setting-chip" data-seconds="30">30</button>
+              <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
+              <button class="duration-btn setting-chip" data-seconds="90">90</button>
+              <button class="duration-btn setting-chip" data-seconds="120">120</button>
+            </div>
           </div>
 
-          <h2>Ціль гри (кількість слів)</h2>
-          <div class="settings-chip-grid">
-            <button class="target-btn setting-chip" data-target="20">20</button>
-            <button class="target-btn setting-chip selected" data-target="30">30</button>
-            <button class="target-btn setting-chip" data-target="50">50</button>
-            <button class="target-btn setting-chip" data-target="100">100</button>
+          <div class="timed-settings">
+            <h2>Ціль гри (кількість слів)</h2>
+            <div class="settings-chip-grid">
+              <button class="target-btn setting-chip" data-target="20">20</button>
+              <button class="target-btn setting-chip selected" data-target="30">30</button>
+              <button class="target-btn setting-chip" data-target="50">50</button>
+              <button class="target-btn setting-chip" data-target="100">100</button>
+            </div>
           </div>
 
-          <h2>Команди</h2>
-          <div class="settings-chip-grid">
-            <button class="team-count-btn setting-chip selected" data-count="2">2</button>
-            <button class="team-count-btn setting-chip" data-count="3">3</button>
-            <button class="team-count-btn setting-chip" data-count="4">4</button>
-          </div>
+          <div class="timed-settings">
+            <h2>Команди</h2>
+            <div class="settings-chip-grid">
+              <button class="team-count-btn setting-chip selected" data-count="2">2</button>
+              <button class="team-count-btn setting-chip" data-count="3">3</button>
+              <button class="team-count-btn setting-chip" data-count="4">4</button>
+            </div>
 
-          <div id="teamNameFields" class="team-name-fields"></div>
+            <div id="teamNameFields" class="team-name-fields"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -105,7 +130,7 @@
               <strong id="gameModeTitle">Поясни слово (Alias)</strong>
             </div>
 
-            <div>
+            <div class="timed-game-ui">
               <span class="small-label">Команда</span>
               <strong id="gameTeamName">Команда 1</strong>
             </div>
@@ -115,12 +140,12 @@
               <strong id="gameCategoryName">—</strong>
             </div>
 
-            <div class="timer">
+            <div class="timer timed-game-ui">
               <span id="timerText">60</span>
             </div>
           </header>
 
-          <div class="score-row">
+          <div class="score-row timed-game-ui">
             <div class="score-box">
               <span id="scoreText">0</span>
               <small>вгадано</small>
@@ -132,7 +157,7 @@
             </div>
           </div>
 
-          <div class="game-progress-block">
+          <div class="game-progress-block timed-game-ui">
             <div class="progress-meta">
               <span id="teamProgressText">0 / 30</span>
               <span class="progress-label">Ціль команди</span>
@@ -140,7 +165,7 @@
             <div class="progress-bar"><span id="teamProgressFill"></span></div>
           </div>
 
-          <div class="game-progress-block">
+          <div class="game-progress-block timed-game-ui">
             <div class="progress-meta">
               <span id="roundProgressText">60 / 60</span>
               <span class="progress-label">Час раунду</span>
@@ -148,20 +173,27 @@
             <div class="progress-bar"><span id="roundProgressFill"></span></div>
           </div>
 
-          <div id="teamScoreBoard" class="team-score-board"></div>
+          <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
 
           <div id="wordCard" class="word-card">
             <span id="wordCategoryBadge" class="word-category-badge">Тема</span>
+            <span id="wordModeHint" class="word-mode-hint" hidden></span>
             <p id="wordText">Слово</p>
-            <span class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>
+            <span id="swipeHint" class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>
           </div>
 
-          <div class="game-buttons">
+          <div class="game-buttons timed-game-ui">
             <button id="skipBtn" class="skip-btn">Пропустити</button>
             <button id="correctBtn" class="correct-btn">Вгадано</button>
           </div>
 
-          <button id="finishEarlyBtn" class="secondary-btn">Завершити раунд</button>
+          <div id="singleCardActions" class="single-card-actions" hidden>
+            <button id="singleNextBtn" class="primary-btn single-next-btn" type="button">Наступне слово</button>
+            <button id="singleSettingsBtn" class="secondary-btn" type="button">До налаштувань</button>
+            <button id="singleMenuBtn" class="secondary-btn" type="button">У меню</button>
+          </div>
+
+          <button id="finishEarlyBtn" class="secondary-btn timed-game-ui">Завершити раунд</button>
         </div>
       </div>
     </section>

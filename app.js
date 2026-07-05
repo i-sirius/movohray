@@ -3,9 +3,12 @@ let selectedCategory = null;
 let selectedCategories = [];
 let selectedDifficulties = ["easy", "medium", "hard"];
 let excludePhrases = false;
+let selectedCharadesFormat = "single";
+let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
+const modeCategoryCache = {};
 let selectedTeamCount = 2;
 let teamScores = [];
 let teamNames = [];
@@ -32,14 +35,18 @@ const modeConfigs = [
   {
     id: "explain",
     title: "Поясни слово (Alias)",
-    description: "Пояснюй слово команді, не називаючи саме слово.",
+    description: "Пояснюй слово, не називаючи його.",
+    dataFile: "words.json",
+    cardHint: "",
     available: true,
   },
   {
     id: "charades",
-    title: "Крокодил",
-    description: "Показувати слово без слів.",
-    available: false,
+    title: "Покажи слово (Крокодил)",
+    description: "Показуй завдання жестами. Говорити не можна.",
+    dataFile: "crocodile.json",
+    cardHint: "Показуй без слів",
+    available: true,
   },
   {
     id: "whoami",
@@ -86,10 +93,15 @@ const durationButtons = document.querySelectorAll(".duration-btn");
 const targetButtons = document.querySelectorAll(".target-btn");
 const difficultyButtons = document.querySelectorAll(".difficulty-btn");
 const phraseFilterBtn = document.getElementById("phraseFilterBtn");
+const charadesFormatSection = document.getElementById("charadesFormatSection");
+const charadesKindSection = document.getElementById("charadesKindSection");
+const charadesFormatButtons = document.querySelectorAll(".charades-format-btn");
+const charadesKindButtons = document.querySelectorAll(".charades-kind-btn");
 const teamCountButtons = document.querySelectorAll(".team-count-btn");
 const settingsMessage = document.getElementById("settingsMessage");
 
 const settingsModeTitle = document.getElementById("settingsModeTitle");
+const settingsModeDescription = document.getElementById("settingsModeDescription");
 const gameModeTitle = document.getElementById("gameModeTitle");
 const gameTeamName = document.getElementById("gameTeamName");
 const gameCategoryName = document.getElementById("gameCategoryName");
@@ -103,6 +115,12 @@ const roundProgressFill = document.getElementById("roundProgressFill");
 const wordText = document.getElementById("wordText");
 const wordCard = document.getElementById("wordCard");
 const wordCategoryBadge = document.getElementById("wordCategoryBadge");
+const wordModeHint = document.getElementById("wordModeHint");
+const swipeHint = document.getElementById("swipeHint");
+const singleCardActions = document.getElementById("singleCardActions");
+const singleNextBtn = document.getElementById("singleNextBtn");
+const singleSettingsBtn = document.getElementById("singleSettingsBtn");
+const singleMenuBtn = document.getElementById("singleMenuBtn");
 
 const skipBtn = document.getElementById("skipBtn");
 const correctBtn = document.getElementById("correctBtn");
@@ -126,7 +144,7 @@ const winnerScoreBoard = document.getElementById("winnerScoreBoard");
 init();
 
 async function init() {
-  await loadWords();
+  await loadModeCategories(selectedMode);
   renderCategories();
   syncTeamNamesForCount();
   renderTeamNameInputs();
@@ -135,13 +153,27 @@ async function init() {
   setupEvents();
 }
 
-async function loadWords() {
+async function loadModeCategories(modeId = selectedMode) {
+  const mode = modeConfigs.find((item) => item.id === modeId) || modeConfigs[0];
+
+  if (modeCategoryCache[mode.id]) {
+    categories = modeCategoryCache[mode.id];
+    return;
+  }
+
   try {
-    const response = await fetch("words.json");
-    categories = await response.json();
+    const response = await fetch(mode.dataFile);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const loadedCategories = await response.json();
+    modeCategoryCache[mode.id] = loadedCategories;
+    categories = loadedCategories;
   } catch (error) {
-    console.error("Не вдалося завантажити words.json", error);
-    settingsMessage.textContent = "Не вдалося завантажити словник.";
+    console.error(`Не вдалося завантажити ${mode.dataFile}`, error);
+    categories = [];
+    settingsMessage.textContent = "Не вдалося завантажити словник режиму.";
   }
 }
 
@@ -178,6 +210,26 @@ function setupEvents() {
     button.addEventListener("click", () => {
       button.classList.toggle("selected");
       selectedDifficulties = getSelectedDifficulties();
+      renderCategories();
+      settingsMessage.textContent = "";
+    });
+  });
+
+  charadesFormatButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      charadesFormatButtons.forEach((btn) => btn.classList.remove("selected"));
+      button.classList.add("selected");
+      selectedCharadesFormat = button.dataset.format || "single";
+      updateModeLabels();
+      settingsMessage.textContent = "";
+    });
+  });
+
+  charadesKindButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      charadesKindButtons.forEach((btn) => btn.classList.remove("selected"));
+      button.classList.add("selected");
+      selectedCharadesKind = button.dataset.kind || "noun";
       renderCategories();
       settingsMessage.textContent = "";
     });
@@ -288,6 +340,26 @@ function setupEvents() {
     finishRound();
   });
 
+  if (singleNextBtn) {
+    singleNextBtn.addEventListener("click", () => {
+      showSingleNextCard();
+    });
+  }
+
+  if (singleSettingsBtn) {
+    singleSettingsBtn.addEventListener("click", () => {
+      resetSwipeState();
+      showScreen("settings");
+    });
+  }
+
+  if (singleMenuBtn) {
+    singleMenuBtn.addEventListener("click", () => {
+      resetSwipeState();
+      showScreen("menu");
+    });
+  }
+
   if (playAgainBtn) {
     playAgainBtn.addEventListener("click", () => {
       const highestScore = Math.max(...teamScores);
@@ -336,14 +408,24 @@ function renderModes() {
       <span>${mode.available ? mode.description : "Скоро"}</span>
     `;
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", async () => {
       if (!mode.available) {
         settingsMessage.textContent = "Цей режим скоро з’явиться";
         return;
       }
 
       selectedMode = mode.id;
+      selectedCategories = [];
+      selectedCategory = null;
+      if (mode.id === "charades") {
+        selectedCharadesFormat = "single";
+        selectedCharadesKind = "noun";
+        syncCharadesOptionButtons();
+      }
+      await loadModeCategories(selectedMode);
       updateModeLabels();
+      renderCategories();
+      settingsMessage.textContent = "";
       showScreen("settings");
     });
 
@@ -357,9 +439,59 @@ function getSelectedModeConfig() {
 
 function updateModeLabels() {
   const mode = getSelectedModeConfig();
+  const isCharadesMode = isCharades();
+  const isSingleMode = isSingleCardMode();
   document.body.dataset.mode = mode.id;
+  document.body.classList.toggle("single-card-mode", isSingleMode);
   settingsModeTitle.textContent = mode.title;
+  if (settingsModeDescription) {
+    settingsModeDescription.textContent = mode.description;
+  }
   gameModeTitle.textContent = mode.title;
+
+  if (charadesFormatSection) {
+    charadesFormatSection.hidden = !isCharadesMode;
+  }
+
+  if (charadesKindSection) {
+    charadesKindSection.hidden = !isCharadesMode;
+  }
+
+  document.querySelectorAll(".timed-settings").forEach((section) => {
+    section.hidden = isSingleMode;
+  });
+
+  document.querySelectorAll(".timed-game-ui").forEach((element) => {
+    element.hidden = isSingleMode;
+  });
+
+  if (singleCardActions) {
+    singleCardActions.hidden = !isSingleMode;
+  }
+
+  if (swipeHint) {
+    swipeHint.textContent = isSingleMode
+      ? "Свайп вгору або вниз — наступне слово"
+      : "Свайп вгору — вгадано, вниз — пропустити";
+  }
+}
+
+function isCharades() {
+  return selectedMode === "charades";
+}
+
+function isSingleCardMode() {
+  return isCharades() && selectedCharadesFormat === "single";
+}
+
+function syncCharadesOptionButtons() {
+  charadesFormatButtons.forEach((button) => {
+    button.classList.toggle("selected", button.dataset.format === selectedCharadesFormat);
+  });
+
+  charadesKindButtons.forEach((button) => {
+    button.classList.toggle("selected", button.dataset.kind === selectedCharadesKind);
+  });
 }
 
 function renderCategories() {
@@ -458,6 +590,18 @@ function getDifficultyName(difficultyId) {
   return difficulty ? difficulty.name : difficultyId;
 }
 
+function getEntryText(entry) {
+  return typeof entry === "object" && entry !== null ? entry.text : entry;
+}
+
+function getEntryKind(entry) {
+  if (typeof entry === "object" && entry !== null && entry.kind) {
+    return entry.kind;
+  }
+
+  return isPhrase(getEntryText(entry)) ? "phrase" : "noun";
+}
+
 function isPhrase(text) {
   return String(text || "").trim().includes(" ");
 }
@@ -472,10 +616,28 @@ function getCategoryWordsByDifficulty(category) {
 
 function getWordsFromCategoryByFilters(category, difficulties = selectedDifficulties, shouldExcludePhrases = excludePhrases) {
   const normalizeEntries = (words, difficultyId) => {
-    const filteredWords = shouldExcludePhrases ? words.filter((word) => !isPhrase(word)) : words;
+    const filteredWords = words.filter((entry) => {
+      const text = getEntryText(entry);
+      const kind = getEntryKind(entry);
 
-    return filteredWords.map((word) => ({
-      word,
+      if (!text) {
+        return false;
+      }
+
+      if (shouldExcludePhrases && isPhrase(text)) {
+        return false;
+      }
+
+      if (isCharades() && selectedCharadesKind !== "all" && kind !== selectedCharadesKind) {
+        return false;
+      }
+
+      return true;
+    });
+
+    return filteredWords.map((entry) => ({
+      word: getEntryText(entry),
+      kind: getEntryKind(entry),
       categoryName: category.name || "Тема",
       difficulty: difficultyId,
       difficultyName: getDifficultyName(difficultyId),
@@ -538,15 +700,15 @@ function validateGameSettings() {
   const selectedDurationValue = selectedDurationButton ? Number(selectedDurationButton.dataset.seconds) : 0;
   const selectedTargetValue = selectedTargetButton ? Number(selectedTargetButton.dataset.target) : 0;
 
-  if (!selectedTeamButton || !Number.isFinite(selectedTeamCountValue) || selectedTeamCountValue <= 0) {
+  if (!isSingleCardMode() && (!selectedTeamButton || !Number.isFinite(selectedTeamCountValue) || selectedTeamCountValue <= 0)) {
     missingSettings.push("кількість команд");
   }
 
-  if (!selectedDurationButton || !Number.isFinite(selectedDurationValue) || selectedDurationValue <= 0) {
+  if (!isSingleCardMode() && (!selectedDurationButton || !Number.isFinite(selectedDurationValue) || selectedDurationValue <= 0)) {
     missingSettings.push("час раунду");
   }
 
-  if (!selectedTargetButton || !Number.isFinite(selectedTargetValue) || selectedTargetValue <= 0) {
+  if (!isSingleCardMode() && (!selectedTargetButton || !Number.isFinite(selectedTargetValue) || selectedTargetValue <= 0)) {
     missingSettings.push("ціль гри");
   }
 
@@ -561,20 +723,29 @@ function validateGameSettings() {
   }
 
   if (getCurrentWordPool().length === 0) {
-    settingsMessage.textContent = "Для цих тем, складності та фільтра словосполучень немає слів.";
+    settingsMessage.textContent = isCharades()
+      ? "Для цих тем і фільтрів немає завдань."
+      : "Для цих тем, складності та фільтра словосполучень немає слів.";
     return false;
   }
 
-  selectedTeamCount = selectedTeamCountValue;
-  selectedDuration = selectedDurationValue;
-  selectedTargetScore = selectedTargetValue;
-  syncTeamNamesForCount();
+  if (!isSingleCardMode()) {
+    selectedTeamCount = selectedTeamCountValue;
+    selectedDuration = selectedDurationValue;
+    selectedTargetScore = selectedTargetValue;
+    syncTeamNamesForCount();
+  }
   settingsMessage.textContent = "";
   return true;
 }
 
 function handleStartRound() {
   if (!validateGameSettings()) {
+    return;
+  }
+
+  if (isSingleCardMode()) {
+    startSingleCardGame();
     return;
   }
 
@@ -629,7 +800,9 @@ function startRound() {
 
   const wordPool = getCurrentWordPool();
   if (wordPool.length === 0) {
-    settingsMessage.textContent = "Для цих тем, складності та фільтра словосполучень немає слів.";
+    settingsMessage.textContent = isCharades()
+      ? "Для цих тем і фільтрів немає завдань."
+      : "Для цих тем, складності та фільтра словосполучень немає слів.";
     showScreen("settings");
     return;
   }
@@ -667,15 +840,61 @@ function getCurrentWordPool() {
   return getEffectiveSelectedCategories().flatMap((category) => getCategoryWordsByDifficulty(category));
 }
 
+function startSingleCardGame() {
+  clearInterval(timerId);
+  resetSwipeState();
+  score = 0;
+  skipped = 0;
+  roundResults = null;
+
+  const wordPool = getCurrentWordPool();
+  if (wordPool.length === 0) {
+    settingsMessage.textContent = "Для цих тем і фільтрів немає завдань.";
+    showScreen("settings");
+    return;
+  }
+
+  deck = shuffleArray([...wordPool]);
+  gameCategoryName.textContent = getSelectedCategoryLabel();
+  updateModeLabels();
+  settingsMessage.textContent = "";
+
+  showScreen("game");
+  showNextWord();
+}
+
 function showNextWord() {
   if (deck.length === 0) {
     deck = shuffleArray([...getCurrentWordPool()]);
   }
 
   const nextEntry = deck.pop();
+  const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
   wordText.textContent = currentWord;
   wordCategoryBadge.textContent = `${nextEntry.categoryName || "Тема"} · ${nextEntry.difficultyName || getDifficultyName(nextEntry.difficulty || "medium")}`;
+
+  if (wordModeHint) {
+    wordModeHint.textContent = mode.cardHint || "";
+    wordModeHint.hidden = !mode.cardHint;
+  }
+}
+
+function showSingleNextCard() {
+  if (!isSingleCardMode() || isSwipeLocked) {
+    return;
+  }
+
+  isSwipeLocked = true;
+  animateWordCard("fly-up");
+
+  clearWordActionTimeout();
+  wordActionTimeoutId = setTimeout(() => {
+    showNextWord();
+    isSwipeLocked = false;
+    wordActionTimeoutId = null;
+    resetWordCardPosition();
+  }, 180);
 }
 
 function updateGameInfo() {
@@ -1013,9 +1232,19 @@ function handleSwipe(swipeDistance) {
   const minimumSwipeDistance = 60;
 
   if (swipeDistance > minimumSwipeDistance) {
+    if (isSingleCardMode()) {
+      showSingleNextCard();
+      return true;
+    }
+
     markCorrect();
     return true;
   } else if (swipeDistance < -minimumSwipeDistance) {
+    if (isSingleCardMode()) {
+      showSingleNextCard();
+      return true;
+    }
+
     markSkipped();
     return true;
   }

@@ -1,0 +1,1906 @@
+﻿[
+    {
+        "id":  "actions",
+        "name":  "Дії",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "спати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "бігти",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "стрибати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "танцювати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "плавати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "їсти",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "пити",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "читати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "писати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "малювати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "плескати",
+                                        "kind":  "action"
+                                    },
+                    {
+                        "text":  "махати рукою",
+                        "kind":  "phrase"
+                    },
+                    {
+                        "text":  "молоток",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "парасолька",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "телефон",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "рюкзак",
+                        "kind":  "noun"
+                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "чистити зуби",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити рибу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "мити посуд",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "прасувати сорочку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "копати яму",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "нести валізу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відчиняти двері",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "зав’язувати шнурки",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "збирати гриби",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "садити дерево",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ремонтувати велосипед",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "запускати повітряного змія",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "тікати від дощу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "шукати загублений телефон",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "переконувати друга",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "забивати цвях",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "витягати застряглу парасольку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "переносити гарячу каструлю",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розплутувати навушники",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "піднімати важку коробку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "переходити болото",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "керувати оркестром",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "відкривати банку без відкривачки",
+                                        "kind":  "phrase"
+                                    },
+                    {
+                        "text":  "тренувати собаку",
+                        "kind":  "phrase"
+                    },
+                    {
+                        "text":  "драбина",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "ліхтарик",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "компас",
+                        "kind":  "noun"
+                    },
+                    {
+                        "text":  "мікрофон",
+                        "kind":  "noun"
+                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "animals",
+        "name":  "Тварини",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "кіт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "собака",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "жаба",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "птах",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "риба",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кінь",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "слон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мавпа",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ведмідь",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "качка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "курка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "заєць",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "лисиця крадеться",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "вовк виє",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пінгвін ходить",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "черепаха повзе",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "дельфін стрибає",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "жирафа їсть листя",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "їжак згортається",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "павук плете павутину",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "бджола збирає мед",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "білка ховає горіхи",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "орел полює",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "корова жує траву",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "хамелеон змінює колір",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "фламінго стоїть на одній нозі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "кенгуру несе маля",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "краб іде боком",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "восьминіг ховається",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "крокодил підкрадається",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тюлень плескає ластами",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пелікан ловить рибу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "бобер будує греблю",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "кажан висить догори ногами",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "верблюд іде пустелею",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "сова повертає голову",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "professions",
+        "name":  "Професії",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "лікар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кухар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "водій",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "учитель",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пожежник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "перукар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пілот",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "співак",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "актор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "будівельник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "продавець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "спортсмен",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "лікар слухає серце",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "кухар мішає суп",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "водій крутить кермо",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "учитель пише на дошці",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пожежник гасить вогонь",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "перукар стриже волосся",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пілот веде літак",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "фотограф знімає портрет",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "садівник поливає квіти",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "стоматолог лікує зуб",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "музикант грає на скрипці",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "офіціант несе тацю",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "режисер знімає сцену",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "архітектор креслить будинок",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "журналіст бере інтерв’ю",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ветеринар оглядає кота",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тренер пояснює вправу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "бариста готує каву",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "кур’єр шукає адресу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "механік ремонтує двигун",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "диригент керує хором",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "екскурсовод показує пам’ятку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувальник витягує плавця",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "майстер лагодить кран",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "sport",
+        "name":  "Спорт",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "футбол",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "баскетбол",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "бокс",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "плавання",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "теніс",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "біг",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лижі",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "шахи",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "йога",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "велосипед",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "волейбол",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гімнастика",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "забивати гол",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "кидати м’яч у кошик",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "подавати в тенісі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "плисти кролем",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "бити боксерську грушу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "стрибати через скакалку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "їхати на лижах",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "робити розминку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "піднімати гантелі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "стояти в планці",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити м’яч",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "фінішувати першим",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "пробігти марафон",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "забити пенальті",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "падати на фініші",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тренувати команду",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "радіти медалі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "сперечатися з арбітром",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "робити сальто",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "перетягувати канат",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "веслувати проти течії",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "забути спортивну форму",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "влучити у ворота із заплющеними очима",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тримати рівновагу на дошці",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "household",
+        "name":  "Побут",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "пилососити",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "підмітати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "мити вікно",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "застеляти ліжко",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "складати одяг",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "вмикати світло",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "наливати чай",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "відчиняти шафу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "витирати пил",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "поливати квіти",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "мити руки",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести пакет",
+                                        "kind":  "phrase"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "прати білизну",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "розвішувати шкарпетки",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "шукати ключі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ремонтувати полицю",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "клеїти шпалери",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "міняти лампочку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "виносити сміття",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "прасувати штани",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "збирати розсипану крупу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чистити килим",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "накривати на стіл",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відкривати тугу кришку",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "збирати меблі за інструкцією",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ловити мильну бульбашку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пересувати важкий диван",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знайти другу шкарпетку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "мити підлогу після гостей",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "лагодити протікаючий кран",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знімати павутиння зі стелі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розбирати завал у шафі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "заспокоювати пральну машину",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести пакети на п’ятий поверх",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розпаковувати посилку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувати вечерю, що підгоріла",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "emotions",
+        "name":  "Емоції",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "радіти",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "сумувати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "сердитися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "боятися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "сміятися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "плакати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "дивуватися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "соромитися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "нудьгувати",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "пишатися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "хвилюватися",
+                                        "kind":  "action"
+                                    },
+                                    {
+                                        "text":  "мріяти",
+                                        "kind":  "action"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "плакати від щастя",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "радіти подарунку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "злитися на будильник",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "боятися павука",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "соромитися компліменту",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чекати важливий дзвінок",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ображатися мовчки",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "нервувати перед виступом",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "заздрити морозиву",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відчувати полегшення",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "сумувати за другом",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пишатися перемогою",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "приховувати сміх",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "вдавати спокій",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "злитися, але посміхатися",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "радіти тихенько",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "переживати за команду",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розгубитися на сцені",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "зніяковіти перед камерою",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "вдавати хоробрість",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "заспокоювати себе",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "образитися без слів",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "показувати вдячність",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "боротися з нетерпінням",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "transport",
+        "name":  "Транспорт",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "авто",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "автобус",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "поїзд",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "літак",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "велосипед",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "корабель",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "таксі",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "метро",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "трамвай",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "самокат",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мотоцикл",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "трактор",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "їхати автобусом",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "керувати автомобілем",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "крутити педалі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чекати поїзд",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "запізнюватися на літак",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "купувати квиток",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "тягнути валізу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити таксі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "стояти в метро",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пристібати ремінь",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "заводити мотоцикл",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пливти на човні",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "штовхати зламане авто",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести важку валізу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пропустити свою зупинку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "заснути в поїзді",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "шукати платформу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "їхати в переповненому транспорті",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "виходити з метро в натовпі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "паркуватися у вузькому місці",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "летіти під час турбулентності",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ремонтувати велосипедне колесо",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тримати рівновагу в автобусі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "перевіряти розклад",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "food",
+        "name":  "Їжа",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "їсти яблуко",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пити чай",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "лизати морозиво",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "кусати бутерброд",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "різати хліб",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "солити суп",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "мішати кашу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "чистити банан",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пекти пиріг",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "наливати молоко",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести торт",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "жувати жуйку",
+                                        "kind":  "phrase"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "варити борщ",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ліпити вареники",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "смажити млинці",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чистити картоплю",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "кришити салат",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "дути на гарячий чай",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відкривати шоколадку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити макарони виделкою",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "збивати яйця",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "замовляти піцу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "шукати ложку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "прикрашати торт",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "їсти лимон без гримаси",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розколювати горіх",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пересолити суп",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розливати компот",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувати підгорілий пиріг",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тягнутися до останнього шматка",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "куштувати дуже гостру страву",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести повну тарілку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знімати пробу як шеф",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "шукати родзинки у булці",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "перемішувати густе тісто",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "відмовлятися від десерту",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "fantasy",
+        "name":  "Казки і фантазія",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "дракон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "принцеса",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лицар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "чарівник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "фея",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "король",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "відьма",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "велетень",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гном",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "русалка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "єдиноріг",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пірат",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "летіти на мітлі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "махати чарівною паличкою",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "боротися з драконом",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "шукати скарб",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "одягати корону",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відкривати таємні двері",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пити чарівне зілля",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "тікати з замку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "охороняти міст",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "будити сплячу красуню",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "красти золото у дракона",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "розмовляти з дзеркалом",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "перетворитися на жабу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знімати прокляття",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "йти через зачарований ліс",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "втікати від велетня",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести магічний меч",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "перемагати темного чаклуна",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "шукати невидимий портал",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "зачаровувати гарбуз",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "показувати карту скарбів",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "домовлятися з русалкою",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувати королівство",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ховатися від привида",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "home_situations",
+        "name":  "Побутові ситуації",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "прокинутися від будильника",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "забути парасольку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "чекати гостей",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "відкрити холодильник",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знайти цукерку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "впустити ложку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "загубити ручку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "міряти взуття",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "вибирати одяг",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "накривати стіл",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "дивитися телевізор",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "говорити телефоном",
+                                        "kind":  "phrase"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "запізнюватися на зустріч",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "розбити чашку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "шукати пульт",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "переплутати двері",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "нести гарячу тарілку",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити комара",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "застрягнути в светрі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "відкривати пакет без ножиць",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "забути пароль",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "заснути над книжкою",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "зустріти сусіда в ліфті",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "вдавати, що все під контролем",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "шукати загублений телефон",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "робити ремонт уночі",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пояснювати дорогу жестами",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "виносити сміття під дощем",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "збирати валізу за хвилину",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "прибирати перед несподіваними гостями",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувати котлету зі сковорідки",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "відкривати двері з пакетами",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "розмовляти з домофоном",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "забути, навіщо зайшов у кімнату",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ловити падаючий торт",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тихо пройти повз сплячих",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "famous_roles",
+        "name":  "Відомі ролі",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "супергерой",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "детектив",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пірат",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "клоун",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "робот",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ковбой",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "балерина",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "диригент",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "фокусник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "космонавт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "король",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ведучий",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "супергерой рятує місто",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "детектив шукає слід",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пірат дивиться у підзорну трубу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "клоун жонглює",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "робот заряджається",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ковбой ловить коня",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "балерина крутиться",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "фокусник дістає кролика",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "космонавт у невагомості",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ведучий оголошує переможця",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "король вітає народ",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "охоронець перевіряє двері",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "детектив допитує підозрюваного",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "супергерой приховує особистість",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пірат знаходить карту",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "фокусник губить секрет",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "робот вчиться танцювати",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "клоун застряг у маленькій машині",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "космонавт ремонтує станцію",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "диригент зупиняє оркестр",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ведучий тягне паузу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "король втратив корону",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "балерина виступає на льоду",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ковбой приручає дикого коня",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    },
+    {
+        "id":  "hard_tasks",
+        "name":  "Складні завдання",
+        "levels":  {
+                       "easy":  [
+                                    {
+                                        "text":  "заблукати",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "поспішати",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "чекати",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ховатися",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дивуватися",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "перемагати",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "прощатися",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "домовлятися",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "відпочивати",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "радіти",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "змерзнути",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "засмагати",
+                                        "kind":  "noun"
+                                    }
+                                ],
+                       "medium":  [
+                                      {
+                                          "text":  "переходити річку по камінцях",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "ловити капелюх на вітрі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "нести воду у відрі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "шукати окуляри на голові",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "показувати тишу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "вчити танець з першого разу",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "збирати пазл без картинки",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "перемагати в конкурсі",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чекати важливе повідомлення",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "перепрошувати без слів",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "забути текст пісні",
+                                          "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "виглядати впевнено",
+                                          "kind":  "phrase"
+                                      }
+                                  ],
+                       "hard":  [
+                                    {
+                                        "text":  "показати невидиму стіну",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "зобразити повільний інтернет",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "пояснити, що час закінчується",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "знайти вихід із лабіринту",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "нести уявний акваріум",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "грати на невидимій скрипці",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "переконати двері відчинитися",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "рятувати уявну вазу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "зобразити дуже слизьку підлогу",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ловити останній автобус",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "тримати рівновагу на канаті",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "показати перемогу без звуку",
+                                        "kind":  "phrase"
+                                    }
+                                ]
+                   }
+    }
+]

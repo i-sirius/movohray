@@ -31,6 +31,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
@@ -239,6 +243,8 @@ h2 {
 .target-btn,
 .difficulty-btn,
 .phrase-filter-btn,
+.charades-format-btn,
+.charades-kind-btn,
 .category-btn,
 .team-count-btn {
   width: 100%;
@@ -405,7 +411,14 @@ h2 {
 .mode-title {
   color: var(--accent);
   font-weight: 800;
-  margin: 8px 0 18px;
+  margin: 8px 0 6px;
+}
+
+.mode-description {
+  max-width: 520px;
+  margin: 0 0 18px;
+  color: var(--color-muted);
+  line-height: 1.45;
 }
 
 .button-grid {
@@ -433,6 +446,8 @@ h2 {
 .target-btn,
 .difficulty-btn,
 .phrase-filter-btn,
+.charades-format-btn,
+.charades-kind-btn,
 .team-count-btn {
   background: #fffaf0;
   color: var(--ink);
@@ -481,6 +496,8 @@ h2 {
 .target-btn:hover,
 .difficulty-btn:hover,
 .phrase-filter-btn:hover,
+.charades-format-btn:hover,
+.charades-kind-btn:hover,
 .team-count-btn:hover {
   transform: translateY(-1px);
 }
@@ -490,6 +507,8 @@ h2 {
 .target-btn.selected,
 .difficulty-btn.selected,
 .phrase-filter-btn.selected,
+.charades-format-btn.selected,
+.charades-kind-btn.selected,
 .team-count-btn.selected {
   background: var(--color-primary);
   color: white;
@@ -675,6 +694,35 @@ h2 {
   letter-spacing: 0;
   box-shadow: 0 5px 12px rgba(39, 49, 79, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.word-mode-hint {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(95, 147, 112, 0.16);
+  color: var(--mode-card-title, var(--accent));
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid rgba(95, 147, 112, 0.18);
+}
+
+.single-card-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.single-card-actions .primary-btn,
+.single-card-actions .secondary-btn {
+  margin-top: 0;
+}
+
+.single-next-btn {
+  min-height: 54px;
 }
 
 .word-card::before,
