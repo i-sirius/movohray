@@ -48,26 +48,26 @@
                                         "text":  "плескати",
                                         "kind":  "action"
                                     },
-                    {
-                        "text":  "махати рукою",
-                        "kind":  "phrase"
-                    },
-                    {
-                        "text":  "молоток",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "парасолька",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "телефон",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "рюкзак",
-                        "kind":  "noun"
-                    }
+                                    {
+                                        "text":  "махати рукою",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "молоток",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "парасолька",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "телефон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рюкзак",
+                                        "kind":  "noun"
+                                    }
                                 ],
                        "medium":  [
                                       {
@@ -164,26 +164,26 @@
                                         "text":  "відкривати банку без відкривачки",
                                         "kind":  "phrase"
                                     },
-                    {
-                        "text":  "тренувати собаку",
-                        "kind":  "phrase"
-                    },
-                    {
-                        "text":  "драбина",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "ліхтарик",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "компас",
-                        "kind":  "noun"
-                    },
-                    {
-                        "text":  "мікрофон",
-                        "kind":  "noun"
-                    }
+                                    {
+                                        "text":  "тренувати собаку",
+                                        "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "драбина",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ліхтарик",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "компас",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мікрофон",
+                                        "kind":  "noun"
+                                    }
                                 ]
                    }
     },
@@ -239,6 +239,82 @@
                                     {
                                         "text":  "заєць",
                                         "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "миша",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "вівця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "коза",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "півень",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "баран",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "хом’як",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "черепаха",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "бджола",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "метелик",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "равлик",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "їжак",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "корова",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "свиня",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гуска",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "осел",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "папуга",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кролик",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "олень",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лев",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -289,6 +365,94 @@
                                       {
                                           "text":  "корова жує траву",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "тигр",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "вовк",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "лисиця",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "акула",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "зебра",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "жирафа",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "носоріг",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бегемот",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "панда",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "коала",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "горила",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "орел",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "сова",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "лебідь",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "павич",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "верблюд",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "кенгуру",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "кит",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "дельфін",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "морж",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "тюлень",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "страус",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -339,6 +503,86 @@
                                     {
                                         "text":  "сова повертає голову",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "хамелеон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "фламінго",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дикобраз",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "альбатрос",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пелікан",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "восьминіг",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "медуза",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "скорпіон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "краб",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "омар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кажан",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "бобер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "манул",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лемур",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тапір",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "броненосець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сурикат",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "нарвал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кашалот",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "саламандра",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -395,6 +639,62 @@
                                     {
                                         "text":  "спортсмен",
                                         "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "поліцейський",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "прибиральник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "листоноша",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "охоронець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рибалка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "моряк",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "танцівник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "косар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "швачка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "садівник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "няня",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "касир",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "медсестра",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "двірник",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -445,6 +745,82 @@
                                       {
                                           "text":  "офіціант несе тацю",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "футболіст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "боксер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "плавець",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "гімнаст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "воротар",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "арбітр",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "тесля",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "сантехнік",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "електрик",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "маляр",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "офіціант",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бармен",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бариста",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "таксист",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "кур’єр",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "екскурсовод",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "ветеринар",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "скрипаль",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "барабанщик",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -495,6 +871,86 @@
                                     {
                                         "text":  "майстер лагодить кран",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "архітектор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "режисер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "оператор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "каскадер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дресирувальник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рятувальник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "водолаз",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "альпініст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кондитер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сушист",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гончар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ювелір",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "коваль",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пасічник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "астроном",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "археолог",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ілюзіоніст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "модельєр",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гример",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "стиліст",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -551,6 +1007,62 @@
                                     {
                                         "text":  "гімнастика",
                                         "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "м’яч",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ракетка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "шолом",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ковзани",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гантеля",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "свисток",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ворота",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "медаль",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кубок",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "стадіон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "басейн",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "велосипедист",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "бігун",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "борець",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -601,6 +1113,78 @@
                                       {
                                           "text":  "фінішувати першим",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "тенісист",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "лижник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "хокеїст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "баскетболіст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "волейболіст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "шахіст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "каратист",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "фехтувальник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "марафонець",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "тренер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "капітан",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "нападник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "захисник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "фігурист",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "серфер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "скейтбордист",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "стрілець",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "лучник",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -651,6 +1235,66 @@
                                     {
                                         "text":  "тримати рівновагу на дошці",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "акробат",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "важкоатлет",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "парашутист",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сноубордист",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "веслувальник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дзюдоїст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тріатлоніст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "регбіст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "керлінгіст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "коментатор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "масажист",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "уболівальник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "призер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "чемпіон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рекордсмен",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -707,6 +1351,86 @@
                                     {
                                         "text":  "нести пакет",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "чайник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "парасоля",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "подушка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дзеркало",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "каструля",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сковорідка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ложка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "виделка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тарілка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "чашка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "диван",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "стілець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "стіл",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лампа",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "годинник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "віник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "відро",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рушник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ключ",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мило",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -757,6 +1481,78 @@
                                       {
                                           "text":  "відкривати тугу кришку",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "пилосос",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "праска",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "холодильник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "плита",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "мікрохвильовка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "тостер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "пральна машина",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "швабра",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "губка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "щітка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "зубна щітка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "ножиці",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "викрутка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "цвях",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "плед",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "килим",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "шухляда",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "полиця",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -807,6 +1603,82 @@
                                     {
                                         "text":  "рятувати вечерю, що підгоріла",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "посудомийка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "зволожувач",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "обігрівач",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "вентилятор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "подовжувач",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "прасувальна дошка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сушарка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "органайзер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "термометр",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "аптечка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "домофон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "жалюзі",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "штора",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "карниз",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пульт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "розетка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "вимикач",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сейф",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "валіза",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -989,7 +1861,7 @@
                                         "kind":  "noun"
                                     },
                                     {
-                                        "text":  "велосипед",
+                                        "text":  "моноколесо",
                                         "kind":  "noun"
                                     },
                                     {
@@ -1018,6 +1890,62 @@
                                     },
                                     {
                                         "text":  "трактор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "вантажівка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "човен",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "катер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пором",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "скутер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тролейбус",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "маршрутка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "вагон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "колесо",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кермо",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "рейка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "зупинка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "квиток",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пасажир",
                                         "kind":  "noun"
                                     }
                                 ],
@@ -1069,6 +1997,78 @@
                                       {
                                           "text":  "пливти на човні",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "локомотив",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "екскаватор",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бульдозер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "підйомник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "кран",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "швидка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "пожежна машина",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "поліцейське авто",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "санчата",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "карета",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "аероплан",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "гелікоптер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "дирижабль",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "яхта",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "підводний човен",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "фура",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "причіп",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "багажник",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -1119,6 +2119,66 @@
                                     {
                                         "text":  "перевіряти розклад",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "машиніст",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "стюардеса",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "диспетчер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "механік",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "штурвал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пропелер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "парашут",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "скафандр",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "перон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "платформа",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "турнікет",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "світлофор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "автокран",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "бензовоз",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тракторист",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -1175,6 +2235,86 @@
                                     {
                                         "text":  "жувати жуйку",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "яблуко",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "банан",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "груша",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "морква",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "огірок",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "помідор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кавун",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "диня",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лимон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "апельсин",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "виноград",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "полуниця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "хліб",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сир",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "яйце",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "торт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "цукерка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "морозиво",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "печиво",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "піца",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -1225,6 +2365,78 @@
                                       {
                                           "text":  "прикрашати торт",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "бургер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бутерброд",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "вареник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "млинець",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "круасан",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "бублик",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "сосиска",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "котлета",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "макарони",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "спагеті",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "салат",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "йогурт",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "суп",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "борщ",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "каша",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "мед",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "горіх",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "пиріг",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -1275,6 +2487,82 @@
                                     {
                                         "text":  "відмовлятися від десерту",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "ананас",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кокос",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "авокадо",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "броколі",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "баклажан",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гарбуз",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "перець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "часник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кукурудза",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "креветка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "суші",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "локшина",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "запіканка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "голубець",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дерун",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "паляниця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пампушка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "млинниця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "самовар",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -1331,6 +2619,58 @@
                                     {
                                         "text":  "пірат",
                                         "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "корона",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "меч",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "щит",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "замок",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "скарб",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "чобіт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мантія",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "паличка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "трон",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "джин",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ельф",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "гоблін",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "троль",
+                                        "kind":  "noun"
                                     }
                                 ],
                        "medium":  [
@@ -1381,6 +2721,74 @@
                                       {
                                           "text":  "розмовляти з дзеркалом",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "чаклун",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "маг",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "вампір",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "перевертень",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "циклоп",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "сфінкс",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "фенікс",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "грифон",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "пегас",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "кентавр",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "скелет",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "мумія",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "привид",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "зомбі",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "чарівниця",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "королева",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "принц",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -1431,6 +2839,70 @@
                                     {
                                         "text":  "ховатися від привида",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "некромант",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "алхімік",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "оракул",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "провісник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "хранитель",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "артефакт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "амулет",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "талісман",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "кристал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "портал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "лабіринт",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "прокляття",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "закляття",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "тронна зала",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "скарбниця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "дракончик",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -1541,7 +3013,7 @@
                                   ],
                        "hard":  [
                                     {
-                                        "text":  "шукати загублений телефон",
+                                        "text":  "загубити гаманець",
                                         "kind":  "phrase"
                                     },
                                     {
@@ -1605,7 +3077,7 @@
                                         "kind":  "noun"
                                     },
                                     {
-                                        "text":  "пірат",
+                                        "text":  "розбійник",
                                         "kind":  "noun"
                                     },
                                     {
@@ -1637,11 +3109,23 @@
                                         "kind":  "noun"
                                     },
                                     {
-                                        "text":  "король",
+                                        "text":  "імператор",
                                         "kind":  "noun"
                                     },
                                     {
                                         "text":  "ведучий",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "шпигун",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ніндзя",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "піратка",
                                         "kind":  "noun"
                                     }
                                 ],
@@ -1693,6 +3177,54 @@
                                       {
                                           "text":  "охоронець перевіряє двері",
                                           "kind":  "phrase"
+                                      },
+                                      {
+                                          "text":  "слідчий",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "суддя",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "адвокат",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "піаніст",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "рок-зірка",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "репер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "телеведучий",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "репортер",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "фотограф",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "мандрівник",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "гонщик",
+                                          "kind":  "noun"
+                                      },
+                                      {
+                                          "text":  "капітан корабля",
+                                          "kind":  "noun"
                                       }
                                   ],
                        "hard":  [
@@ -1743,6 +3275,66 @@
                                     {
                                         "text":  "ковбой приручає дикого коня",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "геній",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "винахідник",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "професор",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "маестро",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "продюсер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "магістр",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "командир",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "генерал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "адмірал",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "посол",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мільйонер",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мандрівний лицар",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "таємний агент",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мисливець за скарбами",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "майстер церемоній",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
@@ -1769,7 +3361,7 @@
                                         "kind":  "noun"
                                     },
                                     {
-                                        "text":  "дивуватися",
+                                        "text":  "загадка",
                                         "kind":  "noun"
                                     },
                                     {
@@ -1789,7 +3381,7 @@
                                         "kind":  "noun"
                                     },
                                     {
-                                        "text":  "радіти",
+                                        "text":  "успіх",
                                         "kind":  "noun"
                                     },
                                     {
@@ -1899,6 +3491,86 @@
                                     {
                                         "text":  "показати перемогу без звуку",
                                         "kind":  "phrase"
+                                    },
+                                    {
+                                        "text":  "справедливість",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "демократія",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "абстракція",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "відповідальність",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "інфляція",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "натхнення",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "самотність",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "ревнощі",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "слава",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "сором",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "провина",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "свобода",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "пам’ять",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "надія",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "удача",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "поразка",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "перемога",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "таємниця",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "мрія",
+                                        "kind":  "noun"
+                                    },
+                                    {
+                                        "text":  "спогад",
+                                        "kind":  "noun"
                                     }
                                 ]
                    }
