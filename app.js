@@ -39,7 +39,7 @@ const modeConfigs = [
     description: "Пояснюй слово, не називаючи його.",
     dataFile: "words.json",
     cardHint: "",
-    defaultNoPhrases: false,
+    defaultNoPhrases: true,
     available: true,
   },
   {
