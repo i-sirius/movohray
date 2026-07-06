@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=0.3.4" />
 </head>
 <body data-mode="explain">
   <main class="app">
@@ -48,84 +48,112 @@
         <p id="settingsMessage" class="message settings-message" role="alert" aria-live="polite"></p>
       </div>
 
-      <div class="card bubble-card">
+      <div class="card bubble-card settings-card">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-b"></div>
           <div class="card-inner">
-            <p class="settings-eyebrow">Налаштування гри</p>
-            <h1 id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</h1>
-            <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
-
-          <div id="charadesFormatSection" class="charades-only settings-option-section" hidden>
-            <h2>Формат гри</h2>
-            <div class="settings-chip-grid">
-              <button class="charades-format-btn setting-chip selected" data-format="single" type="button">Одне слово</button>
-              <button class="charades-format-btn setting-chip" data-format="timed" type="button">На час</button>
-            </div>
-          </div>
-
-          <div id="charadesKindSection" class="charades-only settings-option-section" hidden>
-            <h2>Тип завдань</h2>
-            <div class="settings-chip-grid">
-              <button class="charades-kind-btn setting-chip selected" data-kind="noun" type="button">Іменники</button>
-              <button class="charades-kind-btn setting-chip" data-kind="action" type="button">Дії</button>
-              <button class="charades-kind-btn setting-chip" data-kind="phrase" type="button">Фрази</button>
-              <button class="charades-kind-btn setting-chip" data-kind="all" type="button">Усе</button>
-            </div>
-          </div>
-
-          <h2>Категорія</h2>
-          <div id="categoryList" class="button-grid"></div>
-
-          <h2>Складність</h2>
-          <div class="settings-chip-grid">
-            <button class="difficulty-btn setting-chip selected" data-difficulty="easy">Легко</button>
-            <button class="difficulty-btn setting-chip selected" data-difficulty="medium">Середньо</button>
-            <button class="difficulty-btn setting-chip selected" data-difficulty="hard">Складно</button>
-          </div>
-
-          <h2>Словосполучення</h2>
-          <div class="settings-chip-grid">
-            <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
-          </div>
-
-          <div id="lastWordSection" class="settings-option-section">
-            <h2>Завершення раунду</h2>
-            <div class="settings-chip-grid">
-              <button id="lastWordBtn" class="setting-chip selected" type="button" aria-pressed="true">Довгадувати останнє слово після часу</button>
-            </div>
-          </div>
-
-          <div class="timed-settings">
-            <h2>Час раунду (сек)</h2>
-            <div class="settings-chip-grid">
-              <button class="duration-btn setting-chip" data-seconds="30">30</button>
-              <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
-              <button class="duration-btn setting-chip" data-seconds="90">90</button>
-              <button class="duration-btn setting-chip" data-seconds="120">120</button>
-            </div>
-          </div>
-
-          <div class="timed-settings">
-            <h2>Ціль гри (кількість слів)</h2>
-            <div class="settings-chip-grid">
-              <button class="target-btn setting-chip" data-target="20">20</button>
-              <button class="target-btn setting-chip selected" data-target="30">30</button>
-              <button class="target-btn setting-chip" data-target="50">50</button>
-              <button class="target-btn setting-chip" data-target="100">100</button>
-            </div>
-          </div>
-
-          <div class="timed-settings">
-            <h2>Команди</h2>
-            <div class="settings-chip-grid">
-              <button class="team-count-btn setting-chip selected" data-count="2">2</button>
-              <button class="team-count-btn setting-chip" data-count="3">3</button>
-              <button class="team-count-btn setting-chip" data-count="4">4</button>
+            <div class="settings-header">
+              <p class="settings-eyebrow">Налаштування гри</p>
+              <h1 id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</h1>
+              <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
             </div>
 
-            <div id="teamNameFields" class="team-name-fields"></div>
-          </div>
+            <div class="settings-grid">
+              <section id="charadesFormatSection" class="charades-only settings-group" hidden>
+                <h2>Формат гри</h2>
+                <div class="settings-chip-grid compact-chip-grid">
+                  <button class="charades-format-btn setting-chip selected" data-format="single" type="button">Одне слово</button>
+                  <button class="charades-format-btn setting-chip" data-format="timed" type="button">На час</button>
+                </div>
+              </section>
+
+              <section id="charadesKindSection" class="charades-only settings-group" hidden>
+                <h2>Тип завдань</h2>
+                <div class="settings-chip-grid compact-chip-grid">
+                  <button class="charades-kind-btn setting-chip selected" data-kind="noun" type="button">Іменники</button>
+                  <button class="charades-kind-btn setting-chip" data-kind="action" type="button">Дії</button>
+                  <button class="charades-kind-btn setting-chip" data-kind="phrase" type="button">Фрази</button>
+                  <button class="charades-kind-btn setting-chip" data-kind="all" type="button">Усе</button>
+                </div>
+              </section>
+
+              <section class="settings-group settings-group-wide">
+                <h2>Слова</h2>
+                <div class="setting-subsection">
+                  <div id="categoryList" class="button-grid"></div>
+                </div>
+
+                <div class="settings-two-columns">
+                  <div class="setting-subsection">
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button class="difficulty-btn setting-chip selected" data-difficulty="easy">Легко</button>
+                      <button class="difficulty-btn setting-chip selected" data-difficulty="medium">Середньо</button>
+                      <button class="difficulty-btn setting-chip selected" data-difficulty="hard">Складно</button>
+                    </div>
+                  </div>
+
+                  <div class="setting-subsection">
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="settings-group timed-settings">
+                <h2>Раунд</h2>
+                <div class="settings-two-columns">
+                  <div class="setting-subsection">
+                    <h3>Час:</h3>
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button class="duration-btn setting-chip" data-seconds="30">30</button>
+                      <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
+                      <button class="duration-btn setting-chip" data-seconds="90">90</button>
+                      <button class="duration-btn setting-chip" data-seconds="120">120</button>
+                    </div>
+                  </div>
+
+                  <div id="lastWordSection" class="setting-subsection">
+                    <h3>Після часу:</h3>
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button id="lastWordBtn" class="setting-chip selected" type="button" aria-pressed="true">Довгадати</button>
+                      <button id="lastWordStopBtn" class="setting-chip" type="button" aria-pressed="false">Стоп</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="settings-group timed-settings">
+                <h2>Гра</h2>
+                <div class="settings-two-columns">
+                  <div class="setting-subsection">
+                    <h3>Ціль:</h3>
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button class="target-btn setting-chip" data-target="20">20</button>
+                      <button class="target-btn setting-chip selected" data-target="30">30</button>
+                      <button class="target-btn setting-chip" data-target="50">50</button>
+                      <button class="target-btn setting-chip" data-target="100">100</button>
+                    </div>
+                  </div>
+
+                  <div class="setting-subsection">
+                    <h3>Команди:</h3>
+                    <div class="settings-chip-grid compact-chip-grid">
+                      <button class="team-count-btn setting-chip selected" data-count="2">2</button>
+                      <button class="team-count-btn setting-chip" data-count="3">3</button>
+                      <button class="team-count-btn setting-chip" data-count="4">4</button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="settings-group settings-group-wide timed-settings">
+                <button id="teamNamesToggleBtn" class="setting-chip team-names-toggle" type="button" aria-expanded="false">Назви команд ▾</button>
+                <div id="teamNameFieldsWrap" class="team-name-fields-wrap" hidden>
+                  <div id="teamNameFields" class="team-name-fields"></div>
+                </div>
+              </section>
+            </div>
         </div>
       </div>
     </section>
@@ -172,16 +200,11 @@
             <span id="roundProgressFill"></span>
           </div>
 
-          <div class="round-mini-stats timed-game-ui">
-            <span>✓ <strong id="scoreText">0</strong></span>
-            <span>↷ <strong id="skippedText">0</strong></span>
-          </div>
-
-          <div class="team-mini-progress timed-game-ui">
+          <div class="team-mini-progress timed-game-ui" aria-hidden="true">
             <div class="progress-bar"><span id="teamProgressFill"></span></div>
           </div>
 
-          <div id="teamScoreBoard" class="team-score-board team-score-board-hidden timed-game-ui"></div>
+          <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
 
           <div id="wordCard" class="word-card">
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
@@ -284,8 +307,20 @@
         </div>
       </div>
     </section>
+
+    <div id="exitMenuModal" class="exit-modal" hidden>
+      <div class="exit-modal-backdrop" data-exit-modal-close></div>
+      <div class="exit-modal-card" role="dialog" aria-modal="true" aria-labelledby="exitModalTitle" aria-describedby="exitModalDescription">
+        <h2 id="exitModalTitle">Вийти в меню?</h2>
+        <p id="exitModalDescription">Поточний прогрес гри буде втрачено.</p>
+        <div class="exit-modal-actions">
+          <button id="stayInGameBtn" class="secondary-btn" type="button">Залишитись</button>
+          <button id="confirmExitMenuBtn" class="primary-btn" type="button">Вийти</button>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=0.3.4"></script>
 </body>
 </html>

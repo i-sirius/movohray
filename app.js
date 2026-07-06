@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.3";
+const DATA_VERSION = "0.3.4";
 const modeCategoryCache = {};
 let selectedTeamCount = 2;
 let teamScores = [];
@@ -30,6 +30,7 @@ let score = 0;
 let skipped = 0;
 let timeLeft = 60;
 let timerId = null;
+let wasTimerRunningBeforeExitModal = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -108,11 +109,14 @@ const difficultyButtons = document.querySelectorAll(".difficulty-btn");
 const phraseFilterBtn = document.getElementById("phraseFilterBtn");
 const lastWordSection = document.getElementById("lastWordSection");
 const lastWordBtn = document.getElementById("lastWordBtn");
+const lastWordStopBtn = document.getElementById("lastWordStopBtn");
 const charadesFormatSection = document.getElementById("charadesFormatSection");
 const charadesKindSection = document.getElementById("charadesKindSection");
 const charadesFormatButtons = document.querySelectorAll(".charades-format-btn");
 const charadesKindButtons = document.querySelectorAll(".charades-kind-btn");
 const teamCountButtons = document.querySelectorAll(".team-count-btn");
+const teamNamesToggleBtn = document.getElementById("teamNamesToggleBtn");
+const teamNameFieldsWrap = document.getElementById("teamNameFieldsWrap");
 const settingsMessage = document.getElementById("settingsMessage");
 
 const settingsModeTitle = document.getElementById("settingsModeTitle");
@@ -121,8 +125,6 @@ const gameModeTitle = document.getElementById("gameModeTitle");
 const gameTeamName = document.getElementById("gameTeamName");
 const gameCategoryName = document.getElementById("gameCategoryName");
 const timerText = document.getElementById("timerText");
-const scoreText = document.getElementById("scoreText");
-const skippedText = document.getElementById("skippedText");
 const roundTimeMessage = document.getElementById("roundTimeMessage");
 const teamProgressText = document.getElementById("teamProgressText");
 const teamProgressFill = document.getElementById("teamProgressFill");
@@ -153,6 +155,9 @@ const roundReviewScore = document.getElementById("roundReviewScore");
 const roundReviewSkipped = document.getElementById("roundReviewSkipped");
 const roundReviewList = document.getElementById("roundReviewList");
 const confirmRoundBtn = document.getElementById("confirmRoundBtn");
+const exitMenuModal = document.getElementById("exitMenuModal");
+const stayInGameBtn = document.getElementById("stayInGameBtn");
+const confirmExitMenuBtn = document.getElementById("confirmExitMenuBtn");
 const winnerTitle = document.getElementById("winnerTitle");
 const winnerSubtitle = document.getElementById("winnerSubtitle");
 const winnerHero = document.getElementById("winnerHero");
@@ -173,6 +178,7 @@ async function init() {
   updateModeLabels();
   syncPhraseFilterButton();
   syncLastWordButton();
+  syncTeamNamesVisibility(false);
   setupEvents();
 }
 
@@ -210,6 +216,28 @@ function setupEvents() {
 
   menuExitButtons.forEach((button) => {
     button.addEventListener("click", handleMenuExitRequest);
+  });
+
+  if (stayInGameBtn) {
+    stayInGameBtn.addEventListener("click", closeExitMenuModal);
+  }
+
+  if (confirmExitMenuBtn) {
+    confirmExitMenuBtn.addEventListener("click", confirmExitToMenu);
+  }
+
+  if (exitMenuModal) {
+    exitMenuModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-exit-modal-close]")) {
+        closeExitMenuModal();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
+      closeExitMenuModal();
+    }
   });
 
   startRoundButtons.forEach((button) => {
@@ -280,9 +308,24 @@ function setupEvents() {
 
   if (lastWordBtn) {
     lastWordBtn.addEventListener("click", () => {
-      allowLastWordAfterTime = !allowLastWordAfterTime;
+      allowLastWordAfterTime = true;
       syncLastWordButton();
       settingsMessage.textContent = "";
+    });
+  }
+
+  if (lastWordStopBtn) {
+    lastWordStopBtn.addEventListener("click", () => {
+      allowLastWordAfterTime = false;
+      syncLastWordButton();
+      settingsMessage.textContent = "";
+    });
+  }
+
+  if (teamNamesToggleBtn) {
+    teamNamesToggleBtn.addEventListener("click", () => {
+      const isExpanded = teamNamesToggleBtn.getAttribute("aria-expanded") === "true";
+      syncTeamNamesVisibility(!isExpanded);
     });
   }
 
@@ -524,12 +567,30 @@ function updateModeLabels() {
 }
 
 function syncLastWordButton() {
-  if (!lastWordBtn) {
+  if (!lastWordBtn && !lastWordStopBtn) {
     return;
   }
 
-  lastWordBtn.classList.toggle("selected", allowLastWordAfterTime);
-  lastWordBtn.setAttribute("aria-pressed", String(allowLastWordAfterTime));
+  if (lastWordBtn) {
+    lastWordBtn.classList.toggle("selected", allowLastWordAfterTime);
+    lastWordBtn.setAttribute("aria-pressed", String(allowLastWordAfterTime));
+  }
+
+  if (lastWordStopBtn) {
+    lastWordStopBtn.classList.toggle("selected", !allowLastWordAfterTime);
+    lastWordStopBtn.setAttribute("aria-pressed", String(!allowLastWordAfterTime));
+  }
+}
+
+function syncTeamNamesVisibility(isExpanded) {
+  if (!teamNamesToggleBtn || !teamNameFieldsWrap) {
+    return;
+  }
+
+  teamNamesToggleBtn.classList.toggle("selected", isExpanded);
+  teamNamesToggleBtn.setAttribute("aria-expanded", String(isExpanded));
+  teamNamesToggleBtn.textContent = isExpanded ? "Назви команд ▴" : "Назви команд ▾";
+  teamNameFieldsWrap.hidden = !isExpanded;
 }
 
 function isCharades() {
@@ -653,14 +714,14 @@ function getSelectedCategoryStatus() {
   const firstNames = selectedCategories.slice(0, 3).map((category) => category.name).join(", ");
 
   if (selectedCategories.length === 1) {
-    return `1 тема вибрана: ${firstNames}`;
+    return `1 тема: ${firstNames}`;
   }
 
   if (selectedCategories.length < 5) {
-    return `${selectedCategories.length} теми вибрано: ${firstNames}`;
+    return `${selectedCategories.length} теми: ${firstNames}`;
   }
 
-  return `${selectedCategories.length} тем вибрано: ${firstNames}…`;
+  return `${selectedCategories.length} тем: ${firstNames}…`;
 }
 
 function getSelectedCategoryLabel() {
@@ -1039,6 +1100,7 @@ function hasActiveGameProgress() {
 function resetActiveGameState() {
   clearInterval(timerId);
   timerId = null;
+  wasTimerRunningBeforeExitModal = false;
   resetSwipeState();
   score = 0;
   skipped = 0;
@@ -1057,7 +1119,7 @@ function resetActiveGameState() {
   }
 
   if (skipBtn) {
-    skipBtn.textContent = "Пропустити";
+    updateActionButtonLabels();
   }
 
   resetTeamScores();
@@ -1065,12 +1127,53 @@ function resetActiveGameState() {
 
 function handleMenuExitRequest() {
   if (hasActiveGameProgress()) {
-    const shouldExit = window.confirm("Вийти в головне меню? Поточний прогрес гри буде втрачено.");
-    if (!shouldExit) {
-      return;
-    }
+    openExitMenuModal();
+    return;
   }
 
+  confirmExitToMenu();
+}
+
+function openExitMenuModal() {
+  if (!exitMenuModal) {
+    confirmExitToMenu();
+    return;
+  }
+
+  wasTimerRunningBeforeExitModal = Boolean(timerId && isScreenActive(gameScreen) && !isSingleCardMode());
+  if (wasTimerRunningBeforeExitModal) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  exitMenuModal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  if (stayInGameBtn) {
+    stayInGameBtn.focus();
+  }
+}
+
+function closeExitMenuModal() {
+  if (!exitMenuModal) {
+    return;
+  }
+
+  exitMenuModal.hidden = true;
+  document.body.classList.remove("modal-open");
+
+  if (wasTimerRunningBeforeExitModal && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult) {
+    startTimer();
+  }
+
+  wasTimerRunningBeforeExitModal = false;
+}
+
+function confirmExitToMenu() {
+  if (exitMenuModal) {
+    exitMenuModal.hidden = true;
+  }
+  document.body.classList.remove("modal-open");
   resetActiveGameState();
   showScreen("menu");
 }
@@ -1116,9 +1219,7 @@ function beginPreparedRound() {
   if (roundTimeMessage) {
     roundTimeMessage.textContent = "";
   }
-  if (skipBtn) {
-    skipBtn.textContent = "Пропустити";
-  }
+  updateActionButtonLabels();
 
   showScreen("game");
   showNextWord();
@@ -1202,10 +1303,20 @@ function showSingleNextCard() {
   }, 180);
 }
 
+function updateActionButtonLabels() {
+  if (skipBtn) {
+    const skipLabel = isAwaitingLastWordResult ? "Не вгадано" : "Пропустити";
+    skipBtn.textContent = `${skipLabel} · ${skipped}`;
+  }
+
+  if (correctBtn) {
+    correctBtn.textContent = `Вгадано · ${score}`;
+  }
+}
+
 function updateGameInfo() {
   timerText.textContent = timeLeft;
-  scoreText.textContent = score;
-  skippedText.textContent = skipped;
+  updateActionButtonLabels();
 
   const currentTeamScore = (teamScores[currentTeamIndex] || 0) + score;
   const progressPercent = Math.min(100, Math.round((currentTeamScore / selectedTargetScore) * 100));
@@ -1302,11 +1413,15 @@ function updateTeamScoreBoard(includeCurrentRound = false) {
   teamScores.forEach((scoreValue, index) => {
     const row = document.createElement("div");
     row.className = "team-score-row";
+    if (index === currentTeamIndex) {
+      row.classList.add("current-team");
+    }
+
     const visibleScore = includeCurrentRound && index === currentTeamIndex ? scoreValue + score : scoreValue;
     const progressPercent = Math.min(100, Math.round((visibleScore / selectedTargetScore) * 100));
     row.innerHTML = `
       <strong>${getTeamName(index)}</strong>
-      <span>${visibleScore}</span>
+      <span>${visibleScore}/${selectedTargetScore}</span>
     `;
 
     const progress = document.createElement("div");
@@ -1474,9 +1589,7 @@ function finishRound(reason = "manual") {
   if (reason === "time" && currentEntry) {
     if (shouldGuessLastWordAfterTime()) {
       isAwaitingLastWordResult = true;
-      if (skipBtn) {
-        skipBtn.textContent = "Не вгадано";
-      }
+      updateActionButtonLabels();
       if (roundTimeMessage) {
         roundTimeMessage.textContent = "\u0427\u0430\u0441 \u0432\u0438\u0439\u0448\u043e\u0432. \u0417\u0430\u0432\u0435\u0440\u0448\u0456\u0442\u044c \u043f\u043e\u0442\u043e\u0447\u043d\u0435 \u0441\u043b\u043e\u0432\u043e.";
       }
