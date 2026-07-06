@@ -31,6 +31,7 @@ let skipped = 0;
 let timeLeft = 60;
 let timerId = null;
 let wasTimerRunningBeforeExitModal = false;
+let isThemesPopoverOpen = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -124,6 +125,7 @@ const settingsModeDescription = document.getElementById("settingsModeDescription
 const gameModeTitle = document.getElementById("gameModeTitle");
 const gameTeamName = document.getElementById("gameTeamName");
 const gameCategoryName = document.getElementById("gameCategoryName");
+const gameThemesPopover = document.getElementById("gameThemesPopover");
 const timerText = document.getElementById("timerText");
 const roundTimeMessage = document.getElementById("roundTimeMessage");
 const teamProgressText = document.getElementById("teamProgressText");
@@ -238,6 +240,35 @@ function setupEvents() {
     if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
       closeExitMenuModal();
     }
+
+    if (event.key === "Escape") {
+      closeThemesPopover();
+    }
+  });
+
+  if (gameCategoryName) {
+    gameCategoryName.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleThemesPopover();
+    });
+  }
+
+  if (gameThemesPopover) {
+    gameThemesPopover.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (!isThemesPopoverOpen) {
+      return;
+    }
+
+    if (gameCategoryName?.contains(event.target) || gameThemesPopover?.contains(event.target)) {
+      return;
+    }
+
+    closeThemesPopover();
   });
 
   startRoundButtons.forEach((button) => {
@@ -756,16 +787,106 @@ function getCompactCategoryNames(maxVisible = 3) {
 }
 
 
+function getThemeCountLabel(count) {
+  const lastTwoDigits = count % 100;
+  const lastDigit = count % 10;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return `${count} тем`;
+  }
+
+  if (lastDigit === 1) {
+    return `${count} тема`;
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return `${count} теми`;
+  }
+
+  return `${count} тем`;
+}
+
 function getHudCategoryLabel() {
   if (selectedCategories.length === 0) {
-    return "Усі категорії";
+    return "Усі теми";
   }
 
   if (selectedCategories.length === 1) {
     return selectedCategories[0].name;
   }
 
-  return `${selectedCategories[0].name} +${selectedCategories.length - 1}`;
+  return getThemeCountLabel(selectedCategories.length);
+}
+
+function getActiveThemeNames() {
+  if (selectedCategories.length === 0) {
+    return categories.map((category) => category.name);
+  }
+
+  return selectedCategories.map((category) => category.name);
+}
+
+function renderThemesPopover() {
+  if (!gameThemesPopover) {
+    return;
+  }
+
+  gameThemesPopover.innerHTML = "";
+
+  const title = document.createElement("strong");
+  title.className = "themes-popover-title";
+  title.textContent = "Обрані теми";
+  gameThemesPopover.appendChild(title);
+
+  if (selectedCategories.length === 0) {
+    const allThemesText = document.createElement("p");
+    allThemesText.className = "themes-popover-note";
+    allThemesText.textContent = "Активні всі теми";
+    gameThemesPopover.appendChild(allThemesText);
+    return;
+  }
+
+  const themeList = document.createElement("div");
+  themeList.className = "themes-popover-list";
+
+  getActiveThemeNames().forEach((themeName) => {
+    const themeChip = document.createElement("span");
+    themeChip.className = "themes-popover-chip";
+    themeChip.textContent = themeName;
+    themeList.appendChild(themeChip);
+  });
+
+  gameThemesPopover.appendChild(themeList);
+}
+
+function openThemesPopover() {
+  if (!gameThemesPopover || !gameCategoryName) {
+    return;
+  }
+
+  renderThemesPopover();
+  gameThemesPopover.hidden = false;
+  gameCategoryName.setAttribute("aria-expanded", "true");
+  isThemesPopoverOpen = true;
+}
+
+function closeThemesPopover() {
+  if (!gameThemesPopover || !gameCategoryName) {
+    return;
+  }
+
+  gameThemesPopover.hidden = true;
+  gameCategoryName.setAttribute("aria-expanded", "false");
+  isThemesPopoverOpen = false;
+}
+
+function toggleThemesPopover() {
+  if (isThemesPopoverOpen) {
+    closeThemesPopover();
+    return;
+  }
+
+  openThemesPopover();
 }
 
 function getSelectedDifficultyLabel() {
@@ -817,6 +938,7 @@ function renderGameSummary() {
   }
 
   gameCategoryName.innerHTML = "";
+  gameCategoryName.setAttribute("aria-label", "Показати обрані теми");
 
   const title = document.createElement("span");
   title.className = "summary-title";
@@ -830,6 +952,8 @@ function renderGameSummary() {
     kindBadge.textContent = kindLabel;
     gameCategoryName.appendChild(kindBadge);
   }
+
+  renderThemesPopover();
 }
 
 function renderWordMeta(entry) {
@@ -1762,6 +1886,8 @@ function showWinnerScreen() {
 }
 
 function showScreen(screenName) {
+  closeThemesPopover();
+
   menuScreen.classList.remove("active");
   settingsScreen.classList.remove("active");
   teamReadyScreen.classList.remove("active");

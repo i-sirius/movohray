@@ -192,7 +192,16 @@
             </div>
 
             <div class="game-hud-right">
-              <div id="gameCategoryName" class="game-category-summary-content">Усі категорії</div>
+              <button
+                id="gameCategoryName"
+                class="game-category-summary-content"
+                type="button"
+                aria-expanded="false"
+                aria-controls="gameThemesPopover"
+              >
+                Усі теми
+              </button>
+              <div id="gameThemesPopover" class="game-themes-popover" hidden></div>
             </div>
           </header>
 
