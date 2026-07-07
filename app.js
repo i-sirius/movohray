@@ -9,8 +9,10 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.6";
+const DATA_VERSION = "0.3.7";
 const THEME_STORAGE_KEY = "movohray-theme";
+const GAME_TITLE = "Мовограй";
+const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
 const modeCategoryCache = {};
 const funnyTeamNames = [
   "Веселі Кабачки",
@@ -162,6 +164,8 @@ const winnerScreen = document.getElementById("winnerScreen");
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 const themeToggleIcon = document.getElementById("themeToggleIcon");
 const themeToggleText = document.getElementById("themeToggleText");
+const appTitle = document.getElementById("appTitle");
+const appSubtitle = document.getElementById("appSubtitle");
 
 const backToMenuBtn = document.getElementById("backToMenuBtn");
 const menuExitButtons = document.querySelectorAll(".menu-exit-btn");
@@ -244,6 +248,7 @@ const winnerScoreBoard = document.getElementById("winnerScoreBoard");
 init();
 
 async function init() {
+  applyBrandText();
   initializeTheme();
   await loadModeCategories(selectedMode);
   renderCategories();
@@ -255,6 +260,18 @@ async function init() {
   syncLastWordButton();
   syncTeamNamesVisibility(false);
   setupEvents();
+}
+
+function applyBrandText() {
+  document.title = GAME_TITLE;
+
+  if (appTitle) {
+    appTitle.textContent = GAME_TITLE;
+  }
+
+  if (appSubtitle) {
+    appSubtitle.textContent = GAME_SUBTITLE;
+  }
 }
 
 function getPreferredTheme() {
@@ -690,11 +707,11 @@ function renderModes() {
     upcomingBox.className = "upcoming-modes";
     upcomingBox.innerHTML = `
       <div class="upcoming-modes-copy">
-        <strong>Скоро</strong>
+        <strong>Незабаром</strong>
         <span>Готуємо нові режими для компанії.</span>
       </div>
       <div class="upcoming-mode-chips">
-        ${upcomingModes.map((mode) => `<span>${mode.title.replace(/\s*\([^)]*\)/g, "")}</span>`).join("")}
+        ${upcomingModes.map((mode) => `<span class="upcoming-mode-chip">${mode.title.replace(/\s*\([^)]*\)/g, "")}</span>`).join("")}
       </div>
     `;
     modeList.appendChild(upcomingBox);

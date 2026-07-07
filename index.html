@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.3.6" />
+  <link rel="stylesheet" href="styles.css?v=0.3.7" />
 </head>
 <body data-mode="explain">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -21,9 +21,12 @@
         <div class="decor-dot dot-b"></div>
         <div class="decor-dot dot-c"></div>
         <div class="card-inner">
-          <div class="logo">🎲</div>
-          <h1>Мовограй</h1>
-          <p class="subtitle">Українські ігри зі словами для компанії.</p>
+          <div class="logo" aria-hidden="true">
+            <img class="logo-img logo-img-light" src="favicon-light.png" alt="" />
+            <img class="logo-img logo-img-dark" src="favicon-dark.png" alt="" />
+          </div>
+          <h1 id="appTitle">Мовограй</h1>
+          <p id="appSubtitle" class="subtitle">Українські ігри зі словами для компанії.</p>
           <p class="menu-mode-note">Режими: Поясни слово та Покажи слово.</p>
 
           <div id="modeList" class="mode-grid"></div>
@@ -352,6 +355,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.3.6"></script>
+  <script src="app.js?v=0.3.7"></script>
 </body>
 </html>
