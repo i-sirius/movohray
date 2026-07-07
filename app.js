@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.10";
+const DATA_VERSION = "0.3.11";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -2154,10 +2154,25 @@ function renderRoundReview() {
 
     const meta = document.createElement("span");
     meta.className = "round-word-meta";
-    meta.textContent = `${item.categoryName} \u00b7 ${item.difficultyName}`;
+
+    const category = document.createElement("span");
+    category.className = "round-word-category";
+    category.textContent = formatReviewMetaText(item.categoryName);
+
+    const separator = document.createElement("span");
+    separator.className = "round-word-separator";
+    separator.textContent = " \u00b7 ";
+
+    const difficulty = document.createElement("em");
+    difficulty.className = "round-word-difficulty";
+    difficulty.textContent = formatReviewMetaText(item.difficultyName);
+
+    meta.appendChild(category);
+    meta.appendChild(separator);
+    meta.appendChild(difficulty);
 
     const status = document.createElement("span");
-    status.className = "round-word-status";
+    status.className = `round-word-status ${item.result === "guessed" ? "is-guessed" : "is-skipped"}`;
     status.textContent = item.result === "guessed" ? "\u0412\u0433\u0430\u0434\u0430\u043d\u043e" : "\u041d\u0435 \u0432\u0433\u0430\u0434\u0430\u043d\u043e";
 
     row.addEventListener("click", () => {
@@ -2172,6 +2187,10 @@ function renderRoundReview() {
     row.appendChild(status);
     roundReviewList.appendChild(row);
   });
+}
+
+function formatReviewMetaText(value) {
+  return String(value || "").toLocaleLowerCase("uk-UA");
 }
 
 function getActiveRoundsPlayed() {

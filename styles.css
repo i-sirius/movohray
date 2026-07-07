@@ -1691,8 +1691,13 @@ h2 {
   white-space: nowrap;
 }
 
+.round-word-difficulty {
+  font-style: italic;
+}
+
 .round-word-status {
   border-radius: 999px;
+  border: 1px solid transparent;
   padding: 7px 10px;
   font-size: 12px;
   font-weight: 900;
@@ -1753,14 +1758,16 @@ h2 {
   line-height: 1.2;
 }
 
-.is-guessed .round-word-status {
-  background: rgba(95, 147, 112, 0.22);
-  color: #3d7250;
+.round-word-status.is-guessed {
+  background: rgba(61, 155, 102, 0.2);
+  color: #27734d;
+  border-color: rgba(61, 155, 102, 0.38);
 }
 
-.is-skipped .round-word-status {
-  background: rgba(214, 111, 91, 0.16);
-  color: #8a4a3a;
+.round-word-status.is-skipped {
+  background: rgba(218, 88, 74, 0.18);
+  color: #9c3f35;
+  border-color: rgba(218, 88, 74, 0.36);
 }
 
 .word-card::before,
@@ -2291,6 +2298,18 @@ body[data-theme="dark"] .round-word-row {
   background: var(--color-surface);
   color: var(--color-text);
   border-color: var(--color-border);
+}
+
+body[data-theme="dark"] .round-word-status.is-guessed {
+  background: rgba(118, 196, 154, 0.24);
+  color: #b9f3d0;
+  border-color: rgba(118, 196, 154, 0.44);
+}
+
+body[data-theme="dark"] .round-word-status.is-skipped {
+  background: rgba(241, 128, 108, 0.24);
+  color: #ffc7bd;
+  border-color: rgba(241, 128, 108, 0.42);
 }
 
 body[data-theme="dark"] .pause-round-btn.is-ended .pause-round-label {
