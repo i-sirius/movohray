@@ -183,57 +183,38 @@ button {
 
 .theme-toggle-btn {
   position: fixed;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
   z-index: 30;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
+  gap: 7px;
+  min-height: 40px;
+  max-width: calc(100vw - 28px);
+  padding: 8px 12px;
   border-radius: 999px;
   background: rgba(255, 250, 240, 0.72);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   box-shadow: 0 8px 18px rgba(54, 49, 94, 0.1);
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 900;
   backdrop-filter: blur(10px);
+  white-space: nowrap;
 }
 
 .theme-toggle-btn #themeToggleText {
-  display: none;
+  display: inline;
 }
 
 .theme-toggle-btn #themeToggleIcon {
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.theme-toggle-btn::before {
-  content: "";
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background: #5760a7;
-  box-shadow: inset -5px 0 0 rgba(255, 250, 240, 0.92);
-}
-
-body[data-theme="dark"] .theme-toggle-btn::before {
-  width: 14px;
-  height: 14px;
-  background: #ffd36a;
-  box-shadow:
-    0 -9px 0 -5px #ffd36a,
-    0 9px 0 -5px #ffd36a,
-    9px 0 0 -5px #ffd36a,
-    -9px 0 0 -5px #ffd36a,
-    6px 6px 0 -5px #ffd36a,
-    -6px 6px 0 -5px #ffd36a,
-    6px -6px 0 -5px #ffd36a,
-    -6px -6px 0 -5px #ffd36a;
+  display: inline-grid;
+  place-items: center;
+  width: 1em;
+  height: 1em;
+  font-size: 15px;
+  line-height: 1;
 }
 
 .theme-toggle-btn:hover {
@@ -252,7 +233,7 @@ body[data-theme="dark"] .theme-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 64px 24px 24px;
+  padding: 68px 24px 24px;
 }
 
 .app::before,
@@ -2163,19 +2144,22 @@ body[data-theme="dark"] .mode-card-battle {
   --mode-card-shadow: rgba(0, 0, 0, 0.22);
   --mode-card-dot: rgba(155, 156, 242, 0.18);
   --mode-card-title: var(--color-text);
+  background: var(--mode-card-from);
+  border-color: var(--mode-card-border);
+  box-shadow: 0 16px 34px var(--mode-card-shadow);
 }
 
 body[data-theme="dark"] .mode-card-explain {
-  --mode-card-from: linear-gradient(145deg, rgba(70, 74, 132, 0.72), rgba(37, 44, 75, 0.94));
-  --mode-card-border: rgba(155, 156, 242, 0.34);
-  --mode-card-shadow: rgba(35, 39, 84, 0.34);
+  --mode-card-from: linear-gradient(145deg, rgba(86, 88, 166, 0.9), rgba(43, 49, 92, 0.98));
+  --mode-card-border: rgba(178, 180, 255, 0.46);
+  --mode-card-shadow: rgba(63, 67, 150, 0.42);
   --mode-card-title: #e4e5ff;
 }
 
 body[data-theme="dark"] .mode-card-charades {
-  --mode-card-from: linear-gradient(145deg, rgba(45, 104, 83, 0.72), rgba(31, 58, 56, 0.94));
-  --mode-card-border: rgba(119, 196, 154, 0.34);
-  --mode-card-shadow: rgba(17, 63, 48, 0.32);
+  --mode-card-from: linear-gradient(145deg, rgba(42, 127, 99, 0.9), rgba(28, 67, 65, 0.98));
+  --mode-card-border: rgba(136, 221, 179, 0.44);
+  --mode-card-shadow: rgba(23, 93, 70, 0.4);
   --mode-card-title: #d9f8e7;
 }
 

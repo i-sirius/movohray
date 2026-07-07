@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.4";
+const DATA_VERSION = "0.3.5";
 const THEME_STORAGE_KEY = "movohray-theme";
 const modeCategoryCache = {};
 const funnyTeamNames = [
@@ -284,11 +284,11 @@ function applyTheme(theme) {
   }
 
   if (themeToggleIcon) {
-    themeToggleIcon.textContent = nextTheme === "dark" ? "☀" : "☾";
+    themeToggleIcon.textContent = nextTheme === "dark" ? "☀️" : "🌙";
   }
 
   if (themeToggleText) {
-    themeToggleText.textContent = nextTheme === "dark" ? "Світла" : "Темна";
+    themeToggleText.textContent = nextTheme === "dark" ? "Світла тема" : "Темна тема";
   }
 }
 
