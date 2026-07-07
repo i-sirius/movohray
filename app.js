@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.11";
+const DATA_VERSION = "0.3.12";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -215,6 +215,8 @@ const singleSettingsBtn = document.getElementById("singleSettingsBtn");
 const skipBtn = document.getElementById("skipBtn");
 const correctBtn = document.getElementById("correctBtn");
 const finishEarlyBtn = document.getElementById("finishEarlyBtn");
+const roundCorrectCount = document.getElementById("roundCorrectCount");
+const roundSkippedCount = document.getElementById("roundSkippedCount");
 const pauseRoundBtn = document.getElementById("pauseRoundBtn");
 const pauseRoundIcon = document.getElementById("pauseRoundIcon");
 const pauseRoundLabel = document.getElementById("pauseRoundLabel");
@@ -231,6 +233,7 @@ const teamReadyScore = document.getElementById("readyTeamScore");
 const roundReviewTeamName = document.getElementById("roundReviewTeamName");
 const roundReviewScore = document.getElementById("roundReviewScore");
 const roundReviewSkipped = document.getElementById("roundReviewSkipped");
+const roundReviewProgress = document.getElementById("roundReviewProgress");
 const roundReviewList = document.getElementById("roundReviewList");
 const confirmRoundBtn = document.getElementById("confirmRoundBtn");
 const exitMenuModal = document.getElementById("exitMenuModal");
@@ -1770,6 +1773,14 @@ function updateActionButtonLabels() {
   if (correctBtn) {
     correctBtn.textContent = `Вгадано · ${score}`;
   }
+
+  if (roundCorrectCount) {
+    roundCorrectCount.textContent = score;
+  }
+
+  if (roundSkippedCount) {
+    roundSkippedCount.textContent = skipped;
+  }
 }
 
 function updateGameInfo() {
@@ -2126,6 +2137,12 @@ function renderRoundReview() {
     roundReviewSkipped.textContent = skipped;
   }
 
+  renderRoundReviewProgress();
+
+  if (confirmRoundBtn) {
+    confirmRoundBtn.textContent = getRoundReviewActionLabel();
+  }
+
   if (!roundReviewList) {
     return;
   }
@@ -2191,6 +2208,77 @@ function renderRoundReview() {
 
 function formatReviewMetaText(value) {
   return String(value || "").toLocaleLowerCase("uk-UA");
+}
+
+function renderRoundReviewProgress() {
+  if (!roundReviewProgress) {
+    return;
+  }
+
+  roundReviewProgress.innerHTML = "";
+
+  const heading = document.createElement("div");
+  heading.className = "round-review-progress-heading";
+
+  const title = document.createElement("strong");
+  title.textContent = `${getTeamName(currentTeamIndex)}: +${score} за раунд`;
+
+  const hint = document.createElement("span");
+  hint.textContent = "Прогрес після зарахування";
+
+  heading.appendChild(title);
+  heading.appendChild(hint);
+  roundReviewProgress.appendChild(heading);
+
+  const list = document.createElement("div");
+  list.className = "round-review-team-list";
+
+  teamScores.slice(0, selectedTeamCount).forEach((scoreValue, index) => {
+    const previewScore = index === currentTeamIndex ? scoreValue + score : scoreValue;
+    const progressPercent = Math.min(100, Math.round((previewScore / selectedTargetScore) * 100));
+    const row = document.createElement("div");
+    row.className = "round-review-team-row";
+    if (index === currentTeamIndex) {
+      row.classList.add("current-team");
+    }
+
+    const name = document.createElement("strong");
+    name.textContent = getTeamName(index);
+
+    const total = document.createElement("span");
+    total.textContent = `${previewScore}/${selectedTargetScore}`;
+
+    const progress = document.createElement("div");
+    progress.className = "progress-bar";
+
+    const fill = document.createElement("span");
+    fill.style.width = `${progressPercent}%`;
+
+    progress.appendChild(fill);
+    row.appendChild(name);
+    row.appendChild(total);
+    row.appendChild(progress);
+    list.appendChild(row);
+  });
+
+  roundReviewProgress.appendChild(list);
+}
+
+function getRoundReviewActionLabel() {
+  const previewScores = teamScores.slice(0, selectedTeamCount);
+  previewScores[currentTeamIndex] = (previewScores[currentTeamIndex] || 0) + score;
+
+  const previewRounds = roundsPlayedByTeam.slice(0, selectedTeamCount);
+  previewRounds[currentTeamIndex] = (previewRounds[currentTeamIndex] || 0) + 1;
+
+  const nextFinalRoundActive = finalRoundActive || previewScores.some((scoreValue) => scoreValue >= selectedTargetScore);
+  const equalRounds = previewRounds.every((roundCount) => roundCount === previewRounds[0]);
+
+  if (nextFinalRoundActive && equalRounds) {
+    return "Показати переможця";
+  }
+
+  return "Наступна команда";
 }
 
 function getActiveRoundsPlayed() {

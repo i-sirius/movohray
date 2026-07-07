@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.3.11" />
+  <link rel="stylesheet" href="styles.css?v=0.3.12" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -238,6 +238,18 @@
 
           <div id="wordCard" class="word-card">
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
+            <div class="round-card-stats timed-game-ui" aria-live="polite">
+              <span class="round-card-stat round-card-stat-correct">
+                <span aria-hidden="true">✓</span>
+                <span>Вгадано</span>
+                <strong id="roundCorrectCount">0</strong>
+              </span>
+              <span class="round-card-stat round-card-stat-skipped">
+                <span aria-hidden="true">↓</span>
+                <span>Пропущено</span>
+                <strong id="roundSkippedCount">0</strong>
+              </span>
+            </div>
             <div id="pauseOverlay" class="pause-overlay" hidden>
               <strong>Пауза</strong>
               <span>Натисніть “Грати”, щоб продовжити</span>
@@ -287,6 +299,8 @@
               <small>не вгадано</small>
             </div>
           </div>
+
+          <div id="roundReviewProgress" class="round-review-progress"></div>
 
           <h2 class="round-review-heading">Слова раунду</h2>
           <div id="roundReviewList" class="round-review-list"></div>
@@ -355,6 +369,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.3.11"></script>
+  <script src="app.js?v=0.3.12"></script>
 </body>
 </html>
