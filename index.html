@@ -10,6 +10,10 @@
   <link rel="stylesheet" href="styles.css?v=0.3.4" />
 </head>
 <body data-mode="explain">
+  <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
+    <span id="themeToggleIcon" aria-hidden="true">☾</span>
+    <span id="themeToggleText">Тема</span>
+  </button>
   <main class="app">
     <section id="menuScreen" class="screen active">
       <div class="card center bubble-card">
@@ -148,7 +152,9 @@
               </section>
 
               <section class="settings-group settings-group-wide timed-settings">
-                <button id="teamNamesToggleBtn" class="setting-chip team-names-toggle" type="button" aria-expanded="false">Назви команд ▾</button>
+                <div class="team-names-actions">
+                  <button id="teamNamesToggleBtn" class="setting-chip team-names-toggle" type="button" aria-expanded="false">Назви команд ▾</button>
+                </div>
                 <div id="teamNameFieldsWrap" class="team-name-fields-wrap" hidden>
                   <div id="teamNameFields" class="team-name-fields"></div>
                 </div>
@@ -182,27 +188,39 @@
         <div class="panel-inner">
           <h1 id="gameModeTitle" class="game-mode-title">Поясни слово (Alias)</h1>
           <header class="game-hud timed-game-ui">
-            <div class="game-hud-left">
-              <strong id="gameTeamName">Команда 1</strong>
-              <span id="teamProgressText">0/30</span>
+            <div class="game-hud-left-panel">
+              <div class="game-hud-team-line">
+                <span class="game-hud-kicker">ГРАЄ</span>
+                <strong id="gameTeamName">Команда 1</strong>
+              </div>
+
+              <div class="game-hud-right">
+                <button
+                  id="gameCategoryName"
+                  class="game-category-summary-content"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="gameThemesPopover"
+                >
+                  Усі теми
+                </button>
+                <div id="gameThemesPopover" class="game-themes-popover" hidden></div>
+              </div>
             </div>
 
-            <div class="game-hud-timer" aria-label="Час раунду">
-              <span id="timerText">60</span>
-            </div>
-
-            <div class="game-hud-right">
-              <button
-                id="gameCategoryName"
-                class="game-category-summary-content"
-                type="button"
-                aria-expanded="false"
-                aria-controls="gameThemesPopover"
-              >
-                Усі теми
-              </button>
-              <div id="gameThemesPopover" class="game-themes-popover" hidden></div>
-            </div>
+            <button id="pauseRoundBtn" class="game-hud-center pause-round-btn" type="button" aria-pressed="false">
+              <span class="game-hud-timer" aria-label="Час раунду">
+                <svg class="timer-ring" viewBox="0 0 72 72" aria-hidden="true">
+                  <circle class="timer-ring-bg" cx="36" cy="36" r="31"></circle>
+                  <circle id="timerRingProgress" class="timer-ring-progress" cx="36" cy="36" r="31"></circle>
+                </svg>
+                <span id="timerText">60</span>
+              </span>
+              <span class="pause-round-label">
+                <span id="pauseRoundIcon" class="pause-round-icon pause-icon pause-icon-pause" aria-hidden="true"></span>
+                <span id="pauseRoundLabel">Пауза</span>
+              </span>
+            </button>
           </header>
 
           <div class="game-hud-progress timed-game-ui" aria-hidden="true">
@@ -217,6 +235,10 @@
 
           <div id="wordCard" class="word-card">
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
+            <div id="pauseOverlay" class="pause-overlay" hidden>
+              <strong>Пауза</strong>
+              <span>Натисніть “Грати”, щоб продовжити</span>
+            </div>
             <span id="wordModeHint" class="word-mode-hint" hidden></span>
             <p id="wordText">Слово</p>
             <span id="swipeHint" class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>

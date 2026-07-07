@@ -10,7 +10,70 @@ let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.3.4";
+const THEME_STORAGE_KEY = "movohray-theme";
 const modeCategoryCache = {};
+const funnyTeamNames = [
+  "Веселі Кабачки",
+  "Шалені Бублики",
+  "Котики в Панамі",
+  "Борщові Ніндзя",
+  "Сміливі Вареники",
+  "Команда Печеньок",
+  "Грізні Пампушки",
+  "Космічні Їжаки",
+  "Хитрі Лисички",
+  "Дикі Равлики",
+  "Супер Сирники",
+  "Бадьорі Огірки",
+  "Легендарні Капці",
+  "Пухнасті Динозаври",
+  "Таємні Пиріжки",
+  "Веселі Пельмені",
+  "Круті Картоплини",
+  "Сонні Кактуси",
+  "Мудрі Пончики",
+  "Швидкі Галушки",
+  "Зоряні Млинці",
+  "Смішні Морквинки",
+  "Кмітливі Банани",
+  "Прудкі Черепашки",
+  "Хоробрі Пироги",
+  "Мармеладні Герої",
+  "Танцюючі Пельмені",
+  "Секретні Оладки",
+  "Чемні Дракони",
+  "Рухливі Круасани",
+  "Відважні Кексики",
+  "Диванні Чемпіони",
+  "Сміливі Компоти",
+  "Гучні Помідори",
+  "Сяючі Капібари",
+  "Кавові Мандрівники",
+  "Весняні Пампухи",
+  "Хитрі Баклажани",
+  "Літаючі Вареники",
+  "Молочні Супергерої",
+  "Гречані Лицарі",
+  "Пухкі Бублики",
+  "Соковиті Апельсини",
+  "Чарівні Капці",
+  "Радісні Пінгвіни",
+  "Сміливі Парасолі",
+  "Майстри Пиріжків",
+  "Карамельні Ракети",
+  "Завзяті Огірочки",
+  "Мега Пампушки",
+  "Шоколадні Капітани",
+  "Тихі Феєрверки",
+  "Дружні Хмаринки",
+  "Сирні Детективи",
+  "Бадьорі Бджілки",
+  "Супові Генії",
+  "Піжамні Ракети",
+  "Кумедні Лимони",
+  "Галасливі Смаколики",
+  "Веселі Планети",
+];
 let selectedTeamCount = 2;
 let teamScores = [];
 let teamNames = [];
@@ -32,6 +95,7 @@ let timeLeft = 60;
 let timerId = null;
 let wasTimerRunningBeforeExitModal = false;
 let isThemesPopoverOpen = false;
+let isRoundPaused = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -95,6 +159,9 @@ const gameScreen = document.getElementById("gameScreen");
 const roundReviewScreen = document.getElementById("roundReviewScreen");
 const resultScreen = document.getElementById("resultScreen");
 const winnerScreen = document.getElementById("winnerScreen");
+const themeToggleBtn = document.getElementById("themeToggleBtn");
+const themeToggleIcon = document.getElementById("themeToggleIcon");
+const themeToggleText = document.getElementById("themeToggleText");
 
 const backToMenuBtn = document.getElementById("backToMenuBtn");
 const menuExitButtons = document.querySelectorAll(".menu-exit-btn");
@@ -127,6 +194,7 @@ const gameTeamName = document.getElementById("gameTeamName");
 const gameCategoryName = document.getElementById("gameCategoryName");
 const gameThemesPopover = document.getElementById("gameThemesPopover");
 const timerText = document.getElementById("timerText");
+const timerRingProgress = document.getElementById("timerRingProgress");
 const roundTimeMessage = document.getElementById("roundTimeMessage");
 const teamProgressText = document.getElementById("teamProgressText");
 const teamProgressFill = document.getElementById("teamProgressFill");
@@ -143,6 +211,10 @@ const singleSettingsBtn = document.getElementById("singleSettingsBtn");
 const skipBtn = document.getElementById("skipBtn");
 const correctBtn = document.getElementById("correctBtn");
 const finishEarlyBtn = document.getElementById("finishEarlyBtn");
+const pauseRoundBtn = document.getElementById("pauseRoundBtn");
+const pauseRoundIcon = document.getElementById("pauseRoundIcon");
+const pauseRoundLabel = document.getElementById("pauseRoundLabel");
+const pauseOverlay = document.getElementById("pauseOverlay");
 
 const finalScoreText = document.getElementById("finalScoreText");
 const finalSkippedText = document.getElementById("finalSkippedText");
@@ -172,6 +244,7 @@ const winnerScoreBoard = document.getElementById("winnerScoreBoard");
 init();
 
 async function init() {
+  initializeTheme();
   await loadModeCategories(selectedMode);
   renderCategories();
   syncTeamNamesForCount();
@@ -182,6 +255,56 @@ async function init() {
   syncLastWordButton();
   syncTeamNamesVisibility(false);
   setupEvents();
+}
+
+function getPreferredTheme() {
+  try {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    if (savedTheme === "dark" || savedTheme === "light") {
+      return savedTheme;
+    }
+  } catch (error) {
+    // localStorage can be unavailable in some private/legacy contexts.
+  }
+
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+
+  return "light";
+}
+
+function applyTheme(theme) {
+  const nextTheme = theme === "dark" ? "dark" : "light";
+  document.body.dataset.theme = nextTheme;
+
+  if (themeToggleBtn) {
+    themeToggleBtn.setAttribute("aria-pressed", nextTheme === "dark" ? "true" : "false");
+    themeToggleBtn.setAttribute("aria-label", nextTheme === "dark" ? "Увімкнути світлу тему" : "Увімкнути темну тему");
+  }
+
+  if (themeToggleIcon) {
+    themeToggleIcon.textContent = nextTheme === "dark" ? "☀" : "☾";
+  }
+
+  if (themeToggleText) {
+    themeToggleText.textContent = nextTheme === "dark" ? "Світла" : "Темна";
+  }
+}
+
+function initializeTheme() {
+  applyTheme(getPreferredTheme());
+}
+
+function toggleTheme() {
+  const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+  applyTheme(nextTheme);
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+  } catch (error) {
+    // Theme still changes for the current session if persistence is blocked.
+  }
 }
 
 async function loadModeCategories(modeId = selectedMode) {
@@ -211,6 +334,10 @@ async function loadModeCategories(modeId = selectedMode) {
 
 function setupEvents() {
   renderModes();
+
+  if (themeToggleBtn) {
+    themeToggleBtn.addEventListener("click", toggleTheme);
+  }
 
   backToMenuBtn.addEventListener("click", () => {
     showScreen("menu");
@@ -270,6 +397,13 @@ function setupEvents() {
 
     closeThemesPopover();
   });
+
+  window.addEventListener("resize", positionThemesPopover);
+  window.addEventListener("scroll", positionThemesPopover, true);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", positionThemesPopover);
+    window.visualViewport.addEventListener("scroll", positionThemesPopover);
+  }
 
   startRoundButtons.forEach((button) => {
     button.addEventListener("click", handleStartRound);
@@ -381,7 +515,7 @@ function setupEvents() {
   });
 
   wordCard.addEventListener("pointerdown", (event) => {
-    if (isSwipeLocked) {
+    if (isSwipeLocked || isRoundPaused) {
       return;
     }
 
@@ -455,6 +589,10 @@ function setupEvents() {
     finishRound("manual");
   });
 
+  if (pauseRoundBtn) {
+    pauseRoundBtn.addEventListener("click", toggleRoundPause);
+  }
+
   if (singleNextBtn) {
     singleNextBtn.addEventListener("click", () => {
       showSingleNextCard();
@@ -509,25 +647,21 @@ function setupEvents() {
 
 function renderModes() {
   modeList.innerHTML = "";
+  const activeModes = modeConfigs.filter((mode) => mode.available);
+  const upcomingModes = modeConfigs.filter((mode) => !mode.available);
+  const activeModesWrap = document.createElement("div");
+  activeModesWrap.className = "active-mode-grid";
 
-  modeConfigs.forEach((mode) => {
+  activeModes.forEach((mode) => {
     const button = document.createElement("button");
-    button.className = `mode-card mode-card-${mode.id}`;
-    if (!mode.available) {
-      button.classList.add("disabled");
-    }
+    button.className = `mode-card mode-card-${mode.id} mode-card-active`;
 
     button.innerHTML = `
       <strong>${mode.title}</strong>
-      <span>${mode.available ? mode.description : "Скоро"}</span>
+      <span>${mode.description}</span>
     `;
 
     button.addEventListener("click", async () => {
-      if (!mode.available) {
-        settingsMessage.textContent = "Цей режим скоро з’явиться";
-        return;
-      }
-
       selectedMode = mode.id;
       selectedCategories = [];
       selectedCategory = null;
@@ -546,8 +680,25 @@ function renderModes() {
       showScreen("settings");
     });
 
-    modeList.appendChild(button);
+    activeModesWrap.appendChild(button);
   });
+
+  modeList.appendChild(activeModesWrap);
+
+  if (upcomingModes.length > 0) {
+    const upcomingBox = document.createElement("div");
+    upcomingBox.className = "upcoming-modes";
+    upcomingBox.innerHTML = `
+      <div class="upcoming-modes-copy">
+        <strong>Скоро</strong>
+        <span>Готуємо нові режими для компанії.</span>
+      </div>
+      <div class="upcoming-mode-chips">
+        ${upcomingModes.map((mode) => `<span>${mode.title.replace(/\s*\([^)]*\)/g, "")}</span>`).join("")}
+      </div>
+    `;
+    modeList.appendChild(upcomingBox);
+  }
 }
 
 function getSelectedModeConfig() {
@@ -780,10 +931,12 @@ function getCompactCategoryNames(maxVisible = 3) {
     return "";
   }
 
+  if (selectedCategories.length > maxVisible) {
+    return getThemeCountLabel(selectedCategories.length);
+  }
+
   const visibleNames = selectedCategories.slice(0, maxVisible).map((category) => category.name);
-  const remainingCount = selectedCategories.length - visibleNames.length;
-  const suffix = remainingCount > 0 ? ` +${remainingCount}` : "";
-  return `${visibleNames.join(", ")}${suffix}`;
+  return visibleNames.join(", ");
 }
 
 
@@ -815,7 +968,31 @@ function getHudCategoryLabel() {
     return selectedCategories[0].name;
   }
 
+  if (selectedCategories.length >= 2 && selectedCategories.length <= 5) {
+    const joinedNames = selectedCategories.map((category) => category.name).join(", ");
+    const maxLabelLength = selectedCategories.length <= 2 ? 26 : selectedCategories.length <= 3 ? 34 : 46;
+    return joinedNames.length <= maxLabelLength ? joinedNames : getThemeCountLabel(selectedCategories.length);
+  }
+
   return getThemeCountLabel(selectedCategories.length);
+}
+
+function getHudCategoryLabelClass(label) {
+  const count = selectedCategories.length;
+
+  if (count === 0 || count === 1) {
+    return "summary-title themes-label-short";
+  }
+
+  if (label === getThemeCountLabel(count)) {
+    return "summary-title themes-label-count";
+  }
+
+  if (count <= 3) {
+    return "summary-title themes-label-medium";
+  }
+
+  return "summary-title themes-label-long";
 }
 
 function getActiveThemeNames() {
@@ -841,7 +1018,7 @@ function renderThemesPopover() {
   if (selectedCategories.length === 0) {
     const allThemesText = document.createElement("p");
     allThemesText.className = "themes-popover-note";
-    allThemesText.textContent = "Активні всі теми";
+    allThemesText.textContent = "Усі теми";
     gameThemesPopover.appendChild(allThemesText);
     return;
   }
@@ -868,6 +1045,7 @@ function openThemesPopover() {
   gameThemesPopover.hidden = false;
   gameCategoryName.setAttribute("aria-expanded", "true");
   isThemesPopoverOpen = true;
+  positionThemesPopover();
 }
 
 function closeThemesPopover() {
@@ -876,8 +1054,52 @@ function closeThemesPopover() {
   }
 
   gameThemesPopover.hidden = true;
+  gameThemesPopover.style.left = "";
+  gameThemesPopover.style.top = "";
+  gameThemesPopover.style.width = "";
   gameCategoryName.setAttribute("aria-expanded", "false");
   isThemesPopoverOpen = false;
+}
+
+function positionThemesPopover() {
+  if (!isThemesPopoverOpen || !gameThemesPopover || !gameCategoryName || gameThemesPopover.hidden) {
+    return;
+  }
+
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 360;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 640;
+  const edgeGap = 12;
+  const anchorGap = 8;
+  const anchorRect = gameCategoryName.getBoundingClientRect();
+  const maxWidth = Math.max(220, viewportWidth - edgeGap * 2);
+  const preferredWidth = Math.min(Math.max(anchorRect.width, 260), 340, maxWidth);
+
+  gameThemesPopover.style.width = `${preferredWidth}px`;
+
+  const popoverRect = gameThemesPopover.getBoundingClientRect();
+  const popoverWidth = popoverRect.width || preferredWidth;
+  const popoverHeight = popoverRect.height || 0;
+  let left = anchorRect.left;
+  let top = anchorRect.bottom + anchorGap;
+
+  if (left + popoverWidth > viewportWidth - edgeGap) {
+    left = viewportWidth - popoverWidth - edgeGap;
+  }
+
+  if (left < edgeGap) {
+    left = edgeGap;
+  }
+
+  if (top + popoverHeight > viewportHeight - edgeGap && anchorRect.top > popoverHeight + anchorGap + edgeGap) {
+    top = anchorRect.top - popoverHeight - anchorGap;
+  }
+
+  if (top < edgeGap) {
+    top = edgeGap;
+  }
+
+  gameThemesPopover.style.left = `${Math.round(left)}px`;
+  gameThemesPopover.style.top = `${Math.round(top)}px`;
 }
 
 function toggleThemesPopover() {
@@ -940,9 +1162,10 @@ function renderGameSummary() {
   gameCategoryName.innerHTML = "";
   gameCategoryName.setAttribute("aria-label", "Показати обрані теми");
 
+  const label = getHudCategoryLabel();
   const title = document.createElement("span");
-  title.className = "summary-title";
-  title.textContent = getHudCategoryLabel();
+  title.className = getHudCategoryLabelClass(label);
+  title.textContent = label;
   gameCategoryName.appendChild(title);
 
   const kindLabel = getTaskKindLabel();
@@ -1224,6 +1447,7 @@ function hasActiveGameProgress() {
 function resetActiveGameState() {
   clearInterval(timerId);
   timerId = null;
+  setRoundPaused(false, { resumeTimer: false });
   wasTimerRunningBeforeExitModal = false;
   resetSwipeState();
   score = 0;
@@ -1286,7 +1510,7 @@ function closeExitMenuModal() {
   exitMenuModal.hidden = true;
   document.body.classList.remove("modal-open");
 
-  if (wasTimerRunningBeforeExitModal && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult) {
+  if (wasTimerRunningBeforeExitModal && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult && !isRoundPaused) {
     startTimer();
   }
 
@@ -1304,6 +1528,7 @@ function confirmExitToMenu() {
 
 function startRound() {
   resetSwipeState();
+  setRoundPaused(false, { resumeTimer: false });
   score = 0;
   skipped = 0;
   timeLeft = selectedDuration;
@@ -1339,6 +1564,7 @@ function startRound() {
 
 function beginPreparedRound() {
   resetSwipeState();
+  setRoundPaused(false, { resumeTimer: false });
   isAwaitingLastWordResult = false;
   if (roundTimeMessage) {
     roundTimeMessage.textContent = "";
@@ -1354,6 +1580,11 @@ function beginPreparedRound() {
 
 function startTimer() {
   clearInterval(timerId);
+
+  if (isRoundPaused) {
+    timerId = null;
+    return;
+  }
 
   timerId = setInterval(() => {
     timeLeft--;
@@ -1371,6 +1602,7 @@ function getCurrentWordPool() {
 
 function startSingleCardGame() {
   clearInterval(timerId);
+  setRoundPaused(false, { resumeTimer: false });
   resetSwipeState();
   score = 0;
   skipped = 0;
@@ -1427,6 +1659,91 @@ function showSingleNextCard() {
   }, 180);
 }
 
+function setRoundPaused(paused, options = {}) {
+  const { resumeTimer = true } = options;
+  const nextPausedState = Boolean(paused) && timeLeft > 0 && !isSingleCardMode() && isScreenActive(gameScreen) && !isAwaitingLastWordResult;
+  isRoundPaused = nextPausedState;
+
+  if (isRoundPaused) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  if (wordCard) {
+    wordCard.classList.toggle("is-paused", isRoundPaused);
+    wordCard.setAttribute("aria-busy", isRoundPaused ? "true" : "false");
+  }
+
+  if (gameScreen) {
+    gameScreen.classList.toggle("is-paused", isRoundPaused);
+  }
+
+  if (pauseOverlay) {
+    pauseOverlay.hidden = !isRoundPaused;
+  }
+
+  updatePauseControl();
+
+  if (skipBtn) {
+    skipBtn.disabled = isRoundPaused;
+  }
+
+  if (correctBtn) {
+    correctBtn.disabled = isRoundPaused;
+  }
+
+  if (!isRoundPaused && resumeTimer && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult && !isSingleCardMode()) {
+    startTimer();
+  }
+}
+
+function toggleRoundPause() {
+  if (timeLeft <= 0) {
+    return;
+  }
+
+  setRoundPaused(!isRoundPaused);
+}
+
+function updatePauseControl() {
+  if (!pauseRoundBtn) {
+    return;
+  }
+
+  const isTimeOver = timeLeft <= 0 && isScreenActive(gameScreen) && !isSingleCardMode();
+  pauseRoundBtn.classList.toggle("is-ended", isTimeOver);
+  pauseRoundBtn.setAttribute("aria-disabled", isTimeOver ? "true" : "false");
+
+  if (isTimeOver) {
+    pauseRoundBtn.setAttribute("aria-label", isAwaitingLastWordResult ? "Час вийшов. Дограйте слово" : "Час вийшов");
+    pauseRoundBtn.setAttribute("aria-pressed", "false");
+
+    if (pauseRoundIcon) {
+      pauseRoundIcon.classList.remove("pause-icon-pause", "pause-icon-play");
+      pauseRoundIcon.classList.add("pause-icon-ended");
+    }
+
+    if (pauseRoundLabel) {
+      pauseRoundLabel.textContent = isAwaitingLastWordResult ? "Дограйте" : "Час вийшов";
+    }
+
+    return;
+  }
+
+  pauseRoundBtn.setAttribute("aria-label", isRoundPaused ? "Продовжити раунд" : "Поставити раунд на паузу");
+  pauseRoundBtn.setAttribute("aria-pressed", isRoundPaused ? "true" : "false");
+
+  if (pauseRoundIcon) {
+    pauseRoundIcon.classList.remove("pause-icon-ended");
+    pauseRoundIcon.classList.toggle("pause-icon-pause", !isRoundPaused);
+    pauseRoundIcon.classList.toggle("pause-icon-play", isRoundPaused);
+  }
+
+  if (pauseRoundLabel) {
+    pauseRoundLabel.textContent = isRoundPaused ? "Грати" : "Пауза";
+  }
+}
+
 function updateActionButtonLabels() {
   if (skipBtn) {
     const skipLabel = isAwaitingLastWordResult ? "Не вгадано" : "Пропустити";
@@ -1441,15 +1758,27 @@ function updateActionButtonLabels() {
 function updateGameInfo() {
   timerText.textContent = timeLeft;
   updateActionButtonLabels();
+  updatePauseControl();
 
   const currentTeamScore = (teamScores[currentTeamIndex] || 0) + score;
   const progressPercent = Math.min(100, Math.round((currentTeamScore / selectedTargetScore) * 100));
-  teamProgressText.textContent = `${currentTeamScore}/${selectedTargetScore}`;
+  if (teamProgressText) {
+    teamProgressText.textContent = `${currentTeamScore}/${selectedTargetScore}`;
+  }
   teamProgressFill.style.width = `${progressPercent}%`;
 
   const maxTime = selectedDuration;
   const timeProgressPercent = Math.max(0, Math.round((timeLeft / maxTime) * 100));
-  roundProgressFill.style.width = `${timeProgressPercent}%`;
+  if (roundProgressFill) {
+    roundProgressFill.style.width = `${timeProgressPercent}%`;
+  }
+
+  if (timerRingProgress) {
+    const timerRingLength = 2 * Math.PI * 31;
+    const progressRatio = Math.max(0, Math.min(1, timeLeft / maxTime));
+    timerRingProgress.style.strokeDasharray = `${timerRingLength}`;
+    timerRingProgress.style.strokeDashoffset = `${timerRingLength * (1 - progressRatio)}`;
+  }
 }
 
 function resetTeamScores() {
@@ -1475,6 +1804,20 @@ function syncTeamNamesForCount() {
   teamNames = nextNames;
 }
 
+function generateRandomTeamName(index) {
+  const usedNames = new Set(teamNames.filter((name, teamIndex) => teamIndex !== index && name && name.trim()));
+  const currentName = teamNames[index];
+  const availableNames = funnyTeamNames.filter((name) => !usedNames.has(name) && name !== currentName);
+  const namePool = availableNames.length > 0 ? availableNames : funnyTeamNames;
+  const nextName = namePool[Math.floor(Math.random() * namePool.length)];
+
+  teamNames[index] = nextName;
+  renderTeamNameInputs();
+  updateCurrentTeamDisplay();
+  updateTeamScoreBoard();
+  settingsMessage.textContent = "";
+}
+
 function renderTeamNameInputs() {
   if (!teamNameFields) {
     return;
@@ -1488,7 +1831,7 @@ function renderTeamNameInputs() {
 
     const label = document.createElement("label");
     label.htmlFor = `teamName${index + 1}`;
-    label.textContent = getTeamName(index);
+    label.textContent = getDefaultTeamName(index);
 
     const input = document.createElement("input");
     input.id = `teamName${index + 1}`;
@@ -1500,8 +1843,22 @@ function renderTeamNameInputs() {
       teamNames[index] = event.target.value;
     });
 
+    const fieldControl = document.createElement("div");
+    fieldControl.className = "team-name-control";
+
+    const randomNameButton = document.createElement("button");
+    randomNameButton.className = "team-name-random-btn";
+    randomNameButton.type = "button";
+    randomNameButton.setAttribute("aria-label", `Згенерувати назву для ${getDefaultTeamName(index)}`);
+    randomNameButton.textContent = "🎲";
+    randomNameButton.addEventListener("click", () => {
+      generateRandomTeamName(index);
+    });
+
+    fieldControl.appendChild(input);
+    fieldControl.appendChild(randomNameButton);
     field.appendChild(label);
-    field.appendChild(input);
+    field.appendChild(fieldControl);
     teamNameFields.appendChild(field);
   }
 }
@@ -1705,6 +2062,8 @@ function shouldGuessLastWordAfterTime() {
 
 function finishRound(reason = "manual") {
   clearInterval(timerId);
+  timerId = null;
+  setRoundPaused(false, { resumeTimer: false });
 
   if (isAwaitingLastWordResult) {
     return;
@@ -1714,6 +2073,7 @@ function finishRound(reason = "manual") {
     if (shouldGuessLastWordAfterTime()) {
       isAwaitingLastWordResult = true;
       updateActionButtonLabels();
+      updatePauseControl();
       if (roundTimeMessage) {
         roundTimeMessage.textContent = "\u0427\u0430\u0441 \u0432\u0438\u0439\u0448\u043e\u0432. \u0417\u0430\u0432\u0435\u0440\u0448\u0456\u0442\u044c \u043f\u043e\u0442\u043e\u0447\u043d\u0435 \u0441\u043b\u043e\u0432\u043e.";
       }
@@ -1927,7 +2287,7 @@ function showScreen(screenName) {
 }
 
 function handleSwipe(swipeDistance) {
-  if (isSwipeLocked) {
+  if (isSwipeLocked || isRoundPaused) {
     return false;
   }
 
@@ -1955,7 +2315,7 @@ function handleSwipe(swipeDistance) {
 }
 
 function markCorrect() {
-  if (isSwipeLocked) {
+  if (isSwipeLocked || isRoundPaused) {
     return;
   }
 
@@ -1963,7 +2323,7 @@ function markCorrect() {
 }
 
 function markSkipped() {
-  if (isSwipeLocked) {
+  if (isSwipeLocked || isRoundPaused) {
     return;
   }
 
