@@ -1,7 +1,7 @@
 let categories = [];
 let selectedCategory = null;
 let selectedCategories = [];
-let selectedDifficulties = ["easy", "medium", "hard"];
+let selectedDifficulties = ["easy", "medium"];
 let excludePhrases = false;
 let areCategoriesExpanded = false;
 let selectedCharadesFormat = "single";
@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.12";
+const DATA_VERSION = "0.3.13";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
