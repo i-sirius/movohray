@@ -126,7 +126,8 @@ let isThemesPopoverOpen = false;
 let isRoundPaused = false;
 
 let wordGuessConfig = null;
-let wordGuessWords = [];
+let wordGuessAnswerWords = [];
+let wordGuessAllowedGuesses = new Set();
 let wordGuessTarget = "";
 let wordGuessGuesses = [];
 let wordGuessCurrentGuess = "";
@@ -408,7 +409,7 @@ async function loadModeCategories(modeId = selectedMode) {
 }
 
 async function loadWordGuessDictionary() {
-  if (wordGuessConfig && wordGuessWords.length > 0) {
+  if (wordGuessConfig && wordGuessAnswerWords.length > 0 && wordGuessAllowedGuesses.size > 0) {
     return true;
   }
 
@@ -426,27 +427,19 @@ async function loadWordGuessDictionary() {
     const data = await response.json();
     const wordLength = Number(data.wordLength) || 5;
     const attempts = Number(data.attempts) || 5;
-    const rawWords = Array.isArray(data.words) ? data.words : [];
-    const normalizedWords = rawWords
-      .map((item) => (typeof item === "string" ? { word: item, difficulty: "medium" } : item))
-      .map((item) => ({
-        word: normalizeWordGuessWord(item?.word || ""),
-        difficulty: item?.difficulty || "medium",
-      }))
-      .filter((item) => isValidWordGuessWord(item.word, wordLength));
-    const uniqueWords = [];
-    const seenWords = new Set();
+    const rawAnswerWords = Array.isArray(data.answers) ? data.answers : data.words || [];
+    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength);
+    const allowedGuessWords = normalizeWordGuessList(
+      Array.isArray(data.allowedGuesses) ? data.allowedGuesses : answerWords,
+      wordLength,
+    );
+    const allowedGuessSet = new Set(allowedGuessWords);
 
-    normalizedWords.forEach((item) => {
-      if (seenWords.has(item.word)) {
-        return;
-      }
-
-      seenWords.add(item.word);
-      uniqueWords.push(item);
+    answerWords.forEach((word) => {
+      allowedGuessSet.add(word);
     });
 
-    if (uniqueWords.length === 0) {
+    if (answerWords.length === 0 || allowedGuessSet.size === 0) {
       throw new Error("Empty wordguess dictionary");
     }
 
@@ -455,7 +448,8 @@ async function loadWordGuessDictionary() {
       wordLength,
       attempts,
     };
-    wordGuessWords = uniqueWords;
+    wordGuessAnswerWords = answerWords;
+    wordGuessAllowedGuesses = allowedGuessSet;
 
     if (wordGuessSettingsMessage) {
       wordGuessSettingsMessage.textContent = "";
@@ -465,7 +459,8 @@ async function loadWordGuessDictionary() {
   } catch (error) {
     console.error(`Не вдалося завантажити ${WORD_GUESS_DATA_FILE}`, error);
     wordGuessConfig = null;
-    wordGuessWords = [];
+    wordGuessAnswerWords = [];
+    wordGuessAllowedGuesses = new Set();
 
     if (wordGuessSettingsMessage) {
       wordGuessSettingsMessage.textContent = "Не вдалося завантажити словник.";
@@ -473,6 +468,25 @@ async function loadWordGuessDictionary() {
 
     return false;
   }
+}
+
+function normalizeWordGuessList(rawWords, length = 5) {
+  const normalizedWords = [];
+  const seenWords = new Set();
+
+  rawWords.forEach((item) => {
+    const rawWord = typeof item === "string" ? item : item?.word;
+    const word = normalizeWordGuessWord(rawWord || "");
+
+    if (!isValidWordGuessWord(word, length) || seenWords.has(word)) {
+      return;
+    }
+
+    seenWords.add(word);
+    normalizedWords.push(word);
+  });
+
+  return normalizedWords;
 }
 
 function normalizeWordGuessWord(word) {
@@ -519,8 +533,7 @@ async function startWordGuessGame() {
     return;
   }
 
-  const targetEntry = wordGuessWords[Math.floor(Math.random() * wordGuessWords.length)];
-  wordGuessTarget = targetEntry.word;
+  wordGuessTarget = wordGuessAnswerWords[Math.floor(Math.random() * wordGuessAnswerWords.length)];
   wordGuessGuesses = [];
   wordGuessCurrentGuess = "";
   wordGuessKeyStatuses = {};
@@ -687,6 +700,11 @@ function submitWordGuess() {
 
   if (validationMessage) {
     setWordGuessMessage(validationMessage);
+    return;
+  }
+
+  if (!wordGuessAllowedGuesses.has(guess)) {
+    setWordGuessMessage("Немає в словнику гри");
     return;
   }
 
