@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.8";
+const DATA_VERSION = "0.3.9";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -2264,6 +2264,7 @@ function showWinnerScreen() {
 
 function showScreen(screenName) {
   closeThemesPopover();
+  document.body.dataset.screen = screenName;
 
   menuScreen.classList.remove("active");
   settingsScreen.classList.remove("active");

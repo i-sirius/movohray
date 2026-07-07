@@ -226,14 +226,20 @@ body[data-theme="dark"] .theme-toggle-btn {
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
 }
 
+body:not([data-screen="menu"]):not([data-screen="settings"]) .theme-toggle-btn {
+  display: none;
+}
+
 .app {
   position: relative;
   z-index: 1;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 68px 24px 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
 }
 
 .app::before,
@@ -2358,6 +2364,7 @@ body[data-theme="dark"] .exit-modal-backdrop {
 @media (max-width: 420px) {
   .app {
     padding: 58px 14px 14px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
   }
 
   .active-mode-grid {
@@ -2419,6 +2426,233 @@ body[data-theme="dark"] .exit-modal-backdrop {
   .settings-sticky-panel {
     top: 8px;
     border-radius: 22px;
+  }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+  body[data-screen="game"] .app {
+    align-items: flex-start;
+    padding: 8px 10px calc(10px + env(safe-area-inset-bottom));
+  }
+
+  #gameScreen .game-layout {
+    width: 100%;
+    padding: 12px;
+    border-radius: 24px;
+  }
+
+  #gameScreen .panel-inner {
+    display: grid;
+    gap: 8px;
+  }
+
+  #gameScreen .decor-dot {
+    opacity: 0.35;
+  }
+
+  #gameScreen .game-mode-title {
+    margin-bottom: 4px;
+    font-size: clamp(18px, 5.4vw, 22px);
+    line-height: 1.05;
+  }
+
+  #gameScreen .game-hud {
+    gap: 8px;
+    margin-bottom: 2px;
+    grid-template-columns: minmax(0, 2fr) minmax(98px, 0.8fr);
+  }
+
+  #gameScreen .game-hud-left-panel,
+  #gameScreen .game-hud-center {
+    min-height: 92px;
+    border-radius: 18px;
+  }
+
+  #gameScreen .game-hud-left-panel {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  #gameScreen .game-hud-team-line {
+    gap: 6px;
+  }
+
+  #gameScreen .game-hud-kicker {
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+
+  #gameScreen .game-hud-left-panel strong {
+    font-size: 15px;
+  }
+
+  #gameScreen .game-category-summary-content {
+    min-height: 40px;
+    padding: 7px;
+    border-radius: 14px;
+  }
+
+  #gameScreen .summary-title {
+    font-size: clamp(14px, 4.2vw, 18px);
+    line-height: 1.08;
+    max-height: 2.16em;
+  }
+
+  #gameScreen .themes-label-short,
+  #gameScreen .themes-label-count {
+    font-size: clamp(16px, 4.8vw, 20px);
+  }
+
+  #gameScreen .themes-label-medium,
+  #gameScreen .themes-label-long {
+    font-size: clamp(13px, 3.6vw, 15px);
+  }
+
+  #gameScreen .game-hud-center {
+    min-width: 98px;
+    gap: 5px;
+    padding: 7px 6px;
+  }
+
+  #gameScreen .game-hud-timer {
+    width: 54px;
+    height: 54px;
+    border-width: 2px;
+  }
+
+  #gameScreen #timerText {
+    font-size: 23px;
+  }
+
+  #gameScreen .timer-ring {
+    inset: -6px;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+  }
+
+  #gameScreen .timer-ring-bg,
+  #gameScreen .timer-ring-progress {
+    stroke-width: 4;
+  }
+
+  #gameScreen .pause-round-label {
+    min-height: 27px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  #gameScreen .team-score-board {
+    gap: 6px;
+    margin: 2px 0;
+  }
+
+  #gameScreen .team-score-row {
+    gap: 4px 6px;
+    padding: 7px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+
+  #gameScreen .team-score-row .progress-bar {
+    height: 4px;
+    margin-top: 0;
+  }
+
+  #gameScreen .word-card {
+    min-height: clamp(178px, 30vh, 230px);
+    margin: 4px 0;
+    padding: 52px 16px 42px;
+    border-radius: 24px;
+  }
+
+  #gameScreen .word-card p {
+    font-size: clamp(28px, 9vw, 38px);
+    line-height: 1.05;
+  }
+
+  #gameScreen .word-category-badge {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    gap: 4px;
+  }
+
+  #gameScreen .word-meta-badge {
+    max-width: min(40vw, 160px);
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  #gameScreen .word-mode-hint {
+    bottom: 26px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  #gameScreen .swipe-hint {
+    bottom: 11px;
+    left: 12px;
+    right: 12px;
+    font-size: 11px;
+    opacity: 0.62;
+  }
+
+  #gameScreen .pause-overlay {
+    inset: 10px;
+    border-radius: 20px;
+  }
+
+  #gameScreen .pause-overlay strong {
+    font-size: 22px;
+  }
+
+  #gameScreen .pause-overlay span {
+    font-size: 12px;
+  }
+
+  #gameScreen .round-time-message {
+    min-height: 0;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  #gameScreen .game-buttons {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  #gameScreen .skip-btn,
+  #gameScreen .correct-btn {
+    min-height: 50px;
+    padding: 10px 12px;
+    border-radius: 18px;
+    font-size: 16px;
+  }
+
+  #gameScreen .game-secondary-actions {
+    gap: 8px;
+    margin-top: 0;
+  }
+
+  #gameScreen .game-secondary-actions .secondary-btn {
+    min-height: 40px;
+    padding: 9px 10px;
+    border-radius: 18px;
+    font-size: 12px;
+  }
+
+  #gameScreen .single-card-actions {
+    gap: 8px;
+  }
+
+  #gameScreen .single-card-actions .primary-btn,
+  #gameScreen .single-card-actions .secondary-btn {
+    min-height: 44px;
+    margin-top: 0;
+    padding: 10px 12px;
+    border-radius: 18px;
+    font-size: 14px;
   }
 }
 
