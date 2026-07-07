@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.3.13";
+const DATA_VERSION = "0.3.14";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -215,8 +215,6 @@ const singleSettingsBtn = document.getElementById("singleSettingsBtn");
 const skipBtn = document.getElementById("skipBtn");
 const correctBtn = document.getElementById("correctBtn");
 const finishEarlyBtn = document.getElementById("finishEarlyBtn");
-const roundCorrectCount = document.getElementById("roundCorrectCount");
-const roundSkippedCount = document.getElementById("roundSkippedCount");
 const pauseRoundBtn = document.getElementById("pauseRoundBtn");
 const pauseRoundIcon = document.getElementById("pauseRoundIcon");
 const pauseRoundLabel = document.getElementById("pauseRoundLabel");
@@ -1774,13 +1772,6 @@ function updateActionButtonLabels() {
     correctBtn.textContent = `Вгадано · ${score}`;
   }
 
-  if (roundCorrectCount) {
-    roundCorrectCount.textContent = score;
-  }
-
-  if (roundSkippedCount) {
-    roundSkippedCount.textContent = skipped;
-  }
 }
 
 function updateGameInfo() {
