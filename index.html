@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.3.14" />
+  <link rel="stylesheet" href="styles.css?v=0.4.0" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -27,19 +27,19 @@
           </div>
           <h1 id="appTitle">Мовограй</h1>
           <p id="appSubtitle" class="subtitle">Українські ігри зі словами для компанії.</p>
-          <p class="menu-mode-note">Режими: Поясни слово та Покажи слово.</p>
+          <p class="menu-mode-note">Режими: Поясни слово, Покажи слово та Вгадай слово.</p>
 
           <div id="modeList" class="mode-grid"></div>
 
           <div class="rules-box">
             <h2>Правила</h2>
             <p>
-              Один гравець бачить слово на екрані й пояснює його іншим.
-              Саме слово або його частини називати не можна.
+              Обери режим, налаштуй гру і передай телефон тому, хто грає.
+              У кожному режимі є короткі підказки на екрані.
             </p>
             <p>
-              Якщо слово вгадали — натисни “Вгадано”.
-              Якщо складне — “Пропустити”.
+              У компанії грайте в Alias або Крокодила, а “Вгадай слово”
+              можна пройти самостійно за кілька хвилин.
             </p>
           </div>
         </div>
@@ -163,6 +163,59 @@
                 </div>
               </section>
             </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wordGuessSettingsScreen" class="screen">
+      <div class="card center bubble-card word-guess-start-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <p class="settings-eyebrow">Одиночний режим</p>
+          <h1 class="mode-title">Вгадай слово</h1>
+          <p class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
+
+          <div class="word-guess-summary">
+            <span>5 літер</span>
+            <span>5 спроб</span>
+            <span>Без повторів</span>
+          </div>
+
+          <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
+
+          <button id="wordGuessStartBtn" class="primary-btn" type="button">Почати гру</button>
+          <button id="wordGuessBackBtn" class="secondary-btn" type="button">Назад</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="wordGuessGameScreen" class="screen">
+      <div class="card center bubble-card word-guess-game-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-c"></div>
+        <div class="card-inner word-guess-inner">
+          <div class="word-guess-header">
+            <p class="settings-eyebrow">Вгадай слово</p>
+            <h1>5 літер, 5 спроб</h1>
+          </div>
+
+          <div id="wordGuessBoard" class="word-guess-board" aria-label="Поле гри"></div>
+          <p id="wordGuessMessage" class="message word-guess-message" role="status" aria-live="polite"></p>
+          <div id="wordGuessKeyboard" class="word-guess-keyboard" aria-label="Українська клавіатура"></div>
+
+          <div id="wordGuessResult" class="word-guess-result" hidden>
+            <h2 id="wordGuessResultTitle">Вгадано!</h2>
+            <p id="wordGuessResultText"></p>
+            <div class="word-guess-result-actions">
+              <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
+              <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
+            </div>
+            <div class="word-guess-dictionaries">
+              <span>Подивитися тлумачення:</span>
+              <div id="wordGuessDictionaryLinks" class="word-guess-dictionary-links"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -357,6 +410,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.3.14"></script>
+  <script src="app.js?v=0.4.0"></script>
 </body>
 </html>
