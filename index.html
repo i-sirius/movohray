@@ -185,7 +185,7 @@
           <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
 
           <button id="wordGuessStartBtn" class="primary-btn" type="button">Почати гру</button>
-          <button id="wordGuessBackBtn" class="secondary-btn" type="button">Назад</button>
+          <button id="wordGuessBackBtn" class="secondary-btn" type="button">← У меню</button>
         </div>
       </div>
     </section>
@@ -195,9 +195,12 @@
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
         <div class="card-inner word-guess-inner">
-          <div class="word-guess-header">
-            <p class="settings-eyebrow">Вгадай слово</p>
-            <h1>5 літер, 5 спроб</h1>
+          <div class="word-guess-topbar">
+            <button id="wordGuessTopMenuBtn" class="secondary-btn word-guess-menu-link" type="button">← У меню</button>
+            <div class="word-guess-header">
+              <p class="settings-eyebrow">Вгадай слово</p>
+              <h1>5 літер, 5 спроб</h1>
+            </div>
           </div>
 
           <div id="wordGuessBoard" class="word-guess-board" aria-label="Поле гри"></div>

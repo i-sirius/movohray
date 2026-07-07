@@ -127,7 +127,6 @@ let isRoundPaused = false;
 
 let wordGuessConfig = null;
 let wordGuessWords = [];
-let wordGuessWordSet = new Set();
 let wordGuessTarget = "";
 let wordGuessGuesses = [];
 let wordGuessCurrentGuess = "";
@@ -290,6 +289,7 @@ const resultTeamScoreBoard = document.getElementById("resultTeamScoreBoard");
 const winnerScoreBoard = document.getElementById("winnerScoreBoard");
 const wordGuessStartBtn = document.getElementById("wordGuessStartBtn");
 const wordGuessBackBtn = document.getElementById("wordGuessBackBtn");
+const wordGuessTopMenuBtn = document.getElementById("wordGuessTopMenuBtn");
 const wordGuessSettingsMessage = document.getElementById("wordGuessSettingsMessage");
 const wordGuessBoard = document.getElementById("wordGuessBoard");
 const wordGuessMessage = document.getElementById("wordGuessMessage");
@@ -456,7 +456,6 @@ async function loadWordGuessDictionary() {
       attempts,
     };
     wordGuessWords = uniqueWords;
-    wordGuessWordSet = new Set(uniqueWords.map((item) => item.word));
 
     if (wordGuessSettingsMessage) {
       wordGuessSettingsMessage.textContent = "";
@@ -467,7 +466,6 @@ async function loadWordGuessDictionary() {
     console.error(`Не вдалося завантажити ${WORD_GUESS_DATA_FILE}`, error);
     wordGuessConfig = null;
     wordGuessWords = [];
-    wordGuessWordSet = new Set();
 
     if (wordGuessSettingsMessage) {
       wordGuessSettingsMessage.textContent = "Не вдалося завантажити словник.";
@@ -486,6 +484,24 @@ function isValidWordGuessWord(word, length = 5) {
   return letters.length === length
     && letters.every((letter) => WORD_GUESS_LETTERS.includes(letter))
     && new Set(letters).size === letters.length;
+}
+
+function getWordGuessValidationMessage(word, length = 5) {
+  const letters = Array.from(word);
+
+  if (letters.length !== length) {
+    return "Потрібно 5 літер";
+  }
+
+  if (!letters.every((letter) => WORD_GUESS_LETTERS.includes(letter))) {
+    return "Тільки українські літери";
+  }
+
+  if (new Set(letters).size !== letters.length) {
+    return "Без повторення літер";
+  }
+
+  return "";
 }
 
 function getWordGuessLength() {
@@ -667,19 +683,10 @@ function handleWordGuessPhysicalKey(event) {
 function submitWordGuess() {
   const wordLength = getWordGuessLength();
   const guess = normalizeWordGuessWord(wordGuessCurrentGuess);
+  const validationMessage = getWordGuessValidationMessage(guess, wordLength);
 
-  if (Array.from(guess).length < wordLength) {
-    setWordGuessMessage("Потрібно 5 літер");
-    return;
-  }
-
-  if (!isValidWordGuessWord(guess, wordLength)) {
-    setWordGuessMessage("Без повторення літер");
-    return;
-  }
-
-  if (!wordGuessWordSet.has(guess)) {
-    setWordGuessMessage("Немає в словнику");
+  if (validationMessage) {
+    setWordGuessMessage(validationMessage);
     return;
   }
 
@@ -820,6 +827,12 @@ function setupEvents() {
 
   if (wordGuessBackBtn) {
     wordGuessBackBtn.addEventListener("click", () => {
+      showScreen("menu");
+    });
+  }
+
+  if (wordGuessTopMenuBtn) {
+    wordGuessTopMenuBtn.addEventListener("click", () => {
       showScreen("menu");
     });
   }

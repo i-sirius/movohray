@@ -744,12 +744,12 @@ h2 {
 }
 
 .mode-card-wordguess {
-  --mode-card-from: #e8f5f5;
-  --mode-card-to: #e8f5f5;
-  --mode-card-border: rgba(76, 143, 150, 0.24);
-  --mode-card-shadow: rgba(51, 116, 122, 0.1);
-  --mode-card-dot: rgba(76, 143, 150, 0.14);
-  --mode-card-title: #397a82;
+  --mode-card-from: #f8efd4;
+  --mode-card-to: #f8efd4;
+  --mode-card-border: rgba(198, 153, 70, 0.26);
+  --mode-card-shadow: rgba(146, 105, 42, 0.1);
+  --mode-card-dot: rgba(198, 153, 70, 0.14);
+  --mode-card-title: #87642a;
 }
 
 .mode-card-whoami {
@@ -1444,7 +1444,27 @@ h2 {
   gap: 12px;
 }
 
+.word-guess-topbar {
+  display: grid;
+  grid-template-columns: minmax(78px, auto) minmax(0, 1fr) minmax(78px, auto);
+  align-items: center;
+  gap: 10px;
+}
+
+.word-guess-topbar::after {
+  content: "";
+  display: block;
+}
+
+.word-guess-menu-link {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .word-guess-header {
+  grid-column: 2;
   display: grid;
   gap: 4px;
   text-align: center;
@@ -2825,6 +2845,27 @@ body[data-theme="dark"] .exit-modal-backdrop {
 
   .active-mode-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .mode-grid {
+    margin-top: 16px;
+  }
+
+  .mode-card {
+    min-height: 104px;
+    padding: 14px 16px;
+    border-radius: 20px;
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .mode-card strong {
+    font-size: 18px;
+  }
+
+  .mode-card span {
+    font-size: 13px;
   }
 
   .card,
@@ -2888,6 +2929,17 @@ body[data-theme="dark"] .exit-modal-backdrop {
     padding: 14px;
   }
 
+  .word-guess-topbar {
+    grid-template-columns: minmax(76px, auto) minmax(0, 1fr) minmax(76px, auto);
+    gap: 6px;
+  }
+
+  .word-guess-menu-link {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+
   .word-guess-inner {
     gap: 9px;
   }
@@ -2943,6 +2995,13 @@ body[data-theme="dark"] .exit-modal-backdrop {
 @media (min-width: 421px) and (max-width: 760px) {
   .active-mode-grid {
     grid-template-columns: 1fr;
+    gap: 9px;
+  }
+
+  .mode-card {
+    min-height: 108px;
+    text-align: left;
+    align-items: flex-start;
   }
 }
 
@@ -3381,6 +3440,80 @@ body[data-theme="dark"] .exit-modal-backdrop {
 
   .card {
     padding: 16px;
+  }
+
+  #menuScreen .card {
+    padding: 12px 14px;
+  }
+
+  #menuScreen .card-inner {
+    display: grid;
+    gap: 8px;
+  }
+
+  #menuScreen .logo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0;
+  }
+
+  #menuScreen h1 {
+    font-size: clamp(24px, 4vw, 32px);
+    margin-bottom: 0;
+  }
+
+  #menuScreen .subtitle,
+  #menuScreen .menu-mode-note {
+    font-size: 12px;
+    line-height: 1.25;
+    margin: 0 auto;
+  }
+
+  #menuScreen .mode-grid {
+    gap: 7px;
+    margin-top: 4px;
+  }
+
+  #menuScreen .active-mode-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #menuScreen .mode-card {
+    min-height: 78px;
+    padding: 10px;
+    border-radius: 17px;
+    gap: 4px;
+  }
+
+  #menuScreen .mode-card strong {
+    font-size: clamp(14px, 2.5vw, 17px);
+    line-height: 1.1;
+  }
+
+  #menuScreen .mode-card span {
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  #menuScreen .upcoming-modes {
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 16px;
+  }
+
+  #menuScreen .upcoming-modes-copy span {
+    display: none;
+  }
+
+  #menuScreen .upcoming-mode-chip {
+    min-height: 26px;
+    padding: 5px 9px;
+    font-size: 11px;
+  }
+
+  #menuScreen .rules-box {
+    display: none;
   }
 
   #settingsScreen {
