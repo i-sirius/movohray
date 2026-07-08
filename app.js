@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.24";
+const DATA_VERSION = "0.4.25";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -146,6 +146,7 @@ let wordGuessHintLevel = 0;
 let wordGuessHintLetters = [];
 let wordGuessFeedbackChoice = "";
 let wordGuessMessageTimeoutId = null;
+let wordGuessFinaleEffectTimeoutId = null;
 let isWordGuessHistoryOpen = false;
 let isWordGuessResultHistoryOpen = false;
 
@@ -720,6 +721,7 @@ function getWordGuessDebugLabel() {
 
 async function startWordGuessGame() {
   document.body.classList.remove("word-guess-result-open");
+  clearWordGuessFinaleEffect();
   const isDictionaryReady = await loadWordGuessDictionary();
   if (!isDictionaryReady) {
     showScreen("wordGuessSettings");
@@ -1077,12 +1079,83 @@ function finishWordGuessGame(isWon) {
   updateWordGuessHintState();
 
   if (wordGuessResult) {
+    wordGuessResult.classList.toggle("is-won", isWon);
+    wordGuessResult.classList.toggle("is-lost", !isWon);
     wordGuessResult.hidden = false;
   }
 
   setWordGuessBackgroundLocked(true);
+  playWordGuessFinaleEffect(isWon);
 }
 
+
+
+function clearWordGuessFinaleEffect() {
+  if (wordGuessFinaleEffectTimeoutId) {
+    clearTimeout(wordGuessFinaleEffectTimeoutId);
+    wordGuessFinaleEffectTimeoutId = null;
+  }
+
+  document.querySelectorAll(".word-guess-finale-effects").forEach((layer) => layer.remove());
+}
+
+function playWordGuessFinaleEffect(isWon) {
+  clearWordGuessFinaleEffect();
+
+  const prefersReducedMotion = window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReducedMotion || !document.body) {
+    return;
+  }
+
+  const layer = document.createElement("div");
+  layer.className = `word-guess-finale-effects ${isWon ? "is-win" : "is-loss"}`;
+  layer.setAttribute("aria-hidden", "true");
+
+  if (isWon) {
+    const confettiColors = ["#76c49a", "#7dd6d4", "#e0b864", "#df8fab", "#aaa1f0", "#f7e4a1"];
+    for (let index = 0; index < 70; index++) {
+      const particle = document.createElement("span");
+      particle.className = "word-guess-confetti";
+      particle.style.setProperty("--x", `${Math.round(Math.random() * 100)}vw`);
+      particle.style.setProperty("--dx", `${Math.round(Math.random() * 220 - 110)}px`);
+      particle.style.setProperty("--rot", `${Math.round(Math.random() * 720 - 360)}deg`);
+      particle.style.setProperty("--delay", `${(Math.random() * 0.75).toFixed(2)}s`);
+      particle.style.setProperty("--duration", `${(2.6 + Math.random() * 1.7).toFixed(2)}s`);
+      particle.style.setProperty("--size", `${Math.round(6 + Math.random() * 7)}px`);
+      particle.style.background = confettiColors[index % confettiColors.length];
+      layer.appendChild(particle);
+    }
+
+    for (let index = 0; index < 5; index++) {
+      const burst = document.createElement("span");
+      burst.className = "word-guess-firework";
+      burst.style.setProperty("--fx", `${18 + Math.round(Math.random() * 64)}vw`);
+      burst.style.setProperty("--fy", `${14 + Math.round(Math.random() * 34)}vh`);
+      burst.style.setProperty("--delay", `${(0.1 + Math.random() * 0.9).toFixed(2)}s`);
+      layer.appendChild(burst);
+    }
+  } else {
+    const emojis = ["🤷‍♂️", "🤷", "🤷‍♀️", "🤔", "😕", "🙃", "😶", "🫤"];
+    for (let index = 0; index < 28; index++) {
+      const emoji = document.createElement("span");
+      emoji.className = "word-guess-loss-emoji";
+      emoji.textContent = emojis[index % emojis.length];
+      emoji.style.setProperty("--start-x", `${44 + Math.round(Math.random() * 12)}vw`);
+      emoji.style.setProperty("--start-y", `${38 + Math.round(Math.random() * 16)}vh`);
+      emoji.style.setProperty("--end-x", `${Math.round(Math.random() * 220 - 110)}vw`);
+      emoji.style.setProperty("--end-y", `${Math.round(Math.random() * 130 - 65)}vh`);
+      emoji.style.setProperty("--rot", `${Math.round(Math.random() * 520 - 260)}deg`);
+      emoji.style.setProperty("--delay", `${(Math.random() * 0.85).toFixed(2)}s`);
+      emoji.style.setProperty("--duration", `${(2.8 + Math.random() * 1.5).toFixed(2)}s`);
+      layer.appendChild(emoji);
+    }
+  }
+
+  document.body.appendChild(layer);
+  wordGuessFinaleEffectTimeoutId = setTimeout(clearWordGuessFinaleEffect, isWon ? 5600 : 4800);
+}
 
 function getWordGuessVowelCount(word) {
   const vowels = "аеєиіїоуюя";
@@ -3771,6 +3844,7 @@ function showScreen(screenName) {
   closeThemesPopover();
   if (screenName !== "wordGuessGame") {
     setWordGuessBackgroundLocked(false);
+    clearWordGuessFinaleEffect();
   }
   document.body.dataset.screen = screenName;
 
