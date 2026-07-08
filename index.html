@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.4.2" />
+  <link rel="stylesheet" href="styles.css?v=0.4.3" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -195,13 +195,16 @@
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
         <div class="card-inner word-guess-inner">
-          <div class="word-guess-topbar">
+          <div class="word-guess-titlebar">
             <button id="wordGuessTopMenuBtn" class="secondary-btn word-guess-menu-link" type="button">← У меню</button>
-            <div class="word-guess-header">
-              <p class="settings-eyebrow">Вгадай слово</p>
-              <h1>5 літер, 5 спроб</h1>
+            <div class="word-guess-title-copy">
+              <h1>Вгадай слово</h1>
+              <p>5 літер · 5 спроб</p>
             </div>
+            <button id="wordGuessHistoryBtn" class="secondary-btn word-guess-history-btn" type="button" aria-expanded="false">Спроби · 0</button>
           </div>
+
+          <div id="wordGuessHistoryPanel" class="word-guess-history-panel" hidden></div>
 
           <div id="wordGuessBoard" class="word-guess-board" aria-label="Поле гри"></div>
           <div class="word-guess-helper-row">
@@ -214,6 +217,7 @@
           <div id="wordGuessResult" class="word-guess-result" hidden>
             <h2 id="wordGuessResultTitle">Вгадано!</h2>
             <p id="wordGuessResultText"></p>
+            <div id="wordGuessResultHistory" class="word-guess-result-history"></div>
             <div class="word-guess-result-actions">
               <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
               <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
@@ -417,6 +421,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.2"></script>
+  <script src="app.js?v=0.4.3"></script>
 </body>
 </html>

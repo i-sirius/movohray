@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.2";
+const DATA_VERSION = "0.4.3";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -134,6 +134,8 @@ let wordGuessCurrentGuess = "";
 let wordGuessKeyStatuses = {};
 let wordGuessFinished = false;
 let wordGuessHintUsed = false;
+let wordGuessMessageTimeoutId = null;
+let isWordGuessHistoryOpen = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -297,6 +299,9 @@ const wordGuessBoard = document.getElementById("wordGuessBoard");
 const wordGuessMessage = document.getElementById("wordGuessMessage");
 const wordGuessHintBtn = document.getElementById("wordGuessHintBtn");
 const wordGuessHintText = document.getElementById("wordGuessHintText");
+const wordGuessHistoryBtn = document.getElementById("wordGuessHistoryBtn");
+const wordGuessHistoryPanel = document.getElementById("wordGuessHistoryPanel");
+const wordGuessResultHistory = document.getElementById("wordGuessResultHistory");
 const wordGuessKeyboard = document.getElementById("wordGuessKeyboard");
 const wordGuessResult = document.getElementById("wordGuessResult");
 const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
@@ -542,11 +547,12 @@ async function startWordGuessGame() {
   wordGuessKeyStatuses = {};
   wordGuessFinished = false;
   wordGuessHintUsed = false;
+  isWordGuessHistoryOpen = false;
 
   updateWordGuessHintState();
 
   if (wordGuessMessage) {
-    wordGuessMessage.textContent = "";
+    setWordGuessMessage("");
   }
 
   if (wordGuessResult) {
@@ -555,6 +561,7 @@ async function startWordGuessGame() {
 
   renderWordGuessBoard();
   renderWordGuessKeyboard();
+  renderWordGuessHistory();
   updateWordGuessHintState();
   showScreen("wordGuessGame");
 }
@@ -604,24 +611,22 @@ function renderWordGuessKeyboard() {
 
   wordGuessKeyboard.innerHTML = "";
 
-  WORD_GUESS_KEYBOARD_ROWS.forEach((letters, rowIndex) => {
+  WORD_GUESS_KEYBOARD_ROWS.forEach((letters) => {
     const row = document.createElement("div");
-    row.className = "word-guess-key-row";
-
-    if (rowIndex === WORD_GUESS_KEYBOARD_ROWS.length - 1) {
-      row.appendChild(createWordGuessKey("enter", "Ввести", "wide"));
-    }
+    row.className = "word-guess-key-row word-guess-letter-row";
 
     letters.forEach((letter) => {
       row.appendChild(createWordGuessKey(letter, letter.toLocaleUpperCase("uk-UA")));
     });
 
-    if (rowIndex === WORD_GUESS_KEYBOARD_ROWS.length - 1) {
-      row.appendChild(createWordGuessKey("backspace", "⌫", "utility"));
-    }
-
     wordGuessKeyboard.appendChild(row);
   });
+
+  const controlsRow = document.createElement("div");
+  controlsRow.className = "word-guess-control-row";
+  controlsRow.appendChild(createWordGuessKey("enter", "Ввести", "wide"));
+  controlsRow.appendChild(createWordGuessKey("backspace", "⌫", "utility"));
+  wordGuessKeyboard.appendChild(controlsRow);
 }
 
 function createWordGuessKey(key, label, variant = "") {
@@ -707,11 +712,13 @@ function submitWordGuess() {
 
   if (validationMessage) {
     setWordGuessMessage(validationMessage);
+    shakeWordGuessBoard();
     return;
   }
 
   if (!wordGuessAllowedGuesses.has(guess)) {
     setWordGuessMessage("Немає в словнику гри");
+    shakeWordGuessBoard();
     return;
   }
 
@@ -725,6 +732,7 @@ function submitWordGuess() {
   updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
   setWordGuessMessage("");
+  renderWordGuessHistory();
 
   if (guess === wordGuessTarget) {
     finishWordGuessGame(true);
@@ -797,6 +805,7 @@ function finishWordGuessGame(isWon) {
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
+  renderWordGuessHistory();
   updateWordGuessHintState();
 
   if (wordGuessResult) {
@@ -819,13 +828,17 @@ function getWordGuessHintMessage() {
   const vowelCount = getWordGuessVowelCount(wordGuessTarget);
   const vowelLabel = vowelCount === 1 ? "голосна" : vowelCount >= 2 && vowelCount <= 4 ? "голосні" : "голосних";
 
-  return `Перша літера: ${firstLetter}. У слові ${vowelCount} ${vowelLabel}.`;
+  return `Перша літера: ${firstLetter} · ${vowelCount} ${vowelLabel}`;
 }
 
 function updateWordGuessHintState() {
   if (wordGuessHintBtn) {
-    wordGuessHintBtn.disabled = wordGuessFinished || wordGuessHintUsed || !wordGuessTarget;
-    wordGuessHintBtn.textContent = wordGuessHintUsed ? "💡 Підказку використано" : "💡 Підказка";
+    const isUsed = Boolean(wordGuessHintUsed && wordGuessTarget);
+    wordGuessHintBtn.disabled = wordGuessFinished || isUsed || !wordGuessTarget;
+    wordGuessHintBtn.textContent = isUsed ? "💡" : "💡 Підказка";
+    wordGuessHintBtn.classList.toggle("is-used", isUsed);
+    wordGuessHintBtn.setAttribute("aria-label", isUsed ? "Підказку використано" : "Показати підказку");
+    wordGuessHintBtn.title = isUsed ? "Підказку використано" : "Показати підказку";
   }
 
   if (!wordGuessHintText) {
@@ -879,15 +892,118 @@ function renderWordGuessDictionaryLinks(word) {
   });
 }
 
+function getWordGuessHistoryTitle() {
+  const count = wordGuessGuesses.length;
+  if (count === 0) {
+    return "Спроби · 0";
+  }
+
+  return `Спроби · ${count}`;
+}
+
+function createWordGuessHistoryItem(guess, index) {
+  const item = document.createElement("li");
+  item.className = "word-guess-history-item";
+
+  const indexLabel = document.createElement("span");
+  indexLabel.className = "word-guess-history-index";
+  indexLabel.textContent = `${index + 1}.`;
+  item.appendChild(indexLabel);
+
+  const lettersWrap = document.createElement("span");
+  lettersWrap.className = "word-guess-history-letters";
+
+  guess.letters.forEach((letter, letterIndex) => {
+    const cell = document.createElement("span");
+    cell.className = `word-guess-history-letter is-${guess.statuses[letterIndex] || "absent"}`;
+    cell.textContent = letter.toLocaleUpperCase("uk-UA");
+    lettersWrap.appendChild(cell);
+  });
+
+  item.appendChild(lettersWrap);
+  return item;
+}
+
+function renderWordGuessHistoryList(targetElement, emptyText = "Спроб ще немає.") {
+  if (!targetElement) {
+    return;
+  }
+
+  targetElement.innerHTML = "";
+
+  if (wordGuessGuesses.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "word-guess-history-empty";
+    empty.textContent = emptyText;
+    targetElement.appendChild(empty);
+    return;
+  }
+
+  const list = document.createElement("ol");
+  list.className = "word-guess-history-list";
+  wordGuessGuesses.forEach((guess, index) => {
+    list.appendChild(createWordGuessHistoryItem(guess, index));
+  });
+  targetElement.appendChild(list);
+}
+
+function renderWordGuessHistory() {
+  if (wordGuessHistoryBtn) {
+    wordGuessHistoryBtn.textContent = getWordGuessHistoryTitle();
+    wordGuessHistoryBtn.setAttribute("aria-expanded", String(isWordGuessHistoryOpen));
+  }
+
+  if (wordGuessHistoryPanel) {
+    wordGuessHistoryPanel.hidden = !isWordGuessHistoryOpen;
+    renderWordGuessHistoryList(wordGuessHistoryPanel);
+  }
+
+  if (wordGuessResultHistory) {
+    renderWordGuessHistoryList(wordGuessResultHistory, "Жодної спроби не було.");
+  }
+}
+
+function toggleWordGuessHistory() {
+  isWordGuessHistoryOpen = !isWordGuessHistoryOpen;
+  renderWordGuessHistory();
+}
+
+function shakeWordGuessBoard() {
+  if (!wordGuessBoard) {
+    return;
+  }
+
+  wordGuessBoard.classList.remove("is-invalid");
+  void wordGuessBoard.offsetWidth;
+  wordGuessBoard.classList.add("is-invalid");
+
+  setTimeout(() => {
+    wordGuessBoard.classList.remove("is-invalid");
+  }, 360);
+}
+
 function setWordGuessMessage(message) {
   if (!wordGuessMessage) {
     return;
+  }
+
+  if (wordGuessMessageTimeoutId) {
+    clearTimeout(wordGuessMessageTimeoutId);
+    wordGuessMessageTimeoutId = null;
   }
 
   const hasMessage = Boolean(message);
   wordGuessMessage.textContent = message;
   wordGuessMessage.classList.toggle("is-visible", hasMessage);
   wordGuessMessage.classList.toggle("is-error", hasMessage);
+
+  if (hasMessage) {
+    wordGuessMessageTimeoutId = setTimeout(() => {
+      wordGuessMessage.classList.remove("is-visible", "is-error");
+      wordGuessMessage.textContent = "";
+      wordGuessMessageTimeoutId = null;
+    }, 1700);
+  }
 }
 
 function setupEvents() {
@@ -917,6 +1033,10 @@ function setupEvents() {
 
   if (wordGuessHintBtn) {
     wordGuessHintBtn.addEventListener("click", showWordGuessHint);
+  }
+
+  if (wordGuessHistoryBtn) {
+    wordGuessHistoryBtn.addEventListener("click", toggleWordGuessHistory);
   }
 
   if (wordGuessNewBtn) {
