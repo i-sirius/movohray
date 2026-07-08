@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.19";
+const DATA_VERSION = "0.4.20";
 const THEME_STORAGE_KEY = "movohray-theme";
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const GAME_TITLE = "Мовограй";
@@ -347,6 +347,19 @@ async function init() {
   renderWordGuessBoard();
   renderWordGuessKeyboard();
   setupEvents();
+  registerServiceWorker();
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator) || !window.isSecureContext) {
+    return;
+  }
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js", { scope: "./" }).catch((error) => {
+      console.warn("Не вдалося зареєструвати service worker", error);
+    });
+  });
 }
 
 function applyBrandText() {

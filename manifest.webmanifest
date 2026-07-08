@@ -1,0 +1,33 @@
+{
+  "name": "Мовограй",
+  "short_name": "Мовограй",
+  "description": "Українські ігри зі словами для компанії.",
+  "lang": "uk-UA",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8efd9",
+  "theme_color": "#4c8f96",
+  "categories": ["games", "education"],
+  "icons": [
+    {
+      "src": "favicon-light.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-light.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-light.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
