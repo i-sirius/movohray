@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.11";
+const DATA_VERSION = "0.4.13";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -29,14 +29,17 @@ const WORD_GUESS_STATUS_PRIORITY = {
 const DICTIONARY_LINKS = [
   {
     name: "СУМ",
+    label: "СУМ — словник",
     url: (word) => `https://sum.in.ua/s/${encodeURIComponent(word)}`,
   },
   {
     name: "Горох",
+    label: "Горох — словник",
     url: (word) => `https://goroh.pp.ua/Тлумачення/${encodeURIComponent(word)}`,
   },
   {
     name: "Вікісловник",
+    label: "Вікісловник",
     url: (word) => `https://uk.wiktionary.org/wiki/${encodeURIComponent(word)}`,
   },
 ];
@@ -981,7 +984,9 @@ function renderWordGuessDictionaryLinks(word) {
     anchor.href = link.url(word);
     anchor.target = "_blank";
     anchor.rel = "noopener noreferrer";
-    anchor.textContent = link.name;
+    anchor.textContent = link.label || link.name;
+    anchor.title = `Почитати тлумачення слова ${word.toLocaleUpperCase("uk-UA")} у словнику ${link.name}`;
+    anchor.setAttribute("aria-label", anchor.title);
     wordGuessDictionaryLinks.appendChild(anchor);
   });
 }

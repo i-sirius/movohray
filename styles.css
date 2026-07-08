@@ -5635,3 +5635,44 @@ body[data-theme="dark"] .word-guess-message::before {
     top: 100px;
   }
 }
+
+
+/* 0.4.12 — calmer red for absent letters in Word Guess */
+.word-guess-cell.is-absent,
+.word-guess-key.is-absent,
+.word-guess-history-letter.is-absent {
+  background: #cf7f8e;
+  color: #fffaf0;
+  border-color: rgba(186, 89, 108, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.word-guess-key.is-absent {
+  background: linear-gradient(180deg, #dc93a0, #c97888);
+  color: #fffaf0;
+}
+
+.word-guess-history-letter.is-absent {
+  background: #d58a98;
+  border-color: rgba(186, 89, 108, 0.66);
+  color: #fffaf0;
+}
+
+body[data-theme="dark"] .word-guess-cell.is-absent,
+body[data-theme="dark"] .word-guess-key.is-absent,
+body[data-theme="dark"] .word-guess-history-letter.is-absent {
+  background: #a85d70;
+  color: #ffeef2;
+  border-color: rgba(255, 163, 181, 0.34);
+}
+
+body[data-theme="dark"] .word-guess-key.is-absent {
+  background: linear-gradient(180deg, #b76b7d, #8f5063);
+  color: #ffeef2;
+}
+
+body[data-theme="dark"] .word-guess-history-letter.is-absent {
+  background: #9c5669;
+  border-color: rgba(255, 163, 181, 0.3);
+  color: #ffeef2;
+}
