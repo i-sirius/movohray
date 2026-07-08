@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.23";
+const DATA_VERSION = "0.4.24";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -116,6 +116,7 @@ let currentTeamIndex = 0;
 let roundResults = null;
 let finalRoundActive = false;
 let playedRounds = 0;
+let isRoundReviewWordsExpanded = false;
 
 let deck = [];
 let currentWord = "";
@@ -3463,6 +3464,7 @@ function finishRound(reason = "manual") {
 function showRoundReview() {
   clearInterval(timerId);
   resetSwipeState();
+  isRoundReviewWordsExpanded = false;
   recalculateRoundCounters();
   renderRoundReview();
   showScreen("roundReview");
@@ -3501,13 +3503,32 @@ function renderRoundReview() {
     return;
   }
 
-  roundWords.forEach((item) => {
+  const heading = document.querySelector(".round-review-heading");
+  if (heading) {
+    heading.textContent = `Слова раунду · ${roundWords.length}`;
+  }
+
+  const collapsedLimit = getRoundReviewCollapsedLimit();
+  const shouldCollapse = roundWords.length > collapsedLimit;
+  const visibleWords = shouldCollapse && !isRoundReviewWordsExpanded
+    ? roundWords.slice(0, collapsedLimit)
+    : roundWords;
+
+  roundReviewList.classList.toggle("is-collapsed", shouldCollapse && !isRoundReviewWordsExpanded);
+  roundReviewList.classList.toggle("is-expanded", shouldCollapse && isRoundReviewWordsExpanded);
+
+  visibleWords.forEach((item, index) => {
     const row = document.createElement("button");
     row.type = "button";
     row.className = `round-word-row ${item.result === "guessed" ? "is-guessed" : "is-skipped"}`;
+    row.setAttribute("aria-label", `Змінити статус слова ${item.word}`);
 
     const main = document.createElement("span");
     main.className = "round-word-main";
+
+    const number = document.createElement("span");
+    number.className = "round-word-number";
+    number.textContent = `${index + 1}.`;
 
     const word = document.createElement("span");
     word.className = "round-word-text";
@@ -3522,7 +3543,7 @@ function renderRoundReview() {
 
     const separator = document.createElement("span");
     separator.className = "round-word-separator";
-    separator.textContent = " \u00b7 ";
+    separator.textContent = " · ";
 
     const difficulty = document.createElement("em");
     difficulty.className = "round-word-difficulty";
@@ -3534,7 +3555,8 @@ function renderRoundReview() {
 
     const status = document.createElement("span");
     status.className = `round-word-status ${item.result === "guessed" ? "is-guessed" : "is-skipped"}`;
-    status.textContent = item.result === "guessed" ? "\u0412\u0433\u0430\u0434\u0430\u043d\u043e" : "\u041d\u0435 \u0432\u0433\u0430\u0434\u0430\u043d\u043e";
+    status.textContent = item.result === "guessed" ? "✓" : "–";
+    status.title = item.result === "guessed" ? "Вгадано" : "Не вгадано";
 
     row.addEventListener("click", () => {
       item.result = item.result === "guessed" ? "skipped" : "guessed";
@@ -3542,12 +3564,44 @@ function renderRoundReview() {
       renderRoundReview();
     });
 
+    main.appendChild(number);
     main.appendChild(word);
     main.appendChild(meta);
     row.appendChild(main);
     row.appendChild(status);
     roundReviewList.appendChild(row);
   });
+
+  if (shouldCollapse) {
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "round-review-toggle";
+    toggle.textContent = isRoundReviewWordsExpanded
+      ? "Згорнути слова"
+      : `Показати всі слова · ${roundWords.length}`;
+
+    toggle.addEventListener("click", () => {
+      isRoundReviewWordsExpanded = !isRoundReviewWordsExpanded;
+      renderRoundReview();
+    });
+
+    roundReviewList.appendChild(toggle);
+  }
+}
+
+function getRoundReviewCollapsedLimit() {
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 640;
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 360;
+
+  if (viewportHeight <= 520 && viewportWidth >= 560) {
+    return 8;
+  }
+
+  if (viewportHeight <= 700 || viewportWidth <= 420) {
+    return 8;
+  }
+
+  return 10;
 }
 
 function formatReviewMetaText(value) {

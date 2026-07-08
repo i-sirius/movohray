@@ -7367,3 +7367,264 @@ body[data-theme="dark"] .required-update-eyebrow {
     border-radius: 22px;
   }
 }
+
+/* 0.4.24: compact Alias/round review so action buttons stay visible */
+#roundReviewScreen .round-review-card {
+  width: min(820px, calc(100vw - 24px));
+  max-height: calc(100vh - 20px);
+  max-height: calc(100dvh - 20px);
+  overflow: hidden;
+}
+
+#roundReviewScreen .round-review-card .card-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - 86px);
+  max-height: calc(100dvh - 86px);
+}
+
+#roundReviewScreen h1 {
+  flex: 0 0 auto;
+}
+
+#roundReviewScreen .subtitle,
+#roundReviewScreen .result-grid,
+#roundReviewScreen .round-review-progress,
+#roundReviewScreen .round-review-heading,
+#roundReviewScreen #confirmRoundBtn,
+#roundReviewScreen .menu-exit-btn {
+  flex: 0 0 auto;
+}
+
+#roundReviewScreen .round-review-progress {
+  margin: 8px 0 10px;
+  padding: 10px;
+}
+
+#roundReviewScreen .round-review-heading {
+  margin: 6px 0 8px;
+}
+
+#roundReviewScreen .round-review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 7px;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: min(28vh, 230px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 2px 8px;
+  margin: 0 0 10px;
+}
+
+#roundReviewScreen .round-review-list.is-collapsed {
+  max-height: none;
+  overflow: visible;
+}
+
+#roundReviewScreen .round-review-list.is-expanded {
+  max-height: min(32vh, 260px);
+}
+
+#roundReviewScreen .round-word-row {
+  min-width: 0;
+  min-height: 42px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 9px;
+  border-radius: 14px;
+}
+
+#roundReviewScreen .round-word-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 6px;
+  align-items: center;
+}
+
+#roundReviewScreen .round-word-number {
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 950;
+  font-variant-numeric: tabular-nums;
+}
+
+#roundReviewScreen .round-word-text {
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+#roundReviewScreen .round-word-meta {
+  grid-column: 2;
+  font-size: 10px;
+  line-height: 1.1;
+  opacity: 0.82;
+}
+
+#roundReviewScreen .round-word-status {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  min-height: 26px;
+  padding: 0;
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+#roundReviewScreen .round-review-toggle {
+  grid-column: 1 / -1;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.84);
+  color: var(--color-primary);
+  border: 1px dashed rgba(111, 106, 168, 0.28);
+  font-weight: 950;
+  box-shadow: 0 6px 16px rgba(54, 49, 94, 0.08);
+}
+
+body[data-theme="dark"] #roundReviewScreen .round-review-toggle {
+  background: rgba(31, 38, 58, 0.88);
+  border-color: rgba(220, 226, 255, 0.18);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+#roundReviewScreen #confirmRoundBtn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+#roundReviewScreen .menu-exit-btn {
+  flex: 0 0 auto;
+}
+
+@media (max-height: 520px) and (min-width: 560px) {
+  #roundReviewScreen .round-review-card {
+    width: min(920px, calc(100vw - 16px));
+    max-height: calc(100vh - 12px);
+    max-height: calc(100dvh - 12px);
+    padding: 12px;
+  }
+
+  #roundReviewScreen .round-review-card .card-inner {
+    max-height: calc(100vh - 36px);
+    max-height: calc(100dvh - 36px);
+  }
+
+  #roundReviewScreen h1 {
+    font-size: clamp(20px, 3vw, 28px);
+    margin: 0 0 4px;
+  }
+
+  #roundReviewScreen .subtitle {
+    margin: 0 0 6px;
+  }
+
+  #roundReviewScreen .result-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    margin: 4px 0;
+  }
+
+  #roundReviewScreen .result-item {
+    padding: 7px 8px;
+    border-radius: 14px;
+  }
+
+  #roundReviewScreen .result-item span {
+    font-size: 22px;
+  }
+
+  #roundReviewScreen .round-review-progress {
+    max-height: 82px;
+    overflow-y: auto;
+    padding: 8px;
+    gap: 6px;
+    margin: 4px 0 6px;
+    border-radius: 16px;
+  }
+
+  #roundReviewScreen .round-review-team-list {
+    gap: 5px;
+  }
+
+  #roundReviewScreen .round-review-team-row {
+    padding: 5px 7px;
+    border-radius: 12px;
+    font-size: 11px;
+  }
+
+  #roundReviewScreen .round-review-heading {
+    margin: 4px 0 6px;
+    font-size: 14px;
+  }
+
+  #roundReviewScreen .round-review-list {
+    grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+    gap: 5px;
+    max-height: 22vh;
+    margin-bottom: 6px;
+  }
+
+  #roundReviewScreen .round-review-list.is-expanded {
+    max-height: 26vh;
+  }
+
+  #roundReviewScreen .round-word-row {
+    min-height: 34px;
+    padding: 6px 7px;
+    border-radius: 12px;
+  }
+
+  #roundReviewScreen .round-word-text {
+    font-size: 12px;
+  }
+
+  #roundReviewScreen .round-word-meta {
+    display: none;
+  }
+
+  #roundReviewScreen .round-word-status {
+    min-width: 22px;
+    min-height: 22px;
+    font-size: 12px;
+  }
+
+  #roundReviewScreen .round-review-toggle {
+    min-height: 32px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  #roundReviewScreen #confirmRoundBtn,
+  #roundReviewScreen .menu-exit-btn {
+    min-height: 36px;
+    margin-top: 5px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 520px) {
+  #roundReviewScreen .round-review-card {
+    width: min(100%, calc(100vw - 16px));
+    padding: 16px;
+  }
+
+  #roundReviewScreen .round-review-card .card-inner {
+    max-height: calc(100vh - 52px);
+    max-height: calc(100dvh - 52px);
+  }
+
+  #roundReviewScreen .round-review-list {
+    grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+    max-height: min(26vh, 210px);
+  }
+}
