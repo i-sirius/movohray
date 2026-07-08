@@ -7791,3 +7791,113 @@ body[data-theme="dark"] .word-guess-loss-emoji {
     animation: none !important;
   }
 }
+
+/* 0.4.26 — tablet menu layout and PWA settings spacing */
+@media (min-width: 761px) and (max-width: 1180px) and (min-height: 620px) {
+  #menuScreen {
+    max-width: min(1040px, calc(100vw - 48px));
+  }
+
+  #menuScreen .card {
+    padding: clamp(26px, 3.2vw, 38px);
+  }
+
+  #menuScreen .mode-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 10px;
+  }
+
+  #menuScreen .active-mode-grid {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 14px;
+  }
+
+  #menuScreen .mode-card {
+    min-height: 176px;
+    padding: 20px 18px;
+    border-radius: 26px;
+  }
+
+  #menuScreen .mode-card strong {
+    font-size: clamp(22px, 2.4vw, 30px);
+    line-height: 1.08;
+  }
+
+  #menuScreen .mode-card span.mode-card-description {
+    font-size: clamp(14px, 1.35vw, 16px);
+    line-height: 1.35;
+  }
+
+  #menuScreen .upcoming-modes {
+    min-height: auto;
+    grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    justify-items: stretch;
+    padding: 15px 18px;
+    border-radius: 24px;
+  }
+
+  #menuScreen .upcoming-modes-copy {
+    text-align: left;
+  }
+
+  #menuScreen .upcoming-mode-chips {
+    justify-content: flex-end;
+  }
+
+  #menuScreen .rules-box {
+    grid-template-columns: 132px minmax(0, 1fr) minmax(0, 1fr);
+    padding: 16px 18px;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 940px) and (min-height: 620px) {
+  #menuScreen .active-mode-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #menuScreen .mode-card {
+    min-height: 166px;
+    padding: 18px 14px;
+  }
+
+  #menuScreen .mode-card strong {
+    font-size: clamp(20px, 2.8vw, 26px);
+  }
+
+  #menuScreen .mode-card span.mode-card-description {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 520px) {
+  body[data-screen="settings"] .app {
+    align-items: flex-start;
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+
+  body[data-screen="settings"] .settings-sticky-panel {
+    top: max(8px, env(safe-area-inset-top));
+    margin-bottom: 16px;
+    background: rgba(255, 252, 246, 0.97);
+    backdrop-filter: blur(14px);
+  }
+
+  body[data-theme="dark"][data-screen="settings"] .settings-sticky-panel {
+    background: rgba(25, 31, 48, 0.97);
+  }
+
+  body[data-screen="settings"] .settings-card {
+    margin-top: 2px;
+  }
+
+  body[data-screen="settings"] .category-picker-controls {
+    gap: 8px;
+  }
+
+  body[data-screen="settings"] .category-toggle-btn,
+  body[data-screen="settings"] .all-categories-btn {
+    min-height: 40px;
+  }
+}
