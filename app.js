@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.13";
+const DATA_VERSION = "0.4.14";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -29,12 +29,12 @@ const WORD_GUESS_STATUS_PRIORITY = {
 const DICTIONARY_LINKS = [
   {
     name: "СУМ",
-    label: "СУМ — словник",
+    label: "словник «СУМ»",
     url: (word) => `https://sum.in.ua/s/${encodeURIComponent(word)}`,
   },
   {
     name: "Горох",
-    label: "Горох — словник",
+    label: "словник «Горох»",
     url: (word) => `https://goroh.pp.ua/Тлумачення/${encodeURIComponent(word)}`,
   },
   {
@@ -313,6 +313,7 @@ const wordGuessHistoryBtn = document.getElementById("wordGuessHistoryBtn");
 const wordGuessHistoryPanel = document.getElementById("wordGuessHistoryPanel");
 const wordGuessResultHistory = document.getElementById("wordGuessResultHistory");
 const wordGuessResultHistoryBtn = document.getElementById("wordGuessResultHistoryBtn");
+const wordGuessResultAttempts = document.getElementById("wordGuessResultAttempts");
 const wordGuessKeyboard = document.getElementById("wordGuessKeyboard");
 const wordGuessResult = document.getElementById("wordGuessResult");
 const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
@@ -849,17 +850,19 @@ function finishWordGuessGame(isWon) {
   if (wordGuessResultText) {
     const totalAttempts = wordGuessAttemptLog.length;
     const invalidAttempts = wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length;
-    const attemptSummary = totalAttempts > 0
-      ? ` Всього перевірено: ${totalAttempts}. Не в залік: ${invalidAttempts}.`
-      : "";
+    const validAttempts = wordGuessGuesses.length;
     const dictionaryStats = getWordGuessDictionaryStatsLabel();
     const dictionarySummary = dictionaryStats ? ` ${dictionaryStats}` : "";
+    const checkedSummary = totalAttempts > 0
+      ? ` Перевірено всього: ${totalAttempts}${invalidAttempts > 0 ? `, не в залік: ${invalidAttempts}` : ""}.`
+      : "";
     wordGuessResultText.textContent = isWon
-      ? `Слово ${targetLabel} за ${attemptsUsed} ${getAttemptWord(attemptsUsed)}.${attemptSummary}${dictionarySummary}`
-      : `Правильне слово: ${targetLabel}.${attemptSummary}${dictionarySummary}`;
+      ? `Слово ${targetLabel}. Зараховано ${validAttempts} ${getAttemptWord(validAttempts)}.${checkedSummary}${dictionarySummary}`
+      : `Правильне слово: ${targetLabel}. Зараховано ${validAttempts} ${getAttemptWord(validAttempts)}.${checkedSummary}${dictionarySummary}`;
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
+  renderWordGuessResultAttempts();
   renderWordGuessHistory();
   updateWordGuessHintState();
 
@@ -971,6 +974,44 @@ function getAttemptWord(count) {
   }
 
   return "спроб";
+}
+
+
+function renderWordGuessResultAttempts() {
+  if (!wordGuessResultAttempts) {
+    return;
+  }
+
+  wordGuessResultAttempts.innerHTML = "";
+
+  if (wordGuessAttemptLog.length === 0) {
+    const empty = document.createElement("span");
+    empty.className = "word-guess-result-attempts-empty";
+    empty.textContent = "Спроб ще не було.";
+    wordGuessResultAttempts.appendChild(empty);
+    return;
+  }
+
+  const label = document.createElement("span");
+  label.className = "word-guess-result-attempts-label";
+  label.textContent = "Спроби:";
+  wordGuessResultAttempts.appendChild(label);
+
+  const chips = document.createElement("div");
+  chips.className = "word-guess-result-attempt-chips";
+
+  wordGuessAttemptLog.forEach((attempt) => {
+    const chip = document.createElement("span");
+    chip.className = "word-guess-result-attempt-chip";
+    if (attempt.status === "invalid") {
+      chip.classList.add("is-invalid");
+      chip.title = attempt.message ? `Не в залік: ${attempt.message}` : "Не в залік";
+    }
+    chip.textContent = attempt.word.toLocaleUpperCase("uk-UA");
+    chips.appendChild(chip);
+  });
+
+  wordGuessResultAttempts.appendChild(chips);
 }
 
 function renderWordGuessDictionaryLinks(word) {
