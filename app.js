@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.18";
+const DATA_VERSION = "0.4.19";
 const THEME_STORAGE_KEY = "movohray-theme";
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const GAME_TITLE = "Мовограй";
@@ -680,6 +680,29 @@ function renderWordGuessKeyboard() {
   wordGuessKeyboard.appendChild(controlsRow);
 }
 
+
+function setWordGuessBackgroundLocked(isLocked) {
+  const locked = Boolean(isLocked);
+  document.body.classList.toggle("word-guess-result-open", locked);
+
+  [wordGuessTopMenuBtn, wordGuessHintBtn, wordGuessRulesBtn, wordGuessHistoryBtn].forEach((button) => {
+    if (!button) {
+      return;
+    }
+
+    button.disabled = locked;
+    button.setAttribute("aria-disabled", String(locked));
+  });
+
+  if (wordGuessHistoryPanel) {
+    wordGuessHistoryPanel.hidden = true;
+  }
+
+  if (locked) {
+    isWordGuessHistoryOpen = false;
+  }
+}
+
 function createWordGuessKey(key, label, variant = "") {
   const button = document.createElement("button");
   const status = wordGuessKeyStatuses[key];
@@ -909,7 +932,7 @@ function finishWordGuessGame(isWon) {
     wordGuessResult.hidden = false;
   }
 
-  document.body.classList.add("word-guess-result-open");
+  setWordGuessBackgroundLocked(true);
 }
 
 
@@ -1032,6 +1055,11 @@ function renderWordGuessResultAttempts() {
 
   wordGuessResultAttempts.innerHTML = "";
 
+  const label = document.createElement("span");
+  label.className = "word-guess-result-attempts-label";
+  label.textContent = "Спроби:";
+  wordGuessResultAttempts.appendChild(label);
+
   if (wordGuessAttemptLog.length === 0) {
     const empty = document.createElement("span");
     empty.className = "word-guess-result-attempts-empty";
@@ -1040,22 +1068,21 @@ function renderWordGuessResultAttempts() {
     return;
   }
 
-  const label = document.createElement("span");
-  label.className = "word-guess-result-attempts-label";
-  label.textContent = "Спроби:";
-  wordGuessResultAttempts.appendChild(label);
+  const list = document.createElement("div");
+  list.className = "word-guess-result-attempt-list";
 
-  const chips = document.createElement("div");
-  chips.className = "word-guess-result-attempt-chips";
-
-  wordGuessAttemptLog.forEach((attempt) => {
-    const chip = document.createElement("span");
+  wordGuessAttemptLog.forEach((attempt, index) => {
+    const row = document.createElement("div");
     const isInvalidAttempt = attempt.status === "invalid";
-    chip.className = `word-guess-result-attempt-chip${isInvalidAttempt ? " is-invalid" : ""}`;
+    row.className = `word-guess-result-attempt-row${isInvalidAttempt ? " is-invalid" : ""}`;
 
-    if (isInvalidAttempt) {
-      chip.title = attempt.message ? `Не в залік: ${attempt.message}` : "Не в залік";
-    }
+    const attemptIndex = document.createElement("span");
+    attemptIndex.className = "word-guess-result-attempt-index";
+    attemptIndex.textContent = `${index + 1}.`;
+    row.appendChild(attemptIndex);
+
+    const lettersWrap = document.createElement("span");
+    lettersWrap.className = "word-guess-result-attempt-word";
 
     const letters = Array.from(attempt.word || "");
     for (let letterIndex = 0; letterIndex < getWordGuessLength(); letterIndex++) {
@@ -1064,13 +1091,18 @@ function renderWordGuessResultAttempts() {
       const status = isInvalidAttempt ? "invalid" : attempt.statuses[letterIndex] || "absent";
       letterCell.className = `word-guess-result-attempt-letter is-${status}`;
       letterCell.textContent = letter.toLocaleUpperCase("uk-UA");
-      chip.appendChild(letterCell);
+      lettersWrap.appendChild(letterCell);
     }
 
-    chips.appendChild(chip);
+    if (isInvalidAttempt && attempt.message) {
+      row.title = `Не зараховано: ${attempt.message}`;
+    }
+
+    row.appendChild(lettersWrap);
+    list.appendChild(row);
   });
 
-  wordGuessResultAttempts.appendChild(chips);
+  wordGuessResultAttempts.appendChild(list);
 }
 
 function renderWordGuessDictionaryLinks(word) {
@@ -1329,11 +1361,11 @@ async function copyWordGuessFeedback() {
     }
 
     if (wordGuessFeedbackMessage) {
-      wordGuessFeedbackMessage.textContent = "Звіт для модерації скопійовано.";
+      wordGuessFeedbackMessage.textContent = "Звіт скопійовано. Надішліть його розробнику для модерації словника.";
     }
   } catch (error) {
     if (wordGuessFeedbackMessage) {
-      wordGuessFeedbackMessage.textContent = "Не вдалося скопіювати. Оцінка все одно збережена на пристрої.";
+      wordGuessFeedbackMessage.textContent = "Не вдалося скопіювати. Оцінка збережена на пристрої, але для модерації її треба передати розробнику вручну.";
     }
   }
 }
@@ -1359,16 +1391,16 @@ function updateWordGuessFeedbackState() {
   const entriesCount = getWordGuessFeedbackEntries().length;
   if (wordGuessFeedbackExportBtn) {
     wordGuessFeedbackExportBtn.hidden = entriesCount === 0;
-    wordGuessFeedbackExportBtn.textContent = entriesCount > 1 ? `Скопіювати відгуки · ${entriesCount}` : "Скопіювати відгук";
+    wordGuessFeedbackExportBtn.textContent = entriesCount > 1 ? `Скопіювати звіт для розробника · ${entriesCount}` : "Скопіювати звіт для розробника";
   }
 
   if (wordGuessFeedbackMessage) {
     if (wordGuessFeedbackChoice === "like") {
-      wordGuessFeedbackMessage.textContent = "Записано: слово підходить для гри.";
+      wordGuessFeedbackMessage.textContent = "Записано. Натисніть «Скопіювати відгук» і надішліть його розробнику.";
     } else if (wordGuessFeedbackChoice === "dislike") {
-      wordGuessFeedbackMessage.textContent = "Записано: слово треба переглянути.";
+      wordGuessFeedbackMessage.textContent = "Записано. Натисніть «Скопіювати відгук» і надішліть його розробнику.";
     } else {
-      wordGuessFeedbackMessage.textContent = "Оцінка збережеться на цьому пристрої для модерації.";
+      wordGuessFeedbackMessage.textContent = "Оцінка збережеться на цьому пристрої. Для модерації її треба скопіювати й надіслати розробнику.";
     }
   }
 }
@@ -3513,7 +3545,7 @@ function showWinnerScreen() {
 function showScreen(screenName) {
   closeThemesPopover();
   if (screenName !== "wordGuessGame") {
-    document.body.classList.remove("word-guess-result-open");
+    setWordGuessBackgroundLocked(false);
   }
   document.body.dataset.screen = screenName;
 
