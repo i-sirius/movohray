@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.16";
+const DATA_VERSION = "0.4.17";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -321,6 +321,7 @@ const wordGuessResultText = document.getElementById("wordGuessResultText");
 const wordGuessNewBtn = document.getElementById("wordGuessNewBtn");
 const wordGuessMenuBtn = document.getElementById("wordGuessMenuBtn");
 const wordGuessDictionaryLinks = document.getElementById("wordGuessDictionaryLinks");
+const wordGuessResultDebug = document.getElementById("wordGuessResultDebug");
 
 init();
 
@@ -557,7 +558,19 @@ function getWordGuessDictionaryStatsLabel() {
   return `Словник гри: ${answerCount} для загадування · ${allowedCount} для спроб.`;
 }
 
+function getWordGuessDebugLabel() {
+  const answerCount = wordGuessAnswerWords.length;
+  const allowedCount = wordGuessAllowedGuesses.size;
+
+  if (!answerCount || !allowedCount) {
+    return `v${DATA_VERSION}`;
+  }
+
+  return `v${DATA_VERSION} · загадування: ${answerCount} · спроби: ${allowedCount}`;
+}
+
 async function startWordGuessGame() {
+  document.body.classList.remove("word-guess-result-open");
   const isDictionaryReady = await loadWordGuessDictionary();
   if (!isDictionaryReady) {
     showScreen("wordGuessSettings");
@@ -582,6 +595,10 @@ async function startWordGuessGame() {
 
   if (wordGuessResult) {
     wordGuessResult.hidden = true;
+  }
+
+  if (wordGuessResultDebug) {
+    wordGuessResultDebug.textContent = "";
   }
 
   renderWordGuessBoard();
@@ -840,25 +857,37 @@ function finishWordGuessGame(isWon) {
   wordGuessFinished = true;
   isWordGuessHistoryOpen = false;
   isWordGuessResultHistoryOpen = false;
-  const attemptsUsed = wordGuessGuesses.length;
   const targetLabel = wordGuessTarget.toLocaleUpperCase("uk-UA");
+  const totalAttempts = wordGuessAttemptLog.length;
+  const invalidAttempts = wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length;
+  const validAttempts = wordGuessGuesses.length;
 
   if (wordGuessResultTitle) {
     wordGuessResultTitle.textContent = isWon ? "Вгадано!" : "Спроби закінчились";
   }
 
   if (wordGuessResultText) {
-    const totalAttempts = wordGuessAttemptLog.length;
-    const invalidAttempts = wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length;
-    const validAttempts = wordGuessGuesses.length;
-    const dictionaryStats = getWordGuessDictionaryStatsLabel();
-    const dictionarySummary = dictionaryStats ? ` ${dictionaryStats}` : "";
-    const checkedSummary = totalAttempts > 0
-      ? ` Перевірено всього: ${totalAttempts}${invalidAttempts > 0 ? `, не в залік: ${invalidAttempts}` : ""}.`
-      : "";
-    wordGuessResultText.textContent = isWon
-      ? `Слово ${targetLabel}. Зараховано ${validAttempts} ${getAttemptWord(validAttempts)}.${checkedSummary}${dictionarySummary}`
-      : `Правильне слово: ${targetLabel}. Зараховано ${validAttempts} ${getAttemptWord(validAttempts)}.${checkedSummary}${dictionarySummary}`;
+    wordGuessResultText.textContent = "";
+
+    const targetCaption = document.createElement("span");
+    targetCaption.className = "word-guess-result-caption";
+    targetCaption.textContent = isWon ? "Загадане слово" : "Правильне слово";
+
+    const targetWord = document.createElement("strong");
+    targetWord.className = "word-guess-result-word";
+    targetWord.textContent = targetLabel;
+
+    const summary = document.createElement("span");
+    summary.className = "word-guess-result-summary";
+    summary.textContent = `Зараховано ${validAttempts} ${getAttemptWord(validAttempts)} · перевірено всього: ${totalAttempts}${invalidAttempts > 0 ? ` · не в залік: ${invalidAttempts}` : ""}`;
+
+    wordGuessResultText.appendChild(targetCaption);
+    wordGuessResultText.appendChild(targetWord);
+    wordGuessResultText.appendChild(summary);
+  }
+
+  if (wordGuessResultDebug) {
+    wordGuessResultDebug.textContent = getWordGuessDebugLabel();
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
@@ -869,6 +898,8 @@ function finishWordGuessGame(isWon) {
   if (wordGuessResult) {
     wordGuessResult.hidden = false;
   }
+
+  document.body.classList.add("word-guess-result-open");
 }
 
 
@@ -3338,6 +3369,9 @@ function showWinnerScreen() {
 
 function showScreen(screenName) {
   closeThemesPopover();
+  if (screenName !== "wordGuessGame") {
+    document.body.classList.remove("word-guess-result-open");
+  }
   document.body.dataset.screen = screenName;
 
   menuScreen.classList.remove("active");
