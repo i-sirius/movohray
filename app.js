@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.9";
+const DATA_VERSION = "0.4.10";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -542,6 +542,17 @@ function getWordGuessAttempts() {
   return wordGuessConfig?.attempts || 5;
 }
 
+function getWordGuessDictionaryStatsLabel() {
+  const answerCount = wordGuessAnswerWords.length;
+  const allowedCount = wordGuessAllowedGuesses.size;
+
+  if (!answerCount || !allowedCount) {
+    return "";
+  }
+
+  return `Словник гри: ${answerCount} для загадування · ${allowedCount} для спроб.`;
+}
+
 async function startWordGuessGame() {
   const isDictionaryReady = await loadWordGuessDictionary();
   if (!isDictionaryReady) {
@@ -838,9 +849,11 @@ function finishWordGuessGame(isWon) {
     const attemptSummary = totalAttempts > 0
       ? ` Всього перевірено: ${totalAttempts}. Не в залік: ${invalidAttempts}.`
       : "";
+    const dictionaryStats = getWordGuessDictionaryStatsLabel();
+    const dictionarySummary = dictionaryStats ? ` ${dictionaryStats}` : "";
     wordGuessResultText.textContent = isWon
-      ? `Слово ${targetLabel} за ${attemptsUsed} ${getAttemptWord(attemptsUsed)}.${attemptSummary}`
-      : `Правильне слово: ${targetLabel}.${attemptSummary}`;
+      ? `Слово ${targetLabel} за ${attemptsUsed} ${getAttemptWord(attemptsUsed)}.${attemptSummary}${dictionarySummary}`
+      : `Правильне слово: ${targetLabel}.${attemptSummary}${dictionarySummary}`;
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
@@ -877,7 +890,10 @@ function updateWordGuessHintState() {
 
   const isUsed = Boolean(wordGuessHintUsed && wordGuessTarget);
   wordGuessHintBtn.disabled = !wordGuessTarget;
-  wordGuessHintBtn.textContent = "💡";
+  wordGuessHintBtn.innerHTML = `
+    <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
+    <span class="word-guess-hint-label">Підказка</span>
+  `;
   wordGuessHintBtn.classList.toggle("is-used", isUsed);
   wordGuessHintBtn.setAttribute("aria-label", isUsed ? "Показати використану підказку" : "Показати підказку");
   wordGuessHintBtn.title = isUsed ? "Підказку вже використано" : "Підказка";
