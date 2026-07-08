@@ -5301,3 +5301,150 @@ body[data-theme="dark"] .word-guess-info-close {
     min-height: 34px;
   }
 }
+
+
+/* 0.4.9 — aligned help icons and stronger word guess validation toast */
+.word-guess-toolbar {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 42px;
+  padding: 2px;
+  border-radius: 999px;
+}
+
+.word-guess-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0;
+  margin: 0;
+  border-radius: 999px;
+  line-height: 1;
+  vertical-align: middle;
+  transform: translateY(0);
+}
+
+.word-guess-icon-btn::before {
+  display: inline-grid;
+  place-items: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+}
+
+.word-guess-hint-btn,
+.word-guess-rules-btn {
+  font-size: 0;
+}
+
+.word-guess-hint-btn::before {
+  content: "💡";
+  font-size: 18px;
+  transform: translateY(-0.5px);
+}
+
+.word-guess-rules-btn::before {
+  content: "?";
+  color: currentColor;
+  font-size: 19px;
+  font-weight: 1000;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  transform: translateY(-0.5px);
+}
+
+.word-guess-hint-btn.is-used::after {
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 2px;
+}
+
+.word-guess-icon-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.word-guess-message {
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: min(78vw, 240px);
+  max-width: min(90vw, 380px);
+  padding: 12px 16px;
+  background: rgba(255, 250, 250, 0.99);
+  border: 2px solid rgba(207, 76, 106, 0.46);
+  box-shadow: 0 20px 48px rgba(116, 31, 55, 0.28), 0 0 0 4px rgba(255, 236, 241, 0.86);
+  color: #a92849;
+  font-size: 15px;
+  font-weight: 1000;
+  letter-spacing: 0.01em;
+  text-shadow: none;
+}
+
+.word-guess-message::before {
+  content: "!";
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: rgba(207, 76, 106, 0.14);
+  color: #a92849;
+  font-size: 14px;
+  font-weight: 1000;
+}
+
+.word-guess-message.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+body[data-theme="dark"] .word-guess-message {
+  background: rgba(59, 26, 40, 0.99);
+  border-color: rgba(255, 132, 155, 0.52);
+  color: #ffd2da;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.46), 0 0 0 4px rgba(255, 132, 155, 0.12);
+}
+
+body[data-theme="dark"] .word-guess-message::before {
+  background: rgba(255, 132, 155, 0.18);
+  color: #ffd2da;
+}
+
+@media (max-width: 520px) {
+  .word-guess-toolbar {
+    gap: 6px;
+    height: 38px;
+  }
+
+  .word-guess-icon-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .word-guess-hint-btn::before {
+    font-size: 17px;
+  }
+
+  .word-guess-rules-btn::before {
+    font-size: 18px;
+  }
+
+  .word-guess-message {
+    top: 49%;
+    min-width: min(82vw, 230px);
+    padding: 11px 14px;
+    font-size: 14px;
+  }
+}
