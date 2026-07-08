@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.15";
+const DATA_VERSION = "0.4.16";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -1009,12 +1009,23 @@ function renderWordGuessResultAttempts() {
 
   wordGuessAttemptLog.forEach((attempt) => {
     const chip = document.createElement("span");
-    chip.className = "word-guess-result-attempt-chip";
-    if (attempt.status === "invalid") {
-      chip.classList.add("is-invalid");
+    const isInvalidAttempt = attempt.status === "invalid";
+    chip.className = `word-guess-result-attempt-chip${isInvalidAttempt ? " is-invalid" : ""}`;
+
+    if (isInvalidAttempt) {
       chip.title = attempt.message ? `Не в залік: ${attempt.message}` : "Не в залік";
     }
-    chip.textContent = attempt.word.toLocaleUpperCase("uk-UA");
+
+    const letters = Array.from(attempt.word || "");
+    for (let letterIndex = 0; letterIndex < getWordGuessLength(); letterIndex++) {
+      const letterCell = document.createElement("span");
+      const letter = letters[letterIndex] || "";
+      const status = isInvalidAttempt ? "invalid" : attempt.statuses[letterIndex] || "absent";
+      letterCell.className = `word-guess-result-attempt-letter is-${status}`;
+      letterCell.textContent = letter.toLocaleUpperCase("uk-UA");
+      chip.appendChild(letterCell);
+    }
+
     chips.appendChild(chip);
   });
 
