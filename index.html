@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.4.6" />
+  <link rel="stylesheet" href="styles.css?v=0.4.8" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -191,25 +191,22 @@
     </section>
 
     <section id="wordGuessGameScreen" class="screen">
+      <h1 class="word-guess-screen-title">Вгадай слово</h1>
       <div class="card center bubble-card word-guess-game-card">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
         <div class="card-inner word-guess-inner">
           <div class="word-guess-titlebar">
             <button id="wordGuessTopMenuBtn" class="secondary-btn word-guess-menu-link" type="button">← У меню</button>
-            <div class="word-guess-title-copy">
-              <h1>Вгадай слово</h1>
-              <p>5 літер · 5 спроб</p>
+            <div class="word-guess-toolbar" aria-label="Допомога">
+              <button id="wordGuessHintBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-btn" type="button" aria-label="Показати підказку" title="Підказка">💡</button>
+              <button id="wordGuessRulesBtn" class="secondary-btn word-guess-icon-btn word-guess-rules-btn" type="button" aria-label="Показати правила" title="Правила">?</button>
             </div>
             <button id="wordGuessHistoryBtn" class="secondary-btn word-guess-history-btn" type="button" aria-expanded="false">Спроби · 0</button>
           </div>
 
           <div id="wordGuessHistoryPanel" class="word-guess-history-panel" hidden></div>
 
-          <div class="word-guess-helper-row">
-            <button id="wordGuessHintBtn" class="secondary-btn word-guess-hint-btn" type="button">💡 Підказка</button>
-            <p id="wordGuessHintText" class="word-guess-hint-text" hidden></p>
-          </div>
           <div id="wordGuessBoard" class="word-guess-board" aria-label="Поле гри"></div>
           <p id="wordGuessMessage" class="message word-guess-message" role="status" aria-live="polite"></p>
           <div id="wordGuessKeyboard" class="word-guess-keyboard" aria-label="Українська клавіатура"></div>
@@ -217,7 +214,8 @@
           <div id="wordGuessResult" class="word-guess-result" hidden>
             <h2 id="wordGuessResultTitle">Вгадано!</h2>
             <p id="wordGuessResultText"></p>
-            <div id="wordGuessResultHistory" class="word-guess-result-history"></div>
+            <button id="wordGuessResultHistoryBtn" class="secondary-btn word-guess-result-history-btn" type="button" aria-expanded="false">Спроби · 0</button>
+            <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
             <div class="word-guess-result-actions">
               <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
               <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
@@ -230,6 +228,17 @@
         </div>
       </div>
     </section>
+
+
+    <div id="wordGuessInfoModal" class="word-guess-info-modal" hidden>
+      <div class="word-guess-info-backdrop" data-word-guess-info-close></div>
+      <div class="word-guess-info-card" role="dialog" aria-modal="true" aria-labelledby="wordGuessInfoTitle">
+        <button id="wordGuessInfoCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
+        <p id="wordGuessInfoEyebrow" class="word-guess-info-eyebrow"></p>
+        <h2 id="wordGuessInfoTitle"></h2>
+        <p id="wordGuessInfoText"></p>
+      </div>
+    </div>
 
     <section id="teamReadyScreen" class="screen">
       <div class="card center bubble-card">
@@ -421,6 +430,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.6"></script>
+  <script src="app.js?v=0.4.8"></script>
 </body>
 </html>

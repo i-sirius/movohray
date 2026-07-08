@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.6";
+const DATA_VERSION = "0.4.8";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -137,6 +137,7 @@ let wordGuessFinished = false;
 let wordGuessHintUsed = false;
 let wordGuessMessageTimeoutId = null;
 let isWordGuessHistoryOpen = false;
+let isWordGuessResultHistoryOpen = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -299,10 +300,16 @@ const wordGuessSettingsMessage = document.getElementById("wordGuessSettingsMessa
 const wordGuessBoard = document.getElementById("wordGuessBoard");
 const wordGuessMessage = document.getElementById("wordGuessMessage");
 const wordGuessHintBtn = document.getElementById("wordGuessHintBtn");
-const wordGuessHintText = document.getElementById("wordGuessHintText");
+const wordGuessRulesBtn = document.getElementById("wordGuessRulesBtn");
+const wordGuessInfoModal = document.getElementById("wordGuessInfoModal");
+const wordGuessInfoCloseBtn = document.getElementById("wordGuessInfoCloseBtn");
+const wordGuessInfoEyebrow = document.getElementById("wordGuessInfoEyebrow");
+const wordGuessInfoTitle = document.getElementById("wordGuessInfoTitle");
+const wordGuessInfoText = document.getElementById("wordGuessInfoText");
 const wordGuessHistoryBtn = document.getElementById("wordGuessHistoryBtn");
 const wordGuessHistoryPanel = document.getElementById("wordGuessHistoryPanel");
 const wordGuessResultHistory = document.getElementById("wordGuessResultHistory");
+const wordGuessResultHistoryBtn = document.getElementById("wordGuessResultHistoryBtn");
 const wordGuessKeyboard = document.getElementById("wordGuessKeyboard");
 const wordGuessResult = document.getElementById("wordGuessResult");
 const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
@@ -550,6 +557,7 @@ async function startWordGuessGame() {
   wordGuessFinished = false;
   wordGuessHintUsed = false;
   isWordGuessHistoryOpen = false;
+  isWordGuessResultHistoryOpen = false;
 
   updateWordGuessHintState();
 
@@ -637,7 +645,19 @@ function createWordGuessKey(key, label, variant = "") {
   button.type = "button";
   button.className = `word-guess-key${variant ? ` word-guess-key-${variant}` : ""}`;
   button.dataset.wordGuessKey = key;
-  button.textContent = label;
+
+  if (key === "backspace") {
+    button.classList.add("word-guess-key-icon");
+    button.setAttribute("aria-label", "Стерти літеру");
+    button.innerHTML = `
+      <svg class="word-guess-backspace-icon" viewBox="0 0 28 20" aria-hidden="true" focusable="false">
+        <path d="M10 3.5H24.2C25.2 3.5 26 4.3 26 5.3V14.7C26 15.7 25.2 16.5 24.2 16.5H10L2.8 10L10 3.5Z" />
+        <path d="M13 7.3L18.4 12.7M18.4 7.3L13 12.7" />
+      </svg>
+    `;
+  } else {
+    button.textContent = label;
+  }
 
   if (status) {
     button.classList.add(`is-${status}`);
@@ -804,6 +824,7 @@ function updateWordGuessKeyboardStatuses(guess, statuses) {
 function finishWordGuessGame(isWon) {
   wordGuessFinished = true;
   isWordGuessHistoryOpen = false;
+  isWordGuessResultHistoryOpen = false;
   const attemptsUsed = wordGuessGuesses.length;
   const targetLabel = wordGuessTarget.toLocaleUpperCase("uk-UA");
 
@@ -812,9 +833,14 @@ function finishWordGuessGame(isWon) {
   }
 
   if (wordGuessResultText) {
+    const totalAttempts = wordGuessAttemptLog.length;
+    const invalidAttempts = wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length;
+    const attemptSummary = totalAttempts > 0
+      ? ` Всього перевірено: ${totalAttempts}. Не в залік: ${invalidAttempts}.`
+      : "";
     wordGuessResultText.textContent = isWon
-      ? `Слово ${targetLabel} за ${attemptsUsed} ${getAttemptWord(attemptsUsed)}.`
-      : `Правильне слово: ${targetLabel}.`;
+      ? `Слово ${targetLabel} за ${attemptsUsed} ${getAttemptWord(attemptsUsed)}.${attemptSummary}`
+      : `Правильне слово: ${targetLabel}.${attemptSummary}`;
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
@@ -845,36 +871,75 @@ function getWordGuessHintMessage() {
 }
 
 function updateWordGuessHintState() {
-  if (wordGuessHintBtn) {
-    const isUsed = Boolean(wordGuessHintUsed && wordGuessTarget);
-    wordGuessHintBtn.disabled = wordGuessFinished || isUsed || !wordGuessTarget;
-    wordGuessHintBtn.textContent = isUsed ? "💡" : "💡 Підказка";
-    wordGuessHintBtn.classList.toggle("is-used", isUsed);
-    wordGuessHintBtn.setAttribute("aria-label", isUsed ? "Підказку використано" : "Показати підказку");
-    wordGuessHintBtn.title = isUsed ? "Підказку використано" : "Показати підказку";
-  }
-
-  if (!wordGuessHintText) {
+  if (!wordGuessHintBtn) {
     return;
   }
 
-  if (wordGuessHintUsed && wordGuessTarget) {
-    wordGuessHintText.textContent = getWordGuessHintMessage();
-    wordGuessHintText.hidden = false;
-  } else {
-    wordGuessHintText.textContent = "";
-    wordGuessHintText.hidden = true;
-  }
+  const isUsed = Boolean(wordGuessHintUsed && wordGuessTarget);
+  wordGuessHintBtn.disabled = !wordGuessTarget;
+  wordGuessHintBtn.textContent = "💡";
+  wordGuessHintBtn.classList.toggle("is-used", isUsed);
+  wordGuessHintBtn.setAttribute("aria-label", isUsed ? "Показати використану підказку" : "Показати підказку");
+  wordGuessHintBtn.title = isUsed ? "Підказку вже використано" : "Підказка";
 }
 
 function showWordGuessHint() {
-  if (wordGuessFinished || wordGuessHintUsed || !wordGuessTarget) {
+  if (!wordGuessTarget) {
     return;
   }
 
+  const wasUsed = wordGuessHintUsed;
   wordGuessHintUsed = true;
   setWordGuessMessage("");
   updateWordGuessHintState();
+  openWordGuessInfoModal({
+    eyebrow: wasUsed ? "Підказку вже використано" : "Підказка",
+    title: wasUsed ? "Використана підказка" : "Одна підказка за гру",
+    text: getWordGuessHintMessage(),
+  });
+}
+
+function showWordGuessRules() {
+  openWordGuessInfoModal({
+    eyebrow: "Правила",
+    title: "Як грати",
+    text: "Введи українське слово з 5 різних літер. Зелена літера стоїть на правильному місці, жовта є у слові, але в іншій позиції, сіра — відсутня. Є 5 зарахованих спроб; слова не зі словника показуються в історії як не в залік.",
+  });
+}
+
+function openWordGuessInfoModal({ eyebrow = "", title = "", text = "" } = {}) {
+  if (!wordGuessInfoModal) {
+    return;
+  }
+
+  if (wordGuessInfoEyebrow) {
+    wordGuessInfoEyebrow.textContent = eyebrow;
+    wordGuessInfoEyebrow.hidden = !eyebrow;
+  }
+
+  if (wordGuessInfoTitle) {
+    wordGuessInfoTitle.textContent = title;
+  }
+
+  if (wordGuessInfoText) {
+    wordGuessInfoText.textContent = text;
+  }
+
+  wordGuessInfoModal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  if (wordGuessInfoCloseBtn) {
+    wordGuessInfoCloseBtn.focus();
+  }
+}
+
+function closeWordGuessInfoModal() {
+  if (!wordGuessInfoModal || wordGuessInfoModal.hidden) {
+    return;
+  }
+
+  wordGuessInfoModal.hidden = true;
+  document.body.classList.remove("modal-open");
 }
 
 function getAttemptWord(count) {
@@ -989,8 +1054,10 @@ function renderWordGuessHistoryList(targetElement, emptyText = "Спроб ще 
 }
 
 function renderWordGuessHistory() {
+  const historyTitle = getWordGuessHistoryTitle();
+
   if (wordGuessHistoryBtn) {
-    wordGuessHistoryBtn.textContent = getWordGuessHistoryTitle();
+    wordGuessHistoryBtn.textContent = historyTitle;
     wordGuessHistoryBtn.setAttribute("aria-expanded", String(isWordGuessHistoryOpen));
   }
 
@@ -999,7 +1066,13 @@ function renderWordGuessHistory() {
     renderWordGuessHistoryList(wordGuessHistoryPanel);
   }
 
+  if (wordGuessResultHistoryBtn) {
+    wordGuessResultHistoryBtn.textContent = historyTitle;
+    wordGuessResultHistoryBtn.setAttribute("aria-expanded", String(isWordGuessResultHistoryOpen));
+  }
+
   if (wordGuessResultHistory) {
+    wordGuessResultHistory.hidden = !isWordGuessResultHistoryOpen;
     renderWordGuessHistoryList(wordGuessResultHistory, "Жодної спроби не було.");
   }
 }
@@ -1015,6 +1088,11 @@ function closeWordGuessHistory() {
 
 function toggleWordGuessHistory() {
   isWordGuessHistoryOpen = !isWordGuessHistoryOpen;
+  renderWordGuessHistory();
+}
+
+function toggleWordGuessResultHistory() {
+  isWordGuessResultHistoryOpen = !isWordGuessResultHistoryOpen;
   renderWordGuessHistory();
 }
 
@@ -1085,6 +1163,22 @@ function setupEvents() {
     wordGuessHintBtn.addEventListener("click", showWordGuessHint);
   }
 
+  if (wordGuessRulesBtn) {
+    wordGuessRulesBtn.addEventListener("click", showWordGuessRules);
+  }
+
+  if (wordGuessInfoCloseBtn) {
+    wordGuessInfoCloseBtn.addEventListener("click", closeWordGuessInfoModal);
+  }
+
+  if (wordGuessInfoModal) {
+    wordGuessInfoModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-word-guess-info-close]")) {
+        closeWordGuessInfoModal();
+      }
+    });
+  }
+
   if (wordGuessHistoryBtn) {
     wordGuessHistoryBtn.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -1096,6 +1190,10 @@ function setupEvents() {
     wordGuessHistoryPanel.addEventListener("click", (event) => {
       event.stopPropagation();
     });
+  }
+
+  if (wordGuessResultHistoryBtn) {
+    wordGuessResultHistoryBtn.addEventListener("click", toggleWordGuessResultHistory);
   }
 
   if (wordGuessNewBtn) {
@@ -1137,6 +1235,10 @@ function setupEvents() {
   document.addEventListener("keydown", (event) => {
     if (isScreenActive(wordGuessGameScreen)) {
       handleWordGuessPhysicalKey(event);
+    }
+
+    if (event.key === "Escape" && wordGuessInfoModal && !wordGuessInfoModal.hidden) {
+      closeWordGuessInfoModal();
     }
 
     if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
