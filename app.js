@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.5";
+const DATA_VERSION = "0.4.6";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -716,6 +716,8 @@ function submitWordGuess() {
     addWordGuessAttemptLog(guess, "invalid", [], validationMessage);
     setWordGuessMessage(validationMessage);
     shakeWordGuessBoard();
+    wordGuessCurrentGuess = "";
+    renderWordGuessBoard();
     renderWordGuessHistory();
     return;
   }
@@ -724,9 +726,9 @@ function submitWordGuess() {
     addWordGuessAttemptLog(guess, "invalid", [], "Немає в словнику гри");
     setWordGuessMessage("Немає в словнику гри");
     shakeWordGuessBoard();
-    renderWordGuessHistory();
     wordGuessCurrentGuess = "";
     renderWordGuessBoard();
+    renderWordGuessHistory();
     return;
   }
 
@@ -801,6 +803,7 @@ function updateWordGuessKeyboardStatuses(guess, statuses) {
 
 function finishWordGuessGame(isWon) {
   wordGuessFinished = true;
+  isWordGuessHistoryOpen = false;
   const attemptsUsed = wordGuessGuesses.length;
   const targetLabel = wordGuessTarget.toLocaleUpperCase("uk-UA");
 
@@ -1001,6 +1004,15 @@ function renderWordGuessHistory() {
   }
 }
 
+function closeWordGuessHistory() {
+  if (!isWordGuessHistoryOpen) {
+    return;
+  }
+
+  isWordGuessHistoryOpen = false;
+  renderWordGuessHistory();
+}
+
 function toggleWordGuessHistory() {
   isWordGuessHistoryOpen = !isWordGuessHistoryOpen;
   renderWordGuessHistory();
@@ -1074,7 +1086,16 @@ function setupEvents() {
   }
 
   if (wordGuessHistoryBtn) {
-    wordGuessHistoryBtn.addEventListener("click", toggleWordGuessHistory);
+    wordGuessHistoryBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleWordGuessHistory();
+    });
+  }
+
+  if (wordGuessHistoryPanel) {
+    wordGuessHistoryPanel.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
   }
 
   if (wordGuessNewBtn) {
@@ -1123,6 +1144,7 @@ function setupEvents() {
     }
 
     if (event.key === "Escape") {
+      closeWordGuessHistory();
       closeThemesPopover();
     }
   });
@@ -1152,6 +1174,12 @@ function setupEvents() {
   }
 
   document.addEventListener("click", (event) => {
+    if (isWordGuessHistoryOpen
+      && !wordGuessHistoryBtn?.contains(event.target)
+      && !wordGuessHistoryPanel?.contains(event.target)) {
+      closeWordGuessHistory();
+    }
+
     if (!isThemesPopoverOpen) {
       return;
     }
