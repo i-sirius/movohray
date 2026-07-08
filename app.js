@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.4";
+const DATA_VERSION = "0.4.5";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -130,6 +130,7 @@ let wordGuessAnswerWords = [];
 let wordGuessAllowedGuesses = new Set();
 let wordGuessTarget = "";
 let wordGuessGuesses = [];
+let wordGuessAttemptLog = [];
 let wordGuessCurrentGuess = "";
 let wordGuessKeyStatuses = {};
 let wordGuessFinished = false;
@@ -543,6 +544,7 @@ async function startWordGuessGame() {
 
   wordGuessTarget = wordGuessAnswerWords[Math.floor(Math.random() * wordGuessAnswerWords.length)];
   wordGuessGuesses = [];
+  wordGuessAttemptLog = [];
   wordGuessCurrentGuess = "";
   wordGuessKeyStatuses = {};
   wordGuessFinished = false;
@@ -711,23 +713,31 @@ function submitWordGuess() {
   const validationMessage = getWordGuessValidationMessage(guess, wordLength);
 
   if (validationMessage) {
+    addWordGuessAttemptLog(guess, "invalid", [], validationMessage);
     setWordGuessMessage(validationMessage);
     shakeWordGuessBoard();
+    renderWordGuessHistory();
     return;
   }
 
   if (!wordGuessAllowedGuesses.has(guess)) {
+    addWordGuessAttemptLog(guess, "invalid", [], "Немає в словнику гри");
     setWordGuessMessage("Немає в словнику гри");
     shakeWordGuessBoard();
+    renderWordGuessHistory();
+    wordGuessCurrentGuess = "";
+    renderWordGuessBoard();
     return;
   }
 
   const statuses = evaluateWordGuess(guess, wordGuessTarget);
-  wordGuessGuesses.push({
+  const acceptedGuess = {
     word: guess,
     letters: Array.from(guess),
     statuses,
-  });
+  };
+  wordGuessGuesses.push(acceptedGuess);
+  addWordGuessAttemptLog(guess, "valid", statuses, "");
 
   updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
@@ -892,8 +902,25 @@ function renderWordGuessDictionaryLinks(word) {
   });
 }
 
+function addWordGuessAttemptLog(word, status = "valid", statuses = [], message = "") {
+  const normalizedWord = normalizeWordGuessWord(word);
+  const letters = Array.from(normalizedWord);
+
+  if (letters.length === 0) {
+    return;
+  }
+
+  wordGuessAttemptLog.push({
+    word: normalizedWord,
+    letters,
+    status,
+    statuses: Array.isArray(statuses) ? statuses : [],
+    message,
+  });
+}
+
 function getWordGuessHistoryTitle() {
-  const count = wordGuessGuesses.length;
+  const count = wordGuessAttemptLog.length;
   if (count === 0) {
     return "Спроби · 0";
   }
@@ -903,7 +930,8 @@ function getWordGuessHistoryTitle() {
 
 function createWordGuessHistoryItem(guess, index) {
   const item = document.createElement("li");
-  item.className = "word-guess-history-item";
+  const isInvalidAttempt = guess.status === "invalid";
+  item.className = `word-guess-history-item${isInvalidAttempt ? " is-invalid-attempt" : ""}`;
 
   const indexLabel = document.createElement("span");
   indexLabel.className = "word-guess-history-index";
@@ -913,14 +941,24 @@ function createWordGuessHistoryItem(guess, index) {
   const lettersWrap = document.createElement("span");
   lettersWrap.className = "word-guess-history-letters";
 
-  guess.letters.forEach((letter, letterIndex) => {
+  for (let letterIndex = 0; letterIndex < getWordGuessLength(); letterIndex++) {
     const cell = document.createElement("span");
-    cell.className = `word-guess-history-letter is-${guess.statuses[letterIndex] || "absent"}`;
+    const letter = guess.letters[letterIndex] || "";
+    const status = isInvalidAttempt ? "invalid" : guess.statuses[letterIndex] || "absent";
+    cell.className = `word-guess-history-letter is-${status}`;
     cell.textContent = letter.toLocaleUpperCase("uk-UA");
     lettersWrap.appendChild(cell);
-  });
+  }
 
   item.appendChild(lettersWrap);
+
+  if (isInvalidAttempt) {
+    const note = document.createElement("span");
+    note.className = "word-guess-history-note";
+    note.textContent = guess.message ? `Не в залік · ${guess.message}` : "Не в залік";
+    item.appendChild(note);
+  }
+
   return item;
 }
 
@@ -931,7 +969,7 @@ function renderWordGuessHistoryList(targetElement, emptyText = "Спроб ще 
 
   targetElement.innerHTML = "";
 
-  if (wordGuessGuesses.length === 0) {
+  if (wordGuessAttemptLog.length === 0) {
     const empty = document.createElement("p");
     empty.className = "word-guess-history-empty";
     empty.textContent = emptyText;
@@ -941,7 +979,7 @@ function renderWordGuessHistoryList(targetElement, emptyText = "Спроб ще 
 
   const list = document.createElement("ol");
   list.className = "word-guess-history-list";
-  wordGuessGuesses.forEach((guess, index) => {
+  wordGuessAttemptLog.forEach((guess, index) => {
     list.appendChild(createWordGuessHistoryItem(guess, index));
   });
   targetElement.appendChild(list);
