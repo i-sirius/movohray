@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="stylesheet" href="styles.css?v=0.4.17" />
+  <link rel="stylesheet" href="styles.css?v=0.4.18" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="themeToggleBtn" class="theme-toggle-btn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
@@ -216,6 +216,15 @@
             <p id="wordGuessResultText"></p>
             <div id="wordGuessResultAttempts" class="word-guess-result-attempts" aria-label="Перевірені спроби"></div>
             <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
+            <div id="wordGuessFeedback" class="word-guess-feedback" hidden>
+              <span class="word-guess-feedback-title">Оцінити загадане слово для словника:</span>
+              <div class="word-guess-feedback-actions">
+                <button id="wordGuessLikeBtn" class="word-guess-feedback-btn" type="button" aria-label="Слово підходить для гри">👍 <span>Лишити</span></button>
+                <button id="wordGuessDislikeBtn" class="word-guess-feedback-btn" type="button" aria-label="Слово треба переглянути">👎 <span>Переглянути</span></button>
+              </div>
+              <p id="wordGuessFeedbackMessage" class="word-guess-feedback-message"></p>
+              <button id="wordGuessFeedbackExportBtn" class="word-guess-feedback-export" type="button" hidden>Скопіювати відгуки</button>
+            </div>
             <div class="word-guess-result-actions">
               <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
               <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
@@ -431,6 +440,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.17"></script>
+  <script src="app.js?v=0.4.18"></script>
 </body>
 </html>

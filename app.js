@@ -9,8 +9,9 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.17";
+const DATA_VERSION = "0.4.18";
 const THEME_STORAGE_KEY = "movohray-theme";
+const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
 const modeCategoryCache = {};
@@ -138,6 +139,7 @@ let wordGuessCurrentGuess = "";
 let wordGuessKeyStatuses = {};
 let wordGuessFinished = false;
 let wordGuessHintUsed = false;
+let wordGuessFeedbackChoice = "";
 let wordGuessMessageTimeoutId = null;
 let isWordGuessHistoryOpen = false;
 let isWordGuessResultHistoryOpen = false;
@@ -322,6 +324,11 @@ const wordGuessNewBtn = document.getElementById("wordGuessNewBtn");
 const wordGuessMenuBtn = document.getElementById("wordGuessMenuBtn");
 const wordGuessDictionaryLinks = document.getElementById("wordGuessDictionaryLinks");
 const wordGuessResultDebug = document.getElementById("wordGuessResultDebug");
+const wordGuessFeedback = document.getElementById("wordGuessFeedback");
+const wordGuessLikeBtn = document.getElementById("wordGuessLikeBtn");
+const wordGuessDislikeBtn = document.getElementById("wordGuessDislikeBtn");
+const wordGuessFeedbackMessage = document.getElementById("wordGuessFeedbackMessage");
+const wordGuessFeedbackExportBtn = document.getElementById("wordGuessFeedbackExportBtn");
 
 init();
 
@@ -584,10 +591,12 @@ async function startWordGuessGame() {
   wordGuessKeyStatuses = {};
   wordGuessFinished = false;
   wordGuessHintUsed = false;
+  wordGuessFeedbackChoice = "";
   isWordGuessHistoryOpen = false;
   isWordGuessResultHistoryOpen = false;
 
   updateWordGuessHintState();
+  updateWordGuessFeedbackState();
 
   if (wordGuessMessage) {
     setWordGuessMessage("");
@@ -894,6 +903,7 @@ function finishWordGuessGame(isWon) {
   renderWordGuessResultAttempts();
   renderWordGuessHistory();
   updateWordGuessHintState();
+  updateWordGuessFeedbackState();
 
   if (wordGuessResult) {
     wordGuessResult.hidden = false;
@@ -1242,6 +1252,127 @@ function setWordGuessMessage(message) {
   }
 }
 
+
+function getWordGuessFeedbackEntries() {
+  try {
+    const rawValue = localStorage.getItem(WORD_GUESS_FEEDBACK_STORAGE_KEY);
+    const entries = JSON.parse(rawValue || "[]");
+    return Array.isArray(entries) ? entries : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveWordGuessFeedback(vote) {
+  if (!wordGuessTarget) {
+    return;
+  }
+
+  const normalizedVote = vote === "dislike" ? "dislike" : "like";
+  const entries = getWordGuessFeedbackEntries();
+  const feedbackEntry = {
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    word: wordGuessTarget,
+    vote: normalizedVote,
+    version: DATA_VERSION,
+    createdAt: new Date().toISOString(),
+    acceptedAttempts: wordGuessGuesses.length,
+    checkedAttempts: wordGuessAttemptLog.length,
+    invalidAttempts: wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length,
+    hintUsed: Boolean(wordGuessHintUsed),
+  };
+
+  entries.push(feedbackEntry);
+
+  try {
+    localStorage.setItem(WORD_GUESS_FEEDBACK_STORAGE_KEY, JSON.stringify(entries));
+    wordGuessFeedbackChoice = normalizedVote;
+    updateWordGuessFeedbackState();
+  } catch (error) {
+    if (wordGuessFeedbackMessage) {
+      wordGuessFeedbackMessage.textContent = "Не вдалося зберегти оцінку на цьому пристрої.";
+    }
+  }
+}
+
+function getWordGuessFeedbackText() {
+  const entries = getWordGuessFeedbackEntries();
+  if (entries.length === 0) {
+    return "";
+  }
+
+  return JSON.stringify(entries, null, 2);
+}
+
+async function copyWordGuessFeedback() {
+  const feedbackText = getWordGuessFeedbackText();
+  if (!feedbackText) {
+    if (wordGuessFeedbackMessage) {
+      wordGuessFeedbackMessage.textContent = "Поки немає збережених оцінок.";
+    }
+    return;
+  }
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(feedbackText);
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = feedbackText;
+      textarea.setAttribute("readonly", "readonly");
+      textarea.style.position = "fixed";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      textarea.remove();
+    }
+
+    if (wordGuessFeedbackMessage) {
+      wordGuessFeedbackMessage.textContent = "Звіт для модерації скопійовано.";
+    }
+  } catch (error) {
+    if (wordGuessFeedbackMessage) {
+      wordGuessFeedbackMessage.textContent = "Не вдалося скопіювати. Оцінка все одно збережена на пристрої.";
+    }
+  }
+}
+
+function updateWordGuessFeedbackState() {
+  if (!wordGuessFeedback) {
+    return;
+  }
+
+  const hasTarget = Boolean(wordGuessTarget);
+  wordGuessFeedback.hidden = !hasTarget;
+
+  if (wordGuessLikeBtn) {
+    wordGuessLikeBtn.disabled = !hasTarget;
+    wordGuessLikeBtn.classList.toggle("selected", wordGuessFeedbackChoice === "like");
+  }
+
+  if (wordGuessDislikeBtn) {
+    wordGuessDislikeBtn.disabled = !hasTarget;
+    wordGuessDislikeBtn.classList.toggle("selected", wordGuessFeedbackChoice === "dislike");
+  }
+
+  const entriesCount = getWordGuessFeedbackEntries().length;
+  if (wordGuessFeedbackExportBtn) {
+    wordGuessFeedbackExportBtn.hidden = entriesCount === 0;
+    wordGuessFeedbackExportBtn.textContent = entriesCount > 1 ? `Скопіювати відгуки · ${entriesCount}` : "Скопіювати відгук";
+  }
+
+  if (wordGuessFeedbackMessage) {
+    if (wordGuessFeedbackChoice === "like") {
+      wordGuessFeedbackMessage.textContent = "Записано: слово підходить для гри.";
+    } else if (wordGuessFeedbackChoice === "dislike") {
+      wordGuessFeedbackMessage.textContent = "Записано: слово треба переглянути.";
+    } else {
+      wordGuessFeedbackMessage.textContent = "Оцінка збережеться на цьому пристрої для модерації.";
+    }
+  }
+}
+
 function setupEvents() {
   renderModes();
 
@@ -1302,6 +1433,18 @@ function setupEvents() {
 
   if (wordGuessResultHistoryBtn) {
     wordGuessResultHistoryBtn.addEventListener("click", toggleWordGuessResultHistory);
+  }
+
+  if (wordGuessLikeBtn) {
+    wordGuessLikeBtn.addEventListener("click", () => saveWordGuessFeedback("like"));
+  }
+
+  if (wordGuessDislikeBtn) {
+    wordGuessDislikeBtn.addEventListener("click", () => saveWordGuessFeedback("dislike"));
+  }
+
+  if (wordGuessFeedbackExportBtn) {
+    wordGuessFeedbackExportBtn.addEventListener("click", copyWordGuessFeedback);
   }
 
   if (wordGuessNewBtn) {
