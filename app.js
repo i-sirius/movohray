@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.14";
+const DATA_VERSION = "0.4.15";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -916,8 +916,11 @@ function showWordGuessHint() {
   updateWordGuessHintState();
   openWordGuessInfoModal({
     eyebrow: wasUsed ? "Підказку вже використано" : "Підказка",
-    title: wasUsed ? "Використана підказка" : "Одна підказка за гру",
-    text: getWordGuessHintMessage(),
+    title: getWordGuessHintMessage(),
+    text: wasUsed
+      ? "Її можна переглядати повторно."
+      : "Підказка доступна один раз, але переглядати її можна повторно.",
+    type: "hint",
   });
 }
 
@@ -925,14 +928,18 @@ function showWordGuessRules() {
   openWordGuessInfoModal({
     eyebrow: "Правила",
     title: "Як грати",
-    text: "Введи українське слово з 5 різних літер. Зелена літера стоїть на правильному місці, жовта є у слові, але в іншій позиції, сіра — відсутня. Є 5 зарахованих спроб; слова не зі словника показуються в історії як не в залік.",
+    text: "Введи українське слово з 5 різних літер. Зелена літера стоїть на правильному місці, жовта є у слові, але в іншій позиції, рожева — відсутня. Є 5 зарахованих спроб; слова не зі словника показуються в історії перекресленими і не забирають спробу.",
+    type: "rules",
   });
 }
 
-function openWordGuessInfoModal({ eyebrow = "", title = "", text = "" } = {}) {
+function openWordGuessInfoModal({ eyebrow = "", title = "", text = "", type = "" } = {}) {
   if (!wordGuessInfoModal) {
     return;
   }
+
+  wordGuessInfoModal.classList.toggle("is-hint-modal", type === "hint");
+  wordGuessInfoModal.classList.toggle("is-rules-modal", type === "rules");
 
   if (wordGuessInfoEyebrow) {
     wordGuessInfoEyebrow.textContent = eyebrow;
@@ -1082,11 +1089,8 @@ function createWordGuessHistoryItem(guess, index) {
 
   item.appendChild(lettersWrap);
 
-  if (isInvalidAttempt) {
-    const note = document.createElement("span");
-    note.className = "word-guess-history-note";
-    note.textContent = guess.message ? `Не в залік · ${guess.message}` : "Не в залік";
-    item.appendChild(note);
+  if (isInvalidAttempt && guess.message) {
+    item.title = `Не в залік: ${guess.message}`;
   }
 
   return item;
