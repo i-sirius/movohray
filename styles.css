@@ -6804,7 +6804,7 @@ body[data-theme="dark"] .word-guess-result-actions .secondary-btn:hover {
 }
 
 
-/* 0.4.22 — iPhone result modal and iOS-like Word Guess keyboard */
+/* 0.4.23 — iPhone result modal and iOS-like Word Guess keyboard */
 body.word-guess-result-open {
   overflow: hidden;
 }
@@ -7158,7 +7158,7 @@ body[data-theme="dark"] .word-guess-key {
   }
 }
 
-/* 0.4.22 — remove moderation UI, add home version, two-level hint */
+/* 0.4.23 — remove moderation UI, add home version, two-level hint */
 .menu-version-info {
   margin: 14px auto 0;
   color: rgba(104, 112, 138, 0.72);
@@ -7224,5 +7224,146 @@ body[data-theme="dark"] .word-guess-key.is-hinted {
 
   .word-guess-result-attempts {
     max-height: min(32dvh, 260px);
+  }
+}
+
+body.required-update-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+body.required-update-open .app,
+body.required-update-open .theme-toggle-btn {
+  pointer-events: none;
+  user-select: none;
+}
+
+.required-update-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: max(22px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.2), transparent 34%),
+    rgba(15, 20, 34, 0.74);
+  backdrop-filter: blur(18px) saturate(0.9);
+  -webkit-backdrop-filter: blur(18px) saturate(0.9);
+}
+
+.required-update-card {
+  width: min(520px, 100%);
+  padding: clamp(26px, 6vw, 42px);
+  border-radius: 34px;
+  text-align: center;
+  color: #243050;
+  background: rgba(255, 252, 246, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 30px 80px rgba(13, 16, 32, 0.34);
+}
+
+.required-update-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 18px;
+  border-radius: 50%;
+  color: #fff8e7;
+  background: linear-gradient(145deg, #4c8f96, #6f6aa8);
+  box-shadow: 0 18px 40px rgba(76, 143, 150, 0.28);
+  font-size: 42px;
+  font-weight: 900;
+}
+
+.required-update-eyebrow {
+  margin: 0 0 10px;
+  color: #c33f54;
+  font-size: clamp(18px, 4.8vw, 28px);
+  font-weight: 1000;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.required-update-card h2 {
+  margin: 0;
+  color: #243050;
+  font-size: clamp(28px, 7vw, 42px);
+  line-height: 1.05;
+}
+
+.required-update-card p {
+  margin: 18px auto 0;
+  max-width: 420px;
+  color: #5d6680;
+  font-size: clamp(15px, 3.8vw, 18px);
+  line-height: 1.48;
+  font-weight: 800;
+}
+
+.required-update-btn {
+  width: 100%;
+  min-height: 72px;
+  margin-top: 28px;
+  padding: 18px 24px;
+  border-radius: 24px;
+  color: white;
+  background: linear-gradient(145deg, #4c9aa3, #5d60b4);
+  box-shadow: 0 18px 36px rgba(76, 143, 150, 0.35);
+  font-size: clamp(22px, 6vw, 34px);
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.required-update-btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.required-update-btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.required-update-note {
+  margin-top: 14px !important;
+  color: #858ca3 !important;
+  font-size: 13px !important;
+}
+
+body[data-theme="dark"] .required-update-card {
+  color: #f7f2e8;
+  background: rgba(14, 19, 34, 0.98);
+  border-color: rgba(197, 208, 255, 0.18);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.58);
+}
+
+body[data-theme="dark"] .required-update-card h2 {
+  color: #f7f2e8;
+}
+
+body[data-theme="dark"] .required-update-card p {
+  color: #c5ccdf;
+}
+
+body[data-theme="dark"] .required-update-eyebrow {
+  color: #ff9caf;
+}
+
+@media (max-width: 420px) {
+  .required-update-card {
+    border-radius: 28px;
+  }
+
+  .required-update-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 34px;
+  }
+
+  .required-update-btn {
+    min-height: 66px;
+    border-radius: 22px;
   }
 }

@@ -9,7 +9,9 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.22";
+const DATA_VERSION = "0.4.23";
+const VERSION_CHECK_FILE = "version.json";
+const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const GAME_TITLE = "Мовограй";
@@ -338,6 +340,7 @@ init();
 async function init() {
   applyBrandText();
   initializeTheme();
+  checkRequiredUpdate();
   await loadModeCategories(selectedMode);
   renderCategories();
   syncTeamNamesForCount();
@@ -351,6 +354,118 @@ async function init() {
   renderWordGuessKeyboard();
   setupEvents();
   registerServiceWorker();
+}
+
+
+async function checkRequiredUpdate() {
+  const remoteVersion = await fetchRemoteVersion();
+
+  if (!remoteVersion || remoteVersion === DATA_VERSION) {
+    return;
+  }
+
+  showRequiredUpdateOverlay(remoteVersion);
+}
+
+async function fetchRemoteVersion() {
+  const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+  const timeoutId = controller
+    ? window.setTimeout(() => controller.abort(), VERSION_CHECK_TIMEOUT_MS)
+    : null;
+
+  try {
+    const versionUrl = `${VERSION_CHECK_FILE}?t=${Date.now()}`;
+    const response = await fetch(versionUrl, {
+      cache: "no-store",
+      signal: controller ? controller.signal : undefined,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    return normalizeVersionLabel(data?.version || "");
+  } catch (error) {
+    console.warn("Не вдалося перевірити версію гри", error);
+    return "";
+  } finally {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+    }
+  }
+}
+
+function normalizeVersionLabel(version) {
+  return String(version || "").trim().replace(/^v/i, "");
+}
+
+function showRequiredUpdateOverlay(remoteVersion) {
+  const existingOverlay = document.getElementById("requiredUpdateOverlay");
+  if (existingOverlay) {
+    return;
+  }
+
+  document.body.classList.add("required-update-open");
+
+  const overlay = document.createElement("div");
+  overlay.id = "requiredUpdateOverlay";
+  overlay.className = "required-update-overlay";
+  overlay.setAttribute("role", "alertdialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.setAttribute("aria-labelledby", "requiredUpdateTitle");
+  overlay.setAttribute("aria-describedby", "requiredUpdateText");
+
+  overlay.innerHTML = `
+    <div class="required-update-card">
+      <div class="required-update-icon" aria-hidden="true">↻</div>
+      <p class="required-update-eyebrow">ПОТРІБНО ОНОВИТИ</p>
+      <h2 id="requiredUpdateTitle">Доступна нова версія гри</h2>
+      <p id="requiredUpdateText">
+        На пристрої відкрилась закешована версія v${DATA_VERSION}, а на сайті вже є v${remoteVersion}.
+        Щоб уникнути помилок у словниках і PWA, онови гру зараз.
+      </p>
+      <button id="requiredUpdateBtn" class="required-update-btn" type="button">Оновити гру</button>
+      <p class="required-update-note">Після оновлення сторінка перезавантажиться автоматично.</p>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const updateButton = document.getElementById("requiredUpdateBtn");
+  if (updateButton) {
+    updateButton.focus();
+    updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton));
+  }
+}
+
+async function forceRequiredUpdate(button) {
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Оновлюємо...";
+  }
+
+  try {
+    if ("serviceWorker" in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames
+          .filter((cacheName) => cacheName.startsWith("movohray-cache-"))
+          .map((cacheName) => caches.delete(cacheName))
+      );
+    }
+  } catch (error) {
+    console.warn("Не вдалося повністю очистити кеш перед оновленням", error);
+  }
+
+  const cleanUrl = new URL(window.location.href);
+  cleanUrl.searchParams.set("updated", Date.now().toString());
+  window.location.replace(cleanUrl.toString());
 }
 
 function registerServiceWorker() {
