@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.1";
+const DATA_VERSION = "0.4.2";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -133,6 +133,7 @@ let wordGuessGuesses = [];
 let wordGuessCurrentGuess = "";
 let wordGuessKeyStatuses = {};
 let wordGuessFinished = false;
+let wordGuessHintUsed = false;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -294,6 +295,8 @@ const wordGuessTopMenuBtn = document.getElementById("wordGuessTopMenuBtn");
 const wordGuessSettingsMessage = document.getElementById("wordGuessSettingsMessage");
 const wordGuessBoard = document.getElementById("wordGuessBoard");
 const wordGuessMessage = document.getElementById("wordGuessMessage");
+const wordGuessHintBtn = document.getElementById("wordGuessHintBtn");
+const wordGuessHintText = document.getElementById("wordGuessHintText");
 const wordGuessKeyboard = document.getElementById("wordGuessKeyboard");
 const wordGuessResult = document.getElementById("wordGuessResult");
 const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
@@ -538,6 +541,9 @@ async function startWordGuessGame() {
   wordGuessCurrentGuess = "";
   wordGuessKeyStatuses = {};
   wordGuessFinished = false;
+  wordGuessHintUsed = false;
+
+  updateWordGuessHintState();
 
   if (wordGuessMessage) {
     wordGuessMessage.textContent = "";
@@ -549,6 +555,7 @@ async function startWordGuessGame() {
 
   renderWordGuessBoard();
   renderWordGuessKeyboard();
+  updateWordGuessHintState();
   showScreen("wordGuessGame");
 }
 
@@ -790,10 +797,58 @@ function finishWordGuessGame(isWon) {
   }
 
   renderWordGuessDictionaryLinks(wordGuessTarget);
+  updateWordGuessHintState();
 
   if (wordGuessResult) {
     wordGuessResult.hidden = false;
   }
+}
+
+
+function getWordGuessVowelCount(word) {
+  const vowels = "аеєиіїоуюя";
+  return Array.from(word).filter((letter) => vowels.includes(letter)).length;
+}
+
+function getWordGuessHintMessage() {
+  if (!wordGuessTarget) {
+    return "Підказка з’явиться після старту гри.";
+  }
+
+  const firstLetter = Array.from(wordGuessTarget)[0]?.toLocaleUpperCase("uk-UA") || "";
+  const vowelCount = getWordGuessVowelCount(wordGuessTarget);
+  const vowelLabel = vowelCount === 1 ? "голосна" : vowelCount >= 2 && vowelCount <= 4 ? "голосні" : "голосних";
+
+  return `Перша літера: ${firstLetter}. У слові ${vowelCount} ${vowelLabel}.`;
+}
+
+function updateWordGuessHintState() {
+  if (wordGuessHintBtn) {
+    wordGuessHintBtn.disabled = wordGuessFinished || wordGuessHintUsed || !wordGuessTarget;
+    wordGuessHintBtn.textContent = wordGuessHintUsed ? "💡 Підказку використано" : "💡 Підказка";
+  }
+
+  if (!wordGuessHintText) {
+    return;
+  }
+
+  if (wordGuessHintUsed && wordGuessTarget) {
+    wordGuessHintText.textContent = getWordGuessHintMessage();
+    wordGuessHintText.hidden = false;
+  } else {
+    wordGuessHintText.textContent = "";
+    wordGuessHintText.hidden = true;
+  }
+}
+
+function showWordGuessHint() {
+  if (wordGuessFinished || wordGuessHintUsed || !wordGuessTarget) {
+    return;
+  }
+
+  wordGuessHintUsed = true;
+  setWordGuessMessage("");
+  updateWordGuessHintState();
 }
 
 function getAttemptWord(count) {
@@ -858,6 +913,10 @@ function setupEvents() {
     wordGuessTopMenuBtn.addEventListener("click", () => {
       showScreen("menu");
     });
+  }
+
+  if (wordGuessHintBtn) {
+    wordGuessHintBtn.addEventListener("click", showWordGuessHint);
   }
 
   if (wordGuessNewBtn) {
@@ -1204,9 +1263,17 @@ function renderModes() {
     const button = document.createElement("button");
     button.className = `mode-card mode-card-${mode.id} mode-card-active`;
 
+    const modeIcons = {
+      explain: "💬",
+      charades: "🎭",
+      wordguess: "🔤",
+    };
+
     button.innerHTML = `
+      <span class="mode-card-icon" aria-hidden="true">${modeIcons[mode.id] || "✨"}</span>
       <strong>${mode.title}</strong>
-      <span>${mode.description}</span>
+      <span class="mode-card-description">${mode.description}</span>
+      <span class="mode-card-cta">Грати</span>
     `;
 
     button.addEventListener("click", async () => {
