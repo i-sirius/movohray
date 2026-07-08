@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.0";
+const DATA_VERSION = "0.4.1";
 const THEME_STORAGE_KEY = "movohray-theme";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -825,9 +825,14 @@ function renderWordGuessDictionaryLinks(word) {
 }
 
 function setWordGuessMessage(message) {
-  if (wordGuessMessage) {
-    wordGuessMessage.textContent = message;
+  if (!wordGuessMessage) {
+    return;
   }
+
+  const hasMessage = Boolean(message);
+  wordGuessMessage.textContent = message;
+  wordGuessMessage.classList.toggle("is-visible", hasMessage);
+  wordGuessMessage.classList.toggle("is-error", hasMessage);
 }
 
 function setupEvents() {
