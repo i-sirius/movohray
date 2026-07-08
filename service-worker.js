@@ -1,13 +1,13 @@
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.21";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.22";
 const MOVOHRAY_CORE_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=0.4.21",
-  "./app.js?v=0.4.21",
-  "./wordguess.json?v=0.4.21",
-  "./words.json?v=0.4.21",
-  "./crocodile.json?v=0.4.21",
-  "./manifest.webmanifest?v=0.4.21"
+  "./styles.css?v=0.4.22",
+  "./app.js?v=0.4.22",
+  "./wordguess.json?v=0.4.22",
+  "./words.json?v=0.4.22",
+  "./crocodile.json?v=0.4.22",
+  "./manifest.webmanifest?v=0.4.22"
 ];
 
 self.addEventListener("install", (event) => {
