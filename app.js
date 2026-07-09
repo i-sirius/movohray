@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.33";
+const DATA_VERSION = "0.4.34";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -495,6 +495,13 @@ function normalizeVersionLabel(version) {
 }
 
 function showRequiredUpdateOverlay(remoteVersion) {
+  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion);
+  const normalizedLocalVersion = normalizeVersionLabel(DATA_VERSION);
+
+  if (!normalizedRemoteVersion || normalizedRemoteVersion === normalizedLocalVersion) {
+    return;
+  }
+
   const existingOverlay = document.getElementById("requiredUpdateOverlay");
   if (existingOverlay) {
     return;
@@ -516,7 +523,7 @@ function showRequiredUpdateOverlay(remoteVersion) {
       <p class="required-update-eyebrow">ПОТРІБНО ОНОВИТИ</p>
       <h2 id="requiredUpdateTitle">Доступна нова версія гри</h2>
       <p id="requiredUpdateText">
-        На пристрої відкрилася стара копія гри v${DATA_VERSION}, а на сайті вже є v${remoteVersion}.
+        На пристрої відкрилася стара копія гри v${DATA_VERSION}, а на сайті вже є v${normalizedRemoteVersion}.
         Натисни кнопку, щоб завантажити нову версію зі свіжими словами та виправленнями.
       </p>
       <button id="requiredUpdateBtn" class="required-update-btn" type="button">Оновити гру</button>
@@ -575,7 +582,7 @@ function registerServiceWorker() {
 
     isControllerChangeHandled = true;
     fetchRemoteVersion().then((remoteVersion) => {
-      showRequiredUpdateOverlay(remoteVersion || "нова");
+      showRequiredUpdateOverlay(remoteVersion);
     });
   });
 
@@ -586,7 +593,7 @@ function registerServiceWorker() {
 
         if (registration.waiting && navigator.serviceWorker.controller) {
           fetchRemoteVersion().then((remoteVersion) => {
-            showRequiredUpdateOverlay(remoteVersion || "нова");
+            showRequiredUpdateOverlay(remoteVersion);
           });
         }
 
@@ -599,7 +606,7 @@ function registerServiceWorker() {
           installingWorker.addEventListener("statechange", () => {
             if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
               fetchRemoteVersion().then((remoteVersion) => {
-                showRequiredUpdateOverlay(remoteVersion || "нова");
+                showRequiredUpdateOverlay(remoteVersion);
               });
             }
           });
