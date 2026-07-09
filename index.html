@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.4.31" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.4.32" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.4.31" />
+  <link rel="stylesheet" href="styles.css?v=0.4.32" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -46,9 +46,16 @@
             <small id="settingsSoundText">Можна вимкнути звуки гри</small>
           </span>
         </button>
+        <button id="settingsHapticToggleBtn" class="app-settings-option" type="button" aria-pressed="true">
+          <span id="settingsHapticIcon" class="app-settings-option-icon" aria-hidden="true">📳</span>
+          <span class="app-settings-option-copy">
+            <strong id="settingsHapticTitle">Вібрація увімкнена</strong>
+            <small id="settingsHapticText">Легкі вібрації для ігрових дій</small>
+          </span>
+        </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.4.31</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.4.32</p>
     </div>
   </div>
   <main class="app">
@@ -80,7 +87,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.4.31</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.4.32</p>
         </div>
       </div>
     </section>
@@ -506,6 +513,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.31"></script>
+  <script src="app.js?v=0.4.32"></script>
 </body>
 </html>

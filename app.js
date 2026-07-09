@@ -9,11 +9,12 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.31";
+const DATA_VERSION = "0.4.32";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
+const HAPTIC_STORAGE_KEY = "movohray-haptic";
 const GAME_SOUND_MASTER_VOLUME = 0.16;
 const GAME_SOUND_PATTERNS = {
   correct: [
@@ -174,6 +175,7 @@ let isRoundPaused = false;
 let gameAudioContext = null;
 let isGameAudioUnlocked = false;
 let isGameSoundEnabled = true;
+let isHapticFeedbackEnabled = true;
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
@@ -284,6 +286,10 @@ const settingsSoundToggleBtn = document.getElementById("settingsSoundToggleBtn")
 const settingsSoundIcon = document.getElementById("settingsSoundIcon");
 const settingsSoundTitle = document.getElementById("settingsSoundTitle");
 const settingsSoundText = document.getElementById("settingsSoundText");
+const settingsHapticToggleBtn = document.getElementById("settingsHapticToggleBtn");
+const settingsHapticIcon = document.getElementById("settingsHapticIcon");
+const settingsHapticTitle = document.getElementById("settingsHapticTitle");
+const settingsHapticText = document.getElementById("settingsHapticText");
 const appTitle = document.getElementById("appTitle");
 const appSubtitle = document.getElementById("appSubtitle");
 const menuVersionInfo = document.getElementById("menuVersionInfo");
@@ -411,9 +417,21 @@ const wordGuessFeedbackExportBtn = document.getElementById("wordGuessFeedbackExp
 
 init();
 
+function updateStandaloneModeClass() {
+  const isStandalone = Boolean(
+    window.matchMedia?.("(display-mode: standalone)")?.matches
+    || window.navigator.standalone
+  );
+
+  document.body.classList.toggle("is-standalone", isStandalone);
+  document.body.classList.toggle("is-browser-shell", !isStandalone);
+}
+
 async function init() {
   applyBrandText();
+  updateStandaloneModeClass();
   initializeTheme();
+  initializeHapticSetting();
   checkRequiredUpdate();
   await loadModeCategories(selectedMode);
   renderCategories();
@@ -498,8 +516,8 @@ function showRequiredUpdateOverlay(remoteVersion) {
       <p class="required-update-eyebrow">ПОТРІБНО ОНОВИТИ</p>
       <h2 id="requiredUpdateTitle">Доступна нова версія гри</h2>
       <p id="requiredUpdateText">
-        На пристрої відкрилась закешована версія v${DATA_VERSION}, а на сайті вже є v${remoteVersion}.
-        Щоб уникнути помилок у словниках і PWA, онови гру зараз.
+        На пристрої відкрилася стара копія гри v${DATA_VERSION}, а на сайті вже є v${remoteVersion}.
+        Натисни кнопку, щоб завантажити нову версію зі свіжими словами та виправленнями.
       </p>
       <button id="requiredUpdateBtn" class="required-update-btn" type="button">Оновити гру</button>
       <p class="required-update-note">Після оновлення сторінка перезавантажиться автоматично.</p>
@@ -708,6 +726,59 @@ function applySoundSetting(isEnabled) {
 
 function initializeSoundSetting() {
   applySoundSetting(getPreferredSoundSetting());
+}
+
+function getPreferredHapticSetting() {
+  try {
+    const savedHaptic = localStorage.getItem(HAPTIC_STORAGE_KEY);
+    if (savedHaptic === "off") {
+      return false;
+    }
+    if (savedHaptic === "on") {
+      return true;
+    }
+  } catch (error) {
+    // localStorage can be unavailable; haptics stay enabled for this session.
+  }
+
+  return true;
+}
+
+function applyHapticSetting(isEnabled) {
+  isHapticFeedbackEnabled = Boolean(isEnabled);
+
+  if (settingsHapticToggleBtn) {
+    settingsHapticToggleBtn.setAttribute("aria-pressed", isHapticFeedbackEnabled ? "true" : "false");
+  }
+
+  if (settingsHapticIcon) {
+    settingsHapticIcon.textContent = isHapticFeedbackEnabled ? "📳" : "📴";
+  }
+
+  if (settingsHapticTitle) {
+    settingsHapticTitle.textContent = isHapticFeedbackEnabled ? "Вібрація увімкнена" : "Вібрація вимкнена";
+  }
+
+  if (settingsHapticText) {
+    settingsHapticText.textContent = isHapticFeedbackEnabled
+      ? "Легкі вібрації для вгадано/пропущено"
+      : "Увімкнути легку вібрацію";
+  }
+}
+
+function initializeHapticSetting() {
+  applyHapticSetting(getPreferredHapticSetting());
+}
+
+function toggleHapticSetting() {
+  const nextHapticState = !isHapticFeedbackEnabled;
+  applyHapticSetting(nextHapticState);
+
+  try {
+    localStorage.setItem(HAPTIC_STORAGE_KEY, nextHapticState ? "on" : "off");
+  } catch (error) {
+    // Haptics still change for the current session if persistence is blocked.
+  }
 }
 
 function toggleSoundSetting() {
@@ -1820,6 +1891,9 @@ function renderWordGuessResultAttempts() {
 
   wordGuessResultAttempts.innerHTML = "";
 
+  const wordLength = getWordGuessLength();
+  wordGuessResultAttempts.style.setProperty("--word-guess-length", String(wordLength));
+
   const label = document.createElement("span");
   label.className = "word-guess-result-attempts-label";
   label.textContent = "Спроби:";
@@ -1848,9 +1922,10 @@ function renderWordGuessResultAttempts() {
 
     const lettersWrap = document.createElement("span");
     lettersWrap.className = "word-guess-result-attempt-word";
+    lettersWrap.style.setProperty("--word-guess-length", String(wordLength));
 
     const letters = Array.from(attempt.word || "");
-    for (let letterIndex = 0; letterIndex < getWordGuessLength(); letterIndex++) {
+    for (let letterIndex = 0; letterIndex < wordLength; letterIndex++) {
       const letterCell = document.createElement("span");
       const letter = letters[letterIndex] || "";
       const status = isInvalidAttempt ? "invalid" : attempt.statuses[letterIndex] || "absent";
@@ -2170,6 +2245,10 @@ function setupEvents() {
 
   if (settingsSoundToggleBtn) {
     settingsSoundToggleBtn.addEventListener("click", toggleSoundSetting);
+  }
+
+  if (settingsHapticToggleBtn) {
+    settingsHapticToggleBtn.addEventListener("click", toggleHapticSetting);
   }
 
   if (themeToggleBtn) {
@@ -4636,30 +4715,58 @@ function playToneSequence(sequence = []) {
   });
 }
 
+function playHapticFeedback(type = "tap") {
+  if (!isHapticFeedbackEnabled || typeof navigator === "undefined" || typeof navigator.vibrate !== "function") {
+    return;
+  }
+
+  const patterns = {
+    correct: [18],
+    skipped: [32],
+    roundComplete: [18, 42, 18],
+    gameComplete: [24, 44, 38],
+    gameLoss: [58],
+    tie: [24, 36, 24],
+    tap: [12],
+  };
+
+  try {
+    navigator.vibrate(patterns[type] || patterns.tap);
+  } catch (error) {
+    // Haptic feedback is optional and not supported on every device.
+  }
+}
+
 function playCorrectSound() {
   playToneSequence(GAME_SOUND_PATTERNS.correct);
+  playHapticFeedback("correct");
 }
 
 function playSkipSound() {
   playToneSequence(GAME_SOUND_PATTERNS.skipped);
+  playHapticFeedback("skipped");
 }
 
 function playRoundCompleteSound() {
   playToneSequence(GAME_SOUND_PATTERNS.roundComplete);
+  playHapticFeedback("roundComplete");
 }
 
 function playGameCompleteSound(result = "win") {
   if (result === "loss") {
     playToneSequence(GAME_SOUND_PATTERNS.gameLoss);
+    playHapticFeedback("gameLoss");
     return;
   }
 
   if (result === "tie") {
     playToneSequence(GAME_SOUND_PATTERNS.tie);
+    playHapticFeedback("tie");
     return;
   }
 
   playToneSequence(GAME_SOUND_PATTERNS.gameComplete);
+  playHapticFeedback("gameComplete");
 }
 
 function shuffleArray(array) {
