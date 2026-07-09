@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.34";
+const DATA_VERSION = "0.4.35";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -453,7 +453,9 @@ async function init() {
 async function checkRequiredUpdate() {
   const remoteVersion = await fetchRemoteVersion();
 
-  if (!remoteVersion || remoteVersion === DATA_VERSION) {
+  if (!isRemoteVersionNewer(remoteVersion)) {
+    markCurrentVersionAsSeen();
+    removeRequiredUpdateOverlay();
     return;
   }
 
@@ -491,14 +493,72 @@ async function fetchRemoteVersion() {
 }
 
 function normalizeVersionLabel(version) {
-  return String(version || "").trim().replace(/^v/i, "");
+  return String(version || "")
+    .trim()
+    .replace(/^v/i, "")
+    .replace(/[^0-9.].*$/, "");
+}
+
+function parseVersionParts(version) {
+  return normalizeVersionLabel(version)
+    .split(".")
+    .map((part) => Number.parseInt(part, 10))
+    .map((part) => (Number.isFinite(part) ? part : 0));
+}
+
+function compareVersionLabels(leftVersion, rightVersion) {
+  const left = parseVersionParts(leftVersion);
+  const right = parseVersionParts(rightVersion);
+  const maxLength = Math.max(left.length, right.length);
+
+  for (let index = 0; index < maxLength; index += 1) {
+    const leftPart = left[index] || 0;
+    const rightPart = right[index] || 0;
+
+    if (leftPart > rightPart) {
+      return 1;
+    }
+
+    if (leftPart < rightPart) {
+      return -1;
+    }
+  }
+
+  return 0;
+}
+
+function isRemoteVersionNewer(remoteVersion) {
+  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion);
+
+  if (!normalizedRemoteVersion) {
+    return false;
+  }
+
+  return compareVersionLabels(normalizedRemoteVersion, DATA_VERSION) > 0;
+}
+
+function markCurrentVersionAsSeen() {
+  try {
+    localStorage.setItem("movohray-last-seen-version", normalizeVersionLabel(DATA_VERSION));
+  } catch (error) {
+    // Version marker is only a cache-safety helper.
+  }
+}
+
+function removeRequiredUpdateOverlay() {
+  const existingOverlay = document.getElementById("requiredUpdateOverlay");
+  if (existingOverlay) {
+    existingOverlay.remove();
+  }
+  document.body.classList.remove("required-update-open");
 }
 
 function showRequiredUpdateOverlay(remoteVersion) {
   const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion);
   const normalizedLocalVersion = normalizeVersionLabel(DATA_VERSION);
 
-  if (!normalizedRemoteVersion || normalizedRemoteVersion === normalizedLocalVersion) {
+  if (!isRemoteVersionNewer(normalizedRemoteVersion)) {
+    removeRequiredUpdateOverlay();
     return;
   }
 
@@ -564,6 +624,12 @@ async function forceRequiredUpdate(button) {
     console.warn("Не вдалося повністю очистити кеш перед оновленням", error);
   }
 
+  try {
+    sessionStorage.setItem("movohray-force-update-at", Date.now().toString());
+  } catch (error) {
+    // Reload still works if sessionStorage is unavailable.
+  }
+
   const cleanUrl = new URL(window.location.href);
   cleanUrl.searchParams.set("updated", Date.now().toString());
   window.location.replace(cleanUrl.toString());
@@ -581,9 +647,7 @@ function registerServiceWorker() {
     }
 
     isControllerChangeHandled = true;
-    fetchRemoteVersion().then((remoteVersion) => {
-      showRequiredUpdateOverlay(remoteVersion);
-    });
+    checkRequiredUpdate();
   });
 
   window.addEventListener("load", () => {
@@ -592,9 +656,7 @@ function registerServiceWorker() {
         registration.update().catch(() => {});
 
         if (registration.waiting && navigator.serviceWorker.controller) {
-          fetchRemoteVersion().then((remoteVersion) => {
-            showRequiredUpdateOverlay(remoteVersion);
-          });
+          checkRequiredUpdate();
         }
 
         registration.addEventListener("updatefound", () => {
@@ -605,9 +667,7 @@ function registerServiceWorker() {
 
           installingWorker.addEventListener("statechange", () => {
             if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
-              fetchRemoteVersion().then((remoteVersion) => {
-                showRequiredUpdateOverlay(remoteVersion);
-              });
+              checkRequiredUpdate();
             }
           });
         });
@@ -1217,7 +1277,7 @@ function getWordGuessDebugLabel() {
 }
 
 async function startWordGuessGame() {
-  document.body.classList.remove("word-guess-result-open");
+  setWordGuessBackgroundLocked(false);
   clearWordGuessFinaleEffect();
   const isDictionaryReady = await loadWordGuessDictionary();
   if (!isDictionaryReady) {
@@ -1299,6 +1359,8 @@ function renderWordGuessBoard() {
 
     wordGuessBoard.appendChild(row);
   }
+
+  scheduleWordGuessViewportFit();
 }
 
 function renderWordGuessKeyboard() {
@@ -1324,6 +1386,7 @@ function renderWordGuessKeyboard() {
   controlsRow.appendChild(createWordGuessKey("enter", "Ввести", "wide"));
   controlsRow.appendChild(createWordGuessKey("backspace", "⌫", "utility"));
   wordGuessKeyboard.appendChild(controlsRow);
+  scheduleWordGuessViewportFit();
 }
 
 
@@ -1347,6 +1410,39 @@ function setWordGuessBackgroundLocked(isLocked) {
   if (locked) {
     isWordGuessHistoryOpen = false;
   }
+}
+
+function fitWordGuessBoardToViewport() {
+  if (!isScreenActive(wordGuessGameScreen) || !wordGuessBoard || !wordGuessKeyboard) {
+    return;
+  }
+
+  const wordLength = getWordGuessLength();
+  const attempts = getWordGuessAttempts();
+  const viewportHeight = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight;
+  const boardRect = wordGuessBoard.getBoundingClientRect();
+  const keyboardRect = wordGuessKeyboard.getBoundingClientRect();
+  const boardStyle = window.getComputedStyle(wordGuessBoard);
+  const boardGap = Number.parseFloat(boardStyle.rowGap || boardStyle.gap || "6") || 6;
+  const sampleRow = wordGuessBoard.querySelector(".word-guess-row");
+  const rowGap = Number.parseFloat(window.getComputedStyle(sampleRow || wordGuessBoard).columnGap || "6") || 6;
+  const isBrowserShell = document.body.classList.contains("is-browser-shell");
+  const bottomReserve = isBrowserShell ? 108 : 34;
+  const availableHeight = Math.max(150, viewportHeight - boardRect.top - keyboardRect.height - bottomReserve);
+  const availableWidth = Math.max(220, wordGuessBoard.clientWidth || boardRect.width || 320);
+  const heightCell = Math.floor((availableHeight - boardGap * Math.max(0, attempts - 1)) / attempts);
+  const widthCell = Math.floor((availableWidth - rowGap * Math.max(0, wordLength - 1)) / wordLength);
+  const maxCell = wordLength >= 7 ? 50 : wordLength === 6 ? 54 : 60;
+  const minCell = attempts >= 7 ? 28 : 32;
+  const fittedCell = Math.max(minCell, Math.min(maxCell, heightCell, widthCell));
+
+  wordGuessBoard.style.setProperty("--word-guess-cell-size", `${fittedCell}px`);
+}
+
+function scheduleWordGuessViewportFit() {
+  window.requestAnimationFrame(() => {
+    fitWordGuessBoardToViewport();
+  });
 }
 
 function createWordGuessKey(key, label, variant = "") {
@@ -2232,6 +2328,16 @@ function setupEvents() {
   renderModes();
   setupGameAudioUnlockEvents();
 
+  window.addEventListener("resize", scheduleWordGuessViewportFit);
+  window.addEventListener("orientationchange", () => {
+    window.setTimeout(scheduleWordGuessViewportFit, 160);
+  });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", scheduleWordGuessViewportFit);
+    window.visualViewport.addEventListener("scroll", scheduleWordGuessViewportFit);
+  }
+
   if (appSettingsBtn) {
     appSettingsBtn.addEventListener("click", openAppSettings);
   }
@@ -2302,6 +2408,8 @@ function setupEvents() {
 
   if (wordGuessTopMenuBtn) {
     wordGuessTopMenuBtn.addEventListener("click", () => {
+      setWordGuessBackgroundLocked(false);
+      clearWordGuessFinaleEffect();
       showScreen("menu");
     });
   }
@@ -2371,6 +2479,8 @@ function setupEvents() {
 
   if (wordGuessMenuBtn) {
     wordGuessMenuBtn.addEventListener("click", () => {
+      setWordGuessBackgroundLocked(false);
+      clearWordGuessFinaleEffect();
       showScreen("menu");
     });
   }
@@ -4518,6 +4628,7 @@ function showScreen(screenName) {
 
   if (screenName === "wordGuessGame") {
     wordGuessGameScreen?.classList.add("active");
+    scheduleWordGuessViewportFit();
   }
 
   if (screenName === "teamReady") {
