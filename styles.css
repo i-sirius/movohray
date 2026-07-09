@@ -8836,7 +8836,7 @@ body:not([data-theme="dark"]) .word-guess-dictionary-links a {
 }
 
 
-/* 0.4.35 — fit 6/7 attempts on mobile, align word guess controls */
+/* 0.4.36 — fit 6/7 attempts on mobile, align word guess controls */
 .word-guess-board {
   --word-guess-attempts: 5;
 }
@@ -9073,7 +9073,7 @@ body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-board {
   }
 }
 
-/* v0.4.35 — safer update prompt, compact word guess toolbar and mobile fit fixes */
+/* v0.4.36 — safer update prompt, compact word guess toolbar and mobile fit fixes */
 .word-guess-titlebar {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas:

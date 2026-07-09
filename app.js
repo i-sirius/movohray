@@ -9,9 +9,11 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.35";
+const DATA_VERSION = "0.4.36";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
+const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
+const UPDATE_COMPLETED_STORAGE_KEY = "movohray-update-completed-version";
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
 const HAPTIC_STORAGE_KEY = "movohray-haptic";
@@ -470,11 +472,15 @@ async function fetchRemoteVersion() {
 
   try {
     const versionUrl = `${VERSION_CHECK_FILE}?t=${Date.now()}&local=${encodeURIComponent(DATA_VERSION)}`;
-    const response = await fetch(versionUrl, {
-      cache: "reload",
-      headers: { "Cache-Control": "no-cache" },
+    const request = new Request(versionUrl, {
+      cache: "no-store",
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        "Pragma": "no-cache",
+      },
       signal: controller ? controller.signal : undefined,
     });
+    const response = await fetch(request);
 
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
@@ -538,8 +544,14 @@ function isRemoteVersionNewer(remoteVersion) {
 }
 
 function markCurrentVersionAsSeen() {
+  const normalizedVersion = normalizeVersionLabel(DATA_VERSION);
   try {
-    localStorage.setItem("movohray-last-seen-version", normalizeVersionLabel(DATA_VERSION));
+    localStorage.setItem("movohray-last-seen-version", normalizedVersion);
+    localStorage.setItem(UPDATE_COMPLETED_STORAGE_KEY, normalizedVersion);
+    const pendingTargetVersion = normalizeVersionLabel(localStorage.getItem(UPDATE_TARGET_STORAGE_KEY) || "");
+    if (!pendingTargetVersion || compareVersionLabels(normalizedVersion, pendingTargetVersion) >= 0) {
+      localStorage.removeItem(UPDATE_TARGET_STORAGE_KEY);
+    }
   } catch (error) {
     // Version marker is only a cache-safety helper.
   }
@@ -595,21 +607,43 @@ function showRequiredUpdateOverlay(remoteVersion) {
 
   const updateButton = document.getElementById("requiredUpdateBtn");
   if (updateButton) {
+    updateButton.dataset.remoteVersion = normalizedRemoteVersion;
     updateButton.focus();
-    updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton));
+    updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton, normalizedRemoteVersion));
   }
 }
 
-async function forceRequiredUpdate(button) {
+async function forceRequiredUpdate(button, remoteVersion = "") {
+  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion || button?.dataset?.remoteVersion || "");
+
   if (button) {
     button.disabled = true;
     button.textContent = "Оновлюємо...";
   }
 
   try {
+    if (normalizedRemoteVersion) {
+      localStorage.setItem(UPDATE_TARGET_STORAGE_KEY, normalizedRemoteVersion);
+    }
+    sessionStorage.setItem("movohray-force-update-at", Date.now().toString());
+  } catch (error) {
+    // Reload still works if storage is unavailable.
+  }
+
+  try {
     if ("serviceWorker" in navigator) {
       const registrations = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(registrations.map((registration) => registration.unregister()));
+      await Promise.all(
+        registrations.map(async (registration) => {
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: "SKIP_WAITING" });
+          }
+          if (registration.installing) {
+            registration.installing.postMessage({ type: "SKIP_WAITING" });
+          }
+          await registration.unregister();
+        })
+      );
     }
 
     if ("caches" in window) {
@@ -624,14 +658,11 @@ async function forceRequiredUpdate(button) {
     console.warn("Не вдалося повністю очистити кеш перед оновленням", error);
   }
 
-  try {
-    sessionStorage.setItem("movohray-force-update-at", Date.now().toString());
-  } catch (error) {
-    // Reload still works if sessionStorage is unavailable.
-  }
-
-  const cleanUrl = new URL(window.location.href);
+  const cleanUrl = new URL("index.html", window.location.href);
   cleanUrl.searchParams.set("updated", Date.now().toString());
+  if (normalizedRemoteVersion) {
+    cleanUrl.searchParams.set("target", normalizedRemoteVersion);
+  }
   window.location.replace(cleanUrl.toString());
 }
 
@@ -656,6 +687,7 @@ function registerServiceWorker() {
         registration.update().catch(() => {});
 
         if (registration.waiting && navigator.serviceWorker.controller) {
+          registration.waiting.postMessage({ type: "SKIP_WAITING" });
           checkRequiredUpdate();
         }
 
@@ -667,6 +699,7 @@ function registerServiceWorker() {
 
           installingWorker.addEventListener("statechange", () => {
             if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
+              installingWorker.postMessage({ type: "SKIP_WAITING" });
               checkRequiredUpdate();
             }
           });

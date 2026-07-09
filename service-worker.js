@@ -1,13 +1,11 @@
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.35";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.36";
 const MOVOHRAY_CORE_ASSETS = [
-  "./",
-  "./index.html",
-  "./styles.css?v=0.4.35",
-  "./app.js?v=0.4.35",
-  "./wordguess.json?v=0.4.35",
-  "./words.json?v=0.4.35",
-  "./crocodile.json?v=0.4.35",
-  "./manifest.webmanifest?v=0.4.35"
+  "./styles.css?v=0.4.36",
+  "./app.js?v=0.4.36",
+  "./wordguess.json?v=0.4.36",
+  "./words.json?v=0.4.36",
+  "./crocodile.json?v=0.4.36",
+  "./manifest.webmanifest?v=0.4.36"
 ];
 
 self.addEventListener("install", (event) => {
@@ -36,6 +34,13 @@ self.addEventListener("message", (event) => {
   }
 });
 
+function fetchNoStore(request) {
+  return fetch(request, {
+    cache: "no-store",
+    headers: { "Cache-Control": "no-cache, no-store, must-revalidate" },
+  });
+}
+
 self.addEventListener("fetch", (event) => {
   const request = event.request;
 
@@ -49,41 +54,33 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (requestUrl.pathname.endsWith("/version.json")) {
-    event.respondWith(
-      fetch(request.url, {
-        cache: "reload",
-        headers: { "Cache-Control": "no-cache" },
-      }).catch(() => caches.match("./version.json"))
-    );
+    event.respondWith(fetchNoStore(request));
     return;
   }
 
+  // HTML must stay network-first. If we cache the document, iOS PWA may reopen
+  // an old app shell and show the update screen again after every restart.
   if (request.mode === "navigate" || request.destination === "document") {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(MOVOHRAY_CACHE_NAME).then((cache) => cache.put("./index.html", responseClone));
-          return response;
-        })
-        .catch(() => caches.match("./index.html"))
+      fetchNoStore(request).catch(() => caches.match("./index.html"))
     );
     return;
   }
 
+  // Versioned static assets can stay cache-first, because their URLs include ?v=...
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
-      const networkFetch = fetch(request)
-        .then((response) => {
-          if (response && response.ok) {
-            const responseClone = response.clone();
-            caches.open(MOVOHRAY_CACHE_NAME).then((cache) => cache.put(request, responseClone));
-          }
-          return response;
-        })
-        .catch(() => cachedResponse);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
 
-      return cachedResponse || networkFetch;
+      return fetch(request).then((response) => {
+        if (response && response.ok) {
+          const responseClone = response.clone();
+          caches.open(MOVOHRAY_CACHE_NAME).then((cache) => cache.put(request, responseClone));
+        }
+        return response;
+      });
     })
   );
 });
