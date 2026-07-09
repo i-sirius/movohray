@@ -1,14 +1,13 @@
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.29";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.4.30";
 const MOVOHRAY_CORE_ASSETS = [
   "./",
   "./index.html",
-  "./styles.css?v=0.4.29",
-  "./app.js?v=0.4.29",
-  "./wordguess.json?v=0.4.29",
-  "./words.json?v=0.4.29",
-  "./crocodile.json?v=0.4.29",
-  "./manifest.webmanifest?v=0.4.29",
-  "./version.json?v=0.4.29"
+  "./styles.css?v=0.4.30",
+  "./app.js?v=0.4.30",
+  "./wordguess.json?v=0.4.30",
+  "./words.json?v=0.4.30",
+  "./crocodile.json?v=0.4.30",
+  "./manifest.webmanifest?v=0.4.30"
 ];
 
 self.addEventListener("install", (event) => {
@@ -51,13 +50,10 @@ self.addEventListener("fetch", (event) => {
 
   if (requestUrl.pathname.endsWith("/version.json")) {
     event.respondWith(
-      fetch(request, { cache: "no-store" })
-        .then((response) => {
-          const responseClone = response.clone();
-          caches.open(MOVOHRAY_CACHE_NAME).then((cache) => cache.put("./version.json", responseClone));
-          return response;
-        })
-        .catch(() => caches.match("./version.json"))
+      fetch(request.url, {
+        cache: "reload",
+        headers: { "Cache-Control": "no-cache" },
+      }).catch(() => caches.match("./version.json"))
     );
     return;
   }

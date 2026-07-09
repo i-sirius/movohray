@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.4.29" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.4.30" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.4.29" />
+  <link rel="stylesheet" href="styles.css?v=0.4.30" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -48,7 +48,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.4.29</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.4.30</p>
     </div>
   </div>
   <main class="app">
@@ -80,7 +80,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.4.29</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.4.30</p>
         </div>
       </div>
     </section>
@@ -213,12 +213,19 @@
         <div class="card-inner">
           <p class="settings-eyebrow">Одиночний режим</p>
           <h1 class="mode-title">Вгадай слово</h1>
-          <p class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
+          <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
 
-          <div class="word-guess-summary">
-            <span>5 літер</span>
-            <span>5 спроб</span>
-            <span>Без повторів</span>
+          <div class="word-guess-summary word-guess-mode-picker" aria-label="Вибір довжини слова">
+            <button class="setting-chip word-guess-mode-btn is-active" type="button" data-word-guess-mode="5" aria-pressed="true">
+              <strong>5</strong> літер · 5 спроб
+            </button>
+            <button class="setting-chip word-guess-mode-btn" type="button" data-word-guess-mode="6" aria-pressed="false">
+              <strong>6</strong> літер · 6 спроб
+            </button>
+            <button class="setting-chip word-guess-mode-btn" type="button" data-word-guess-mode="7" aria-pressed="false">
+              <strong>7</strong> літер · 7 спроб
+            </button>
+            <span class="word-guess-mode-note">Без повторення літер</span>
           </div>
 
           <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
@@ -247,6 +254,11 @@
                 <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
                 <span class="word-guess-hint-step" aria-hidden="true">2</span>
                 <span class="word-guess-hint-label">Підказка 2</span>
+              </button>
+              <button id="wordGuessHintThirdBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-step-btn word-guess-hint-third-btn" type="button" aria-label="Третя підказка відкриється після другої" title="Третя підказка відкриється після другої" disabled>
+                <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
+                <span class="word-guess-hint-step" aria-hidden="true">3</span>
+                <span class="word-guess-hint-label">Підказка 3</span>
               </button>
               <button id="wordGuessRulesBtn" class="secondary-btn word-guess-icon-btn word-guess-rules-btn" type="button" aria-label="Показати правила" title="Правила">?</button>
             </div>
@@ -479,6 +491,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.29"></script>
+  <script src="app.js?v=0.4.30"></script>
 </body>
 </html>
