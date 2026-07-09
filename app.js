@@ -9,10 +9,11 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.27";
+const DATA_VERSION = "0.4.28";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
+const SOUND_STORAGE_KEY = "movohray-sound";
 const GAME_SOUND_MASTER_VOLUME = 0.16;
 const GAME_SOUND_PATTERNS = {
   correct: [
@@ -165,6 +166,7 @@ let isThemesPopoverOpen = false;
 let isRoundPaused = false;
 let gameAudioContext = null;
 let isGameAudioUnlocked = false;
+let isGameSoundEnabled = true;
 
 let wordGuessConfig = null;
 let wordGuessAnswerWords = [];
@@ -257,6 +259,18 @@ const winnerScreen = document.getElementById("winnerScreen");
 const themeToggleBtn = document.getElementById("themeToggleBtn");
 const themeToggleIcon = document.getElementById("themeToggleIcon");
 const themeToggleText = document.getElementById("themeToggleText");
+const appSettingsBtn = document.getElementById("appSettingsBtn");
+const appSettingsModal = document.getElementById("appSettingsModal");
+const appSettingsCloseBtn = document.getElementById("appSettingsCloseBtn");
+const appSettingsVersion = document.getElementById("appSettingsVersion");
+const settingsThemeToggleBtn = document.getElementById("settingsThemeToggleBtn");
+const settingsThemeIcon = document.getElementById("settingsThemeIcon");
+const settingsThemeTitle = document.getElementById("settingsThemeTitle");
+const settingsThemeText = document.getElementById("settingsThemeText");
+const settingsSoundToggleBtn = document.getElementById("settingsSoundToggleBtn");
+const settingsSoundIcon = document.getElementById("settingsSoundIcon");
+const settingsSoundTitle = document.getElementById("settingsSoundTitle");
+const settingsSoundText = document.getElementById("settingsSoundText");
 const appTitle = document.getElementById("appTitle");
 const appSubtitle = document.getElementById("appSubtitle");
 const menuVersionInfo = document.getElementById("menuVersionInfo");
@@ -345,7 +359,9 @@ const wordGuessTopMenuBtn = document.getElementById("wordGuessTopMenuBtn");
 const wordGuessSettingsMessage = document.getElementById("wordGuessSettingsMessage");
 const wordGuessBoard = document.getElementById("wordGuessBoard");
 const wordGuessMessage = document.getElementById("wordGuessMessage");
-const wordGuessHintBtn = document.getElementById("wordGuessHintBtn");
+const wordGuessHintFirstBtn = document.getElementById("wordGuessHintFirstBtn");
+const wordGuessHintSecondBtn = document.getElementById("wordGuessHintSecondBtn");
+const wordGuessHintBtn = wordGuessHintFirstBtn;
 const wordGuessRulesBtn = document.getElementById("wordGuessRulesBtn");
 const wordGuessInfoModal = document.getElementById("wordGuessInfoModal");
 const wordGuessInfoCloseBtn = document.getElementById("wordGuessInfoCloseBtn");
@@ -536,6 +552,10 @@ function updateMenuVersionInfo() {
   }
 
   menuVersionInfo.textContent = `v${DATA_VERSION}`;
+
+  if (appSettingsVersion) {
+    appSettingsVersion.textContent = `v${DATA_VERSION}`;
+  }
 }
 
 function getPreferredTheme() {
@@ -571,6 +591,95 @@ function applyTheme(theme) {
   if (themeToggleText) {
     themeToggleText.textContent = nextTheme === "dark" ? "Світла тема" : "Темна тема";
   }
+
+  if (settingsThemeToggleBtn) {
+    settingsThemeToggleBtn.setAttribute("aria-pressed", nextTheme === "dark" ? "true" : "false");
+  }
+
+  if (settingsThemeIcon) {
+    settingsThemeIcon.textContent = nextTheme === "dark" ? "☀️" : "🌙";
+  }
+
+  if (settingsThemeTitle) {
+    settingsThemeTitle.textContent = nextTheme === "dark" ? "Світла тема" : "Темна тема";
+  }
+
+  if (settingsThemeText) {
+    settingsThemeText.textContent = nextTheme === "dark" ? "Перемкнути на світле оформлення" : "Перемкнути на темне оформлення";
+  }
+}
+
+function getPreferredSoundSetting() {
+  try {
+    const savedSound = localStorage.getItem(SOUND_STORAGE_KEY);
+    if (savedSound === "off") {
+      return false;
+    }
+    if (savedSound === "on") {
+      return true;
+    }
+  } catch (error) {
+    // localStorage can be unavailable; sound stays enabled for this session.
+  }
+
+  return true;
+}
+
+function applySoundSetting(isEnabled) {
+  isGameSoundEnabled = Boolean(isEnabled);
+
+  if (settingsSoundToggleBtn) {
+    settingsSoundToggleBtn.setAttribute("aria-pressed", isGameSoundEnabled ? "true" : "false");
+  }
+
+  if (settingsSoundIcon) {
+    settingsSoundIcon.textContent = isGameSoundEnabled ? "🔊" : "🔇";
+  }
+
+  if (settingsSoundTitle) {
+    settingsSoundTitle.textContent = isGameSoundEnabled ? "Звук увімкнено" : "Звук вимкнено";
+  }
+
+  if (settingsSoundText) {
+    settingsSoundText.textContent = isGameSoundEnabled ? "Вимкнути звуки гри" : "Увімкнути звуки гри";
+  }
+}
+
+function initializeSoundSetting() {
+  applySoundSetting(getPreferredSoundSetting());
+}
+
+function toggleSoundSetting() {
+  const nextSoundState = !isGameSoundEnabled;
+  applySoundSetting(nextSoundState);
+
+  try {
+    localStorage.setItem(SOUND_STORAGE_KEY, nextSoundState ? "on" : "off");
+  } catch (error) {
+    // Sound still changes for the current session if persistence is blocked.
+  }
+}
+
+function openAppSettings() {
+  if (!appSettingsModal) {
+    return;
+  }
+
+  appSettingsModal.hidden = false;
+  document.body.classList.add("app-settings-open");
+
+  if (appSettingsCloseBtn) {
+    appSettingsCloseBtn.focus();
+  }
+}
+
+function closeAppSettings() {
+  if (!appSettingsModal) {
+    return;
+  }
+
+  appSettingsModal.hidden = true;
+  document.body.classList.remove("app-settings-open");
 }
 
 function initializeTheme() {
@@ -864,7 +973,7 @@ function setWordGuessBackgroundLocked(isLocked) {
   const locked = Boolean(isLocked);
   document.body.classList.toggle("word-guess-result-open", locked);
 
-  [wordGuessTopMenuBtn, wordGuessHintBtn, wordGuessRulesBtn, wordGuessHistoryBtn].forEach((button) => {
+  [wordGuessTopMenuBtn, wordGuessHintFirstBtn, wordGuessHintSecondBtn, wordGuessRulesBtn, wordGuessHistoryBtn].forEach((button) => {
     if (!button) {
       return;
     }
@@ -1249,22 +1358,29 @@ function getWordGuessHintTitle() {
 }
 
 function updateWordGuessHintState() {
-  if (!wordGuessHintBtn) {
-    return;
+  const isFirstUsed = Boolean(wordGuessHintLevel >= 1 && wordGuessTarget);
+  const isSecondAvailable = Boolean(wordGuessHintLevel >= 1 && wordGuessTarget);
+  const isSecondUsed = Boolean(wordGuessHintLevel >= 2 && wordGuessTarget);
+
+  if (wordGuessHintFirstBtn) {
+    wordGuessHintFirstBtn.disabled = !wordGuessTarget;
+    wordGuessHintFirstBtn.classList.toggle("is-used", isFirstUsed);
+    wordGuessHintFirstBtn.setAttribute("aria-pressed", isFirstUsed ? "true" : "false");
+    wordGuessHintFirstBtn.setAttribute("aria-label", isFirstUsed ? "Показати першу підказку ще раз" : "Показати першу підказку");
+    wordGuessHintFirstBtn.title = isFirstUsed ? "Перша підказка" : "Підказка";
   }
 
-  const isUsed = Boolean(wordGuessHintLevel > 0 && wordGuessTarget);
-  wordGuessHintBtn.disabled = !wordGuessTarget;
-  wordGuessHintBtn.innerHTML = `
-    <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
-    <span class="word-guess-hint-label">Підказка</span>
-  `;
-  wordGuessHintBtn.classList.toggle("is-used", isUsed);
-  wordGuessHintBtn.setAttribute("aria-label", isUsed ? "Показати підказку" : "Показати підказку");
-  wordGuessHintBtn.title = isUsed ? "Показати підказку ще раз" : "Підказка";
+  if (wordGuessHintSecondBtn) {
+    wordGuessHintSecondBtn.disabled = !isSecondAvailable;
+    wordGuessHintSecondBtn.classList.toggle("is-available", isSecondAvailable);
+    wordGuessHintSecondBtn.classList.toggle("is-used", isSecondUsed);
+    wordGuessHintSecondBtn.setAttribute("aria-pressed", isSecondUsed ? "true" : "false");
+    wordGuessHintSecondBtn.setAttribute("aria-label", isSecondUsed ? "Показати другу підказку ще раз" : "Показати другу підказку");
+    wordGuessHintSecondBtn.title = isSecondAvailable ? "Друга підказка" : "Друга підказка відкриється після першої";
+  }
 }
 
-function showWordGuessHint() {
+function showWordGuessFirstHint() {
   if (!wordGuessTarget) {
     return;
   }
@@ -1272,7 +1388,25 @@ function showWordGuessHint() {
   if (wordGuessHintLevel === 0) {
     wordGuessHintLevel = 1;
     wordGuessHintUsed = true;
-  } else if (wordGuessHintLevel === 1) {
+  }
+
+  setWordGuessMessage("");
+  updateWordGuessHintState();
+
+  openWordGuessInfoModal({
+    eyebrow: "Підказка 1",
+    title: getWordGuessBasicHintMessage(),
+    text: "Можна відкрити другу підказку: вона підсвітить одну літеру, яка точно є у слові.",
+    type: "hint",
+  });
+}
+
+function showWordGuessSecondHint() {
+  if (!wordGuessTarget || wordGuessHintLevel < 1) {
+    return;
+  }
+
+  if (wordGuessHintLevel === 1) {
     wordGuessHintLevel = 2;
     const hintedLetter = getWordGuessSecondHintLetter();
     if (hintedLetter && !wordGuessHintLetters.includes(hintedLetter)) {
@@ -1285,13 +1419,15 @@ function showWordGuessHint() {
   updateWordGuessHintState();
 
   openWordGuessInfoModal({
-    eyebrow: wordGuessHintLevel >= 2 ? "Підказка 2" : "Підказка 1",
+    eyebrow: "Підказка 2",
     title: getWordGuessHintTitle(),
-    text: wordGuessHintLevel >= 2
-      ? "Підсвічена на клавіатурі літера точно є у загаданому слові."
-      : "Натисни «Підказка» ще раз, щоб підсвітити одну літеру із загаданого слова.",
+    text: "Підсвічена на клавіатурі літера точно є у загаданому слові.",
     type: "hint",
   });
+}
+
+function showWordGuessHint() {
+  showWordGuessFirstHint();
 }
 
 function showWordGuessRules() {
@@ -1689,6 +1825,30 @@ function setupEvents() {
   renderModes();
   setupGameAudioUnlockEvents();
 
+  if (appSettingsBtn) {
+    appSettingsBtn.addEventListener("click", openAppSettings);
+  }
+
+  if (appSettingsCloseBtn) {
+    appSettingsCloseBtn.addEventListener("click", closeAppSettings);
+  }
+
+  if (appSettingsModal) {
+    appSettingsModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-app-settings-close]")) {
+        closeAppSettings();
+      }
+    });
+  }
+
+  if (settingsThemeToggleBtn) {
+    settingsThemeToggleBtn.addEventListener("click", toggleTheme);
+  }
+
+  if (settingsSoundToggleBtn) {
+    settingsSoundToggleBtn.addEventListener("click", toggleSoundSetting);
+  }
+
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", toggleTheme);
   }
@@ -1711,8 +1871,12 @@ function setupEvents() {
     });
   }
 
-  if (wordGuessHintBtn) {
-    wordGuessHintBtn.addEventListener("click", showWordGuessHint);
+  if (wordGuessHintFirstBtn) {
+    wordGuessHintFirstBtn.addEventListener("click", showWordGuessFirstHint);
+  }
+
+  if (wordGuessHintSecondBtn) {
+    wordGuessHintSecondBtn.addEventListener("click", showWordGuessSecondHint);
   }
 
   if (wordGuessRulesBtn) {
@@ -1803,6 +1967,10 @@ function setupEvents() {
 
     if (event.key === "Escape" && wordGuessInfoModal && !wordGuessInfoModal.hidden) {
       closeWordGuessInfoModal();
+    }
+
+    if (event.key === "Escape" && appSettingsModal && !appSettingsModal.hidden) {
+      closeAppSettings();
     }
 
     if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
@@ -4077,6 +4245,10 @@ function unlockGameAudio() {
 }
 
 function playToneSequence(sequence = []) {
+  if (!isGameSoundEnabled) {
+    return;
+  }
+
   const context = getGameAudioContext();
   if (!context || sequence.length === 0) {
     return;

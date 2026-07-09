@@ -7901,3 +7901,283 @@ body[data-theme="dark"] .word-guess-loss-emoji {
     min-height: 40px;
   }
 }
+
+/* 0.4.28 — app settings, safer PWA top controls, two-step hint buttons */
+.theme-toggle-btn {
+  display: none !important;
+}
+
+.app-settings-btn {
+  position: fixed;
+  top: max(12px, calc(env(safe-area-inset-top, 0px) + 10px));
+  right: max(12px, calc(env(safe-area-inset-right, 0px) + 12px));
+  z-index: 40;
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: rgba(255, 250, 240, 0.78);
+  color: var(--color-text);
+  box-shadow: 0 10px 24px rgba(54, 49, 94, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 20px;
+  line-height: 1;
+}
+
+.app-settings-btn:hover {
+  transform: translateY(-1px) rotate(8deg);
+}
+
+body[data-theme="dark"] .app-settings-btn {
+  background: rgba(31, 38, 58, 0.78);
+  border-color: rgba(148, 163, 184, 0.24);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
+}
+
+body:not([data-screen="menu"]):not([data-screen="settings"]) .app-settings-btn,
+body.required-update-open .app-settings-btn,
+body.word-guess-result-open .app-settings-btn {
+  display: none;
+}
+
+.app-settings-modal[hidden] {
+  display: none;
+}
+
+.app-settings-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: max(18px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(18px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+
+.app-settings-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 24, 38, 0.42);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.app-settings-card {
+  position: relative;
+  z-index: 1;
+  width: min(430px, calc(100vw - 32px));
+  border-radius: 28px;
+  padding: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 250, 240, 0.94);
+  color: var(--color-text);
+  box-shadow: 0 24px 60px rgba(40, 35, 70, 0.22);
+}
+
+body[data-theme="dark"] .app-settings-card {
+  background: rgba(21, 27, 44, 0.96);
+  border-color: rgba(148, 163, 184, 0.22);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.46);
+}
+
+.app-settings-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(148, 163, 184, 0.16);
+  color: inherit;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.app-settings-eyebrow,
+.app-settings-version {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app-settings-card h2 {
+  margin: 4px 44px 18px 0;
+  font-size: clamp(28px, 7vw, 38px);
+  line-height: 1.05;
+}
+
+.app-settings-options {
+  display: grid;
+  gap: 12px;
+}
+
+.app-settings-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(255, 255, 255, 0.54);
+  color: inherit;
+  text-align: left;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+body[data-theme="dark"] .app-settings-option {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(148, 163, 184, 0.18);
+}
+
+.app-settings-option-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background: rgba(241, 211, 142, 0.28);
+  font-size: 21px;
+}
+
+.app-settings-option-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.app-settings-option-copy strong {
+  font-size: 17px;
+  line-height: 1.15;
+}
+
+.app-settings-option-copy small,
+.app-settings-note {
+  color: var(--color-muted);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.app-settings-note {
+  margin: 16px 0 10px;
+  font-size: 13px;
+}
+
+.app-settings-version {
+  text-align: right;
+  opacity: 0.7;
+}
+
+.word-guess-toolbar {
+  align-items: stretch;
+  gap: 8px;
+}
+
+.word-guess-hint-btn,
+.word-guess-hint-step-btn,
+.word-guess-rules-btn {
+  min-height: 42px;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.word-guess-hint-btn {
+  min-width: 132px;
+  padding-inline: 15px;
+}
+
+.word-guess-hint-step-btn {
+  width: 46px;
+  min-width: 46px;
+  padding: 0;
+  opacity: 0.48;
+  filter: grayscale(0.35);
+}
+
+.word-guess-hint-step-btn.is-available {
+  opacity: 1;
+  filter: none;
+}
+
+.word-guess-hint-btn.is-used,
+.word-guess-hint-step-btn.is-used {
+  opacity: 1;
+  filter: none;
+}
+
+.word-guess-hint-btn.is-used::after,
+.word-guess-hint-step-btn.is-used::after,
+.word-guess-hint-btn::after,
+.word-guess-hint-step-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
+.word-guess-hint-step-btn .word-guess-hint-icon {
+  font-size: 18px;
+  transform: translateY(1px);
+}
+
+.word-guess-hint-step {
+  position: absolute;
+  right: 8px;
+  bottom: 7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.78);
+  color: #8a6b19;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1;
+}
+
+body[data-theme="dark"] .word-guess-hint-step {
+  background: rgba(15, 23, 42, 0.78);
+  color: #f7d47a;
+}
+
+@media (max-width: 520px) {
+  .app-settings-btn {
+    top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px));
+    right: max(10px, calc(env(safe-area-inset-right, 0px) + 10px));
+    width: 42px;
+    height: 42px;
+    font-size: 19px;
+  }
+
+  .word-guess-toolbar {
+    justify-content: center;
+  }
+
+  .word-guess-hint-btn {
+    min-width: min(154px, 44vw);
+  }
+
+  .word-guess-hint-step-btn,
+  .word-guess-rules-btn {
+    width: 44px;
+    min-width: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .word-guess-hint-btn {
+    min-width: 46px;
+    padding-inline: 0;
+  }
+
+  .word-guess-hint-btn .word-guess-hint-label {
+    display: none;
+  }
+}
