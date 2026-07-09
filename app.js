@@ -9,10 +9,42 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.26";
+const DATA_VERSION = "0.4.27";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
+const GAME_SOUND_MASTER_VOLUME = 0.16;
+const GAME_SOUND_PATTERNS = {
+  correct: [
+    { frequency: 540, start: 0, duration: 0.08, volume: 0.42, type: "sine" },
+    { frequency: 760, start: 0.08, duration: 0.11, volume: 0.36, type: "sine" },
+  ],
+  skipped: [
+    { frequency: 260, start: 0, duration: 0.08, volume: 0.34, type: "triangle" },
+    { frequency: 185, start: 0.08, duration: 0.1, volume: 0.28, type: "triangle" },
+  ],
+  roundComplete: [
+    { frequency: 392, start: 0, duration: 0.09, volume: 0.28, type: "sine" },
+    { frequency: 494, start: 0.09, duration: 0.09, volume: 0.3, type: "sine" },
+    { frequency: 659, start: 0.18, duration: 0.18, volume: 0.32, type: "sine" },
+  ],
+  gameComplete: [
+    { frequency: 523, start: 0, duration: 0.1, volume: 0.32, type: "sine" },
+    { frequency: 659, start: 0.1, duration: 0.1, volume: 0.34, type: "sine" },
+    { frequency: 784, start: 0.2, duration: 0.12, volume: 0.36, type: "sine" },
+    { frequency: 1047, start: 0.34, duration: 0.24, volume: 0.28, type: "sine" },
+  ],
+  gameLoss: [
+    { frequency: 330, start: 0, duration: 0.12, volume: 0.26, type: "triangle" },
+    { frequency: 277, start: 0.13, duration: 0.13, volume: 0.24, type: "triangle" },
+    { frequency: 220, start: 0.27, duration: 0.18, volume: 0.22, type: "triangle" },
+  ],
+  tie: [
+    { frequency: 392, start: 0, duration: 0.1, volume: 0.28, type: "sine" },
+    { frequency: 392, start: 0.14, duration: 0.1, volume: 0.28, type: "sine" },
+    { frequency: 523, start: 0.28, duration: 0.16, volume: 0.3, type: "sine" },
+  ],
+};
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
@@ -131,6 +163,8 @@ let timerId = null;
 let wasTimerRunningBeforeExitModal = false;
 let isThemesPopoverOpen = false;
 let isRoundPaused = false;
+let gameAudioContext = null;
+let isGameAudioUnlocked = false;
 
 let wordGuessConfig = null;
 let wordGuessAnswerWords = [];
@@ -1085,6 +1119,7 @@ function finishWordGuessGame(isWon) {
   }
 
   setWordGuessBackgroundLocked(true);
+  playGameCompleteSound(isWon ? "win" : "loss");
   playWordGuessFinaleEffect(isWon);
 }
 
@@ -1652,6 +1687,7 @@ function updateWordGuessFeedbackState() {
 
 function setupEvents() {
   renderModes();
+  setupGameAudioUnlockEvents();
 
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", toggleTheme);
@@ -3539,6 +3575,7 @@ function showRoundReview() {
   resetSwipeState();
   isRoundReviewWordsExpanded = false;
   recalculateRoundCounters();
+  playRoundCompleteSound();
   renderRoundReview();
   showScreen("roundReview");
 }
@@ -3837,6 +3874,7 @@ function showWinnerScreen() {
     playAgainBtn.textContent = "Нова гра";
   }
 
+  playGameCompleteSound(tiedIndices.length > 1 ? "tie" : "win");
   showScreen("winner");
 }
 
@@ -3986,12 +4024,119 @@ function animateWordCard(className) {
   }, 220);
 }
 
+function setupGameAudioUnlockEvents() {
+  const unlockEvents = ["pointerdown", "touchstart", "keydown"];
+
+  unlockEvents.forEach((eventName) => {
+    document.addEventListener(eventName, unlockGameAudio, { once: true, passive: true });
+  });
+}
+
+function getGameAudioContext() {
+  if (gameAudioContext) {
+    return gameAudioContext;
+  }
+
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) {
+    return null;
+  }
+
+  gameAudioContext = new AudioContextClass();
+  return gameAudioContext;
+}
+
+function unlockGameAudio() {
+  const context = getGameAudioContext();
+  if (!context) {
+    return;
+  }
+
+  if (context.state === "suspended") {
+    context.resume().catch(() => {});
+  }
+
+  if (isGameAudioUnlocked) {
+    return;
+  }
+
+  try {
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const startTime = context.currentTime;
+
+    gain.gain.setValueAtTime(0.0001, startTime);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start(startTime);
+    oscillator.stop(startTime + 0.02);
+    isGameAudioUnlocked = true;
+  } catch (error) {
+    // Sound is optional; the game must keep working if audio is blocked.
+  }
+}
+
+function playToneSequence(sequence = []) {
+  const context = getGameAudioContext();
+  if (!context || sequence.length === 0) {
+    return;
+  }
+
+  if (context.state === "suspended") {
+    context.resume().catch(() => {});
+  }
+
+  const baseTime = context.currentTime + 0.01;
+
+  sequence.forEach((note) => {
+    try {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      const startTime = baseTime + (note.start || 0);
+      const duration = Math.max(0.04, note.duration || 0.1);
+      const noteVolume = Math.max(0.0001, (note.volume || 0.3) * GAME_SOUND_MASTER_VOLUME);
+
+      oscillator.type = note.type || "sine";
+      oscillator.frequency.setValueAtTime(note.frequency || 440, startTime);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(noteVolume, startTime + Math.min(0.025, duration / 3));
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(startTime);
+      oscillator.stop(startTime + duration + 0.03);
+    } catch (error) {
+      // Ignore individual failed notes; audio feedback is non-critical.
+    }
+  });
+}
+
 function playCorrectSound() {
-  // Тут пізніше додамо звук для “Вгадано”
+  playToneSequence(GAME_SOUND_PATTERNS.correct);
 }
 
 function playSkipSound() {
-  // Тут пізніше додамо звук для “Пропущено”
+  playToneSequence(GAME_SOUND_PATTERNS.skipped);
+}
+
+function playRoundCompleteSound() {
+  playToneSequence(GAME_SOUND_PATTERNS.roundComplete);
+}
+
+function playGameCompleteSound(result = "win") {
+  if (result === "loss") {
+    playToneSequence(GAME_SOUND_PATTERNS.gameLoss);
+    return;
+  }
+
+  if (result === "tie") {
+    playToneSequence(GAME_SOUND_PATTERNS.tie);
+    return;
+  }
+
+  playToneSequence(GAME_SOUND_PATTERNS.gameComplete);
 }
 
 function shuffleArray(array) {
