@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.32";
+const DATA_VERSION = "0.4.33";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -1260,7 +1260,9 @@ function renderWordGuessBoard() {
   const wordLength = getWordGuessLength();
   const attempts = getWordGuessAttempts();
   wordGuessBoard.style.setProperty("--word-guess-length", String(wordLength));
+  wordGuessBoard.style.setProperty("--word-guess-attempts", String(attempts));
   wordGuessBoard.dataset.wordLength = String(wordLength);
+  wordGuessBoard.dataset.attempts = String(attempts);
   wordGuessBoard.innerHTML = "";
 
   for (let rowIndex = 0; rowIndex < attempts; rowIndex++) {
@@ -1436,7 +1438,7 @@ function handleWordGuessPhysicalKey(event) {
 function submitWordGuess() {
   const wordLength = getWordGuessLength();
   const guess = normalizeWordGuessWord(wordGuessCurrentGuess);
-  const validationMessage = getWordGuessValidationMessage(guess, wordLength);
+  const validationMessage = getWordGuessValidationMessage(guess, wordLength, getWordGuessAllowsRepeats());
 
   if (validationMessage) {
     addWordGuessAttemptLog(guess, "invalid", [], validationMessage);

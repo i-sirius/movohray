@@ -8834,3 +8834,241 @@ body:not([data-theme="dark"]) .word-guess-dictionary-links a {
     font-size: clamp(9px, calc(66px / var(--word-guess-length, 5)), 11px);
   }
 }
+
+
+/* 0.4.33 — fit 6/7 attempts on mobile, align word guess controls */
+.word-guess-board {
+  --word-guess-attempts: 5;
+}
+
+.word-guess-toolbar {
+  grid-template-columns: repeat(4, 42px);
+  place-items: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.word-guess-rules-btn,
+.word-guess-hint-btn,
+.word-guess-hint-step-btn {
+  align-self: center;
+  justify-self: center;
+}
+
+@media (max-width: 520px) {
+  body[data-screen="wordGuessGame"] .app {
+    min-height: 100svh;
+    align-items: flex-start;
+    padding-top: max(4px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(6px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .word-guess-screen-title {
+    margin-bottom: 4px;
+    font-size: clamp(25px, 7vw, 32px);
+    line-height: 1;
+  }
+
+  .word-guess-game-card {
+    width: calc(100vw - 10px);
+    padding: 8px 7px 9px;
+    border-radius: 25px;
+  }
+
+  .word-guess-inner {
+    gap: 7px;
+  }
+
+  .word-guess-titlebar {
+    gap: 5px 7px;
+    padding: 7px;
+    border-radius: 21px;
+  }
+
+  .word-guess-toolbar {
+    grid-template-columns: repeat(4, 38px);
+    gap: 8px;
+    height: 38px;
+  }
+
+  .word-guess-hint-btn,
+  .word-guess-hint-step-btn,
+  .word-guess-rules-btn,
+  .word-guess-hint-btn.is-used,
+  .word-guess-hint-step-btn.is-used {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px;
+    min-height: 38px;
+  }
+
+  .word-guess-board {
+    --word-guess-cell-size: clamp(
+      32px,
+      min(
+        calc((100vw - 76px) / var(--word-guess-length, 5)),
+        calc((100svh - 505px) / var(--word-guess-attempts, 5))
+      ),
+      55px
+    );
+    gap: clamp(4px, calc(var(--word-guess-cell-size) * 0.13), 7px);
+  }
+
+  .word-guess-row {
+    gap: clamp(4px, calc(var(--word-guess-cell-size) * 0.13), 7px);
+  }
+
+  .word-guess-cell {
+    border-radius: clamp(9px, calc(var(--word-guess-cell-size) * 0.24), 13px);
+    font-size: clamp(20px, calc(var(--word-guess-cell-size) * 0.58), 34px);
+  }
+
+  .word-guess-keyboard {
+    padding: 7px 6px max(8px, env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+    border-radius: 23px;
+  }
+
+  .word-guess-key {
+    min-height: 42px;
+    border-radius: 12px;
+  }
+
+  .word-guess-control-row .word-guess-key-wide,
+  .word-guess-control-row .word-guess-key-utility {
+    min-height: 43px;
+  }
+}
+
+@media (max-width: 520px) and (max-height: 820px) {
+  .word-guess-board {
+    --word-guess-cell-size: clamp(
+      29px,
+      min(
+        calc((100vw - 78px) / var(--word-guess-length, 5)),
+        calc((100svh - 530px) / var(--word-guess-attempts, 5))
+      ),
+      51px
+    );
+  }
+
+  .word-guess-key {
+    min-height: 40px;
+  }
+
+  .word-guess-control-row .word-guess-key-wide,
+  .word-guess-control-row .word-guess-key-utility {
+    min-height: 41px;
+  }
+}
+
+@media (max-width: 390px), (max-height: 760px) and (max-width: 520px) {
+  .word-guess-screen-title {
+    font-size: clamp(23px, 6.8vw, 30px);
+  }
+
+  .word-guess-toolbar {
+    grid-template-columns: repeat(4, 36px);
+    gap: 7px;
+    height: 36px;
+  }
+
+  .word-guess-hint-btn,
+  .word-guess-hint-step-btn,
+  .word-guess-rules-btn,
+  .word-guess-hint-btn.is-used,
+  .word-guess-hint-step-btn.is-used {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px;
+    min-height: 36px;
+  }
+
+  .word-guess-board {
+    --word-guess-cell-size: clamp(
+      27px,
+      min(
+        calc((100vw - 70px) / var(--word-guess-length, 5)),
+        calc((100svh - 520px) / var(--word-guess-attempts, 5))
+      ),
+      48px
+    );
+    gap: 4px;
+  }
+
+  .word-guess-row {
+    gap: 4px;
+  }
+
+  .word-guess-cell {
+    font-size: clamp(18px, calc(var(--word-guess-cell-size) * 0.58), 30px);
+  }
+
+  .word-guess-key {
+    min-height: 38px;
+    font-size: clamp(15px, 4.6vw, 19px);
+  }
+
+  .word-guess-control-row .word-guess-key-wide,
+  .word-guess-control-row .word-guess-key-utility {
+    min-height: 39px;
+  }
+}
+
+body.is-browser-shell[data-screen="wordGuessGame"] .app {
+  padding-bottom: max(112px, calc(env(safe-area-inset-bottom, 0px) + 104px));
+}
+
+body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-game-card {
+  margin-bottom: 94px;
+}
+
+body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-board {
+  --word-guess-cell-size: clamp(
+    27px,
+    min(
+      calc((100vw - 78px) / var(--word-guess-length, 5)),
+      calc((100svh - 585px) / var(--word-guess-attempts, 5))
+    ),
+    50px
+  );
+}
+
+@supports (height: 100dvh) {
+  @media (max-width: 520px) {
+    .word-guess-board {
+      --word-guess-cell-size: clamp(
+        32px,
+        min(
+          calc((100vw - 76px) / var(--word-guess-length, 5)),
+          calc((100dvh - 505px) / var(--word-guess-attempts, 5))
+        ),
+        55px
+      );
+    }
+  }
+
+  @media (max-width: 520px) and (max-height: 820px) {
+    .word-guess-board {
+      --word-guess-cell-size: clamp(
+        29px,
+        min(
+          calc((100vw - 78px) / var(--word-guess-length, 5)),
+          calc((100dvh - 530px) / var(--word-guess-attempts, 5))
+        ),
+        51px
+      );
+    }
+  }
+
+  body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-board {
+    --word-guess-cell-size: clamp(
+      27px,
+      min(
+        calc((100vw - 78px) / var(--word-guess-length, 5)),
+        calc((100dvh - 585px) / var(--word-guess-attempts, 5))
+      ),
+      50px
+    );
+  }
+}
