@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.30";
+const DATA_VERSION = "0.4.31";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const THEME_STORAGE_KEY = "movohray-theme";
@@ -48,7 +48,12 @@ const GAME_SOUND_PATTERNS = {
 };
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const WORD_GUESS_MODE_STORAGE_KEY = "movohray-wordguess-mode";
+const WORD_GUESS_LENGTH_STORAGE_KEY = "movohray-wordguess-length";
+const WORD_GUESS_ATTEMPTS_STORAGE_KEY = "movohray-wordguess-attempts";
+const WORD_GUESS_REPEATS_STORAGE_KEY = "movohray-wordguess-repeats";
 const WORD_GUESS_DEFAULT_MODE = "5";
+const WORD_GUESS_DEFAULT_LENGTH = 5;
+const WORD_GUESS_DEFAULT_ATTEMPTS = 5;
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
 const modeCategoryCache = {};
@@ -173,7 +178,10 @@ let isGameSoundEnabled = true;
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
 let wordGuessLoadedModeKey = "";
-let selectedWordGuessModeKey = readWordGuessModePreference();
+let selectedWordGuessLength = readWordGuessNumberPreference(WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_DEFAULT_LENGTH);
+let selectedWordGuessAttempts = readWordGuessNumberPreference(WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_DEFAULT_ATTEMPTS);
+let selectedWordGuessAllowRepeats = readWordGuessRepeatsPreference();
+let selectedWordGuessModeKey = getSelectedWordGuessModeKey();
 let wordGuessAnswerWords = [];
 let wordGuessAllowedGuesses = new Set();
 let wordGuessTarget = "";
@@ -360,6 +368,12 @@ const resultTeamScoreBoard = document.getElementById("resultTeamScoreBoard");
 const winnerScoreBoard = document.getElementById("winnerScoreBoard");
 const wordGuessStartBtn = document.getElementById("wordGuessStartBtn");
 const wordGuessModeDescription = document.getElementById("wordGuessModeDescription");
+const wordGuessLengthSummary = document.getElementById("wordGuessLengthSummary");
+const wordGuessAttemptsSummary = document.getElementById("wordGuessAttemptsSummary");
+const wordGuessRepeatsSummary = document.getElementById("wordGuessRepeatsSummary");
+const wordGuessLengthButtons = Array.from(document.querySelectorAll("[data-word-guess-length]"));
+const wordGuessAttemptButtons = Array.from(document.querySelectorAll("[data-word-guess-attempts]"));
+const wordGuessRepeatButtons = Array.from(document.querySelectorAll("[data-word-guess-repeats]"));
 const wordGuessModeButtons = Array.from(document.querySelectorAll("[data-word-guess-mode]"));
 const wordGuessBackBtn = document.getElementById("wordGuessBackBtn");
 const wordGuessTopMenuBtn = document.getElementById("wordGuessTopMenuBtn");
@@ -770,9 +784,11 @@ async function loadModeCategories(modeId = selectedMode) {
 }
 
 async function loadWordGuessDictionary() {
+  const selectedModeKey = getSelectedWordGuessModeKey();
+
   if (
     wordGuessDictionaryData
-    && wordGuessLoadedModeKey === selectedWordGuessModeKey
+    && wordGuessLoadedModeKey === selectedModeKey
     && wordGuessConfig
     && wordGuessAnswerWords.length > 0
     && wordGuessAllowedGuesses.size > 0
@@ -796,14 +812,17 @@ async function loadWordGuessDictionary() {
     }
 
     const data = wordGuessDictionaryData;
-    const modeData = getWordGuessModeData(data, selectedWordGuessModeKey);
-    const wordLength = Number(modeData.wordLength) || Number(selectedWordGuessModeKey) || Number(data.wordLength) || 5;
-    const attempts = Number(modeData.attempts) || wordLength;
+    const dictionaryModeKey = getSelectedWordGuessDictionaryKey();
+    const modeData = getWordGuessModeData(data, dictionaryModeKey);
+    const wordLength = selectedWordGuessLength;
+    const attempts = selectedWordGuessAttempts;
+    const allowRepeats = selectedWordGuessAllowRepeats;
     const rawAnswerWords = Array.isArray(modeData.answers) ? modeData.answers : modeData.words || [];
-    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength);
+    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats);
     const allowedGuessWords = normalizeWordGuessList(
       Array.isArray(modeData.allowedGuesses) ? modeData.allowedGuesses : answerWords,
       wordLength,
+      allowRepeats,
     );
     const allowedGuessSet = new Set(allowedGuessWords);
 
@@ -817,11 +836,13 @@ async function loadWordGuessDictionary() {
 
     wordGuessConfig = {
       version: data.version || "1.0",
-      modeKey: selectedWordGuessModeKey,
+      modeKey: selectedModeKey,
+      dictionaryModeKey,
       wordLength,
       attempts,
+      allowRepeats,
     };
-    wordGuessLoadedModeKey = selectedWordGuessModeKey;
+    wordGuessLoadedModeKey = selectedModeKey;
     wordGuessAnswerWords = answerWords;
     wordGuessAllowedGuesses = allowedGuessSet;
 
@@ -847,12 +868,28 @@ async function loadWordGuessDictionary() {
   }
 }
 
-function getWordGuessModeData(data, modeKey = selectedWordGuessModeKey) {
+function getSelectedWordGuessModeKey() {
+  const length = Number(selectedWordGuessLength) || WORD_GUESS_DEFAULT_LENGTH;
+  const attempts = Number(selectedWordGuessAttempts) || WORD_GUESS_DEFAULT_ATTEMPTS;
+  return `${length}-${attempts}-${selectedWordGuessAllowRepeats ? "repeat" : "unique"}`;
+}
+
+function getSelectedWordGuessDictionaryKey() {
+  const length = Number(selectedWordGuessLength) || WORD_GUESS_DEFAULT_LENGTH;
+  return `${length}${selectedWordGuessAllowRepeats ? "-repeat" : ""}`;
+}
+
+function getWordGuessModeData(data, modeKey = getSelectedWordGuessDictionaryKey()) {
   const modes = data?.modes && typeof data.modes === "object" ? data.modes : null;
   const normalizedModeKey = String(modeKey || data?.defaultMode || WORD_GUESS_DEFAULT_MODE);
+  const fallbackLength = String(selectedWordGuessLength || data?.defaultMode || WORD_GUESS_DEFAULT_MODE);
 
   if (modes && modes[normalizedModeKey]) {
     return modes[normalizedModeKey];
+  }
+
+  if (modes && modes[fallbackLength]) {
+    return modes[fallbackLength];
   }
 
   if (modes && data?.defaultMode && modes[String(data.defaultMode)]) {
@@ -866,65 +903,146 @@ function getWordGuessModeData(data, modeKey = selectedWordGuessModeKey) {
   return data || {};
 }
 
-function readWordGuessModePreference() {
+function readWordGuessNumberPreference(storageKey, fallback) {
   try {
-    const storedMode = localStorage.getItem(WORD_GUESS_MODE_STORAGE_KEY);
-    if (["5", "6", "7"].includes(storedMode)) {
-      return storedMode;
+    const storedValue = Number(localStorage.getItem(storageKey));
+    if ([5, 6, 7].includes(storedValue)) {
+      return storedValue;
+    }
+
+    if (storageKey === WORD_GUESS_LENGTH_STORAGE_KEY) {
+      const legacyMode = Number(localStorage.getItem(WORD_GUESS_MODE_STORAGE_KEY));
+      if ([5, 6, 7].includes(legacyMode)) {
+        return legacyMode;
+      }
     }
   } catch (error) {
-    console.warn("Не вдалося прочитати режим Вгадай слово", error);
+    console.warn("Не вдалося прочитати налаштування Вгадай слово", error);
   }
 
-  return WORD_GUESS_DEFAULT_MODE;
+  return fallback;
 }
 
-function saveWordGuessModePreference(modeKey) {
+function readWordGuessRepeatsPreference() {
   try {
-    localStorage.setItem(WORD_GUESS_MODE_STORAGE_KEY, modeKey);
+    return localStorage.getItem(WORD_GUESS_REPEATS_STORAGE_KEY) === "true";
   } catch (error) {
-    console.warn("Не вдалося зберегти режим Вгадай слово", error);
+    console.warn("Не вдалося прочитати налаштування повторів Вгадай слово", error);
+  }
+
+  return false;
+}
+
+function saveWordGuessSelectionPreference() {
+  try {
+    localStorage.setItem(WORD_GUESS_LENGTH_STORAGE_KEY, String(selectedWordGuessLength));
+    localStorage.setItem(WORD_GUESS_ATTEMPTS_STORAGE_KEY, String(selectedWordGuessAttempts));
+    localStorage.setItem(WORD_GUESS_REPEATS_STORAGE_KEY, String(selectedWordGuessAllowRepeats));
+    localStorage.setItem(WORD_GUESS_MODE_STORAGE_KEY, String(selectedWordGuessLength));
+  } catch (error) {
+    console.warn("Не вдалося зберегти налаштування Вгадай слово", error);
   }
 }
 
 function getSelectedWordGuessModeNumbers() {
-  const wordLength = Number(selectedWordGuessModeKey) || getWordGuessLength();
-  return { wordLength, attempts: wordLength };
+  const wordLength = Number(selectedWordGuessLength) || getWordGuessLength();
+  const attempts = Number(selectedWordGuessAttempts) || getWordGuessAttempts();
+  return { wordLength, attempts, allowRepeats: Boolean(selectedWordGuessAllowRepeats) };
 }
 
-function renderWordGuessModeSelector() {
-  const { wordLength, attempts } = getSelectedWordGuessModeNumbers();
+function closeWordGuessStartPickers() {
+  document.querySelectorAll(".word-guess-select[open]").forEach((picker) => {
+    picker.removeAttribute("open");
+  });
+}
 
-  if (wordGuessModeDescription) {
-    wordGuessModeDescription.textContent = `Відгадай українське слово з ${wordLength} ${getLetterWord(wordLength)} за ${attempts} ${getAttemptWord(attempts)}.`;
-  }
-
-  wordGuessModeButtons.forEach((button) => {
-    const modeKey = String(button.dataset.wordGuessMode || "");
-    const isActive = modeKey === String(selectedWordGuessModeKey);
+function updateWordGuessSelectorButtons(buttons, activeValue, datasetName) {
+  buttons.forEach((button) => {
+    const isActive = String(button.dataset[datasetName] || "") === String(activeValue);
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
 }
 
-function selectWordGuessMode(modeKey) {
-  const normalizedModeKey = String(modeKey || WORD_GUESS_DEFAULT_MODE);
-  if (!["5", "6", "7"].includes(normalizedModeKey)) {
-    return;
+function renderWordGuessModeSelector() {
+  const { wordLength, attempts, allowRepeats } = getSelectedWordGuessModeNumbers();
+
+  selectedWordGuessModeKey = getSelectedWordGuessModeKey();
+
+  if (wordGuessModeDescription) {
+    const repeatLabel = allowRepeats ? "Літери можуть повторюватися." : "Без повторення літер.";
+    wordGuessModeDescription.textContent = `Відгадай українське слово з ${wordLength} ${getLetterWord(wordLength)} за ${attempts} ${getAttemptWord(attempts)}. ${repeatLabel}`;
   }
 
-  if (normalizedModeKey === selectedWordGuessModeKey) {
-    renderWordGuessModeSelector();
-    return;
+  if (wordGuessLengthSummary) {
+    wordGuessLengthSummary.innerHTML = `<strong>${wordLength}</strong> ${getLetterWord(wordLength)}`;
   }
 
-  selectedWordGuessModeKey = normalizedModeKey;
-  saveWordGuessModePreference(normalizedModeKey);
+  if (wordGuessAttemptsSummary) {
+    wordGuessAttemptsSummary.innerHTML = `<strong>${attempts}</strong> ${getAttemptWord(attempts)}`;
+  }
+
+  if (wordGuessRepeatsSummary) {
+    wordGuessRepeatsSummary.innerHTML = allowRepeats
+      ? "З повторами літер"
+      : "Без повторення літер";
+  }
+
+  updateWordGuessSelectorButtons(wordGuessLengthButtons, wordLength, "wordGuessLength");
+  updateWordGuessSelectorButtons(wordGuessAttemptButtons, attempts, "wordGuessAttempts");
+  updateWordGuessSelectorButtons(wordGuessRepeatButtons, String(allowRepeats), "wordGuessRepeats");
+
+  wordGuessModeButtons.forEach((button) => {
+    const modeKey = String(button.dataset.wordGuessMode || "");
+    const isActive = modeKey === String(wordLength);
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
+function resetWordGuessDictionaryCache() {
   wordGuessLoadedModeKey = "";
   wordGuessConfig = null;
   wordGuessAnswerWords = [];
   wordGuessAllowedGuesses = new Set();
+}
+
+function selectWordGuessMode(modeKey) {
+  selectWordGuessLength(modeKey);
+}
+
+function selectWordGuessLength(length) {
+  const normalizedLength = Number(length) || WORD_GUESS_DEFAULT_LENGTH;
+  if (![5, 6, 7].includes(normalizedLength)) {
+    return;
+  }
+
+  selectedWordGuessLength = normalizedLength;
+  saveWordGuessSelectionPreference();
+  resetWordGuessDictionaryCache();
   renderWordGuessModeSelector();
+  closeWordGuessStartPickers();
+}
+
+function selectWordGuessAttempts(attempts) {
+  const normalizedAttempts = Number(attempts) || WORD_GUESS_DEFAULT_ATTEMPTS;
+  if (![5, 6, 7].includes(normalizedAttempts)) {
+    return;
+  }
+
+  selectedWordGuessAttempts = normalizedAttempts;
+  saveWordGuessSelectionPreference();
+  resetWordGuessDictionaryCache();
+  renderWordGuessModeSelector();
+  closeWordGuessStartPickers();
+}
+
+function selectWordGuessRepeats(allowRepeats) {
+  selectedWordGuessAllowRepeats = allowRepeats === true || String(allowRepeats) === "true";
+  saveWordGuessSelectionPreference();
+  resetWordGuessDictionaryCache();
+  renderWordGuessModeSelector();
+  closeWordGuessStartPickers();
 }
 
 function getLetterWord(count) {
@@ -938,7 +1056,7 @@ function getLetterWord(count) {
   return "літер";
 }
 
-function normalizeWordGuessList(rawWords, length = 5) {
+function normalizeWordGuessList(rawWords, length = 5, allowRepeats = false) {
   const normalizedWords = [];
   const seenWords = new Set();
 
@@ -946,7 +1064,7 @@ function normalizeWordGuessList(rawWords, length = 5) {
     const rawWord = typeof item === "string" ? item : item?.word;
     const word = normalizeWordGuessWord(rawWord || "");
 
-    if (!isValidWordGuessWord(word, length) || seenWords.has(word)) {
+    if (!isValidWordGuessWord(word, length, allowRepeats) || seenWords.has(word)) {
       return;
     }
 
@@ -961,14 +1079,14 @@ function normalizeWordGuessWord(word) {
   return String(word).trim().toLocaleLowerCase("uk-UA");
 }
 
-function isValidWordGuessWord(word, length = 5) {
+function isValidWordGuessWord(word, length = 5, allowRepeats = false) {
   const letters = Array.from(word);
   return letters.length === length
     && letters.every((letter) => WORD_GUESS_LETTERS.includes(letter))
-    && new Set(letters).size === letters.length;
+    && (allowRepeats || new Set(letters).size === letters.length);
 }
 
-function getWordGuessValidationMessage(word, length = 5) {
+function getWordGuessValidationMessage(word, length = 5, allowRepeats = false) {
   const letters = Array.from(word);
 
   if (letters.length !== length) {
@@ -979,7 +1097,7 @@ function getWordGuessValidationMessage(word, length = 5) {
     return "Тільки українські літери";
   }
 
-  if (new Set(letters).size !== letters.length) {
+  if (!allowRepeats && new Set(letters).size !== letters.length) {
     return "Без повторення літер";
   }
 
@@ -987,11 +1105,15 @@ function getWordGuessValidationMessage(word, length = 5) {
 }
 
 function getWordGuessLength() {
-  return wordGuessConfig?.wordLength || 5;
+  return wordGuessConfig?.wordLength || selectedWordGuessLength || 5;
 }
 
 function getWordGuessAttempts() {
-  return wordGuessConfig?.attempts || 5;
+  return wordGuessConfig?.attempts || selectedWordGuessAttempts || 5;
+}
+
+function getWordGuessAllowsRepeats() {
+  return Boolean(wordGuessConfig?.allowRepeats ?? selectedWordGuessAllowRepeats);
 }
 
 function getWordGuessDictionaryStatsLabel() {
@@ -1635,7 +1757,7 @@ function showWordGuessRules() {
   openWordGuessInfoModal({
     eyebrow: "Правила",
     title: "Як грати",
-    text: `Введи українське слово з ${getWordGuessLength()} різних літер. Зелена літера стоїть на правильному місці, жовта є у слові, але в іншій позиції, рожева — відсутня. Є ${getWordGuessAttempts()} зарахованих спроб. Підказки мають три рівні: базова підказка, одна правильна літера, потім усі літери загаданого слова на клавіатурі.`,
+    text: `Введи українське слово з ${getWordGuessLength()} ${getLetterWord(getWordGuessLength())}${getWordGuessAllowsRepeats() ? ", літери можуть повторюватися" : " без повторення літер"}. Зелена літера стоїть на правильному місці, жовта є у слові, але в іншій позиції, рожева — відсутня. Є ${getWordGuessAttempts()} зарахованих спроб. Підказки мають три рівні: базова підказка, одна правильна літера, потім усі літери загаданого слова на клавіатурі.`,
     type: "rules",
   });
 }
@@ -2057,6 +2179,24 @@ function setupEvents() {
   wordGuessModeButtons.forEach((button) => {
     button.addEventListener("click", () => {
       selectWordGuessMode(button.dataset.wordGuessMode);
+    });
+  });
+
+  wordGuessLengthButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectWordGuessLength(button.dataset.wordGuessLength);
+    });
+  });
+
+  wordGuessAttemptButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectWordGuessAttempts(button.dataset.wordGuessAttempts);
+    });
+  });
+
+  wordGuessRepeatButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectWordGuessRepeats(button.dataset.wordGuessRepeats);
     });
   });
 

@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.4.30" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.4.31" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.4.30" />
+  <link rel="stylesheet" href="styles.css?v=0.4.31" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -48,7 +48,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.4.30</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.4.31</p>
     </div>
   </div>
   <main class="app">
@@ -80,7 +80,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.4.30</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.4.31</p>
         </div>
       </div>
     </section>
@@ -215,17 +215,32 @@
           <h1 class="mode-title">Вгадай слово</h1>
           <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
 
-          <div class="word-guess-summary word-guess-mode-picker" aria-label="Вибір довжини слова">
-            <button class="setting-chip word-guess-mode-btn is-active" type="button" data-word-guess-mode="5" aria-pressed="true">
-              <strong>5</strong> літер · 5 спроб
-            </button>
-            <button class="setting-chip word-guess-mode-btn" type="button" data-word-guess-mode="6" aria-pressed="false">
-              <strong>6</strong> літер · 6 спроб
-            </button>
-            <button class="setting-chip word-guess-mode-btn" type="button" data-word-guess-mode="7" aria-pressed="false">
-              <strong>7</strong> літер · 7 спроб
-            </button>
-            <span class="word-guess-mode-note">Без повторення літер</span>
+          <div class="word-guess-summary word-guess-mode-picker" aria-label="Налаштування режиму Вгадай слово">
+            <details class="word-guess-select">
+              <summary id="wordGuessLengthSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> літер</summary>
+              <div class="word-guess-select-menu" role="group" aria-label="Довжина слова">
+                <button class="word-guess-select-option is-active" type="button" data-word-guess-length="5" aria-pressed="true">5 літер</button>
+                <button class="word-guess-select-option" type="button" data-word-guess-length="6" aria-pressed="false">6 літер</button>
+                <button class="word-guess-select-option" type="button" data-word-guess-length="7" aria-pressed="false">7 літер</button>
+              </div>
+            </details>
+
+            <details class="word-guess-select">
+              <summary id="wordGuessAttemptsSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> спроб</summary>
+              <div class="word-guess-select-menu" role="group" aria-label="Кількість спроб">
+                <button class="word-guess-select-option is-active" type="button" data-word-guess-attempts="5" aria-pressed="true">5 спроб</button>
+                <button class="word-guess-select-option" type="button" data-word-guess-attempts="6" aria-pressed="false">6 спроб</button>
+                <button class="word-guess-select-option" type="button" data-word-guess-attempts="7" aria-pressed="false">7 спроб</button>
+              </div>
+            </details>
+
+            <details class="word-guess-select word-guess-repeat-select">
+              <summary id="wordGuessRepeatsSummary" class="setting-chip word-guess-select-summary">Без повторення літер</summary>
+              <div class="word-guess-select-menu" role="group" aria-label="Повтори літер">
+                <button class="word-guess-select-option is-active" type="button" data-word-guess-repeats="false" aria-pressed="true">Без повторення літер</button>
+                <button class="word-guess-select-option" type="button" data-word-guess-repeats="true" aria-pressed="false">З повторами літер</button>
+              </div>
+            </details>
           </div>
 
           <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
@@ -491,6 +506,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.30"></script>
+  <script src="app.js?v=0.4.31"></script>
 </body>
 </html>
