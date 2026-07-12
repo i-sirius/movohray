@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.36";
+const DATA_VERSION = "0.4.37";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -17,6 +17,10 @@ const UPDATE_COMPLETED_STORAGE_KEY = "movohray-update-completed-version";
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
 const HAPTIC_STORAGE_KEY = "movohray-haptic";
+const LEGACY_IOS_MATCH = /OS (?:9|10|11|12)_/i.test(navigator.userAgent || "");
+if (LEGACY_IOS_MATCH) {
+  document.documentElement.classList.add("legacy-ios");
+}
 const GAME_SOUND_MASTER_VOLUME = 0.16;
 const GAME_SOUND_PATTERNS = {
   correct: [
@@ -421,7 +425,7 @@ init();
 
 function updateStandaloneModeClass() {
   const isStandalone = Boolean(
-    window.matchMedia?.("(display-mode: standalone)")?.matches
+    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
     || window.navigator.standalone
   );
 
@@ -487,7 +491,7 @@ async function fetchRemoteVersion() {
     }
 
     const data = await response.json();
-    return normalizeVersionLabel(data?.version || "");
+    return normalizeVersionLabel((data && data.version) || "");
   } catch (error) {
     console.warn("Не вдалося перевірити версію гри", error);
     return "";
@@ -614,7 +618,7 @@ function showRequiredUpdateOverlay(remoteVersion) {
 }
 
 async function forceRequiredUpdate(button, remoteVersion = "") {
-  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion || button?.dataset?.remoteVersion || "");
+  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion || (button && button.dataset ? button.dataset.remoteVersion : "") || "");
 
   if (button) {
     button.disabled = true;
@@ -1051,9 +1055,9 @@ function getSelectedWordGuessDictionaryKey() {
 }
 
 function getWordGuessModeData(data, modeKey = getSelectedWordGuessDictionaryKey()) {
-  const modes = data?.modes && typeof data.modes === "object" ? data.modes : null;
-  const normalizedModeKey = String(modeKey || data?.defaultMode || WORD_GUESS_DEFAULT_MODE);
-  const fallbackLength = String(selectedWordGuessLength || data?.defaultMode || WORD_GUESS_DEFAULT_MODE);
+  const modes = (data && data.modes) && typeof data.modes === "object" ? data.modes : null;
+  const normalizedModeKey = String(modeKey || (data && data.defaultMode) || WORD_GUESS_DEFAULT_MODE);
+  const fallbackLength = String(selectedWordGuessLength || (data && data.defaultMode) || WORD_GUESS_DEFAULT_MODE);
 
   if (modes && modes[normalizedModeKey]) {
     return modes[normalizedModeKey];
@@ -1063,7 +1067,7 @@ function getWordGuessModeData(data, modeKey = getSelectedWordGuessDictionaryKey(
     return modes[fallbackLength];
   }
 
-  if (modes && data?.defaultMode && modes[String(data.defaultMode)]) {
+  if (modes && (data && data.defaultMode) && modes[String(data.defaultMode)]) {
     return modes[String(data.defaultMode)];
   }
 
@@ -1232,7 +1236,7 @@ function normalizeWordGuessList(rawWords, length = 5, allowRepeats = false) {
   const seenWords = new Set();
 
   rawWords.forEach((item) => {
-    const rawWord = typeof item === "string" ? item : item?.word;
+    const rawWord = typeof item === "string" ? item : (item && item.word);
     const word = normalizeWordGuessWord(rawWord || "");
 
     if (!isValidWordGuessWord(word, length, allowRepeats) || seenWords.has(word)) {
@@ -1276,15 +1280,15 @@ function getWordGuessValidationMessage(word, length = 5, allowRepeats = false) {
 }
 
 function getWordGuessLength() {
-  return wordGuessConfig?.wordLength || selectedWordGuessLength || 5;
+  return (wordGuessConfig && wordGuessConfig.wordLength) || selectedWordGuessLength || 5;
 }
 
 function getWordGuessAttempts() {
-  return wordGuessConfig?.attempts || selectedWordGuessAttempts || 5;
+  return (wordGuessConfig && wordGuessConfig.attempts) || selectedWordGuessAttempts || 5;
 }
 
 function getWordGuessAllowsRepeats() {
-  return Boolean(wordGuessConfig?.allowRepeats ?? selectedWordGuessAllowRepeats);
+  return Boolean((wordGuessConfig && typeof wordGuessConfig.allowRepeats !== "undefined" ? wordGuessConfig.allowRepeats : selectedWordGuessAllowRepeats));
 }
 
 function getWordGuessDictionaryStatsLabel() {
@@ -1452,7 +1456,7 @@ function fitWordGuessBoardToViewport() {
 
   const wordLength = getWordGuessLength();
   const attempts = getWordGuessAttempts();
-  const viewportHeight = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = (window.visualViewport ? window.visualViewport.height : 0) || window.innerHeight || document.documentElement.clientHeight;
   const boardRect = wordGuessBoard.getBoundingClientRect();
   const keyboardRect = wordGuessKeyboard.getBoundingClientRect();
   const boardStyle = window.getComputedStyle(wordGuessBoard);
@@ -1798,7 +1802,7 @@ function getWordGuessBasicHintMessage() {
     return "Підказка з’явиться після старту гри.";
   }
 
-  const firstLetter = Array.from(wordGuessTarget)[0]?.toLocaleUpperCase("uk-UA") || "";
+  const firstLetter = (Array.from(wordGuessTarget)[0] ? Array.from(wordGuessTarget)[0].toLocaleUpperCase("uk-UA") : "") || "";
   const vowelCount = getWordGuessVowelCount(wordGuessTarget);
   const vowelLabel = vowelCount === 1 ? "голосна" : vowelCount >= 2 && vowelCount <= 4 ? "голосні" : "голосних";
 
@@ -1817,7 +1821,7 @@ function getWordGuessSecondHintLetter() {
 
   wordGuessGuesses.forEach((guess) => {
     Array.from(guess.word || "").forEach((letter, index) => {
-      const status = guess.statuses?.[index];
+      const status = (guess.statuses ? guess.statuses[index] : undefined);
       if (status === "correct" || status === "present") {
         discoveredLetters.add(letter);
       }
@@ -2591,8 +2595,8 @@ function setupEvents() {
 
   document.addEventListener("click", (event) => {
     if (isWordGuessHistoryOpen
-      && !wordGuessHistoryBtn?.contains(event.target)
-      && !wordGuessHistoryPanel?.contains(event.target)) {
+      && !(wordGuessHistoryBtn && wordGuessHistoryBtn.contains(event.target))
+      && !(wordGuessHistoryPanel && wordGuessHistoryPanel.contains(event.target))) {
       closeWordGuessHistory();
     }
 
@@ -2600,7 +2604,7 @@ function setupEvents() {
       return;
     }
 
-    if (gameCategoryName?.contains(event.target) || gameThemesPopover?.contains(event.target)) {
+    if ((gameCategoryName && gameCategoryName.contains(event.target)) || (gameThemesPopover && gameThemesPopover.contains(event.target))) {
       return;
     }
 
@@ -2866,9 +2870,9 @@ function renderModes() {
     button.className = `mode-card mode-card-${mode.id} mode-card-active`;
 
     const modeIcons = {
-      explain: "💬",
-      charades: "🎭",
-      wordguess: "🔤",
+      explain: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path class="mode-icon-main" d="M10 13h34a10 10 0 0 1 10 10v13a10 10 0 0 1-10 10H29L17 55l3-9H10A10 10 0 0 1 0 36V23a10 10 0 0 1 10-10Z"/><circle class="mode-icon-dot" cx="16" cy="30" r="3"/><circle class="mode-icon-dot" cx="27" cy="30" r="3"/><circle class="mode-icon-dot" cx="38" cy="30" r="3"/></svg>`,
+      charades: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path class="mode-icon-main" d="M11 12c8 0 14 3 18 8v27c-4 5-10 8-18 8-6 0-9-4-9-10V22c0-6 3-10 9-10Zm42 0c6 0 9 4 9 10v23c0 6-3 10-9 10-8 0-14-3-18-8V20c4-5 10-8 18-8Z"/><circle class="mode-icon-eye" cx="14" cy="28" r="3"/><circle class="mode-icon-eye" cx="50" cy="28" r="3"/><path class="mode-icon-line" d="M11 41c4 3 8 3 12 0M41 42c4-4 8-4 12 0"/></svg>`,
+      wordguess: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect class="mode-icon-tile mode-icon-tile-a" x="4" y="8" width="17" height="17" rx="5"/><rect class="mode-icon-tile mode-icon-tile-b" x="24" y="8" width="17" height="17" rx="5"/><rect class="mode-icon-tile mode-icon-tile-c" x="44" y="8" width="17" height="17" rx="5"/><rect class="mode-icon-tile mode-icon-tile-c" x="4" y="29" width="17" height="17" rx="5"/><rect class="mode-icon-tile mode-icon-tile-a" x="24" y="29" width="17" height="17" rx="5"/><rect class="mode-icon-tile mode-icon-tile-b" x="44" y="29" width="17" height="17" rx="5"/><path class="mode-icon-letter" d="M9 19h7M27 20l4-8 4 8M49 13h7M49 19h7M9 34h7v7H9zM28 35h9M32.5 31v14M48 34l9 9M57 34l-9 9"/></svg>`,
     };
 
     button.innerHTML = `
@@ -4638,8 +4642,8 @@ function showScreen(screenName) {
 
   menuScreen.classList.remove("active");
   settingsScreen.classList.remove("active");
-  wordGuessSettingsScreen?.classList.remove("active");
-  wordGuessGameScreen?.classList.remove("active");
+  wordGuessSettingsScreen && wordGuessSettingsScreen.classList.remove("active");
+  wordGuessGameScreen && wordGuessGameScreen.classList.remove("active");
   teamReadyScreen.classList.remove("active");
   gameScreen.classList.remove("active");
   roundReviewScreen.classList.remove("active");
@@ -4656,11 +4660,11 @@ function showScreen(screenName) {
   }
 
   if (screenName === "wordGuessSettings") {
-    wordGuessSettingsScreen?.classList.add("active");
+    wordGuessSettingsScreen && wordGuessSettingsScreen.classList.add("active");
   }
 
   if (screenName === "wordGuessGame") {
-    wordGuessGameScreen?.classList.add("active");
+    wordGuessGameScreen && wordGuessGameScreen.classList.add("active");
     scheduleWordGuessViewportFit();
   }
 
