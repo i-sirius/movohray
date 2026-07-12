@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.37";
+const DATA_VERSION = "0.4.38";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -240,6 +240,12 @@ const modeConfigs = [
     available: true,
   },
   {
+    id: "svitlohray",
+    title: "Світлограй",
+    description: "Світлова гра на реакцію без слів.",
+    available: false,
+  },
+  {
     id: "whoami",
     title: "Хто я?",
     description: "Відгадувати персонажа за питаннями.",
@@ -413,6 +419,7 @@ const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
 const wordGuessResultText = document.getElementById("wordGuessResultText");
 const wordGuessNewBtn = document.getElementById("wordGuessNewBtn");
 const wordGuessMenuBtn = document.getElementById("wordGuessMenuBtn");
+const wordGuessShareBtn = document.getElementById("wordGuessShareBtn");
 const wordGuessDictionaryLinks = document.getElementById("wordGuessDictionaryLinks");
 const wordGuessResultDebug = document.getElementById("wordGuessResultDebug");
 const wordGuessFeedback = document.getElementById("wordGuessFeedback");
@@ -1407,9 +1414,9 @@ function renderWordGuessKeyboard() {
 
   wordGuessKeyboard.innerHTML = "";
 
-  WORD_GUESS_KEYBOARD_ROWS.forEach((letters) => {
+  WORD_GUESS_KEYBOARD_ROWS.forEach((letters, rowIndex) => {
     const row = document.createElement("div");
-    row.className = "word-guess-key-row word-guess-letter-row";
+    row.className = `word-guess-key-row word-guess-letter-row word-guess-key-row-${rowIndex + 1}`;
 
     letters.forEach((letter) => {
       row.appendChild(createWordGuessKey(letter, letter.toLocaleUpperCase("uk-UA")));
@@ -1669,6 +1676,81 @@ function updateWordGuessKeyboardStatuses(guess, statuses) {
   });
 }
 
+function getWordGuessHintResultLabel() {
+  if (!wordGuessHintLevel) {
+    return "Підказки не використовувались";
+  }
+
+  const usedHints = [];
+  for (let level = 1; level <= wordGuessHintLevel; level++) {
+    usedHints.push(String(level));
+  }
+
+  return `Використано підказки: ${usedHints.join(", ")}`;
+}
+
+function getWordGuessShareGrid() {
+  return wordGuessAttemptLog
+    .filter((attempt) => attempt.status !== "invalid")
+    .map((attempt) => {
+      const statuses = Array.isArray(attempt.statuses) ? attempt.statuses : [];
+      return statuses.map((status) => {
+        if (status === "correct") return "🟩";
+        if (status === "present") return "🟨";
+        return "🟥";
+      }).join("");
+    })
+    .join("\n");
+}
+
+function buildWordGuessShareText() {
+  const isWon = wordGuessGuesses.some((guess) => guess.word === wordGuessTarget || guess === wordGuessTarget);
+  const wordLength = getWordGuessLength();
+  const attemptsLimit = getWordGuessAttempts();
+  const validAttempts = wordGuessGuesses.length;
+  const resultLabel = isWon ? `${validAttempts}/${attemptsLimit}` : `—/${attemptsLimit}`;
+  const repeatLabel = getWordGuessAllowsRepeats() ? "з повторами" : "без повторів";
+  const grid = getWordGuessShareGrid();
+
+  return [
+    "Мовограй · Вгадай слово",
+    `${wordLength} літер · ${resultLabel} · ${repeatLabel}`,
+    getWordGuessHintResultLabel(),
+    grid,
+    window.location.origin + window.location.pathname,
+  ].filter(Boolean).join("\n");
+}
+
+async function shareWordGuessResult() {
+  const shareText = buildWordGuessShareText();
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: "Мовограй — Вгадай слово", text: shareText });
+      return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(shareText);
+      setWordGuessMessage("Результат скопійовано");
+      return;
+    }
+    const fallback = document.createElement("textarea");
+    fallback.value = shareText;
+    fallback.setAttribute("readonly", "");
+    fallback.style.position = "fixed";
+    fallback.style.opacity = "0";
+    document.body.appendChild(fallback);
+    fallback.select();
+    document.execCommand("copy");
+    fallback.remove();
+    setWordGuessMessage("Результат скопійовано");
+  } catch (error) {
+    if (!(error && error.name === "AbortError")) {
+      console.warn("Не вдалося розшарити результат", error);
+      setWordGuessMessage("Не вдалося розшарити результат");
+    }
+  }
+}
+
 function finishWordGuessGame(isWon) {
   wordGuessFinished = true;
   isWordGuessHistoryOpen = false;
@@ -1697,9 +1779,14 @@ function finishWordGuessGame(isWon) {
     summary.className = "word-guess-result-summary";
     summary.textContent = `Зараховано ${validAttempts} ${getAttemptWord(validAttempts)} · перевірено всього: ${totalAttempts}${invalidAttempts > 0 ? ` · не в залік: ${invalidAttempts}` : ""}`;
 
+    const hintSummary = document.createElement("span");
+    hintSummary.className = `word-guess-result-hints is-level-${wordGuessHintLevel}`;
+    hintSummary.textContent = getWordGuessHintResultLabel();
+
     wordGuessResultText.appendChild(targetCaption);
     wordGuessResultText.appendChild(targetWord);
     wordGuessResultText.appendChild(summary);
+    wordGuessResultText.appendChild(hintSummary);
   }
 
   if (wordGuessResultDebug) {
@@ -2506,6 +2593,10 @@ function setupEvents() {
 
   if (wordGuessFeedbackExportBtn) {
     wordGuessFeedbackExportBtn.addEventListener("click", copyWordGuessFeedback);
+  }
+
+  if (wordGuessShareBtn) {
+    wordGuessShareBtn.addEventListener("click", shareWordGuessResult);
   }
 
   if (wordGuessNewBtn) {
