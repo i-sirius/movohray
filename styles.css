@@ -9307,7 +9307,7 @@ body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-board {
   }
 }
 
-/* 0.4.38 — iOS 12 compatibility and transparent game emblems */
+/* 0.4.39 — iOS 12 compatibility and transparent game emblems */
 .mode-card-icon {
   width: 58px;
   height: 58px;
@@ -9462,7 +9462,7 @@ html.legacy-ios .upcoming-modes {
 }
 
 
-/* 0.4.38 — iPhone-like keyboard, compact result sharing and noun-only dictionaries */
+/* 0.4.39 — iPhone-like keyboard, compact result sharing and noun-only dictionaries */
 .word-guess-keyboard {
   gap: 7px;
   padding: 8px 7px 7px;
@@ -9521,4 +9521,118 @@ body[data-theme="dark"] .word-guess-result-actions .word-guess-share-btn { color
   .word-guess-key { min-height:44px; padding-inline:2px; }
   .word-guess-key-row-2 { padding-inline:2.5%; }
   .word-guess-key-row-3 { padding-inline:6%; }
+}
+
+
+/* 0.4.39 — clearer transparent game emblems and compact share action */
+.mode-card-icon {
+  width: 68px;
+  height: 68px;
+  margin-bottom: 10px;
+}
+.mode-card-icon svg {
+  filter: drop-shadow(0 8px 12px rgba(30, 42, 80, .16));
+}
+.mode-card-explain .mode-icon-bubble {
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+}
+.mode-card-explain .mode-icon-bubble-back {
+  fill: rgba(108, 112, 205, .12);
+  stroke: #777dd1;
+}
+.mode-card-explain .mode-icon-bubble-front {
+  fill: rgba(84, 92, 181, .22);
+  stroke: #5962b1;
+}
+.mode-card-explain .mode-icon-lines {
+  fill: none;
+  stroke: #535ca9;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+.mode-card-charades .mode-icon-croc-body {
+  fill: rgba(66, 164, 112, .24);
+  stroke: #398d62;
+  stroke-width: 2.7;
+  stroke-linejoin: round;
+}
+.mode-card-charades .mode-icon-croc-jaw {
+  fill: rgba(113, 206, 151, .32);
+  stroke: #398d62;
+  stroke-width: 2.3;
+}
+.mode-card-charades .mode-icon-croc-eye { fill: #f6fff8; stroke: #2f7852; stroke-width: 1.5; }
+.mode-card-charades .mode-icon-croc-pupil { fill: #224d38; }
+.mode-card-charades .mode-icon-croc-teeth {
+  fill: none;
+  stroke: #f7fff9;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.mode-card-wordguess .mode-icon-grid-cell {
+  fill: rgba(255,255,255,.08);
+  stroke: rgba(64,74,105,.34);
+  stroke-width: 1.2;
+}
+.mode-card-wordguess .mode-icon-grid-cell.is-correct { fill: #56a97d; stroke: #418a64; }
+.mode-card-wordguess .mode-icon-grid-cell.is-present { fill: #dca84f; stroke: #ba8330; }
+.mode-card-wordguess .mode-icon-grid-cell.is-absent { fill: #c98698; stroke: #ac6578; }
+.mode-card-wordguess .mode-icon-grid-cell.is-empty { fill: rgba(247,247,250,.34); }
+body[data-theme="dark"] .mode-card-explain .mode-icon-bubble-back { fill: rgba(166,170,255,.12); stroke: #b5b8ff; }
+body[data-theme="dark"] .mode-card-explain .mode-icon-bubble-front { fill: rgba(145,151,255,.2); stroke: #d0d2ff; }
+body[data-theme="dark"] .mode-card-explain .mode-icon-lines { stroke: #edf0ff; }
+body[data-theme="dark"] .mode-card-charades .mode-icon-croc-body { fill: rgba(91,205,145,.22); stroke: #91e2b5; }
+body[data-theme="dark"] .mode-card-charades .mode-icon-croc-jaw { fill: rgba(126,232,171,.26); stroke: #91e2b5; }
+body[data-theme="dark"] .mode-card-charades .mode-icon-croc-eye { stroke: #63b989; }
+body[data-theme="dark"] .mode-card-wordguess .mode-icon-grid-cell.is-empty { fill: rgba(255,255,255,.04); stroke: rgba(214,222,244,.22); }
+
+.word-guess-result-word-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
+.word-guess-result-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.word-guess-share-compact {
+  position: absolute;
+  top: 32px;
+  right: 4px;
+  z-index: 2;
+  width: auto;
+  min-width: 0;
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border-color: rgba(74,151,158,.22);
+  background: rgba(91,176,180,.09);
+  color: #397d84;
+  font-size: .76rem;
+  font-weight: 800;
+  box-shadow: none;
+}
+.word-guess-share-compact span:first-child { font-size: .92rem; }
+.word-guess-share-compact:hover { transform: translateY(-1px); background: rgba(91,176,180,.15); }
+body[data-theme="dark"] .word-guess-share-compact {
+  color: #9ee0de;
+  border-color: rgba(117,217,217,.2);
+  background: rgba(72,175,181,.1);
+}
+.word-guess-result-actions { grid-template-columns: 1fr 1fr; }
+@media (max-width: 420px) {
+  .mode-card-icon { width: 60px; height: 60px; }
+  .word-guess-share-compact {
+    top: 31px;
+    right: 0;
+    padding: 7px 9px;
+  }
+  .word-guess-share-compact span:last-child { display: none; }
+  .word-guess-result-actions { grid-template-columns: 1fr; }
 }

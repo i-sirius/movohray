@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.4.38" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.4.39" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.4.38" />
+  <link rel="stylesheet" href="styles.css?v=0.4.39" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -55,7 +55,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.4.38</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.4.39</p>
     </div>
   </div>
   <main class="app">
@@ -87,7 +87,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.4.38</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.4.39</p>
         </div>
       </div>
     </section>
@@ -285,11 +285,13 @@
 
           <div id="wordGuessResult" class="word-guess-result" hidden>
             <h2 id="wordGuessResultTitle">Вгадано!</h2>
-            <p id="wordGuessResultText"></p>
+            <div class="word-guess-result-word-wrap">
+              <div id="wordGuessResultText" class="word-guess-result-text"></div>
+              <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn word-guess-share-compact" type="button" aria-label="Поділитися результатом"><span aria-hidden="true">↗</span><span>Поділитися</span></button>
+            </div>
             <div id="wordGuessResultAttempts" class="word-guess-result-attempts" aria-label="Перевірені спроби"></div>
             <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
             <div class="word-guess-result-actions">
-              <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn" type="button"><span aria-hidden="true">↗</span> Розшарити результат</button>
               <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
               <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
             </div>
@@ -504,6 +506,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.38"></script>
+  <script src="app.js?v=0.4.39"></script>
 </body>
 </html>
