@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.39";
+const DATA_VERSION = "0.4.40";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -2961,13 +2961,13 @@ function renderModes() {
     button.className = `mode-card mode-card-${mode.id} mode-card-active`;
 
     const modeIcons = {
-      explain: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path class="mode-icon-bubble mode-icon-bubble-back" d="M10 11h30a10 10 0 0 1 10 10v13a10 10 0 0 1-10 10H27l-11 9 3-9h-9A10 10 0 0 1 0 34V21A10 10 0 0 1 10 11Z"/><path class="mode-icon-bubble mode-icon-bubble-front" d="M27 24h27a9 9 0 0 1 9 9v11a9 9 0 0 1-9 9H44l-9 7 2-7H27a9 9 0 0 1-9-9V33a9 9 0 0 1 9-9Z"/><path class="mode-icon-lines" d="M9 23h24M9 31h18M29 36h24M29 44h17"/></svg>`,
-      charades: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path class="mode-icon-croc-body" d="M7 32c0-11 9-20 21-20h11c8 0 15 4 19 10l4 7-8-2 6 7-9-2 5 7-11-3c-4 8-12 14-22 14H12c-6 0-10-4-10-10 0-3 2-6 5-8Z"/><path class="mode-icon-croc-jaw" d="M8 33h39c-4 8-11 13-22 13H12c-5 0-8-3-8-7 0-3 1-5 4-6Z"/><circle class="mode-icon-croc-eye" cx="31" cy="24" r="3.5"/><circle class="mode-icon-croc-pupil" cx="32" cy="24" r="1.4"/><path class="mode-icon-croc-teeth" d="M15 33l3 5 3-5 3 5 3-5 3 5 3-5 3 5 3-5"/></svg>`,
-      wordguess: `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><g class="mode-icon-grid">${Array.from({ length: 25 }, (_, index) => { const x = 5 + (index % 5) * 11; const y = 5 + Math.floor(index / 5) * 11; const row = Math.floor(index / 5); const col = index % 5; const state = row === 0 ? ["correct","absent","present","absent","correct"][col] : row === 1 ? ["absent","correct","absent","present","absent"][col] : "empty"; return `<rect class="mode-icon-grid-cell is-${state}" x="${x}" y="${y}" width="9" height="9" rx="2"/>`; }).join("")}</g></svg>`,
+      explain: "assets/game-modes/alias.png",
+      charades: "assets/game-modes/charades.png",
+      wordguess: "assets/game-modes/wordguess.png",
     };
 
     button.innerHTML = `
-      <span class="mode-card-icon" aria-hidden="true">${modeIcons[mode.id] || "✨"}</span>
+      <span class="mode-card-icon" aria-hidden="true">${modeIcons[mode.id] ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async">` : "✨"}</span>
       <strong>${mode.title}</strong>
       <span class="mode-card-description">${mode.description}</span>
       <span class="mode-card-cta">Грати</span>
