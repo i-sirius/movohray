@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.1";
+const DATA_VERSION = "0.5.2";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -372,6 +372,7 @@ const settingsMessage = document.getElementById("settingsMessage");
 
 const settingsModeTitle = document.getElementById("settingsModeTitle");
 const settingsModeDescription = document.getElementById("settingsModeDescription");
+const settingsRulesBtn = document.getElementById("settingsRulesBtn");
 const gameModeTitle = document.getElementById("gameModeTitle");
 const gameTeamName = document.getElementById("gameTeamName");
 const gameCategoryName = document.getElementById("gameCategoryName");
@@ -448,6 +449,12 @@ const wordGuessInfoCloseBtn = document.getElementById("wordGuessInfoCloseBtn");
 const wordGuessInfoEyebrow = document.getElementById("wordGuessInfoEyebrow");
 const wordGuessInfoTitle = document.getElementById("wordGuessInfoTitle");
 const wordGuessInfoText = document.getElementById("wordGuessInfoText");
+const wordGuessSettingsRulesBtn = document.getElementById("wordGuessSettingsRulesBtn");
+const setupRulesModal = document.getElementById("setupRulesModal");
+const setupRulesCloseBtn = document.getElementById("setupRulesCloseBtn");
+const setupRulesEyebrow = document.getElementById("setupRulesEyebrow");
+const setupRulesTitle = document.getElementById("setupRulesTitle");
+const setupRulesText = document.getElementById("setupRulesText");
 const wordGuessHistoryBtn = document.getElementById("wordGuessHistoryBtn");
 const wordGuessHistoryPanel = document.getElementById("wordGuessHistoryPanel");
 const wordGuessResultHistory = document.getElementById("wordGuessResultHistory");
@@ -481,6 +488,7 @@ const whoAmICategoryList = document.getElementById("whoAmICategoryList");
 const whoAmIMaybeBtn = document.getElementById("whoAmIMaybeBtn");
 const whoAmIContinueMaybeBtn = document.getElementById("whoAmIContinueMaybeBtn");
 const whoAmISettingsMessage = document.getElementById("whoAmISettingsMessage");
+const whoAmISettingsRulesBtn = document.getElementById("whoAmISettingsRulesBtn");
 const whoAmIStartBtn = document.getElementById("whoAmIStartBtn");
 const whoAmIBackBtn = document.getElementById("whoAmIBackBtn");
 const whoAmIRevealStep = document.getElementById("whoAmIRevealStep");
@@ -2209,6 +2217,70 @@ function closeWordGuessInfoModal() {
   document.body.classList.remove("modal-open");
 }
 
+function getSetupRules(modeId) {
+  if (modeId === "charades") {
+    return {
+      eyebrow: "Покажи слово",
+      title: "Короткі правила",
+      text: "Гравець показує слово жестами без звуків і підказок літерами. Команда відгадує якомога більше завдань за раунд або грає по одному слову.",
+    };
+  }
+
+  if (modeId === "wordguess") {
+    return {
+      eyebrow: "Вгадай слово",
+      title: "Короткі правила",
+      text: "Введи слово потрібної довжини. Зелений означає правильну позицію, жовтий — літера є в слові, рожевий — літери немає. Є три підказки.",
+    };
+  }
+
+  if (modeId === "whoami") {
+    return {
+      eyebrow: "Хто я?",
+      title: "Короткі правила",
+      text: "Кожен має приховану роль. Сам гравець її не бачить, ставить питання, а інші відповідають “так”, “ні” або “можливо”. Після відгадування роль підтверджують інші.",
+    };
+  }
+
+  return {
+    eyebrow: "Поясни слово",
+    title: "Короткі правила",
+    text: "Пояснюй слово своїй команді, не називаючи його та спільнокореневі слова. За вгадані слова команда отримує очки.",
+  };
+}
+
+function openSetupRules(modeId) {
+  if (!setupRulesModal) {
+    return;
+  }
+
+  const rules = getSetupRules(modeId);
+  if (setupRulesEyebrow) {
+    setupRulesEyebrow.textContent = rules.eyebrow;
+  }
+  if (setupRulesTitle) {
+    setupRulesTitle.textContent = rules.title;
+  }
+  if (setupRulesText) {
+    setupRulesText.textContent = rules.text;
+  }
+
+  setupRulesModal.hidden = false;
+  document.body.classList.add("modal-open");
+  if (setupRulesCloseBtn) {
+    setupRulesCloseBtn.focus();
+  }
+}
+
+function closeSetupRules() {
+  if (!setupRulesModal || setupRulesModal.hidden) {
+    return;
+  }
+
+  setupRulesModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
 function getAttemptWord(count) {
   if (count === 1) {
     return "спробу";
@@ -2727,21 +2799,39 @@ function renderWhoAmICategories() {
 
   whoAmICategoryList.innerHTML = "";
 
+  const summaryCard = document.createElement("div");
+  summaryCard.className = "whoami-category-summary-card";
+
+  const summaryCopy = document.createElement("div");
+  summaryCopy.className = "whoami-category-summary-copy";
+  const summaryTitle = document.createElement("strong");
+  summaryTitle.textContent = getWhoAmICategorySummaryTitle();
+  const summaryText = document.createElement("span");
+  summaryText.textContent = getWhoAmICategoryStatus();
+  summaryCopy.appendChild(summaryTitle);
+  summaryCopy.appendChild(summaryText);
+
+  const details = document.createElement("details");
+  details.className = "whoami-category-details";
+  const detailsSummary = document.createElement("summary");
+  detailsSummary.className = "secondary-btn whoami-category-change";
+  detailsSummary.textContent = "Змінити категорії";
+  details.appendChild(detailsSummary);
+
   const controls = document.createElement("div");
-  controls.className = "category-picker-controls";
+  controls.className = "category-picker-controls whoami-category-controls";
 
   const allButton = document.createElement("button");
-  allButton.className = "category-btn all-categories-btn";
+  allButton.className = "secondary-btn whoami-category-mini-btn";
   allButton.type = "button";
   allButton.textContent = "Усі ролі";
-  allButton.classList.toggle("selected", whoAmISelectedCategoryNames.length === whoAmICategories.length);
   allButton.addEventListener("click", () => {
     whoAmISelectedCategoryNames = whoAmICategories.map((category) => category.name);
     renderWhoAmICategories();
   });
 
   const clearButton = document.createElement("button");
-  clearButton.className = "category-toggle-btn setting-chip";
+  clearButton.className = "secondary-btn whoami-category-mini-btn";
   clearButton.type = "button";
   clearButton.textContent = "Очистити";
   clearButton.addEventListener("click", () => {
@@ -2752,20 +2842,17 @@ function renderWhoAmICategories() {
   controls.appendChild(allButton);
   controls.appendChild(clearButton);
 
-  const summary = document.createElement("p");
-  summary.className = "category-status";
-  summary.textContent = getWhoAmICategoryStatus();
-
   const list = document.createElement("div");
   list.className = "category-list whoami-category-list";
 
   whoAmICategories.forEach((category) => {
     const button = document.createElement("button");
     const isSelected = whoAmISelectedCategoryNames.indexOf(category.name) >= 0;
-    button.className = "category-btn";
+    button.className = "whoami-category-option";
     button.type = "button";
-    button.textContent = `${category.name} (${getWhoAmICategoryCount(category)})`;
+    button.innerHTML = `<span>${category.name}</span><small>${getWhoAmICategoryCount(category)} ролей</small>`;
     button.classList.toggle("selected", isSelected);
+    button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     button.addEventListener("click", () => {
       if (isSelected) {
         whoAmISelectedCategoryNames = whoAmISelectedCategoryNames.filter((name) => name !== category.name);
@@ -2777,9 +2864,22 @@ function renderWhoAmICategories() {
     list.appendChild(button);
   });
 
-  whoAmICategoryList.appendChild(controls);
-  whoAmICategoryList.appendChild(summary);
-  whoAmICategoryList.appendChild(list);
+  details.appendChild(controls);
+  details.appendChild(list);
+  summaryCard.appendChild(summaryCopy);
+  summaryCard.appendChild(details);
+  whoAmICategoryList.appendChild(summaryCard);
+}
+
+function getWhoAmICategorySummaryTitle() {
+  const count = whoAmISelectedCategoryNames.length;
+  if (count === whoAmICategories.length) {
+    return "Усі ролі";
+  }
+  if (count === 0) {
+    return "Категорії не вибрано";
+  }
+  return `Вибрано ${count} категорій`;
 }
 
 function getWhoAmICategoryStatus() {
@@ -3160,6 +3260,8 @@ function updateWhoAmICurrentSpoiler(assignment, visible) {
   whoAmICurrentSpoilerBtn.dataset.whoamiRole = assignment.role;
   whoAmICurrentSpoilerBtn.dataset.whoamiCategory = assignment.category;
   whoAmICurrentSpoilerBtn.dataset.whoamiPlayer = assignment.player;
+  whoAmICurrentSpoilerBtn.setAttribute("aria-controls", "whoAmICurrentSpoilerValue");
+  whoAmICurrentSpoilerBtn.setAttribute("aria-label", `Роль ${assignment.player}. Натисніть або утримуйте, щоб нагадати роль`);
   whoAmICurrentSpoilerWarning.textContent = `Не показуйте екран гравцю ${assignment.player}`;
   whoAmICurrentSpoilerRole.textContent = assignment.role;
   whoAmICurrentSpoilerCategory.textContent = assignment.category;
@@ -3174,6 +3276,7 @@ function showWhoAmISpoiler(button) {
   whoAmIActiveSpoilerButton = button;
   button.classList.add("is-revealed");
   button.setAttribute("aria-pressed", "true");
+  button.setAttribute("aria-expanded", "true");
 
   const targetId = button.getAttribute("aria-controls");
   const target = targetId ? document.getElementById(targetId) : whoAmICurrentSpoilerValue;
@@ -3196,6 +3299,7 @@ function hideWhoAmISpoiler() {
     const target = targetId ? document.getElementById(targetId) : whoAmICurrentSpoilerValue;
     whoAmIActiveSpoilerButton.classList.remove("is-revealed");
     whoAmIActiveSpoilerButton.setAttribute("aria-pressed", "false");
+    whoAmIActiveSpoilerButton.setAttribute("aria-expanded", "false");
     if (target) {
       target.hidden = true;
       target.classList.remove("is-revealed");
@@ -3217,15 +3321,40 @@ function bindWhoAmISpoilerButton(button) {
 
   button.dataset.whoamiSpoilerBound = "true";
   button.setAttribute("aria-pressed", "false");
+  button.setAttribute("aria-expanded", "false");
 
+  let suppressClick = false;
+  let pressStartedAt = 0;
   const start = (event) => {
     if (event && event.cancelable) {
       event.preventDefault();
     }
+    pressStartedAt = Date.now();
     showWhoAmISpoiler(button);
   };
-  const end = () => {
+  const end = (event) => {
+    const pressDuration = pressStartedAt ? Date.now() - pressStartedAt : 0;
     hideWhoAmISpoiler();
+    if (event && (event.type === "touchend" || event.type === "touchcancel" || pressDuration > 260)) {
+      suppressClick = true;
+      window.setTimeout(() => {
+        suppressClick = false;
+      }, 350);
+    }
+    pressStartedAt = 0;
+  };
+  const revealForClick = () => {
+    if (suppressClick) {
+      return;
+    }
+    showWhoAmISpoiler(button);
+  };
+  const revealForKeyboard = (event) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    event.preventDefault();
+    showWhoAmISpoiler(button);
   };
 
   button.addEventListener("touchstart", start, { passive: false });
@@ -3235,6 +3364,8 @@ function bindWhoAmISpoilerButton(button) {
   button.addEventListener("mouseup", end);
   button.addEventListener("mouseleave", end);
   button.addEventListener("blur", end);
+  button.addEventListener("click", revealForClick);
+  button.addEventListener("keydown", revealForKeyboard);
 
   if (window.PointerEvent) {
     button.addEventListener("pointerdown", start);
@@ -3552,28 +3683,53 @@ function showWhoAmIFinal() {
   whoAmIFinalTitle.textContent = "Гру завершено";
   whoAmIFinalHero.innerHTML = "";
   whoAmIFinalBoard.innerHTML = "";
+  whoAmIFinalBoard.className = "whoami-final-board";
 
   if (isTimed && whoAmITeamCount > 0) {
     const highest = Math.max.apply(null, whoAmITeamScores);
     const winners = [];
-    whoAmITeamScores.forEach((scoreValue, index) => {
-      if (scoreValue === highest) {
-        winners.push(getWhoAmITeamName(index));
+    const teamRows = whoAmITeamScores.map((scoreValue, index) => ({
+      name: getWhoAmITeamName(index),
+      score: scoreValue,
+    })).sort((a, b) => b.score - a.score);
+
+    teamRows.forEach((team, index) => {
+      if (team.score === highest) {
+        winners.push(team.name);
       }
       const row = document.createElement("div");
-      row.className = "whoami-role-row";
-      row.innerHTML = `<strong>${getWhoAmITeamName(index)}</strong><span>${scoreValue} очок</span>`;
+      row.className = `whoami-final-row ${index < 3 ? "is-podium" : ""} is-rank-${index + 1}`;
+      row.innerHTML = `
+        <span class="whoami-final-place">${index + 1}</span>
+        <div>
+          <strong>${team.name}</strong>
+          <small>${team.score} очок</small>
+        </div>
+      `;
       whoAmIFinalBoard.appendChild(row);
     });
     whoAmIFinalSubtitle.textContent = winners.length > 1 ? `Нічия: ${winners.join(", ")}` : `Перемогла ${winners[0]}`;
-    whoAmIFinalHero.textContent = winners.length > 1 ? "Нічия" : "Перемога";
+    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${winners.length > 1 ? "Нічия" : "Перемога"}</strong><span aria-hidden="true">✦</span>`;
     playGameCompleteSound(winners.length > 1 ? "tie" : "win");
   } else if (isTimed) {
     const guessed = whoAmITimedRoles.filter((item) => item.status === "guessed").length;
     whoAmIFinalSubtitle.textContent = `Вгадано ролей: ${guessed}`;
-    whoAmIFinalHero.textContent = `${guessed}`;
+    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${guessed}</strong><span>ролей</span>`;
+    whoAmITimedRoles.forEach((item, index) => {
+      const row = document.createElement("div");
+      row.className = "whoami-final-row";
+      row.innerHTML = `
+        <span class="whoami-final-place">${index + 1}</span>
+        <div>
+          <strong>${item.role}</strong>
+          <small>${item.category} · ${item.status === "guessed" ? "вгадано" : "пропущено"}</small>
+        </div>
+      `;
+      whoAmIFinalBoard.appendChild(row);
+    });
     playGameCompleteSound("win");
   } else {
+    const allGuessed = whoAmIAssignments.length > 0 && whoAmIAssignments.every((assignment) => assignment.guessed);
     const ordered = whoAmIAssignments.slice().sort((a, b) => {
       if (a.guessed && !b.guessed) {
         return -1;
@@ -3581,16 +3737,30 @@ function showWhoAmIFinal() {
       if (!a.guessed && b.guessed) {
         return 1;
       }
-      return (a.guessedRound || 999) - (b.guessedRound || 999);
+      if ((a.guessedRound || 999) !== (b.guessedRound || 999)) {
+        return (a.guessedRound || 999) - (b.guessedRound || 999);
+      }
+      return (a.turns || 0) - (b.turns || 0);
     });
+
+    whoAmIFinalTitle.textContent = allGuessed ? "Усі ролі відгадано" : "Гру завершено";
+    whoAmIFinalSubtitle.textContent = allGuessed ? "Усі учасники відкрили свої ролі." : "Підсумок ролей і ходів.";
+    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${allGuessed ? "Фініш" : "Підсумок"}</strong><span aria-hidden="true">✦</span>`;
+
     ordered.forEach((assignment, index) => {
       const row = document.createElement("div");
-      row.className = "whoami-role-row";
-      row.innerHTML = `<strong>${index + 1}. ${assignment.player}</strong><span>${assignment.role} · ${assignment.category}</span>`;
+      const isPodium = !allGuessed && assignment.guessed && index < 3;
+      row.className = `whoami-final-row ${isPodium ? "is-podium" : ""} is-rank-${index + 1}`;
+      row.innerHTML = `
+        <span class="whoami-final-place">${allGuessed ? "✓" : index + 1}</span>
+        <div>
+          <strong>${assignment.player}</strong>
+          <small>${assignment.role} · ${assignment.category}</small>
+          <em>${assignment.guessed ? `відгадав у колі ${assignment.guessedRound || whoAmIRound}` : assignment.skipped ? "вибув" : "роль не відгадано"}</em>
+        </div>
+      `;
       whoAmIFinalBoard.appendChild(row);
     });
-    whoAmIFinalSubtitle.textContent = "Усі ролі відкрито.";
-    whoAmIFinalHero.textContent = "Фінал";
     playGameCompleteSound("win");
   }
 
@@ -3779,6 +3949,36 @@ function setupEvents() {
 
   if (wordGuessRulesBtn) {
     wordGuessRulesBtn.addEventListener("click", showWordGuessRules);
+  }
+
+  if (settingsRulesBtn) {
+    settingsRulesBtn.addEventListener("click", () => {
+      openSetupRules(selectedMode);
+    });
+  }
+
+  if (wordGuessSettingsRulesBtn) {
+    wordGuessSettingsRulesBtn.addEventListener("click", () => {
+      openSetupRules("wordguess");
+    });
+  }
+
+  if (whoAmISettingsRulesBtn) {
+    whoAmISettingsRulesBtn.addEventListener("click", () => {
+      openSetupRules("whoami");
+    });
+  }
+
+  if (setupRulesCloseBtn) {
+    setupRulesCloseBtn.addEventListener("click", closeSetupRules);
+  }
+
+  if (setupRulesModal) {
+    setupRulesModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-setup-rules-close]")) {
+        closeSetupRules();
+      }
+    });
   }
 
   if (wordGuessInfoCloseBtn) {
@@ -4061,6 +4261,10 @@ function setupEvents() {
 
     if (event.key === "Escape" && wordGuessInfoModal && !wordGuessInfoModal.hidden) {
       closeWordGuessInfoModal();
+    }
+
+    if (event.key === "Escape" && setupRulesModal && !setupRulesModal.hidden) {
+      closeSetupRules();
     }
 
     if (event.key === "Escape" && appSettingsModal && !appSettingsModal.hidden) {
