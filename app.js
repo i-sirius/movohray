@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.0";
+const DATA_VERSION = "0.5.1";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -213,7 +213,7 @@ let whoAmIData = null;
 let whoAmICategories = [];
 let whoAmISelectedCategoryNames = [];
 let whoAmISelectedDifficulties = ["easy", "medium"];
-let whoAmIShowMode = "pass";
+let whoAmIShowMode = "host";
 let whoAmIPartyMode = "turns";
 let whoAmIPlayerCount = WHOAMI_DEFAULT_PLAYER_COUNT;
 let whoAmIPlayers = [];
@@ -236,6 +236,10 @@ let whoAmITimeLeft = 60;
 let whoAmITimedRoles = [];
 let whoAmITimedTeamIndex = 0;
 let whoAmIResultMode = "continue";
+let whoAmIFlowStage = "";
+let whoAmISpoilerTimeoutId = null;
+let whoAmIActiveSpoilerButton = null;
+let whoAmIPendingGuessAssignment = null;
 
 let pointerStartY = 0;
 let isSwipeLocked = false;
@@ -501,9 +505,16 @@ const whoAmINoBtn = document.getElementById("whoAmINoBtn");
 const whoAmIMaybeAnswerBtn = document.getElementById("whoAmIMaybeAnswerBtn");
 const whoAmIGuessedBtn = document.getElementById("whoAmIGuessedBtn");
 const whoAmISkipRoleBtn = document.getElementById("whoAmISkipRoleBtn");
+const whoAmIParticipantsBtn = document.getElementById("whoAmIParticipantsBtn");
 const whoAmIRulesBtn = document.getElementById("whoAmIRulesBtn");
 const whoAmIEndRoundBtn = document.getElementById("whoAmIEndRoundBtn");
 const whoAmIGameMenuBtn = document.getElementById("whoAmIGameMenuBtn");
+const whoAmICurrentSpoiler = document.getElementById("whoAmICurrentSpoiler");
+const whoAmICurrentSpoilerBtn = document.getElementById("whoAmICurrentSpoilerBtn");
+const whoAmICurrentSpoilerValue = document.getElementById("whoAmICurrentSpoilerValue");
+const whoAmICurrentSpoilerWarning = document.getElementById("whoAmICurrentSpoilerWarning");
+const whoAmICurrentSpoilerRole = document.getElementById("whoAmICurrentSpoilerRole");
+const whoAmICurrentSpoilerCategory = document.getElementById("whoAmICurrentSpoilerCategory");
 const whoAmIRoundTitle = document.getElementById("whoAmIRoundTitle");
 const whoAmIRoundSummary = document.getElementById("whoAmIRoundSummary");
 const whoAmIRoundRoles = document.getElementById("whoAmIRoundRoles");
@@ -518,6 +529,13 @@ const whoAmINewBtn = document.getElementById("whoAmINewBtn");
 const whoAmIFinalMenuBtn = document.getElementById("whoAmIFinalMenuBtn");
 const whoAmIRulesModal = document.getElementById("whoAmIRulesModal");
 const whoAmIRulesCloseBtn = document.getElementById("whoAmIRulesCloseBtn");
+const whoAmIParticipantsModal = document.getElementById("whoAmIParticipantsModal");
+const whoAmIParticipantsCloseBtn = document.getElementById("whoAmIParticipantsCloseBtn");
+const whoAmIParticipantsList = document.getElementById("whoAmIParticipantsList");
+const whoAmIConfirmModal = document.getElementById("whoAmIConfirmModal");
+const whoAmIConfirmText = document.getElementById("whoAmIConfirmText");
+const whoAmIConfirmYesBtn = document.getElementById("whoAmIConfirmYesBtn");
+const whoAmIConfirmNoBtn = document.getElementById("whoAmIConfirmNoBtn");
 
 init();
 
@@ -2928,7 +2946,7 @@ function startWhoAmITurnsGame() {
   whoAmIRoleVisible = false;
   whoAmICurrentIndex = 0;
   if (whoAmIShowMode === "forehead") {
-    beginWhoAmITurn();
+    showWhoAmITurnIntro();
     return;
   }
   showWhoAmIReveal();
@@ -2966,30 +2984,36 @@ function startWhoAmITimedRound() {
   whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
   whoAmITimeLeft = whoAmIDuration;
   whoAmICurrentIndex = 0;
-  beginWhoAmITurn();
+  startWhoAmIActiveTurn();
   startWhoAmITimer();
 }
 
 function showWhoAmIReveal() {
   const assignment = whoAmIAssignments[whoAmIRevealIndex];
   if (!assignment) {
-    beginWhoAmITurn();
+    showWhoAmITurnIntro();
     return;
   }
 
+  whoAmIFlowStage = "deal";
   whoAmIRoleVisible = false;
   whoAmIRevealRoleBox.hidden = true;
   whoAmIRevealStep.textContent = `Роль ${whoAmIRevealIndex + 1} з ${whoAmIAssignments.length}`;
-  whoAmIRevealTitle.textContent = "Передайте телефон";
-  whoAmIRevealInstruction.textContent = `Передайте телефон тим, хто має побачити роль гравця ${assignment.player}. Сам гравець не дивиться на екран.`;
-  whoAmIRevealPrimaryBtn.textContent = "Показати роль";
+  whoAmIRevealTitle.textContent = `${assignment.player} має відвернутися від екрана`;
+  whoAmIRevealInstruction.textContent = "Покажіть роль іншим учасникам. Сам гравець не повинен бачити екран.";
+  whoAmIRevealPrimaryBtn.textContent = "Показати роль іншим";
   showScreen("whoAmIReveal");
 }
 
 function handleWhoAmIRevealPrimary() {
+  if (whoAmIFlowStage === "turn-host" || whoAmIFlowStage === "turn-forehead") {
+    startWhoAmIActiveTurn();
+    return;
+  }
+
   const assignment = whoAmIAssignments[whoAmIRevealIndex];
   if (!assignment) {
-    beginWhoAmITurn();
+    showWhoAmITurnIntro();
     return;
   }
 
@@ -2999,15 +3023,15 @@ function handleWhoAmIRevealPrimary() {
     whoAmIRevealCategory.textContent = assignment.category;
     whoAmIRevealRole.textContent = assignment.role;
     whoAmIRevealTitle.textContent = assignment.player;
-    whoAmIRevealInstruction.textContent = "Запам'ятайте роль і натисніть кнопку, щоб сховати її.";
-    whoAmIRevealPrimaryBtn.textContent = "Сховати роль";
+    whoAmIRevealInstruction.textContent = "Усі запам'ятали? Натисніть кнопку, щоб сховати роль.";
+    whoAmIRevealPrimaryBtn.textContent = "Усі запам'ятали";
     playHapticFeedback("tap");
     return;
   }
 
   whoAmIRevealIndex += 1;
   if (whoAmIRevealIndex >= whoAmIAssignments.length) {
-    beginWhoAmITurn();
+    showWhoAmITurnIntro();
     return;
   }
 
@@ -3015,6 +3039,36 @@ function handleWhoAmIRevealPrimary() {
 }
 
 function beginWhoAmITurn() {
+  showWhoAmITurnIntro();
+}
+
+function showWhoAmITurnIntro() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    showWhoAmIFinal();
+    return;
+  }
+
+  whoAmIRoleVisible = false;
+  whoAmIRevealRoleBox.hidden = true;
+  whoAmIRevealStep.textContent = whoAmIPartyMode === "turns" ? `Коло ${whoAmIRound}` : "Хід";
+
+  if (whoAmIShowMode === "forehead") {
+    whoAmIFlowStage = "turn-forehead";
+    whoAmIRevealTitle.textContent = `Передайте телефон гравцю ${assignment.player}`;
+    whoAmIRevealInstruction.textContent = "Піднесіть телефон до чола екраном до інших. Сам гравець фізично не бачить роль.";
+    whoAmIRevealPrimaryBtn.textContent = "Показати роль";
+  } else {
+    whoAmIFlowStage = "turn-host";
+    whoAmIRevealTitle.textContent = "Передайте телефон ведучому";
+    whoAmIRevealInstruction.textContent = `Гравець ${assignment.player} не повинен бачити екран.`;
+    whoAmIRevealPrimaryBtn.textContent = "Почати хід";
+  }
+
+  showScreen("whoAmIReveal");
+}
+
+function startWhoAmIActiveTurn() {
   const assignment = getWhoAmICurrentAssignment();
   if (!assignment) {
     showWhoAmIFinal();
@@ -3025,6 +3079,7 @@ function beginWhoAmITurn() {
     assignment.turns += 1;
   }
 
+  whoAmIFlowStage = "game";
   renderWhoAmIGame();
   showScreen("whoAmIGame");
 }
@@ -3071,14 +3126,122 @@ function renderWhoAmIGame() {
   whoAmITimerText.textContent = whoAmITimeLeft;
   whoAmIMaybeAnswerBtn.hidden = !whoAmIAllowMaybe;
 
-  const showForehead = whoAmIShowMode === "forehead" || isTimed || isSingle;
+  const showForehead = whoAmIShowMode === "forehead";
   whoAmIForeheadCard.hidden = !showForehead;
   if (showForehead) {
     whoAmIForeheadCategory.textContent = assignment.category;
     whoAmIForeheadRole.textContent = assignment.role;
   }
 
+  updateWhoAmICurrentSpoiler(assignment, !showForehead);
+  if (whoAmIParticipantsBtn) {
+    const count = whoAmIPartyMode === "turns" ? whoAmIAssignments.length : whoAmITeamCount > 0 ? whoAmITeamCount : 1;
+    whoAmIParticipantsBtn.textContent = `Учасники · ${count}`;
+  }
+  if (whoAmISkipRoleBtn) {
+    whoAmISkipRoleBtn.hidden = whoAmIPartyMode === "turns";
+  }
+
   renderWhoAmIPlayersBoard();
+}
+
+function updateWhoAmICurrentSpoiler(assignment, visible) {
+  hideWhoAmISpoiler();
+  if (!whoAmICurrentSpoiler || !whoAmICurrentSpoilerBtn || !whoAmICurrentSpoilerValue) {
+    return;
+  }
+
+  whoAmICurrentSpoiler.hidden = !visible;
+  if (!visible || !assignment) {
+    return;
+  }
+
+  whoAmICurrentSpoilerBtn.textContent = `Роль ${assignment.player} — утримуйте, щоб нагадати`;
+  whoAmICurrentSpoilerBtn.dataset.whoamiRole = assignment.role;
+  whoAmICurrentSpoilerBtn.dataset.whoamiCategory = assignment.category;
+  whoAmICurrentSpoilerBtn.dataset.whoamiPlayer = assignment.player;
+  whoAmICurrentSpoilerWarning.textContent = `Не показуйте екран гравцю ${assignment.player}`;
+  whoAmICurrentSpoilerRole.textContent = assignment.role;
+  whoAmICurrentSpoilerCategory.textContent = assignment.category;
+}
+
+function showWhoAmISpoiler(button) {
+  if (!button) {
+    return;
+  }
+
+  hideWhoAmISpoiler();
+  whoAmIActiveSpoilerButton = button;
+  button.classList.add("is-revealed");
+  button.setAttribute("aria-pressed", "true");
+
+  const targetId = button.getAttribute("aria-controls");
+  const target = targetId ? document.getElementById(targetId) : whoAmICurrentSpoilerValue;
+  if (target) {
+    target.hidden = false;
+    target.classList.add("is-revealed");
+  }
+
+  whoAmISpoilerTimeoutId = window.setTimeout(hideWhoAmISpoiler, 2500);
+}
+
+function hideWhoAmISpoiler() {
+  if (whoAmISpoilerTimeoutId) {
+    window.clearTimeout(whoAmISpoilerTimeoutId);
+    whoAmISpoilerTimeoutId = null;
+  }
+
+  if (whoAmIActiveSpoilerButton) {
+    const targetId = whoAmIActiveSpoilerButton.getAttribute("aria-controls");
+    const target = targetId ? document.getElementById(targetId) : whoAmICurrentSpoilerValue;
+    whoAmIActiveSpoilerButton.classList.remove("is-revealed");
+    whoAmIActiveSpoilerButton.setAttribute("aria-pressed", "false");
+    if (target) {
+      target.hidden = true;
+      target.classList.remove("is-revealed");
+    }
+  }
+
+  if (whoAmICurrentSpoilerValue) {
+    whoAmICurrentSpoilerValue.hidden = true;
+    whoAmICurrentSpoilerValue.classList.remove("is-revealed");
+  }
+
+  whoAmIActiveSpoilerButton = null;
+}
+
+function bindWhoAmISpoilerButton(button) {
+  if (!button || button.dataset.whoamiSpoilerBound === "true") {
+    return;
+  }
+
+  button.dataset.whoamiSpoilerBound = "true";
+  button.setAttribute("aria-pressed", "false");
+
+  const start = (event) => {
+    if (event && event.cancelable) {
+      event.preventDefault();
+    }
+    showWhoAmISpoiler(button);
+  };
+  const end = () => {
+    hideWhoAmISpoiler();
+  };
+
+  button.addEventListener("touchstart", start, { passive: false });
+  button.addEventListener("touchend", end);
+  button.addEventListener("touchcancel", end);
+  button.addEventListener("mousedown", start);
+  button.addEventListener("mouseup", end);
+  button.addEventListener("mouseleave", end);
+  button.addEventListener("blur", end);
+
+  if (window.PointerEvent) {
+    button.addEventListener("pointerdown", start);
+    button.addEventListener("pointerup", end);
+    button.addEventListener("pointercancel", end);
+    button.addEventListener("pointerleave", end);
+  }
 }
 
 function renderWhoAmIPlayersBoard() {
@@ -3097,9 +3260,12 @@ function renderWhoAmIPlayersBoard() {
     item.className = "whoami-player-item";
     item.classList.toggle("is-current", index === whoAmICurrentIndex);
     item.classList.toggle("is-done", assignment.guessed);
+    item.classList.toggle("is-out", assignment.skipped);
+    const status = index === whoAmICurrentIndex ? "грає" : assignment.guessed ? "відгадав" : assignment.skipped ? "вибув" : "у грі";
     item.innerHTML = `
       <strong>${assignment.player}</strong>
-      <span>${assignment.guessed ? "відгадав" : assignment.skipped ? "пропущено" : "у грі"}</span>
+      <span>${status}</span>
+      <em>роль прихована</em>
       <small>так ${assignment.yes} · ні ${assignment.no}${whoAmIAllowMaybe ? ` · можливо ${assignment.maybe}` : ""}</small>
     `;
     whoAmIPlayersBoard.appendChild(item);
@@ -3147,6 +3313,8 @@ function handleWhoAmIAnswer(type) {
     playSkipSound();
   }
 
+  flashWhoAmIAnswer(type);
+
   if (whoAmIPartyMode === "turns" && type !== "yes" && !(type === "maybe" && whoAmIContinueAfterMaybe)) {
     moveToNextWhoAmIPlayer();
     return;
@@ -3155,14 +3323,32 @@ function handleWhoAmIAnswer(type) {
   renderWhoAmIGame();
 }
 
+function flashWhoAmIAnswer(type) {
+  if (!whoAmIGameScreen) {
+    return;
+  }
+
+  whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no", "whoami-feedback-maybe");
+  void whoAmIGameScreen.offsetWidth;
+  whoAmIGameScreen.classList.add(`whoami-feedback-${type}`);
+  window.setTimeout(() => {
+    whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no", "whoami-feedback-maybe");
+  }, 420);
+}
+
 function markWhoAmIGuessed() {
   const assignment = getWhoAmICurrentAssignment();
   if (!assignment) {
     return;
   }
 
-  const confirmed = window.confirm("Гравець справді правильно назвав свою роль?");
-  if (!confirmed) {
+  openWhoAmIConfirmModal(assignment);
+}
+
+function confirmWhoAmIGuessed() {
+  const assignment = whoAmIPendingGuessAssignment || getWhoAmICurrentAssignment();
+  closeWhoAmIConfirmModal();
+  if (!assignment) {
     return;
   }
 
@@ -3195,6 +3381,29 @@ function markWhoAmIGuessed() {
   }
 
   moveToNextWhoAmIPlayer();
+}
+
+function openWhoAmIConfirmModal(assignment) {
+  if (!whoAmIConfirmModal) {
+    whoAmIPendingGuessAssignment = assignment;
+    confirmWhoAmIGuessed();
+    return;
+  }
+
+  whoAmIPendingGuessAssignment = assignment;
+  if (whoAmIConfirmText) {
+    whoAmIConfirmText.textContent = `${assignment.player} справді правильно назвав свою роль?`;
+  }
+  whoAmIConfirmModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function closeWhoAmIConfirmModal() {
+  if (whoAmIConfirmModal) {
+    whoAmIConfirmModal.hidden = true;
+  }
+  document.body.classList.remove("modal-open");
+  whoAmIPendingGuessAssignment = null;
 }
 
 function skipWhoAmIRole() {
@@ -3404,8 +3613,64 @@ function closeWhoAmIRules() {
   document.body.classList.remove("modal-open");
 }
 
+function openWhoAmIParticipants() {
+  if (!whoAmIParticipantsModal || !whoAmIParticipantsList) {
+    return;
+  }
+
+  renderWhoAmIParticipantsList();
+  whoAmIParticipantsModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function closeWhoAmIParticipants() {
+  hideWhoAmISpoiler();
+  if (!whoAmIParticipantsModal) {
+    return;
+  }
+  whoAmIParticipantsModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function renderWhoAmIParticipantsList() {
+  whoAmIParticipantsList.innerHTML = "";
+
+  whoAmIAssignments.forEach((assignment, index) => {
+    if (!assignment) {
+      return;
+    }
+
+    const row = document.createElement("div");
+    const roleId = `whoamiParticipantRole${index}`;
+    const isCurrent = index === whoAmICurrentIndex && whoAmIPartyMode !== "timed";
+    const isRevealed = assignment.guessed;
+    const status = isCurrent ? "активний гравець" : assignment.guessed ? "відгадав" : assignment.skipped ? "вибув" : "у грі";
+    row.className = "whoami-participant-row";
+    row.classList.toggle("is-current", isCurrent);
+    row.classList.toggle("is-done", assignment.guessed);
+    row.innerHTML = `
+      <div>
+        <strong>${assignment.player}</strong>
+        <span>${status}</span>
+      </div>
+      <div class="whoami-participant-role">
+        ${isRevealed
+          ? `<strong class="whoami-open-role">${assignment.role}</strong><small>${assignment.category}</small>`
+          : `<button class="whoami-spoiler-btn compact" type="button" aria-controls="${roleId}">Утримуйте роль</button><span id="${roleId}" class="whoami-spoiler-value compact" hidden><strong>${assignment.role}</strong><small>${assignment.category}</small></span>`}
+      </div>
+    `;
+    whoAmIParticipantsList.appendChild(row);
+
+    const spoilerButton = row.querySelector(".whoami-spoiler-btn");
+    bindWhoAmISpoilerButton(spoilerButton);
+  });
+}
+
 function exitWhoAmIToMenu() {
   clearWhoAmITimer();
+  hideWhoAmISpoiler();
+  closeWhoAmIParticipants();
+  closeWhoAmIConfirmModal();
   showScreen("menu");
 }
 
@@ -3577,7 +3842,7 @@ function setupEvents() {
 
   whoAmIShowModeButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      whoAmIShowMode = button.dataset.whoamiShowMode || "pass";
+    whoAmIShowMode = button.dataset.whoamiShowMode || "host";
       syncWhoAmIButtons();
     });
   });
@@ -3676,6 +3941,12 @@ function setupEvents() {
     whoAmISkipRoleBtn.addEventListener("click", skipWhoAmIRole);
   }
 
+  bindWhoAmISpoilerButton(whoAmICurrentSpoilerBtn);
+
+  if (whoAmIParticipantsBtn) {
+    whoAmIParticipantsBtn.addEventListener("click", openWhoAmIParticipants);
+  }
+
   if (whoAmIRulesBtn) {
     whoAmIRulesBtn.addEventListener("click", openWhoAmIRules);
   }
@@ -3724,6 +3995,41 @@ function setupEvents() {
     });
   }
 
+  if (whoAmIParticipantsCloseBtn) {
+    whoAmIParticipantsCloseBtn.addEventListener("click", closeWhoAmIParticipants);
+  }
+
+  if (whoAmIParticipantsModal) {
+    whoAmIParticipantsModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-whoami-participants-close]")) {
+        closeWhoAmIParticipants();
+      }
+    });
+  }
+
+  if (whoAmIConfirmYesBtn) {
+    whoAmIConfirmYesBtn.addEventListener("click", confirmWhoAmIGuessed);
+  }
+
+  if (whoAmIConfirmNoBtn) {
+    whoAmIConfirmNoBtn.addEventListener("click", closeWhoAmIConfirmModal);
+  }
+
+  if (whoAmIConfirmModal) {
+    whoAmIConfirmModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-whoami-confirm-close]")) {
+        closeWhoAmIConfirmModal();
+      }
+    });
+  }
+
+  window.addEventListener("blur", hideWhoAmISpoiler);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      hideWhoAmISpoiler();
+    }
+  });
+
   backToMenuBtn.addEventListener("click", () => {
     showScreen("menu");
   });
@@ -3769,7 +4075,16 @@ function setupEvents() {
       closeWhoAmIRules();
     }
 
+    if (event.key === "Escape" && whoAmIParticipantsModal && !whoAmIParticipantsModal.hidden) {
+      closeWhoAmIParticipants();
+    }
+
+    if (event.key === "Escape" && whoAmIConfirmModal && !whoAmIConfirmModal.hidden) {
+      closeWhoAmIConfirmModal();
+    }
+
     if (event.key === "Escape") {
+      hideWhoAmISpoiler();
       closeWordGuessHistory();
       closeThemesPopover();
     }
@@ -4076,19 +4391,19 @@ function renderModes() {
     button.className = `mode-card mode-card-${mode.id} mode-card-active`;
 
     const modeIcons = {
-      explain: "assets/game-modes/alias.png",
-      charades: "assets/game-modes/charades.png",
-      wordguess: "assets/game-modes/wordguess.png",
+      explain: "assets/game-icons/alias.png",
+      charades: "assets/game-icons/charades.png",
+      wordguess: "assets/game-icons/wordguess.png",
+      whoami: "assets/game-icons/whoami.png",
     };
-    const modeIconMarkup = mode.id === "whoami"
-      ? '<span class="mode-card-svg-icon mode-card-whoami-icon"></span>'
-      : modeIcons[mode.id] ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async">` : "✨";
+    const modeIconMarkup = modeIcons[mode.id]
+      ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false;"><span class="mode-card-icon-fallback" hidden>?</span>`
+      : '<span class="mode-card-icon-fallback">?</span>';
 
     button.innerHTML = `
       <span class="mode-card-icon" aria-hidden="true">${modeIconMarkup}</span>
       <strong>${mode.title}</strong>
       <span class="mode-card-description">${mode.description}</span>
-      <span class="mode-card-cta">Грати</span>
     `;
 
     button.addEventListener("click", async () => {

@@ -9372,7 +9372,7 @@ body.is-browser-shell[data-screen="wordGuessGame"] .word-guess-board {
   filter: drop-shadow(0 7px 10px var(--mode-card-shadow, rgba(80, 95, 155, 0.18)));
 }
 
-/* 0.5.0 — illustrated game-mode art without rectangular icon plates */
+/* 0.5.1 — illustrated game-mode art without rectangular icon plates */
 .mode-card-icon {
   width: 96px;
   height: 82px;
@@ -9762,6 +9762,19 @@ body[data-theme="dark"] .word-guess-share-compact {
 
 .whoami-game-layout {
   max-width: 940px;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+#whoAmIGameScreen.whoami-feedback-yes .whoami-game-layout {
+  box-shadow: 0 0 0 4px rgba(118, 196, 154, 0.24), 0 18px 46px rgba(80, 95, 155, 0.14);
+}
+
+#whoAmIGameScreen.whoami-feedback-no .whoami-game-layout {
+  box-shadow: 0 0 0 4px rgba(223, 143, 171, 0.22), 0 18px 46px rgba(80, 95, 155, 0.14);
+}
+
+#whoAmIGameScreen.whoami-feedback-maybe .whoami-game-layout {
+  box-shadow: 0 0 0 4px rgba(224, 184, 100, 0.26), 0 18px 46px rgba(80, 95, 155, 0.14);
 }
 
 .whoami-game-header {
@@ -9968,5 +9981,273 @@ body[data-theme="dark"] .whoami-role-row {
   .whoami-answer-grid button,
   .whoami-game-buttons button {
     min-height: 46px;
+  }
+}
+
+/* 0.5.1 — shared setup shell, four-mode menu, safe Who Am I spoilers */
+#menuScreen .active-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#menuScreen .upcoming-modes {
+  width: 100%;
+}
+
+.mode-card {
+  min-height: 128px;
+}
+
+.mode-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 6px;
+  overflow: visible;
+}
+
+.mode-card-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.mode-card-icon-fallback {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  color: var(--mode-card-title);
+  border: 2px solid currentColor;
+  font-size: 30px;
+  font-weight: 900;
+  background: rgba(255, 250, 240, 0.42);
+}
+
+#settingsScreen.active,
+#whoAmISettingsScreen.active,
+#wordGuessSettingsScreen.active {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#settingsScreen.active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#settingsScreen .settings-card {
+  order: 1;
+}
+
+#settingsScreen .settings-sticky-panel {
+  order: 2;
+  position: static;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+#settingsScreen .settings-action-row,
+.whoami-action-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+#settingsScreen .settings-start-btn {
+  order: 1;
+}
+
+#settingsScreen .settings-back-btn {
+  order: 2;
+}
+
+.whoami-advanced-settings {
+  display: grid;
+  gap: 10px;
+}
+
+.whoami-advanced-settings summary {
+  width: fit-content;
+  list-style: none;
+  cursor: pointer;
+}
+
+.whoami-advanced-settings summary::-webkit-details-marker {
+  display: none;
+}
+
+.whoami-current-spoiler {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.whoami-spoiler-btn {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 16px;
+  border: 1px solid rgba(184, 131, 88, 0.34);
+  background: rgba(255, 250, 240, 0.78);
+  color: var(--accent);
+  font-weight: 900;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.whoami-spoiler-btn.compact {
+  min-height: 38px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.whoami-spoiler-btn.is-revealed {
+  background: #ffe2d1;
+  color: #8c3f31;
+  border-color: rgba(214, 95, 70, 0.48);
+}
+
+.whoami-spoiler-value {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #fff1e8;
+  border: 1px solid rgba(214, 95, 70, 0.34);
+  text-align: center;
+}
+
+.whoami-spoiler-value strong {
+  color: #8c3f31;
+  font-size: clamp(28px, 8vw, 54px);
+  line-height: 1;
+}
+
+.whoami-spoiler-value small {
+  color: #a94838;
+  font-weight: 900;
+}
+
+.whoami-player-item em {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.whoami-player-item.is-out {
+  opacity: 0.74;
+}
+
+.whoami-participants-card {
+  max-width: 720px;
+}
+
+.whoami-participants-list {
+  display: grid;
+  gap: 10px;
+  max-height: min(62vh, 520px);
+  overflow: auto;
+}
+
+.whoami-participant-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 0.9fr);
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 250, 240, 0.78);
+  border: 1px solid rgba(111, 106, 168, 0.12);
+}
+
+.whoami-participant-row.is-current {
+  border-color: rgba(184, 131, 88, 0.46);
+  box-shadow: 0 10px 24px rgba(141, 101, 67, 0.12);
+}
+
+.whoami-participant-row strong {
+  color: var(--color-text);
+}
+
+.whoami-participant-row span,
+.whoami-participant-row small {
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.whoami-participant-role {
+  display: grid;
+  gap: 6px;
+}
+
+.whoami-open-role {
+  color: var(--accent);
+}
+
+body[data-theme="dark"] .mode-card-icon-fallback,
+body[data-theme="dark"] .whoami-spoiler-btn,
+body[data-theme="dark"] .whoami-participant-row {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+body[data-theme="dark"] .whoami-spoiler-value {
+  background: rgba(129, 76, 94, 0.28);
+  border-color: rgba(250, 177, 150, 0.32);
+}
+
+body[data-theme="dark"] .whoami-spoiler-value strong,
+body[data-theme="dark"] .whoami-spoiler-value small {
+  color: #ffd2bf;
+}
+
+@media (min-width: 1120px) {
+  #menuScreen .active-mode-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  #menuScreen .active-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #menuScreen .mode-card {
+    min-height: 96px;
+    display: grid;
+    grid-template-columns: 76px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    justify-content: stretch;
+    text-align: left;
+    column-gap: 12px;
+    padding: 14px;
+  }
+
+  #menuScreen .mode-card-icon {
+    grid-row: 1 / span 2;
+    width: 64px;
+    height: 64px;
+    margin: 0;
+  }
+
+  #menuScreen .mode-card strong,
+  #menuScreen .mode-card-description {
+    grid-column: 2;
+  }
+
+  #settingsScreen .settings-action-row,
+  .whoami-action-row,
+  .whoami-participant-row {
+    grid-template-columns: 1fr;
   }
 }
