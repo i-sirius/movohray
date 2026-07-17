@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.5.2" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.5.3" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.5.2" />
+  <link rel="stylesheet" href="styles.css?v=0.5.3" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -55,7 +55,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.5.2</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.5.3</p>
     </div>
   </div>
   <main class="app">
@@ -87,16 +87,16 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.5.2</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.5.3</p>
         </div>
       </div>
     </section>
 
     <section id="settingsScreen" class="screen">
       <div class="settings-sticky-panel">
-        <div class="settings-action-row">
-          <button id="backToMenuBtn" class="secondary-btn settings-back-btn">← У меню</button>
-          <button id="startRoundBtn" class="primary-btn settings-start-btn start-round-btn">Почати гру</button>
+        <div class="settings-action-row mode-setup-actions">
+          <button id="backToMenuBtn" class="secondary-btn settings-back-btn mode-menu-button">← У меню</button>
+          <button id="startRoundBtn" class="primary-btn settings-start-btn start-round-btn mode-start-button">Почати гру</button>
         </div>
         <p id="settingsMessage" class="message settings-message" role="alert" aria-live="polite"></p>
       </div>
@@ -252,8 +252,10 @@
 
           <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
 
-          <button id="wordGuessStartBtn" class="primary-btn" type="button">Почати гру</button>
-          <button id="wordGuessBackBtn" class="secondary-btn" type="button">← У меню</button>
+          <div class="mode-setup-actions word-guess-setup-actions">
+            <button id="wordGuessStartBtn" class="primary-btn mode-start-button" type="button">Почати гру</button>
+            <button id="wordGuessBackBtn" class="secondary-btn mode-menu-button" type="button">← У меню</button>
+          </div>
         </div>
       </div>
     </section>
@@ -349,7 +351,7 @@
               </div>
               <button id="whoAmISettingsRulesBtn" class="setup-rules-btn" type="button" aria-label="Показати правила">?</button>
             </div>
-            <p class="mode-description">Один гравець не бачить свою роль, а інші відповідають на його запитання: так, ні або можливо.</p>
+            <p class="mode-description">Один гравець не бачить свою роль, а інші відповідають на його запитання: так або ні.</p>
           </div>
 
           <div class="settings-grid whoami-settings-grid">
@@ -376,14 +378,19 @@
 
             <section id="whoAmIPlayersSection" class="settings-group settings-group-wide">
               <h2>Гравці</h2>
-              <div class="settings-chip-grid compact-chip-grid">
-                <button class="whoami-player-count-btn setting-chip" data-whoami-players="2" type="button">2</button>
-                <button class="whoami-player-count-btn setting-chip selected" data-whoami-players="4" type="button">4</button>
-                <button class="whoami-player-count-btn setting-chip" data-whoami-players="6" type="button">6</button>
-                <button class="whoami-player-count-btn setting-chip" data-whoami-players="8" type="button">8</button>
-                <button class="whoami-player-count-btn setting-chip" data-whoami-players="12" type="button">12</button>
+              <div class="whoami-setup-compact-row">
+                <details id="whoAmIPlayerCountPicker" class="whoami-setup-dropdown">
+                  <summary id="whoAmIPlayerCountSummary" class="setting-chip whoami-dropdown-summary">Гравців: 4</summary>
+                  <div class="whoami-dropdown-menu">
+                    <button class="whoami-player-count-btn setting-chip" data-whoami-players="2" type="button">2</button>
+                    <button class="whoami-player-count-btn setting-chip selected" data-whoami-players="4" type="button">4</button>
+                    <button class="whoami-player-count-btn setting-chip" data-whoami-players="6" type="button">6</button>
+                    <button class="whoami-player-count-btn setting-chip" data-whoami-players="8" type="button">8</button>
+                    <button class="whoami-player-count-btn setting-chip" data-whoami-players="12" type="button">12</button>
+                  </div>
+                </details>
+                <button id="whoAmIEditPlayersBtn" class="secondary-btn whoami-edit-players-btn" type="button">Гравці · 4</button>
               </div>
-              <div id="whoAmIPlayerFields" class="team-name-fields whoami-player-fields"></div>
             </section>
 
             <section class="settings-group settings-group-wide">
@@ -398,13 +405,6 @@
                     <button class="whoami-difficulty-btn setting-chip" data-whoami-difficulty="hard" type="button">Складно</button>
                   </div>
                 </div>
-                <details class="setting-subsection whoami-advanced-settings">
-                  <summary class="setting-chip">Додаткові налаштування</summary>
-                  <div class="settings-chip-grid compact-chip-grid">
-                    <button id="whoAmIMaybeBtn" class="setting-chip selected" type="button" aria-pressed="true">Можливо дозволено</button>
-                    <button id="whoAmIContinueMaybeBtn" class="setting-chip" type="button" aria-pressed="false">Можливо не завершує хід</button>
-                  </div>
-                </details>
               </div>
             </section>
 
@@ -435,9 +435,9 @@
           </div>
 
           <p id="whoAmISettingsMessage" class="message settings-message" role="alert" aria-live="polite"></p>
-          <div class="settings-action-row whoami-action-row">
-            <button id="whoAmIStartBtn" class="primary-btn" type="button">Почати гру</button>
-            <button id="whoAmIBackBtn" class="secondary-btn" type="button">← У меню</button>
+          <div class="settings-action-row mode-setup-actions whoami-action-row">
+            <button id="whoAmIStartBtn" class="primary-btn mode-start-button" type="button">Почати гру</button>
+            <button id="whoAmIBackBtn" class="secondary-btn mode-menu-button" type="button">← У меню</button>
           </div>
         </div>
       </div>
@@ -455,6 +455,7 @@
             <small id="whoAmIRevealCategory">Категорія</small>
             <strong id="whoAmIRevealRole">Роль</strong>
           </div>
+          <button id="whoAmIRevealChangeRoleBtn" class="secondary-btn whoami-change-role-btn" type="button" hidden>Інша роль</button>
           <button id="whoAmIRevealPrimaryBtn" class="primary-btn" type="button">Показати роль</button>
           <button id="whoAmIRevealMenuBtn" class="secondary-btn" type="button">У меню</button>
         </div>
@@ -503,11 +504,11 @@
           <div class="whoami-answer-grid">
             <button id="whoAmIYesBtn" class="correct-btn" type="button">Так</button>
             <button id="whoAmINoBtn" class="skip-btn" type="button">Ні</button>
-            <button id="whoAmIMaybeAnswerBtn" class="secondary-btn whoami-maybe-answer" type="button">Можливо</button>
           </div>
 
           <div class="game-buttons whoami-game-buttons">
             <button id="whoAmIGuessedBtn" class="primary-btn" type="button">Відгадав роль</button>
+            <button id="whoAmIGameChangeRoleBtn" class="secondary-btn whoami-change-role-btn" type="button">Інша роль</button>
             <button id="whoAmISkipRoleBtn" class="secondary-btn" type="button">Пропустити</button>
           </div>
 
@@ -552,7 +553,29 @@
         <button id="whoAmIRulesCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
         <p class="word-guess-info-eyebrow">Хто я?</p>
         <h2 id="whoAmIRulesTitle">Правила</h2>
-        <p>Гравець ставить запитання про свою роль. Інші відповідають тільки “так”, “ні” або “можливо”. Саму роль не підказуйте напряму.</p>
+        <p>Гравець ставить запитання про свою роль. Інші відповідають тільки “так” або “ні”. Саму роль не підказуйте напряму.</p>
+      </div>
+    </div>
+
+    <div id="whoAmIPlayersModal" class="word-guess-info-modal whoami-setup-modal" hidden>
+      <div class="word-guess-info-backdrop" data-whoami-players-close></div>
+      <div class="word-guess-info-card whoami-setup-modal-card" role="dialog" aria-modal="true" aria-labelledby="whoAmIPlayersModalTitle">
+        <button id="whoAmIPlayersCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
+        <p class="word-guess-info-eyebrow">Хто я?</p>
+        <h2 id="whoAmIPlayersModalTitle">Імена гравців</h2>
+        <div id="whoAmIPlayerFields" class="team-name-fields whoami-player-fields"></div>
+        <button id="whoAmIPlayersDoneBtn" class="primary-btn" type="button">Готово</button>
+      </div>
+    </div>
+
+    <div id="whoAmICategoriesModal" class="word-guess-info-modal whoami-setup-modal" hidden>
+      <div class="word-guess-info-backdrop" data-whoami-categories-close></div>
+      <div class="word-guess-info-card whoami-setup-modal-card" role="dialog" aria-modal="true" aria-labelledby="whoAmICategoriesModalTitle">
+        <button id="whoAmICategoriesCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
+        <p class="word-guess-info-eyebrow">Хто я?</p>
+        <h2 id="whoAmICategoriesModalTitle">Категорії ролей</h2>
+        <div id="whoAmICategoryModalList" class="category-picker"></div>
+        <button id="whoAmICategoriesDoneBtn" class="primary-btn" type="button">Готово</button>
       </div>
     </div>
 
@@ -769,6 +792,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.5.2"></script>
+  <script src="app.js?v=0.5.3"></script>
 </body>
 </html>

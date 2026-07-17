@@ -5382,8 +5382,7 @@ body[data-theme="dark"] .word-guess-info-close {
   line-height: 1;
 }
 
-.word-guess-hint-btn,
-.word-guess-rules-btn {
+.word-guess-hint-btn {
   font-size: 0;
 }
 
@@ -5394,12 +5393,8 @@ body[data-theme="dark"] .word-guess-info-close {
 }
 
 .word-guess-rules-btn::before {
-  content: "?";
-  color: currentColor;
-  font-size: 19px;
-  font-weight: 1000;
-  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
-  transform: translateY(-0.5px);
+  content: none;
+  display: none;
 }
 
 .word-guess-hint-btn.is-used::after {
@@ -8314,7 +8309,7 @@ body[data-theme="dark"] .word-guess-hint-step {
 .word-guess-rules-btn {
   align-self: center;
   justify-self: center;
-  font-size: 0;
+  font-size: 19px;
 }
 
 .word-guess-rules-btn::before {
@@ -9773,10 +9768,6 @@ body[data-theme="dark"] .word-guess-share-compact {
   box-shadow: 0 0 0 4px rgba(223, 143, 171, 0.22), 0 18px 46px rgba(80, 95, 155, 0.14);
 }
 
-#whoAmIGameScreen.whoami-feedback-maybe .whoami-game-layout {
-  box-shadow: 0 0 0 4px rgba(224, 184, 100, 0.26), 0 18px 46px rgba(80, 95, 155, 0.14);
-}
-
 .whoami-game-header {
   display: flex;
   align-items: center;
@@ -9894,11 +9885,6 @@ body[data-theme="dark"] .word-guess-share-compact {
 .whoami-answer-grid button,
 .whoami-game-buttons button {
   min-height: 58px;
-}
-
-.whoami-maybe-answer {
-  background: #f7e5a6;
-  color: #6c5515;
 }
 
 .whoami-role-list {
@@ -10057,8 +10043,8 @@ body[data-theme="dark"] .whoami-role-row {
 #settingsScreen .settings-action-row,
 .whoami-action-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: 10px;
+  grid-template-columns: minmax(0, 2fr) minmax(135px, 1fr);
+  gap: 12px;
 }
 
 #settingsScreen .settings-start-btn {
@@ -10067,21 +10053,6 @@ body[data-theme="dark"] .whoami-role-row {
 
 #settingsScreen .settings-back-btn {
   order: 2;
-}
-
-.whoami-advanced-settings {
-  display: grid;
-  gap: 10px;
-}
-
-.whoami-advanced-settings summary {
-  width: fit-content;
-  list-style: none;
-  cursor: pointer;
-}
-
-.whoami-advanced-settings summary::-webkit-details-marker {
-  display: none;
 }
 
 .whoami-current-spoiler {
@@ -10245,8 +10216,6 @@ body[data-theme="dark"] .whoami-spoiler-value small {
     grid-column: 2;
   }
 
-  #settingsScreen .settings-action-row,
-  .whoami-action-row,
   .whoami-participant-row {
     grid-template-columns: 1fr;
   }
@@ -10358,7 +10327,7 @@ body[data-theme="dark"] .mode-card-wordguess {
   transform: translateY(-1px);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .mode-card-active:hover {
     background: var(--mode-card-hover);
     border-color: var(--mode-card-border);
@@ -10722,11 +10691,6 @@ body[data-theme="dark"] .whoami-category-option.selected {
   background: linear-gradient(180deg, #f39a8d, #db6b5c);
 }
 
-.whoami-maybe-answer {
-  background: linear-gradient(180deg, #f6d778, #e8b84e);
-  color: #5f4610;
-}
-
 .whoami-game-buttons {
   grid-template-columns: minmax(0, 1fr) !important;
   max-width: 620px;
@@ -10929,5 +10893,516 @@ body[data-theme="dark"] .whoami-final-row.is-podium {
 
   .whoami-players-board {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* 0.5.3 — focused polish for Who Am I setup, palette and Alias round scale */
+body[data-theme="dark"] {
+  --whoami-card-bg: linear-gradient(145deg, rgba(25, 22, 52, 0.98), rgba(38, 31, 76, 0.95) 56%, rgba(31, 50, 88, 0.9));
+  --whoami-card-border: rgba(174, 194, 255, 0.28);
+  --whoami-card-hover: linear-gradient(145deg, rgba(33, 27, 67, 0.98), rgba(50, 39, 96, 0.96) 56%, rgba(40, 63, 107, 0.92));
+  --whoami-accent: #7fd7df;
+}
+
+body[data-theme="dark"] .mode-card-whoami {
+  --mode-card-from:
+    radial-gradient(circle at 86% 16%, rgba(244, 128, 120, 0.18), transparent 38%),
+    linear-gradient(145deg, #30284a 0%, #25273f 52%, #1d2438 100%);
+  --mode-card-to: #25273f;
+  --mode-card-border: rgba(197, 179, 255, 0.42);
+  --mode-card-shadow: rgba(35, 25, 72, 0.42);
+  --mode-card-title: #fffaf7;
+  --mode-card-hover:
+    radial-gradient(circle at 84% 14%, rgba(255, 150, 122, 0.24), transparent 40%),
+    linear-gradient(145deg, #3a2e5b 0%, #2d2d50 52%, #24304b 100%);
+  color: #fffaf7;
+  background: var(--mode-card-from) !important;
+  border-color: var(--mode-card-border) !important;
+}
+
+body[data-theme="dark"] .mode-card-whoami strong {
+  color: #fffaf7;
+}
+
+body[data-theme="dark"] .mode-card-whoami .mode-card-description {
+  color: #d9d3f4;
+}
+
+body[data-theme="dark"] .whoami-settings-card {
+  background: linear-gradient(145deg, rgba(24, 31, 52, 0.98), rgba(31, 39, 67, 0.94));
+  border-color: rgba(143, 214, 217, 0.2);
+}
+
+body[data-theme="dark"] .whoami-settings-grid .settings-group,
+body[data-theme="dark"] .whoami-category-summary-card,
+body[data-theme="dark"] .whoami-category-option {
+  background: rgba(255, 255, 255, 0.055);
+  border-color: rgba(198, 218, 235, 0.12);
+}
+
+body[data-theme="dark"] .whoami-category-option.selected {
+  background: rgba(143, 214, 217, 0.14);
+  border-color: rgba(143, 214, 217, 0.42);
+}
+
+body[data-theme="dark"] .setup-rules-btn {
+  background: rgba(127, 215, 223, 0.18);
+  border-color: rgba(174, 194, 255, 0.42);
+  color: #ecfdff;
+  display: grid;
+  place-items: center;
+}
+
+.mode-setup-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(135px, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.mode-setup-actions > button,
+.mode-setup-actions .primary-btn,
+.mode-setup-actions .secondary-btn {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  height: 52px;
+  margin-top: 0;
+  padding: 0 18px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+  border-width: 1px;
+  border-radius: 18px;
+  white-space: nowrap;
+}
+
+.mode-setup-actions .mode-start-button,
+#settingsScreen .mode-setup-actions .settings-start-btn {
+  order: 1;
+}
+
+.mode-setup-actions .mode-menu-button,
+#settingsScreen .mode-setup-actions .settings-back-btn {
+  order: 2;
+}
+
+.setting-switch-btn {
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 106, 168, 0.2);
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--color-text);
+  font-weight: 900;
+  text-align: center;
+}
+
+.setting-switch-btn.is-on {
+  background: linear-gradient(135deg, #df674f, #b84f90);
+  border-color: rgba(178, 79, 144, 0.38);
+  color: #ffffff;
+}
+
+body[data-theme="dark"] .setting-switch-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(198, 218, 235, 0.16);
+  color: #eef4ff;
+}
+
+body[data-theme="dark"] .setting-switch-btn.is-on {
+  background: linear-gradient(135deg, rgba(127, 215, 223, 0.24), rgba(122, 103, 190, 0.28));
+  border-color: rgba(127, 215, 223, 0.42);
+  color: #f4feff;
+}
+
+.whoami-category-summary-card {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.whoami-category-details[open] {
+  gap: 12px;
+}
+
+.whoami-category-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.whoami-category-mini-btn {
+  width: 100%;
+}
+
+.whoami-category-list,
+.whoami-category-grid {
+  align-items: stretch;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.whoami-category-option {
+  min-height: 50px;
+  align-content: center;
+}
+
+.whoami-answer-grid.is-two-answer {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.whoami-answer-grid.is-two-answer button {
+  min-height: 62px;
+}
+
+.whoami-change-role-btn {
+  border-color: rgba(143, 214, 217, 0.22);
+}
+
+#whoAmIFinalScreen.screen.active {
+  background: rgba(14, 18, 31, 0.72);
+}
+
+#whoAmIFinalScreen .card {
+  width: min(100%, 680px);
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  background: linear-gradient(145deg, rgba(255, 250, 246, 0.98), rgba(246, 250, 252, 0.96));
+}
+
+body[data-theme="dark"] #whoAmIFinalScreen .card {
+  background: linear-gradient(145deg, rgba(22, 29, 49, 0.98), rgba(29, 38, 66, 0.96));
+  border-color: rgba(143, 214, 217, 0.2);
+}
+
+#whoAmIFinalHero[hidden] {
+  display: none !important;
+}
+
+.whoami-final-board {
+  max-height: none;
+  overflow: visible;
+  width: 100%;
+  margin: 12px 0 16px;
+}
+
+.whoami-final-row {
+  grid-template-columns: 40px minmax(0, 1fr);
+  justify-items: stretch;
+  text-align: left;
+}
+
+.whoami-final-row.is-podium,
+.whoami-final-row.is-rank-1 {
+  background: rgba(143, 214, 217, 0.12);
+  border-color: rgba(82, 160, 174, 0.22);
+  box-shadow: none;
+}
+
+body[data-theme="dark"] .whoami-final-row,
+body[data-theme="dark"] .whoami-final-row.is-podium {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(143, 214, 217, 0.16);
+}
+
+.whoami-final-place {
+  background: rgba(82, 160, 174, 0.12);
+  color: #357f8a;
+}
+
+body[data-theme="dark"] .whoami-final-place {
+  background: rgba(143, 214, 217, 0.14);
+  color: #b9f3f5;
+}
+
+body[data-mode="explain"] #gameScreen .game-hud-team-line {
+  gap: 10px;
+}
+
+body[data-mode="explain"] #gameScreen .game-hud-kicker {
+  font-size: clamp(11px, 1.8vw, 13px);
+  padding: 5px 9px;
+}
+
+body[data-mode="explain"] #gameScreen .game-hud-left-panel strong {
+  font-size: clamp(21px, 4vw, 31px);
+}
+
+body[data-mode="explain"] #gameScreen .word-card p {
+  font-size: clamp(46px, 11vw, 86px);
+  line-height: 0.95;
+}
+
+body[data-mode="explain"] #gameScreen .game-buttons button {
+  min-height: clamp(58px, 8vw, 74px);
+  font-size: clamp(18px, 3vw, 24px);
+}
+
+@media (max-width: 599px) {
+  .whoami-category-controls {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .whoami-category-list,
+  .whoami-category-grid {
+    grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
+  }
+
+  body[data-mode="explain"] #gameScreen .word-card p {
+    font-size: clamp(38px, 13vw, 62px);
+  }
+}
+
+/* 0.5.3 follow-up — narrow Word Guess keyboard and compact Who Am I setup */
+.word-guess-keyboard {
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#wordGuessGameScreen,
+body[data-screen="wordGuessGame"] .app,
+.word-guess-game-card {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.word-guess-key-row {
+  display: grid;
+  grid-template-columns: repeat(var(--word-guess-key-count, 10), minmax(0, 1fr));
+  width: 100%;
+  min-width: 0;
+  gap: 4px;
+}
+
+.word-guess-control-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.word-guess-key-row:nth-child(1) {
+  --word-guess-key-count: 12;
+}
+
+.word-guess-key-row:nth-child(2) {
+  --word-guess-key-count: 11;
+}
+
+.word-guess-key-row:nth-child(3) {
+  --word-guess-key-count: 10;
+}
+
+.word-guess-key {
+  width: 100%;
+  min-width: 0;
+  padding-inline: 0;
+  box-sizing: border-box;
+}
+
+.word-guess-key-wide {
+  grid-column: span 2;
+  font-size: clamp(10px, 2.8vw, 12px);
+}
+
+.word-guess-key-utility {
+  font-size: clamp(15px, 4vw, 18px);
+}
+
+.word-guess-control-row .word-guess-key-wide,
+.word-guess-control-row .word-guess-key-utility {
+  grid-column: auto;
+}
+
+.word-guess-control-row .word-guess-key-utility::before {
+  content: none !important;
+  display: none !important;
+}
+
+.word-guess-rules-btn {
+  font-size: 19px !important;
+  line-height: 1;
+  display: inline-grid !important;
+  place-items: center;
+}
+
+.word-guess-rules-btn::before {
+  content: none !important;
+  display: none !important;
+}
+
+.mode-setup-actions {
+  grid-template-columns: minmax(0, 2fr) minmax(135px, 1fr);
+}
+
+.mode-setup-actions > button,
+.mode-setup-actions .primary-btn,
+.mode-setup-actions .secondary-btn {
+  min-height: 52px;
+  height: 52px;
+  margin-top: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  line-height: 1.15;
+  border-width: 1px;
+  border-radius: 18px;
+  white-space: nowrap;
+}
+
+.whoami-setup-compact-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.whoami-setup-dropdown {
+  position: relative;
+  min-width: 0;
+}
+
+.whoami-dropdown-summary {
+  min-height: 44px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  cursor: pointer;
+}
+
+.whoami-dropdown-summary::-webkit-details-marker {
+  display: none;
+}
+
+.whoami-dropdown-summary::after {
+  content: "▾";
+  margin-left: 8px;
+  font-size: 0.8em;
+}
+
+.whoami-setup-dropdown[open] .whoami-dropdown-summary::after {
+  transform: rotate(180deg);
+}
+
+.whoami-dropdown-menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border-radius: 16px;
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 18px 36px rgba(54, 49, 94, 0.18);
+}
+
+.whoami-edit-players-btn {
+  min-height: 44px;
+}
+
+.whoami-setup-modal-card {
+  width: min(100%, 720px);
+  max-height: min(86vh, 680px);
+  overflow: auto;
+}
+
+.whoami-player-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.whoami-category-summary-card {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.whoami-category-summary-card .whoami-category-change {
+  width: auto;
+  min-width: 160px;
+}
+
+.whoami-category-list,
+.whoami-category-grid {
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+}
+
+body[data-theme="dark"] .whoami-dropdown-menu {
+  background: #1c2438;
+  border-color: rgba(197, 179, 255, 0.22);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.36);
+}
+
+.whoami-answer-grid,
+.whoami-answer-grid.is-two-answer {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.whoami-answer-grid button {
+  width: 100%;
+  min-height: 62px;
+}
+
+@media (max-width: 420px) {
+  .mode-setup-actions,
+  #settingsScreen .mode-setup-actions,
+  .whoami-action-row {
+    grid-template-columns: 1fr;
+  }
+
+  .whoami-setup-compact-row,
+  .whoami-category-summary-card {
+    grid-template-columns: 1fr;
+  }
+
+  .whoami-player-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .word-guess-game-card {
+    width: min(100%, calc(100vw - 18px));
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 360px) {
+  .word-guess-keyboard {
+    gap: 5px;
+    padding-inline: 0;
+  }
+
+  .word-guess-key-row {
+    gap: 3px;
+  }
+
+  .word-guess-key {
+    min-height: 38px;
+    border-radius: 9px;
+    font-size: clamp(11px, 4vw, 14px);
+  }
+
+  .word-guess-key-wide {
+    font-size: clamp(9px, 3vw, 11px);
   }
 }

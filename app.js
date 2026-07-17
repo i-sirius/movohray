@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.2";
+const DATA_VERSION = "0.5.3";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -21,36 +21,36 @@ const LEGACY_IOS_MATCH = /OS (?:9|10|11|12)_/i.test(navigator.userAgent || "");
 if (LEGACY_IOS_MATCH) {
   document.documentElement.classList.add("legacy-ios");
 }
-const GAME_SOUND_MASTER_VOLUME = 0.16;
+const GAME_SOUND_MASTER_VOLUME = 0.22;
 const GAME_SOUND_PATTERNS = {
   correct: [
-    { frequency: 540, start: 0, duration: 0.08, volume: 0.42, type: "sine" },
-    { frequency: 760, start: 0.08, duration: 0.11, volume: 0.36, type: "sine" },
+    { frequency: 620, start: 0, duration: 0.07, volume: 0.5, type: "sine" },
+    { frequency: 880, start: 0.07, duration: 0.11, volume: 0.42, type: "sine" },
   ],
   skipped: [
-    { frequency: 260, start: 0, duration: 0.08, volume: 0.34, type: "triangle" },
-    { frequency: 185, start: 0.08, duration: 0.1, volume: 0.28, type: "triangle" },
+    { frequency: 255, start: 0, duration: 0.09, volume: 0.38, type: "triangle" },
+    { frequency: 196, start: 0.09, duration: 0.12, volume: 0.3, type: "triangle" },
   ],
   roundComplete: [
-    { frequency: 392, start: 0, duration: 0.09, volume: 0.28, type: "sine" },
-    { frequency: 494, start: 0.09, duration: 0.09, volume: 0.3, type: "sine" },
-    { frequency: 659, start: 0.18, duration: 0.18, volume: 0.32, type: "sine" },
+    { frequency: 392, start: 0, duration: 0.08, volume: 0.34, type: "sine" },
+    { frequency: 523, start: 0.1, duration: 0.08, volume: 0.36, type: "sine" },
+    { frequency: 659, start: 0.2, duration: 0.18, volume: 0.38, type: "sine" },
   ],
   gameComplete: [
-    { frequency: 523, start: 0, duration: 0.1, volume: 0.32, type: "sine" },
-    { frequency: 659, start: 0.1, duration: 0.1, volume: 0.34, type: "sine" },
-    { frequency: 784, start: 0.2, duration: 0.12, volume: 0.36, type: "sine" },
-    { frequency: 1047, start: 0.34, duration: 0.24, volume: 0.28, type: "sine" },
+    { frequency: 523, start: 0, duration: 0.1, volume: 0.38, type: "sine" },
+    { frequency: 659, start: 0.1, duration: 0.1, volume: 0.4, type: "sine" },
+    { frequency: 784, start: 0.2, duration: 0.12, volume: 0.42, type: "sine" },
+    { frequency: 1047, start: 0.34, duration: 0.24, volume: 0.34, type: "sine" },
   ],
   gameLoss: [
-    { frequency: 330, start: 0, duration: 0.12, volume: 0.26, type: "triangle" },
-    { frequency: 277, start: 0.13, duration: 0.13, volume: 0.24, type: "triangle" },
-    { frequency: 220, start: 0.27, duration: 0.18, volume: 0.22, type: "triangle" },
+    { frequency: 330, start: 0, duration: 0.13, volume: 0.3, type: "triangle" },
+    { frequency: 277, start: 0.15, duration: 0.14, volume: 0.28, type: "triangle" },
+    { frequency: 220, start: 0.31, duration: 0.2, volume: 0.24, type: "triangle" },
   ],
   tie: [
-    { frequency: 392, start: 0, duration: 0.1, volume: 0.28, type: "sine" },
-    { frequency: 392, start: 0.14, duration: 0.1, volume: 0.28, type: "sine" },
-    { frequency: 523, start: 0.28, duration: 0.16, volume: 0.3, type: "sine" },
+    { frequency: 440, start: 0, duration: 0.1, volume: 0.32, type: "sine" },
+    { frequency: 440, start: 0.14, duration: 0.1, volume: 0.32, type: "sine" },
+    { frequency: 587, start: 0.29, duration: 0.17, volume: 0.34, type: "sine" },
   ],
 };
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
@@ -221,15 +221,12 @@ let whoAmITeamCount = 0;
 let whoAmITeams = [];
 let whoAmITeamScores = [];
 let whoAmIDuration = 60;
-let whoAmIAllowMaybe = true;
-let whoAmIContinueAfterMaybe = false;
 let whoAmIDeck = [];
 let whoAmIAssignments = [];
 let whoAmIRevealIndex = 0;
 let whoAmIRoleVisible = false;
 let whoAmICurrentIndex = 0;
 let whoAmIRound = 1;
-let whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
 let whoAmIRoundLog = [];
 let whoAmITimerId = null;
 let whoAmITimeLeft = 60;
@@ -482,11 +479,19 @@ const whoAmIDurationButtons = Array.from(document.querySelectorAll("[data-whoami
 const whoAmITeamCountButtons = Array.from(document.querySelectorAll("[data-whoami-teams]"));
 const whoAmIPlayersSection = document.getElementById("whoAmIPlayersSection");
 const whoAmITimedSection = document.getElementById("whoAmITimedSection");
+const whoAmIPlayerCountPicker = document.getElementById("whoAmIPlayerCountPicker");
+const whoAmIPlayerCountSummary = document.getElementById("whoAmIPlayerCountSummary");
+const whoAmIEditPlayersBtn = document.getElementById("whoAmIEditPlayersBtn");
 const whoAmIPlayerFields = document.getElementById("whoAmIPlayerFields");
+const whoAmIPlayersModal = document.getElementById("whoAmIPlayersModal");
+const whoAmIPlayersCloseBtn = document.getElementById("whoAmIPlayersCloseBtn");
+const whoAmIPlayersDoneBtn = document.getElementById("whoAmIPlayersDoneBtn");
 const whoAmITeamFields = document.getElementById("whoAmITeamFields");
 const whoAmICategoryList = document.getElementById("whoAmICategoryList");
-const whoAmIMaybeBtn = document.getElementById("whoAmIMaybeBtn");
-const whoAmIContinueMaybeBtn = document.getElementById("whoAmIContinueMaybeBtn");
+const whoAmICategoryModalList = document.getElementById("whoAmICategoryModalList");
+const whoAmICategoriesModal = document.getElementById("whoAmICategoriesModal");
+const whoAmICategoriesCloseBtn = document.getElementById("whoAmICategoriesCloseBtn");
+const whoAmICategoriesDoneBtn = document.getElementById("whoAmICategoriesDoneBtn");
 const whoAmISettingsMessage = document.getElementById("whoAmISettingsMessage");
 const whoAmISettingsRulesBtn = document.getElementById("whoAmISettingsRulesBtn");
 const whoAmIStartBtn = document.getElementById("whoAmIStartBtn");
@@ -497,6 +502,7 @@ const whoAmIRevealInstruction = document.getElementById("whoAmIRevealInstruction
 const whoAmIRevealRoleBox = document.getElementById("whoAmIRevealRoleBox");
 const whoAmIRevealCategory = document.getElementById("whoAmIRevealCategory");
 const whoAmIRevealRole = document.getElementById("whoAmIRevealRole");
+const whoAmIRevealChangeRoleBtn = document.getElementById("whoAmIRevealChangeRoleBtn");
 const whoAmIRevealPrimaryBtn = document.getElementById("whoAmIRevealPrimaryBtn");
 const whoAmIRevealMenuBtn = document.getElementById("whoAmIRevealMenuBtn");
 const whoAmIGameKicker = document.getElementById("whoAmIGameKicker");
@@ -510,8 +516,9 @@ const whoAmIForeheadRole = document.getElementById("whoAmIForeheadRole");
 const whoAmIPlayersBoard = document.getElementById("whoAmIPlayersBoard");
 const whoAmIYesBtn = document.getElementById("whoAmIYesBtn");
 const whoAmINoBtn = document.getElementById("whoAmINoBtn");
-const whoAmIMaybeAnswerBtn = document.getElementById("whoAmIMaybeAnswerBtn");
+const whoAmIAnswerGrid = document.querySelector(".whoami-answer-grid");
 const whoAmIGuessedBtn = document.getElementById("whoAmIGuessedBtn");
+const whoAmIGameChangeRoleBtn = document.getElementById("whoAmIGameChangeRoleBtn");
 const whoAmISkipRoleBtn = document.getElementById("whoAmISkipRoleBtn");
 const whoAmIParticipantsBtn = document.getElementById("whoAmIParticipantsBtn");
 const whoAmIRulesBtn = document.getElementById("whoAmIRulesBtn");
@@ -1249,9 +1256,22 @@ function getSelectedWordGuessModeNumbers() {
   return { wordLength, attempts, allowRepeats: Boolean(selectedWordGuessAllowRepeats) };
 }
 
-function closeWordGuessStartPickers() {
+function closeWordGuessStartPickers(exceptPicker) {
   document.querySelectorAll(".word-guess-select[open]").forEach((picker) => {
+    if (exceptPicker && picker === exceptPicker) {
+      return;
+    }
     picker.removeAttribute("open");
+  });
+}
+
+function bindWordGuessStartPickerEvents() {
+  document.querySelectorAll(".word-guess-select").forEach((picker) => {
+    picker.addEventListener("toggle", () => {
+      if (picker.open) {
+        closeWordGuessStartPickers(picker);
+      }
+    });
   });
 }
 
@@ -2238,7 +2258,7 @@ function getSetupRules(modeId) {
     return {
       eyebrow: "Хто я?",
       title: "Короткі правила",
-      text: "Кожен має приховану роль. Сам гравець її не бачить, ставить питання, а інші відповідають “так”, “ні” або “можливо”. Після відгадування роль підтверджують інші.",
+      text: "Кожен має приховану роль. Сам гравець її не бачить, ставить питання, а інші відповідають тільки “так” або “ні”. Після відгадування роль підтверджують інші.",
     };
   }
 
@@ -2759,6 +2779,8 @@ function renderWhoAmIPlayerFields() {
     field.appendChild(input);
     whoAmIPlayerFields.appendChild(field);
   }
+
+  syncWhoAmISetupSummaries();
 }
 
 function renderWhoAmITeamFields() {
@@ -2811,12 +2833,25 @@ function renderWhoAmICategories() {
   summaryCopy.appendChild(summaryTitle);
   summaryCopy.appendChild(summaryText);
 
-  const details = document.createElement("details");
-  details.className = "whoami-category-details";
-  const detailsSummary = document.createElement("summary");
-  detailsSummary.className = "secondary-btn whoami-category-change";
-  detailsSummary.textContent = "Змінити категорії";
-  details.appendChild(detailsSummary);
+  const changeButton = document.createElement("button");
+  changeButton.className = "secondary-btn whoami-category-change";
+  changeButton.type = "button";
+  changeButton.textContent = "Змінити категорії";
+  changeButton.addEventListener("click", openWhoAmICategoriesModal);
+
+  summaryCard.appendChild(summaryCopy);
+  summaryCard.appendChild(changeButton);
+  whoAmICategoryList.appendChild(summaryCard);
+
+  renderWhoAmICategoryModalList();
+}
+
+function renderWhoAmICategoryModalList() {
+  if (!whoAmICategoryModalList) {
+    return;
+  }
+
+  whoAmICategoryModalList.innerHTML = "";
 
   const controls = document.createElement("div");
   controls.className = "category-picker-controls whoami-category-controls";
@@ -2843,7 +2878,7 @@ function renderWhoAmICategories() {
   controls.appendChild(clearButton);
 
   const list = document.createElement("div");
-  list.className = "category-list whoami-category-list";
+  list.className = "category-list whoami-category-list whoami-category-grid";
 
   whoAmICategories.forEach((category) => {
     const button = document.createElement("button");
@@ -2864,11 +2899,8 @@ function renderWhoAmICategories() {
     list.appendChild(button);
   });
 
-  details.appendChild(controls);
-  details.appendChild(list);
-  summaryCard.appendChild(summaryCopy);
-  summaryCard.appendChild(details);
-  whoAmICategoryList.appendChild(summaryCard);
+  whoAmICategoryModalList.appendChild(controls);
+  whoAmICategoryModalList.appendChild(list);
 }
 
 function getWhoAmICategorySummaryTitle() {
@@ -2899,6 +2931,51 @@ function getWhoAmICategoryCount(category) {
     total += category.levels[difficulty].length;
   });
   return total;
+}
+
+function syncWhoAmISetupSummaries() {
+  if (whoAmIPlayerCountSummary) {
+    whoAmIPlayerCountSummary.textContent = `Гравців: ${whoAmIPlayerCount}`;
+  }
+  if (whoAmIEditPlayersBtn) {
+    whoAmIEditPlayersBtn.textContent = `Гравці · ${whoAmIPlayerCount}`;
+  }
+}
+
+function closeWhoAmISetupDropdowns(exceptPicker) {
+  if (whoAmIPlayerCountPicker && whoAmIPlayerCountPicker !== exceptPicker) {
+    whoAmIPlayerCountPicker.removeAttribute("open");
+  }
+}
+
+function openWhoAmIPlayersModal() {
+  closeWhoAmISetupDropdowns();
+  closeWhoAmICategoriesModal();
+  renderWhoAmIPlayerFields();
+  if (whoAmIPlayersModal) {
+    whoAmIPlayersModal.hidden = false;
+  }
+}
+
+function closeWhoAmIPlayersModal() {
+  if (whoAmIPlayersModal) {
+    whoAmIPlayersModal.hidden = true;
+  }
+}
+
+function openWhoAmICategoriesModal() {
+  closeWhoAmISetupDropdowns();
+  closeWhoAmIPlayersModal();
+  renderWhoAmICategoryModalList();
+  if (whoAmICategoriesModal) {
+    whoAmICategoriesModal.hidden = false;
+  }
+}
+
+function closeWhoAmICategoriesModal() {
+  if (whoAmICategoriesModal) {
+    whoAmICategoriesModal.hidden = true;
+  }
 }
 
 function getWhoAmIRolePool() {
@@ -2947,16 +3024,7 @@ function syncWhoAmIButtons() {
     button.classList.toggle("selected", Number(button.dataset.whoamiTeams) === whoAmITeamCount);
   });
 
-  if (whoAmIMaybeBtn) {
-    whoAmIMaybeBtn.classList.toggle("selected", whoAmIAllowMaybe);
-    whoAmIMaybeBtn.setAttribute("aria-pressed", whoAmIAllowMaybe ? "true" : "false");
-    whoAmIMaybeBtn.textContent = whoAmIAllowMaybe ? "Можливо дозволено" : "Без можливо";
-  }
-
-  if (whoAmIContinueMaybeBtn) {
-    whoAmIContinueMaybeBtn.classList.toggle("selected", whoAmIContinueAfterMaybe);
-    whoAmIContinueMaybeBtn.setAttribute("aria-pressed", whoAmIContinueAfterMaybe ? "true" : "false");
-  }
+  syncWhoAmISetupSummaries();
 }
 
 function updateWhoAmISettingsVisibility() {
@@ -2998,7 +3066,6 @@ function startWhoAmIGame() {
   clearWhoAmITimer();
   whoAmIDeck = shuffleArray(getWhoAmIRolePool());
   whoAmIRound = 1;
-  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
   whoAmIRoundLog = [];
   whoAmIResultMode = "continue";
 
@@ -3022,6 +3089,25 @@ function takeWhoAmIRole() {
   return whoAmIDeck.pop();
 }
 
+function replaceWhoAmIAssignmentRole(assignment) {
+  if (!assignment) {
+    return false;
+  }
+
+  const nextRole = takeWhoAmIRole();
+  if (!nextRole) {
+    return false;
+  }
+
+  assignment.role = nextRole.role;
+  assignment.category = nextRole.category;
+  assignment.difficulty = nextRole.difficulty;
+  assignment.guessed = false;
+  assignment.skipped = false;
+  assignment.guessedRound = 0;
+  return true;
+}
+
 function startWhoAmITurnsGame() {
   syncWhoAmIPlayers();
   whoAmIAssignments = [];
@@ -3036,7 +3122,6 @@ function startWhoAmITurnsGame() {
       skipped: false,
       yes: 0,
       no: 0,
-      maybe: 0,
       turns: 0,
       guessedRound: 0,
     });
@@ -3063,12 +3148,10 @@ function startWhoAmISingleRole() {
     skipped: false,
     yes: 0,
     no: 0,
-    maybe: 0,
     turns: 0,
     guessedRound: 0,
   }];
   whoAmICurrentIndex = 0;
-  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
   beginWhoAmITurn();
 }
 
@@ -3081,7 +3164,6 @@ function startWhoAmITimedGame() {
 
 function startWhoAmITimedRound() {
   whoAmITimedRoles = [];
-  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
   whoAmITimeLeft = whoAmIDuration;
   whoAmICurrentIndex = 0;
   startWhoAmIActiveTurn();
@@ -3098,6 +3180,9 @@ function showWhoAmIReveal() {
   whoAmIFlowStage = "deal";
   whoAmIRoleVisible = false;
   whoAmIRevealRoleBox.hidden = true;
+  if (whoAmIRevealChangeRoleBtn) {
+    whoAmIRevealChangeRoleBtn.hidden = true;
+  }
   whoAmIRevealStep.textContent = `Роль ${whoAmIRevealIndex + 1} з ${whoAmIAssignments.length}`;
   whoAmIRevealTitle.textContent = `${assignment.player} має відвернутися від екрана`;
   whoAmIRevealInstruction.textContent = "Покажіть роль іншим учасникам. Сам гравець не повинен бачити екран.";
@@ -3120,6 +3205,9 @@ function handleWhoAmIRevealPrimary() {
   if (!whoAmIRoleVisible) {
     whoAmIRoleVisible = true;
     whoAmIRevealRoleBox.hidden = false;
+    if (whoAmIRevealChangeRoleBtn) {
+      whoAmIRevealChangeRoleBtn.hidden = false;
+    }
     whoAmIRevealCategory.textContent = assignment.category;
     whoAmIRevealRole.textContent = assignment.role;
     whoAmIRevealTitle.textContent = assignment.player;
@@ -3138,6 +3226,21 @@ function handleWhoAmIRevealPrimary() {
   showWhoAmIReveal();
 }
 
+function changeWhoAmIRevealRole() {
+  const assignment = whoAmIAssignments[whoAmIRevealIndex];
+  if (!whoAmIRoleVisible || !assignment) {
+    return;
+  }
+
+  if (!replaceWhoAmIAssignmentRole(assignment)) {
+    return;
+  }
+
+  whoAmIRevealCategory.textContent = assignment.category;
+  whoAmIRevealRole.textContent = assignment.role;
+  playHapticFeedback("tap");
+}
+
 function beginWhoAmITurn() {
   showWhoAmITurnIntro();
 }
@@ -3151,6 +3254,9 @@ function showWhoAmITurnIntro() {
 
   whoAmIRoleVisible = false;
   whoAmIRevealRoleBox.hidden = true;
+  if (whoAmIRevealChangeRoleBtn) {
+    whoAmIRevealChangeRoleBtn.hidden = true;
+  }
   whoAmIRevealStep.textContent = whoAmIPartyMode === "turns" ? `Коло ${whoAmIRound}` : "Хід";
 
   if (whoAmIShowMode === "forehead") {
@@ -3197,7 +3303,6 @@ function getWhoAmICurrentAssignment() {
         skipped: false,
         yes: 0,
         no: 0,
-        maybe: 0,
         turns: 0,
         guessedRound: 0,
       };
@@ -3224,7 +3329,9 @@ function renderWhoAmIGame() {
 
   whoAmITimerBox.hidden = !isTimed;
   whoAmITimerText.textContent = whoAmITimeLeft;
-  whoAmIMaybeAnswerBtn.hidden = !whoAmIAllowMaybe;
+  if (whoAmIAnswerGrid) {
+    whoAmIAnswerGrid.classList.add("is-two-answer");
+  }
 
   const showForehead = whoAmIShowMode === "forehead";
   whoAmIForeheadCard.hidden = !showForehead;
@@ -3397,7 +3504,7 @@ function renderWhoAmIPlayersBoard() {
       <strong>${assignment.player}</strong>
       <span>${status}</span>
       <em>роль прихована</em>
-      <small>так ${assignment.yes} · ні ${assignment.no}${whoAmIAllowMaybe ? ` · можливо ${assignment.maybe}` : ""}</small>
+      <small>так ${assignment.yes} · ні ${assignment.no}</small>
     `;
     whoAmIPlayersBoard.appendChild(item);
   });
@@ -3428,25 +3535,21 @@ function handleWhoAmIAnswer(type) {
     return;
   }
 
-  if (type === "maybe" && !whoAmIAllowMaybe) {
+  if (type !== "yes" && type !== "no") {
     return;
   }
 
   assignment[type] += 1;
-  whoAmIQuestionStats[type] += 1;
 
   if (type === "yes") {
     playCorrectSound();
-  } else if (type === "maybe") {
-    playHapticFeedback("tap");
-    playToneSequence([{ frequency: 420, start: 0, duration: 0.08, volume: 0.26, type: "sine" }]);
   } else {
     playSkipSound();
   }
 
   flashWhoAmIAnswer(type);
 
-  if (whoAmIPartyMode === "turns" && type !== "yes" && !(type === "maybe" && whoAmIContinueAfterMaybe)) {
+  if (whoAmIPartyMode === "turns" && type === "no") {
     moveToNextWhoAmIPlayer();
     return;
   }
@@ -3459,11 +3562,11 @@ function flashWhoAmIAnswer(type) {
     return;
   }
 
-  whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no", "whoami-feedback-maybe");
+  whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no");
   void whoAmIGameScreen.offsetWidth;
   whoAmIGameScreen.classList.add(`whoami-feedback-${type}`);
   window.setTimeout(() => {
-    whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no", "whoami-feedback-maybe");
+    whoAmIGameScreen.classList.remove("whoami-feedback-yes", "whoami-feedback-no");
   }, 420);
 }
 
@@ -3474,6 +3577,21 @@ function markWhoAmIGuessed() {
   }
 
   openWhoAmIConfirmModal(assignment);
+}
+
+function changeWhoAmICurrentRole() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    return;
+  }
+
+  if (!replaceWhoAmIAssignmentRole(assignment)) {
+    return;
+  }
+
+  hideWhoAmISpoiler();
+  playHapticFeedback("tap");
+  renderWhoAmIGame();
 }
 
 function confirmWhoAmIGuessed() {
@@ -3682,6 +3800,7 @@ function showWhoAmIFinal() {
   const isTimed = whoAmIPartyMode === "timed";
   whoAmIFinalTitle.textContent = "Гру завершено";
   whoAmIFinalHero.innerHTML = "";
+  whoAmIFinalHero.hidden = true;
   whoAmIFinalBoard.innerHTML = "";
   whoAmIFinalBoard.className = "whoami-final-board";
 
@@ -3709,12 +3828,10 @@ function showWhoAmIFinal() {
       whoAmIFinalBoard.appendChild(row);
     });
     whoAmIFinalSubtitle.textContent = winners.length > 1 ? `Нічия: ${winners.join(", ")}` : `Перемогла ${winners[0]}`;
-    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${winners.length > 1 ? "Нічия" : "Перемога"}</strong><span aria-hidden="true">✦</span>`;
     playGameCompleteSound(winners.length > 1 ? "tie" : "win");
   } else if (isTimed) {
     const guessed = whoAmITimedRoles.filter((item) => item.status === "guessed").length;
     whoAmIFinalSubtitle.textContent = `Вгадано ролей: ${guessed}`;
-    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${guessed}</strong><span>ролей</span>`;
     whoAmITimedRoles.forEach((item, index) => {
       const row = document.createElement("div");
       row.className = "whoami-final-row";
@@ -3745,8 +3862,6 @@ function showWhoAmIFinal() {
 
     whoAmIFinalTitle.textContent = allGuessed ? "Усі ролі відгадано" : "Гру завершено";
     whoAmIFinalSubtitle.textContent = allGuessed ? "Усі учасники відкрили свої ролі." : "Підсумок ролей і ходів.";
-    whoAmIFinalHero.innerHTML = `<span aria-hidden="true">✦</span><strong>${allGuessed ? "Фініш" : "Підсумок"}</strong><span aria-hidden="true">✦</span>`;
-
     ordered.forEach((assignment, index) => {
       const row = document.createElement("div");
       const isPodium = !allGuessed && assignment.guessed && index < 3;
@@ -3915,6 +4030,8 @@ function setupEvents() {
     });
   });
 
+  bindWordGuessStartPickerEvents();
+
   if (wordGuessStartBtn) {
     wordGuessStartBtn.addEventListener("click", () => {
       startWordGuessGame();
@@ -4058,6 +4175,7 @@ function setupEvents() {
   whoAmIPlayerCountButtons.forEach((button) => {
     button.addEventListener("click", () => {
       whoAmIPlayerCount = Number(button.dataset.whoamiPlayers) || WHOAMI_DEFAULT_PLAYER_COUNT;
+      closeWhoAmISetupDropdowns();
       renderWhoAmIPlayerFields();
       syncWhoAmIButtons();
     });
@@ -4091,17 +4209,48 @@ function setupEvents() {
     });
   });
 
-  if (whoAmIMaybeBtn) {
-    whoAmIMaybeBtn.addEventListener("click", () => {
-      whoAmIAllowMaybe = !whoAmIAllowMaybe;
-      syncWhoAmIButtons();
+  if (whoAmIPlayerCountPicker) {
+    whoAmIPlayerCountPicker.addEventListener("toggle", () => {
+      if (whoAmIPlayerCountPicker.open) {
+        closeWhoAmIPlayersModal();
+        closeWhoAmICategoriesModal();
+      }
     });
   }
 
-  if (whoAmIContinueMaybeBtn) {
-    whoAmIContinueMaybeBtn.addEventListener("click", () => {
-      whoAmIContinueAfterMaybe = !whoAmIContinueAfterMaybe;
-      syncWhoAmIButtons();
+  if (whoAmIEditPlayersBtn) {
+    whoAmIEditPlayersBtn.addEventListener("click", openWhoAmIPlayersModal);
+  }
+
+  if (whoAmIPlayersCloseBtn) {
+    whoAmIPlayersCloseBtn.addEventListener("click", closeWhoAmIPlayersModal);
+  }
+
+  if (whoAmIPlayersDoneBtn) {
+    whoAmIPlayersDoneBtn.addEventListener("click", closeWhoAmIPlayersModal);
+  }
+
+  if (whoAmIPlayersModal) {
+    whoAmIPlayersModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-whoami-players-close]")) {
+        closeWhoAmIPlayersModal();
+      }
+    });
+  }
+
+  if (whoAmICategoriesCloseBtn) {
+    whoAmICategoriesCloseBtn.addEventListener("click", closeWhoAmICategoriesModal);
+  }
+
+  if (whoAmICategoriesDoneBtn) {
+    whoAmICategoriesDoneBtn.addEventListener("click", closeWhoAmICategoriesModal);
+  }
+
+  if (whoAmICategoriesModal) {
+    whoAmICategoriesModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-whoami-categories-close]")) {
+        closeWhoAmICategoriesModal();
+      }
     });
   }
 
@@ -4117,6 +4266,10 @@ function setupEvents() {
     whoAmIRevealPrimaryBtn.addEventListener("click", handleWhoAmIRevealPrimary);
   }
 
+  if (whoAmIRevealChangeRoleBtn) {
+    whoAmIRevealChangeRoleBtn.addEventListener("click", changeWhoAmIRevealRole);
+  }
+
   if (whoAmIRevealMenuBtn) {
     whoAmIRevealMenuBtn.addEventListener("click", exitWhoAmIToMenu);
   }
@@ -4129,12 +4282,12 @@ function setupEvents() {
     whoAmINoBtn.addEventListener("click", () => handleWhoAmIAnswer("no"));
   }
 
-  if (whoAmIMaybeAnswerBtn) {
-    whoAmIMaybeAnswerBtn.addEventListener("click", () => handleWhoAmIAnswer("maybe"));
-  }
-
   if (whoAmIGuessedBtn) {
     whoAmIGuessedBtn.addEventListener("click", markWhoAmIGuessed);
+  }
+
+  if (whoAmIGameChangeRoleBtn) {
+    whoAmIGameChangeRoleBtn.addEventListener("click", changeWhoAmICurrentRole);
   }
 
   if (whoAmISkipRoleBtn) {
@@ -4290,7 +4443,21 @@ function setupEvents() {
     if (event.key === "Escape") {
       hideWhoAmISpoiler();
       closeWordGuessHistory();
+      closeWordGuessStartPickers();
+      closeWhoAmISetupDropdowns();
+      closeWhoAmIPlayersModal();
+      closeWhoAmICategoriesModal();
       closeThemesPopover();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target && event.target.closest && event.target.closest(".word-guess-select")) {
+      return;
+    }
+    closeWordGuessStartPickers();
+    if (whoAmIPlayerCountPicker && event.target && event.target.closest && !event.target.closest(".whoami-setup-dropdown")) {
+      closeWhoAmISetupDropdowns();
     }
   });
 
@@ -6373,6 +6540,14 @@ function showWinnerScreen() {
 
 function showScreen(screenName) {
   closeThemesPopover();
+  if (screenName !== "wordGuessSettings") {
+    closeWordGuessStartPickers();
+  }
+  if (screenName !== "whoAmISettings") {
+    closeWhoAmISetupDropdowns();
+    closeWhoAmIPlayersModal();
+    closeWhoAmICategoriesModal();
+  }
   if (screenName !== "wordGuessGame") {
     setWordGuessBackgroundLocked(false);
     clearWordGuessFinaleEffect();
