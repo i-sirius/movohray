@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.4.40" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.5.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.4.40" />
+  <link rel="stylesheet" href="styles.css?v=0.5.0" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -55,7 +55,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.4.40</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.5.0</p>
     </div>
   </div>
   <main class="app">
@@ -71,7 +71,7 @@
           </div>
           <h1 id="appTitle">Мовограй</h1>
           <p id="appSubtitle" class="subtitle">Українські ігри зі словами для компанії.</p>
-          <p class="menu-mode-note">Режими: Поясни слово, Покажи слово та Вгадай слово.</p>
+          <p class="menu-mode-note">Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?</p>
 
           <div id="modeList" class="mode-grid"></div>
 
@@ -87,7 +87,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.4.40</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.5.0</p>
         </div>
       </div>
     </section>
@@ -316,6 +316,211 @@
       </div>
     </div>
 
+    <section id="whoAmISettingsScreen" class="screen">
+      <div class="card bubble-card settings-card whoami-settings-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <div class="settings-header">
+            <p class="settings-eyebrow">Компанійний режим</p>
+            <h1 class="mode-title">Хто я?</h1>
+            <p class="mode-description">Один гравець не бачить свою роль, а інші відповідають на його запитання: так, ні або можливо.</p>
+          </div>
+
+          <div class="settings-grid whoami-settings-grid">
+            <section class="settings-group settings-group-wide">
+              <h2>Формат</h2>
+              <div class="settings-two-columns">
+                <div class="setting-subsection">
+                  <h3>Показ ролі:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button class="whoami-show-mode-btn setting-chip selected" data-whoami-show-mode="pass" type="button">Передай телефон</button>
+                    <button class="whoami-show-mode-btn setting-chip" data-whoami-show-mode="forehead" type="button">Телефон на лобі</button>
+                  </div>
+                </div>
+                <div class="setting-subsection">
+                  <h3>Тип партії:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button class="whoami-party-mode-btn setting-chip selected" data-whoami-party-mode="turns" type="button">По черзі</button>
+                    <button class="whoami-party-mode-btn setting-chip" data-whoami-party-mode="single" type="button">Одна роль</button>
+                    <button class="whoami-party-mode-btn setting-chip" data-whoami-party-mode="timed" type="button">На час</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="whoAmIPlayersSection" class="settings-group settings-group-wide">
+              <h2>Гравці</h2>
+              <div class="settings-chip-grid compact-chip-grid">
+                <button class="whoami-player-count-btn setting-chip" data-whoami-players="2" type="button">2</button>
+                <button class="whoami-player-count-btn setting-chip selected" data-whoami-players="4" type="button">4</button>
+                <button class="whoami-player-count-btn setting-chip" data-whoami-players="6" type="button">6</button>
+                <button class="whoami-player-count-btn setting-chip" data-whoami-players="8" type="button">8</button>
+                <button class="whoami-player-count-btn setting-chip" data-whoami-players="12" type="button">12</button>
+              </div>
+              <div id="whoAmIPlayerFields" class="team-name-fields whoami-player-fields"></div>
+            </section>
+
+            <section class="settings-group settings-group-wide">
+              <h2>Ролі</h2>
+              <div id="whoAmICategoryList" class="category-picker"></div>
+              <div class="settings-two-columns">
+                <div class="setting-subsection">
+                  <h3>Складність:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button class="whoami-difficulty-btn setting-chip selected" data-whoami-difficulty="easy" type="button">Легко</button>
+                    <button class="whoami-difficulty-btn setting-chip selected" data-whoami-difficulty="medium" type="button">Середньо</button>
+                    <button class="whoami-difficulty-btn setting-chip" data-whoami-difficulty="hard" type="button">Складно</button>
+                  </div>
+                </div>
+                <div class="setting-subsection">
+                  <h3>Відповіді:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button id="whoAmIMaybeBtn" class="setting-chip selected" type="button" aria-pressed="true">Можливо дозволено</button>
+                    <button id="whoAmIContinueMaybeBtn" class="setting-chip" type="button" aria-pressed="false">Можливо не завершує хід</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section id="whoAmITimedSection" class="settings-group settings-group-wide" hidden>
+              <h2>Раунд на час</h2>
+              <div class="settings-two-columns">
+                <div class="setting-subsection">
+                  <h3>Час:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button class="whoami-duration-btn setting-chip" data-whoami-seconds="30" type="button">30</button>
+                    <button class="whoami-duration-btn setting-chip selected" data-whoami-seconds="60" type="button">60</button>
+                    <button class="whoami-duration-btn setting-chip" data-whoami-seconds="90" type="button">90</button>
+                    <button class="whoami-duration-btn setting-chip" data-whoami-seconds="120" type="button">120</button>
+                  </div>
+                </div>
+                <div class="setting-subsection">
+                  <h3>Команди:</h3>
+                  <div class="settings-chip-grid compact-chip-grid">
+                    <button class="whoami-team-count-btn setting-chip selected" data-whoami-teams="0" type="button">Без команд</button>
+                    <button class="whoami-team-count-btn setting-chip" data-whoami-teams="2" type="button">2</button>
+                    <button class="whoami-team-count-btn setting-chip" data-whoami-teams="3" type="button">3</button>
+                    <button class="whoami-team-count-btn setting-chip" data-whoami-teams="4" type="button">4</button>
+                  </div>
+                </div>
+              </div>
+              <div id="whoAmITeamFields" class="team-name-fields whoami-team-fields"></div>
+            </section>
+          </div>
+
+          <p id="whoAmISettingsMessage" class="message settings-message" role="alert" aria-live="polite"></p>
+          <div class="settings-action-row whoami-action-row">
+            <button id="whoAmIStartBtn" class="primary-btn" type="button">Почати гру</button>
+            <button id="whoAmIBackBtn" class="secondary-btn" type="button">У меню</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="whoAmIRevealScreen" class="screen">
+      <div class="card center bubble-card whoami-reveal-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <p id="whoAmIRevealStep" class="settings-eyebrow">Роль 1 з 4</p>
+          <h1 id="whoAmIRevealTitle">Передайте телефон</h1>
+          <p id="whoAmIRevealInstruction" class="subtitle"></p>
+          <div id="whoAmIRevealRoleBox" class="whoami-role-box" hidden>
+            <small id="whoAmIRevealCategory">Категорія</small>
+            <strong id="whoAmIRevealRole">Роль</strong>
+          </div>
+          <button id="whoAmIRevealPrimaryBtn" class="primary-btn" type="button">Показати роль</button>
+          <button id="whoAmIRevealMenuBtn" class="secondary-btn" type="button">У меню</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="whoAmIGameScreen" class="screen">
+      <div class="game-layout bubble-panel whoami-game-layout">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-c"></div>
+        <div class="panel-inner">
+          <header class="whoami-game-header">
+            <div>
+              <p id="whoAmIGameKicker" class="game-hud-kicker">ХІД ГРАВЦЯ</p>
+              <h1 id="whoAmICurrentPlayer">Гравець 1</h1>
+              <p id="whoAmIGameInfo" class="mode-description">Коло 1</p>
+            </div>
+            <div id="whoAmITimerBox" class="whoami-timer-box" hidden>
+              <span id="whoAmITimerText">60</span>
+              <small>сек</small>
+            </div>
+          </header>
+
+          <div id="whoAmIForeheadCard" class="whoami-forehead-card" hidden>
+            <small id="whoAmIForeheadCategory">Категорія</small>
+            <strong id="whoAmIForeheadRole">Роль</strong>
+            <span>Тримайте екран так, щоб роль бачили інші.</span>
+          </div>
+
+          <div id="whoAmIPlayersBoard" class="whoami-players-board"></div>
+
+          <div class="whoami-answer-grid">
+            <button id="whoAmIYesBtn" class="correct-btn" type="button">Так</button>
+            <button id="whoAmINoBtn" class="skip-btn" type="button">Ні</button>
+            <button id="whoAmIMaybeAnswerBtn" class="secondary-btn whoami-maybe-answer" type="button">Можливо</button>
+          </div>
+
+          <div class="game-buttons whoami-game-buttons">
+            <button id="whoAmIGuessedBtn" class="primary-btn" type="button">Відгадав роль</button>
+            <button id="whoAmISkipRoleBtn" class="secondary-btn" type="button">Пропустити</button>
+          </div>
+
+          <div class="game-secondary-actions">
+            <button id="whoAmIRulesBtn" class="secondary-btn" type="button">Правила</button>
+            <button id="whoAmIEndRoundBtn" class="secondary-btn" type="button">Завершити раунд</button>
+            <button id="whoAmIGameMenuBtn" class="secondary-btn" type="button">У меню</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="whoAmIRoundScreen" class="screen">
+      <div class="card center bubble-card whoami-result-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1 id="whoAmIRoundTitle">Раунд завершено</h1>
+          <p id="whoAmIRoundSummary" class="subtitle"></p>
+          <div id="whoAmIRoundRoles" class="whoami-role-list"></div>
+          <div id="whoAmIRoundScoreBoard" class="team-score-board"></div>
+          <button id="whoAmIRoundNextBtn" class="primary-btn" type="button">Далі</button>
+          <button id="whoAmIRoundMenuBtn" class="secondary-btn" type="button">У меню</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="whoAmIFinalScreen" class="screen">
+      <div class="card center bubble-card">
+        <div class="decor-dot dot-a"></div>
+        <div class="decor-dot dot-b"></div>
+        <div class="card-inner">
+          <h1 id="whoAmIFinalTitle">Гру завершено</h1>
+          <p id="whoAmIFinalSubtitle" class="subtitle"></p>
+          <div id="whoAmIFinalHero" class="winner-hero"></div>
+          <div id="whoAmIFinalBoard" class="whoami-role-list"></div>
+          <button id="whoAmINewBtn" class="primary-btn" type="button">Нова гра</button>
+          <button id="whoAmIFinalMenuBtn" class="secondary-btn" type="button">У головне меню</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="whoAmIRulesModal" class="word-guess-info-modal" hidden>
+      <div class="word-guess-info-backdrop" data-whoami-rules-close></div>
+      <div class="word-guess-info-card" role="dialog" aria-modal="true" aria-labelledby="whoAmIRulesTitle">
+        <button id="whoAmIRulesCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
+        <p class="word-guess-info-eyebrow">Хто я?</p>
+        <h2 id="whoAmIRulesTitle">Правила</h2>
+        <p>Гравець ставить запитання про свою роль. Інші відповідають тільки “так”, “ні” або “можливо”. Саму роль не підказуйте напряму.</p>
+      </div>
+    </div>
+
     <section id="teamReadyScreen" class="screen">
       <div class="card center bubble-card">
         <div class="decor-dot dot-a"></div>
@@ -506,6 +711,6 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.4.40"></script>
+  <script src="app.js?v=0.5.0"></script>
 </body>
 </html>

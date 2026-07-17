@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.4.40";
+const DATA_VERSION = "0.5.0";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -65,6 +65,8 @@ const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
 const modeCategoryCache = {};
 const WORD_GUESS_DATA_FILE = "wordguess.json";
+const WHOAMI_DATA_FILE = "whoami.json";
+const WHOAMI_DEFAULT_PLAYER_COUNT = 4;
 const WORD_GUESS_LETTERS = "абвгґдеєжзиіїйклмнопрстуфхцчшщьюя";
 const WORD_GUESS_KEYBOARD_ROWS = [
   ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ї"],
@@ -207,6 +209,34 @@ let wordGuessFinaleEffectTimeoutId = null;
 let isWordGuessHistoryOpen = false;
 let isWordGuessResultHistoryOpen = false;
 
+let whoAmIData = null;
+let whoAmICategories = [];
+let whoAmISelectedCategoryNames = [];
+let whoAmISelectedDifficulties = ["easy", "medium"];
+let whoAmIShowMode = "pass";
+let whoAmIPartyMode = "turns";
+let whoAmIPlayerCount = WHOAMI_DEFAULT_PLAYER_COUNT;
+let whoAmIPlayers = [];
+let whoAmITeamCount = 0;
+let whoAmITeams = [];
+let whoAmITeamScores = [];
+let whoAmIDuration = 60;
+let whoAmIAllowMaybe = true;
+let whoAmIContinueAfterMaybe = false;
+let whoAmIDeck = [];
+let whoAmIAssignments = [];
+let whoAmIRevealIndex = 0;
+let whoAmIRoleVisible = false;
+let whoAmICurrentIndex = 0;
+let whoAmIRound = 1;
+let whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
+let whoAmIRoundLog = [];
+let whoAmITimerId = null;
+let whoAmITimeLeft = 60;
+let whoAmITimedRoles = [];
+let whoAmITimedTeamIndex = 0;
+let whoAmIResultMode = "continue";
+
 let pointerStartY = 0;
 let isSwipeLocked = false;
 let dragOffsetY = 0;
@@ -249,7 +279,8 @@ const modeConfigs = [
     id: "whoami",
     title: "Хто я?",
     description: "Відгадувати персонажа за питаннями.",
-    available: false,
+    dataFile: WHOAMI_DATA_FILE,
+    available: true,
   },
   {
     id: "battle",
@@ -278,6 +309,11 @@ const menuScreen = document.getElementById("menuScreen");
 const settingsScreen = document.getElementById("settingsScreen");
 const wordGuessSettingsScreen = document.getElementById("wordGuessSettingsScreen");
 const wordGuessGameScreen = document.getElementById("wordGuessGameScreen");
+const whoAmISettingsScreen = document.getElementById("whoAmISettingsScreen");
+const whoAmIRevealScreen = document.getElementById("whoAmIRevealScreen");
+const whoAmIGameScreen = document.getElementById("whoAmIGameScreen");
+const whoAmIRoundScreen = document.getElementById("whoAmIRoundScreen");
+const whoAmIFinalScreen = document.getElementById("whoAmIFinalScreen");
 const teamReadyScreen = document.getElementById("teamReadyScreen");
 const gameScreen = document.getElementById("gameScreen");
 const roundReviewScreen = document.getElementById("roundReviewScreen");
@@ -427,6 +463,61 @@ const wordGuessLikeBtn = document.getElementById("wordGuessLikeBtn");
 const wordGuessDislikeBtn = document.getElementById("wordGuessDislikeBtn");
 const wordGuessFeedbackMessage = document.getElementById("wordGuessFeedbackMessage");
 const wordGuessFeedbackExportBtn = document.getElementById("wordGuessFeedbackExportBtn");
+const whoAmIShowModeButtons = Array.from(document.querySelectorAll("[data-whoami-show-mode]"));
+const whoAmIPartyModeButtons = Array.from(document.querySelectorAll("[data-whoami-party-mode]"));
+const whoAmIPlayerCountButtons = Array.from(document.querySelectorAll("[data-whoami-players]"));
+const whoAmIDifficultyButtons = Array.from(document.querySelectorAll("[data-whoami-difficulty]"));
+const whoAmIDurationButtons = Array.from(document.querySelectorAll("[data-whoami-seconds]"));
+const whoAmITeamCountButtons = Array.from(document.querySelectorAll("[data-whoami-teams]"));
+const whoAmIPlayersSection = document.getElementById("whoAmIPlayersSection");
+const whoAmITimedSection = document.getElementById("whoAmITimedSection");
+const whoAmIPlayerFields = document.getElementById("whoAmIPlayerFields");
+const whoAmITeamFields = document.getElementById("whoAmITeamFields");
+const whoAmICategoryList = document.getElementById("whoAmICategoryList");
+const whoAmIMaybeBtn = document.getElementById("whoAmIMaybeBtn");
+const whoAmIContinueMaybeBtn = document.getElementById("whoAmIContinueMaybeBtn");
+const whoAmISettingsMessage = document.getElementById("whoAmISettingsMessage");
+const whoAmIStartBtn = document.getElementById("whoAmIStartBtn");
+const whoAmIBackBtn = document.getElementById("whoAmIBackBtn");
+const whoAmIRevealStep = document.getElementById("whoAmIRevealStep");
+const whoAmIRevealTitle = document.getElementById("whoAmIRevealTitle");
+const whoAmIRevealInstruction = document.getElementById("whoAmIRevealInstruction");
+const whoAmIRevealRoleBox = document.getElementById("whoAmIRevealRoleBox");
+const whoAmIRevealCategory = document.getElementById("whoAmIRevealCategory");
+const whoAmIRevealRole = document.getElementById("whoAmIRevealRole");
+const whoAmIRevealPrimaryBtn = document.getElementById("whoAmIRevealPrimaryBtn");
+const whoAmIRevealMenuBtn = document.getElementById("whoAmIRevealMenuBtn");
+const whoAmIGameKicker = document.getElementById("whoAmIGameKicker");
+const whoAmICurrentPlayer = document.getElementById("whoAmICurrentPlayer");
+const whoAmIGameInfo = document.getElementById("whoAmIGameInfo");
+const whoAmITimerBox = document.getElementById("whoAmITimerBox");
+const whoAmITimerText = document.getElementById("whoAmITimerText");
+const whoAmIForeheadCard = document.getElementById("whoAmIForeheadCard");
+const whoAmIForeheadCategory = document.getElementById("whoAmIForeheadCategory");
+const whoAmIForeheadRole = document.getElementById("whoAmIForeheadRole");
+const whoAmIPlayersBoard = document.getElementById("whoAmIPlayersBoard");
+const whoAmIYesBtn = document.getElementById("whoAmIYesBtn");
+const whoAmINoBtn = document.getElementById("whoAmINoBtn");
+const whoAmIMaybeAnswerBtn = document.getElementById("whoAmIMaybeAnswerBtn");
+const whoAmIGuessedBtn = document.getElementById("whoAmIGuessedBtn");
+const whoAmISkipRoleBtn = document.getElementById("whoAmISkipRoleBtn");
+const whoAmIRulesBtn = document.getElementById("whoAmIRulesBtn");
+const whoAmIEndRoundBtn = document.getElementById("whoAmIEndRoundBtn");
+const whoAmIGameMenuBtn = document.getElementById("whoAmIGameMenuBtn");
+const whoAmIRoundTitle = document.getElementById("whoAmIRoundTitle");
+const whoAmIRoundSummary = document.getElementById("whoAmIRoundSummary");
+const whoAmIRoundRoles = document.getElementById("whoAmIRoundRoles");
+const whoAmIRoundScoreBoard = document.getElementById("whoAmIRoundScoreBoard");
+const whoAmIRoundNextBtn = document.getElementById("whoAmIRoundNextBtn");
+const whoAmIRoundMenuBtn = document.getElementById("whoAmIRoundMenuBtn");
+const whoAmIFinalTitle = document.getElementById("whoAmIFinalTitle");
+const whoAmIFinalSubtitle = document.getElementById("whoAmIFinalSubtitle");
+const whoAmIFinalHero = document.getElementById("whoAmIFinalHero");
+const whoAmIFinalBoard = document.getElementById("whoAmIFinalBoard");
+const whoAmINewBtn = document.getElementById("whoAmINewBtn");
+const whoAmIFinalMenuBtn = document.getElementById("whoAmIFinalMenuBtn");
+const whoAmIRulesModal = document.getElementById("whoAmIRulesModal");
+const whoAmIRulesCloseBtn = document.getElementById("whoAmIRulesCloseBtn");
 
 init();
 
@@ -2447,6 +2538,877 @@ function updateWordGuessFeedbackState() {
   }
 }
 
+function isWhoAmI() {
+  return selectedMode === "whoami";
+}
+
+async function loadWhoAmIData() {
+  if (whoAmIData && whoAmICategories.length > 0) {
+    return true;
+  }
+
+  if (whoAmISettingsMessage) {
+    whoAmISettingsMessage.textContent = "Завантажуємо ролі...";
+  }
+
+  try {
+    const response = await fetch(`${WHOAMI_DATA_FILE}?v=${encodeURIComponent(DATA_VERSION)}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    whoAmIData = await response.json();
+    whoAmICategories = normalizeWhoAmICategories(whoAmIData);
+    if (whoAmICategories.length === 0) {
+      throw new Error("Empty whoami dictionary");
+    }
+
+    if (whoAmISelectedCategoryNames.length === 0) {
+      whoAmISelectedCategoryNames = whoAmICategories.map((category) => category.name);
+    }
+
+    if (whoAmISettingsMessage) {
+      whoAmISettingsMessage.textContent = "";
+    }
+
+    renderWhoAmISettings();
+    return true;
+  } catch (error) {
+    console.error(`Не вдалося завантажити ${WHOAMI_DATA_FILE}`, error);
+    whoAmIData = null;
+    whoAmICategories = [];
+    if (whoAmISettingsMessage) {
+      whoAmISettingsMessage.textContent = "Не вдалося завантажити ролі.";
+    }
+    return false;
+  }
+}
+
+function normalizeWhoAmICategories(data) {
+  const source = data && data.categories ? data.categories : {};
+  return Object.keys(source).map((name) => {
+    const levels = source[name] || {};
+    return {
+      name,
+      levels: {
+        easy: Array.isArray(levels.easy) ? levels.easy : [],
+        medium: Array.isArray(levels.medium) ? levels.medium : [],
+        hard: Array.isArray(levels.hard) ? levels.hard : [],
+      },
+    };
+  });
+}
+
+function getWhoAmIPlayerName(index) {
+  const name = whoAmIPlayers[index];
+  if (name && name.trim()) {
+    return name.trim();
+  }
+  return `Гравець ${index + 1}`;
+}
+
+function getWhoAmITeamName(index) {
+  const name = whoAmITeams[index];
+  if (name && name.trim()) {
+    return name.trim();
+  }
+  return `Команда ${index + 1}`;
+}
+
+function syncWhoAmIPlayers() {
+  const nextPlayers = [];
+  for (let index = 0; index < whoAmIPlayerCount; index += 1) {
+    nextPlayers.push(whoAmIPlayers[index] || `Гравець ${index + 1}`);
+  }
+  whoAmIPlayers = nextPlayers;
+}
+
+function syncWhoAmITeams() {
+  const nextTeams = [];
+  for (let index = 0; index < whoAmITeamCount; index += 1) {
+    nextTeams.push(whoAmITeams[index] || getDefaultTeamName(index));
+  }
+  whoAmITeams = nextTeams;
+  whoAmITeamScores = Array.from({ length: whoAmITeamCount }, () => 0);
+}
+
+function renderWhoAmISettings() {
+  renderWhoAmIPlayerFields();
+  renderWhoAmITeamFields();
+  renderWhoAmICategories();
+  updateWhoAmISettingsVisibility();
+  syncWhoAmIButtons();
+}
+
+function renderWhoAmIPlayerFields() {
+  if (!whoAmIPlayerFields) {
+    return;
+  }
+
+  syncWhoAmIPlayers();
+  whoAmIPlayerFields.innerHTML = "";
+
+  for (let index = 0; index < whoAmIPlayerCount; index += 1) {
+    const field = document.createElement("div");
+    field.className = "team-name-field";
+
+    const label = document.createElement("label");
+    label.htmlFor = `whoAmIPlayer${index + 1}`;
+    label.textContent = `Гравець ${index + 1}`;
+
+    const input = document.createElement("input");
+    input.id = `whoAmIPlayer${index + 1}`;
+    input.type = "text";
+    input.placeholder = `Гравець ${index + 1}`;
+    input.value = getWhoAmIPlayerName(index);
+    input.addEventListener("input", (event) => {
+      whoAmIPlayers[index] = event.target.value;
+    });
+
+    field.appendChild(label);
+    field.appendChild(input);
+    whoAmIPlayerFields.appendChild(field);
+  }
+}
+
+function renderWhoAmITeamFields() {
+  if (!whoAmITeamFields) {
+    return;
+  }
+
+  syncWhoAmITeams();
+  whoAmITeamFields.innerHTML = "";
+
+  for (let index = 0; index < whoAmITeamCount; index += 1) {
+    const field = document.createElement("div");
+    field.className = "team-name-field";
+
+    const label = document.createElement("label");
+    label.htmlFor = `whoAmITeam${index + 1}`;
+    label.textContent = getDefaultTeamName(index);
+
+    const input = document.createElement("input");
+    input.id = `whoAmITeam${index + 1}`;
+    input.type = "text";
+    input.placeholder = getDefaultTeamName(index);
+    input.value = getWhoAmITeamName(index);
+    input.addEventListener("input", (event) => {
+      whoAmITeams[index] = event.target.value;
+    });
+
+    field.appendChild(label);
+    field.appendChild(input);
+    whoAmITeamFields.appendChild(field);
+  }
+}
+
+function renderWhoAmICategories() {
+  if (!whoAmICategoryList) {
+    return;
+  }
+
+  whoAmICategoryList.innerHTML = "";
+
+  const controls = document.createElement("div");
+  controls.className = "category-picker-controls";
+
+  const allButton = document.createElement("button");
+  allButton.className = "category-btn all-categories-btn";
+  allButton.type = "button";
+  allButton.textContent = "Усі ролі";
+  allButton.classList.toggle("selected", whoAmISelectedCategoryNames.length === whoAmICategories.length);
+  allButton.addEventListener("click", () => {
+    whoAmISelectedCategoryNames = whoAmICategories.map((category) => category.name);
+    renderWhoAmICategories();
+  });
+
+  const clearButton = document.createElement("button");
+  clearButton.className = "category-toggle-btn setting-chip";
+  clearButton.type = "button";
+  clearButton.textContent = "Очистити";
+  clearButton.addEventListener("click", () => {
+    whoAmISelectedCategoryNames = [];
+    renderWhoAmICategories();
+  });
+
+  controls.appendChild(allButton);
+  controls.appendChild(clearButton);
+
+  const summary = document.createElement("p");
+  summary.className = "category-status";
+  summary.textContent = getWhoAmICategoryStatus();
+
+  const list = document.createElement("div");
+  list.className = "category-list whoami-category-list";
+
+  whoAmICategories.forEach((category) => {
+    const button = document.createElement("button");
+    const isSelected = whoAmISelectedCategoryNames.indexOf(category.name) >= 0;
+    button.className = "category-btn";
+    button.type = "button";
+    button.textContent = `${category.name} (${getWhoAmICategoryCount(category)})`;
+    button.classList.toggle("selected", isSelected);
+    button.addEventListener("click", () => {
+      if (isSelected) {
+        whoAmISelectedCategoryNames = whoAmISelectedCategoryNames.filter((name) => name !== category.name);
+      } else {
+        whoAmISelectedCategoryNames = whoAmISelectedCategoryNames.concat(category.name);
+      }
+      renderWhoAmICategories();
+    });
+    list.appendChild(button);
+  });
+
+  whoAmICategoryList.appendChild(controls);
+  whoAmICategoryList.appendChild(summary);
+  whoAmICategoryList.appendChild(list);
+}
+
+function getWhoAmICategoryStatus() {
+  const count = whoAmISelectedCategoryNames.length;
+  if (count === 0) {
+    return "Оберіть хоча б одну категорію.";
+  }
+  if (count === whoAmICategories.length) {
+    return `Усі категорії · ${getWhoAmIRolePool().length} ролей`;
+  }
+  return `${count} категорій · ${getWhoAmIRolePool().length} ролей`;
+}
+
+function getWhoAmICategoryCount(category) {
+  let total = 0;
+  whoAmISelectedDifficulties.forEach((difficulty) => {
+    total += category.levels[difficulty].length;
+  });
+  return total;
+}
+
+function getWhoAmIRolePool() {
+  const selectedNames = whoAmISelectedCategoryNames;
+  const roles = [];
+
+  whoAmICategories.forEach((category) => {
+    if (selectedNames.indexOf(category.name) < 0) {
+      return;
+    }
+
+    whoAmISelectedDifficulties.forEach((difficulty) => {
+      category.levels[difficulty].forEach((role) => {
+        roles.push({
+          role,
+          category: category.name,
+          difficulty,
+          status: "active",
+        });
+      });
+    });
+  });
+
+  return roles;
+}
+
+function syncWhoAmIButtons() {
+  whoAmIShowModeButtons.forEach((button) => {
+    button.classList.toggle("selected", button.dataset.whoamiShowMode === whoAmIShowMode);
+  });
+  whoAmIPartyModeButtons.forEach((button) => {
+    button.classList.toggle("selected", button.dataset.whoamiPartyMode === whoAmIPartyMode);
+  });
+  whoAmIPlayerCountButtons.forEach((button) => {
+    button.classList.toggle("selected", Number(button.dataset.whoamiPlayers) === whoAmIPlayerCount);
+  });
+  whoAmIDifficultyButtons.forEach((button) => {
+    const active = whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    button.classList.toggle("selected", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+  whoAmIDurationButtons.forEach((button) => {
+    button.classList.toggle("selected", Number(button.dataset.whoamiSeconds) === whoAmIDuration);
+  });
+  whoAmITeamCountButtons.forEach((button) => {
+    button.classList.toggle("selected", Number(button.dataset.whoamiTeams) === whoAmITeamCount);
+  });
+
+  if (whoAmIMaybeBtn) {
+    whoAmIMaybeBtn.classList.toggle("selected", whoAmIAllowMaybe);
+    whoAmIMaybeBtn.setAttribute("aria-pressed", whoAmIAllowMaybe ? "true" : "false");
+    whoAmIMaybeBtn.textContent = whoAmIAllowMaybe ? "Можливо дозволено" : "Без можливо";
+  }
+
+  if (whoAmIContinueMaybeBtn) {
+    whoAmIContinueMaybeBtn.classList.toggle("selected", whoAmIContinueAfterMaybe);
+    whoAmIContinueMaybeBtn.setAttribute("aria-pressed", whoAmIContinueAfterMaybe ? "true" : "false");
+  }
+}
+
+function updateWhoAmISettingsVisibility() {
+  if (whoAmIPlayersSection) {
+    whoAmIPlayersSection.hidden = whoAmIPartyMode !== "turns";
+  }
+  if (whoAmITimedSection) {
+    whoAmITimedSection.hidden = whoAmIPartyMode !== "timed";
+  }
+}
+
+function validateWhoAmISettings() {
+  const pool = getWhoAmIRolePool();
+  if (whoAmISelectedDifficulties.length === 0) {
+    whoAmISettingsMessage.textContent = "Оберіть хоча б один рівень складності.";
+    return false;
+  }
+  if (whoAmISelectedCategoryNames.length === 0) {
+    whoAmISettingsMessage.textContent = "Оберіть хоча б одну категорію.";
+    return false;
+  }
+  if (pool.length === 0) {
+    whoAmISettingsMessage.textContent = "Для цих категорій немає ролей.";
+    return false;
+  }
+  if (whoAmIPartyMode === "turns" && pool.length < whoAmIPlayerCount) {
+    whoAmISettingsMessage.textContent = "Ролей менше, ніж гравців. Додайте категорії або складність.";
+    return false;
+  }
+  whoAmISettingsMessage.textContent = "";
+  return true;
+}
+
+function startWhoAmIGame() {
+  if (!validateWhoAmISettings()) {
+    return;
+  }
+
+  clearWhoAmITimer();
+  whoAmIDeck = shuffleArray(getWhoAmIRolePool());
+  whoAmIRound = 1;
+  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
+  whoAmIRoundLog = [];
+  whoAmIResultMode = "continue";
+
+  if (whoAmIPartyMode === "turns") {
+    startWhoAmITurnsGame();
+    return;
+  }
+
+  if (whoAmIPartyMode === "timed") {
+    startWhoAmITimedGame();
+    return;
+  }
+
+  startWhoAmISingleRole();
+}
+
+function takeWhoAmIRole() {
+  if (whoAmIDeck.length === 0) {
+    whoAmIDeck = shuffleArray(getWhoAmIRolePool());
+  }
+  return whoAmIDeck.pop();
+}
+
+function startWhoAmITurnsGame() {
+  syncWhoAmIPlayers();
+  whoAmIAssignments = [];
+  for (let index = 0; index < whoAmIPlayerCount; index += 1) {
+    const role = takeWhoAmIRole();
+    whoAmIAssignments.push({
+      player: getWhoAmIPlayerName(index),
+      role: role.role,
+      category: role.category,
+      difficulty: role.difficulty,
+      guessed: false,
+      skipped: false,
+      yes: 0,
+      no: 0,
+      maybe: 0,
+      turns: 0,
+      guessedRound: 0,
+    });
+  }
+
+  whoAmIRevealIndex = 0;
+  whoAmIRoleVisible = false;
+  whoAmICurrentIndex = 0;
+  if (whoAmIShowMode === "forehead") {
+    beginWhoAmITurn();
+    return;
+  }
+  showWhoAmIReveal();
+}
+
+function startWhoAmISingleRole() {
+  const role = takeWhoAmIRole();
+  whoAmIAssignments = [{
+    player: "Гравець",
+    role: role.role,
+    category: role.category,
+    difficulty: role.difficulty,
+    guessed: false,
+    skipped: false,
+    yes: 0,
+    no: 0,
+    maybe: 0,
+    turns: 0,
+    guessedRound: 0,
+  }];
+  whoAmICurrentIndex = 0;
+  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
+  beginWhoAmITurn();
+}
+
+function startWhoAmITimedGame() {
+  syncWhoAmITeams();
+  whoAmITimedTeamIndex = 0;
+  whoAmITeamScores = Array.from({ length: whoAmITeamCount }, () => 0);
+  startWhoAmITimedRound();
+}
+
+function startWhoAmITimedRound() {
+  whoAmITimedRoles = [];
+  whoAmIQuestionStats = { yes: 0, no: 0, maybe: 0 };
+  whoAmITimeLeft = whoAmIDuration;
+  whoAmICurrentIndex = 0;
+  beginWhoAmITurn();
+  startWhoAmITimer();
+}
+
+function showWhoAmIReveal() {
+  const assignment = whoAmIAssignments[whoAmIRevealIndex];
+  if (!assignment) {
+    beginWhoAmITurn();
+    return;
+  }
+
+  whoAmIRoleVisible = false;
+  whoAmIRevealRoleBox.hidden = true;
+  whoAmIRevealStep.textContent = `Роль ${whoAmIRevealIndex + 1} з ${whoAmIAssignments.length}`;
+  whoAmIRevealTitle.textContent = "Передайте телефон";
+  whoAmIRevealInstruction.textContent = `Передайте телефон тим, хто має побачити роль гравця ${assignment.player}. Сам гравець не дивиться на екран.`;
+  whoAmIRevealPrimaryBtn.textContent = "Показати роль";
+  showScreen("whoAmIReveal");
+}
+
+function handleWhoAmIRevealPrimary() {
+  const assignment = whoAmIAssignments[whoAmIRevealIndex];
+  if (!assignment) {
+    beginWhoAmITurn();
+    return;
+  }
+
+  if (!whoAmIRoleVisible) {
+    whoAmIRoleVisible = true;
+    whoAmIRevealRoleBox.hidden = false;
+    whoAmIRevealCategory.textContent = assignment.category;
+    whoAmIRevealRole.textContent = assignment.role;
+    whoAmIRevealTitle.textContent = assignment.player;
+    whoAmIRevealInstruction.textContent = "Запам'ятайте роль і натисніть кнопку, щоб сховати її.";
+    whoAmIRevealPrimaryBtn.textContent = "Сховати роль";
+    playHapticFeedback("tap");
+    return;
+  }
+
+  whoAmIRevealIndex += 1;
+  if (whoAmIRevealIndex >= whoAmIAssignments.length) {
+    beginWhoAmITurn();
+    return;
+  }
+
+  showWhoAmIReveal();
+}
+
+function beginWhoAmITurn() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    showWhoAmIFinal();
+    return;
+  }
+
+  if (whoAmIPartyMode === "turns") {
+    assignment.turns += 1;
+  }
+
+  renderWhoAmIGame();
+  showScreen("whoAmIGame");
+}
+
+function getWhoAmICurrentAssignment() {
+  if (whoAmIPartyMode === "timed") {
+    if (!whoAmIAssignments[0] || whoAmIAssignments[0].guessed || whoAmIAssignments[0].skipped) {
+      const role = takeWhoAmIRole();
+      whoAmIAssignments[0] = {
+        player: whoAmITeamCount > 0 ? getWhoAmITeamName(whoAmITimedTeamIndex) : "Гравець",
+        role: role.role,
+        category: role.category,
+        difficulty: role.difficulty,
+        guessed: false,
+        skipped: false,
+        yes: 0,
+        no: 0,
+        maybe: 0,
+        turns: 0,
+        guessedRound: 0,
+      };
+    }
+    return whoAmIAssignments[0];
+  }
+
+  return whoAmIAssignments[whoAmICurrentIndex];
+}
+
+function renderWhoAmIGame() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    return;
+  }
+
+  const isTimed = whoAmIPartyMode === "timed";
+  const isSingle = whoAmIPartyMode === "single";
+  whoAmIGameKicker.textContent = isTimed ? "РАУНД" : "ХІД ГРАВЦЯ";
+  whoAmICurrentPlayer.textContent = assignment.player;
+  whoAmIGameInfo.textContent = isTimed
+    ? `${whoAmITimedRoles.filter((item) => item.status === "guessed").length} вгадано · ${whoAmITimedRoles.filter((item) => item.status === "skipped").length} пропущено`
+    : isSingle ? "Одна роль" : `Коло ${whoAmIRound}`;
+
+  whoAmITimerBox.hidden = !isTimed;
+  whoAmITimerText.textContent = whoAmITimeLeft;
+  whoAmIMaybeAnswerBtn.hidden = !whoAmIAllowMaybe;
+
+  const showForehead = whoAmIShowMode === "forehead" || isTimed || isSingle;
+  whoAmIForeheadCard.hidden = !showForehead;
+  if (showForehead) {
+    whoAmIForeheadCategory.textContent = assignment.category;
+    whoAmIForeheadRole.textContent = assignment.role;
+  }
+
+  renderWhoAmIPlayersBoard();
+}
+
+function renderWhoAmIPlayersBoard() {
+  if (!whoAmIPlayersBoard) {
+    return;
+  }
+
+  whoAmIPlayersBoard.innerHTML = "";
+  if (whoAmIPartyMode === "timed") {
+    renderWhoAmITimedBoard();
+    return;
+  }
+
+  whoAmIAssignments.forEach((assignment, index) => {
+    const item = document.createElement("div");
+    item.className = "whoami-player-item";
+    item.classList.toggle("is-current", index === whoAmICurrentIndex);
+    item.classList.toggle("is-done", assignment.guessed);
+    item.innerHTML = `
+      <strong>${assignment.player}</strong>
+      <span>${assignment.guessed ? "відгадав" : assignment.skipped ? "пропущено" : "у грі"}</span>
+      <small>так ${assignment.yes} · ні ${assignment.no}${whoAmIAllowMaybe ? ` · можливо ${assignment.maybe}` : ""}</small>
+    `;
+    whoAmIPlayersBoard.appendChild(item);
+  });
+}
+
+function renderWhoAmITimedBoard() {
+  const guessed = whoAmITimedRoles.filter((item) => item.status === "guessed").length;
+  const skippedCount = whoAmITimedRoles.filter((item) => item.status === "skipped").length;
+  const summary = document.createElement("div");
+  summary.className = "whoami-player-item is-current";
+  summary.innerHTML = `<strong>${guessed}</strong><span>вгадано</span><small>${skippedCount} пропущено</small>`;
+  whoAmIPlayersBoard.appendChild(summary);
+
+  if (whoAmITeamCount > 0) {
+    whoAmITeamScores.forEach((scoreValue, index) => {
+      const item = document.createElement("div");
+      item.className = "whoami-player-item";
+      item.classList.toggle("is-current", index === whoAmITimedTeamIndex);
+      item.innerHTML = `<strong>${getWhoAmITeamName(index)}</strong><span>${scoreValue} очок</span><small>${index === whoAmITimedTeamIndex ? "грає зараз" : "очікує"}</small>`;
+      whoAmIPlayersBoard.appendChild(item);
+    });
+  }
+}
+
+function handleWhoAmIAnswer(type) {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    return;
+  }
+
+  if (type === "maybe" && !whoAmIAllowMaybe) {
+    return;
+  }
+
+  assignment[type] += 1;
+  whoAmIQuestionStats[type] += 1;
+
+  if (type === "yes") {
+    playCorrectSound();
+  } else if (type === "maybe") {
+    playHapticFeedback("tap");
+    playToneSequence([{ frequency: 420, start: 0, duration: 0.08, volume: 0.26, type: "sine" }]);
+  } else {
+    playSkipSound();
+  }
+
+  if (whoAmIPartyMode === "turns" && type !== "yes" && !(type === "maybe" && whoAmIContinueAfterMaybe)) {
+    moveToNextWhoAmIPlayer();
+    return;
+  }
+
+  renderWhoAmIGame();
+}
+
+function markWhoAmIGuessed() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    return;
+  }
+
+  const confirmed = window.confirm("Гравець справді правильно назвав свою роль?");
+  if (!confirmed) {
+    return;
+  }
+
+  assignment.guessed = true;
+  assignment.guessedRound = whoAmIRound;
+  playGameCompleteSound("win");
+
+  if (whoAmIPartyMode === "timed") {
+    whoAmITimedRoles.push({
+      role: assignment.role,
+      category: assignment.category,
+      status: "guessed",
+    });
+    if (whoAmITeamCount > 0) {
+      whoAmITeamScores[whoAmITimedTeamIndex] += 1;
+    }
+    whoAmIAssignments[0] = null;
+    beginWhoAmITurn();
+    return;
+  }
+
+  if (whoAmIPartyMode === "single") {
+    showWhoAmIRound("single");
+    return;
+  }
+
+  if (getWhoAmIActiveAssignments().length <= 1) {
+    showWhoAmIFinal();
+    return;
+  }
+
+  moveToNextWhoAmIPlayer();
+}
+
+function skipWhoAmIRole() {
+  const assignment = getWhoAmICurrentAssignment();
+  if (!assignment) {
+    return;
+  }
+
+  assignment.skipped = true;
+  playSkipSound();
+
+  if (whoAmIPartyMode === "timed") {
+    whoAmITimedRoles.push({
+      role: assignment.role,
+      category: assignment.category,
+      status: "skipped",
+    });
+    whoAmIAssignments[0] = null;
+    beginWhoAmITurn();
+    return;
+  }
+
+  if (whoAmIPartyMode === "single") {
+    showWhoAmIRound("single");
+    return;
+  }
+
+  moveToNextWhoAmIPlayer();
+}
+
+function getWhoAmIActiveAssignments() {
+  return whoAmIAssignments.filter((assignment) => assignment && !assignment.guessed && !assignment.skipped);
+}
+
+function moveToNextWhoAmIPlayer() {
+  const active = getWhoAmIActiveAssignments();
+  if (active.length === 0) {
+    showWhoAmIFinal();
+    return;
+  }
+
+  let guard = 0;
+  do {
+    whoAmICurrentIndex = (whoAmICurrentIndex + 1) % whoAmIAssignments.length;
+    if (whoAmICurrentIndex === 0) {
+      whoAmIRound += 1;
+    }
+    guard += 1;
+  } while (
+    guard <= whoAmIAssignments.length
+    && whoAmIAssignments[whoAmICurrentIndex]
+    && (whoAmIAssignments[whoAmICurrentIndex].guessed || whoAmIAssignments[whoAmICurrentIndex].skipped)
+  );
+
+  beginWhoAmITurn();
+}
+
+function startWhoAmITimer() {
+  clearWhoAmITimer();
+  whoAmITimerId = setInterval(() => {
+    whoAmITimeLeft -= 1;
+    if (whoAmITimerText) {
+      whoAmITimerText.textContent = whoAmITimeLeft;
+    }
+    if (whoAmITimeLeft <= 0) {
+      finishWhoAmITimedRound();
+    }
+  }, 1000);
+}
+
+function clearWhoAmITimer() {
+  if (whoAmITimerId) {
+    clearInterval(whoAmITimerId);
+    whoAmITimerId = null;
+  }
+}
+
+function finishWhoAmITimedRound() {
+  clearWhoAmITimer();
+  playRoundCompleteSound();
+  showWhoAmIRound("timed");
+}
+
+function showWhoAmIRound(mode) {
+  clearWhoAmITimer();
+  const isTimed = mode === "timed";
+  const roles = isTimed ? whoAmITimedRoles : whoAmIAssignments;
+  const guessed = roles.filter((item) => item && (item.status === "guessed" || item.guessed)).length;
+  const skippedCount = roles.filter((item) => item && (item.status === "skipped" || item.skipped)).length;
+
+  whoAmIRoundTitle.textContent = isTimed ? "Раунд завершено" : "Роль завершено";
+  whoAmIRoundSummary.textContent = `${guessed} вгадано · ${skippedCount} пропущено`;
+  whoAmIRoundRoles.innerHTML = "";
+
+  roles.forEach((item) => {
+    if (!item) {
+      return;
+    }
+    const row = document.createElement("div");
+    row.className = "whoami-role-row";
+    const status = item.status || (item.guessed ? "guessed" : item.skipped ? "skipped" : "active");
+    row.innerHTML = `
+      <strong>${item.role}</strong>
+      <span>${item.category}</span>
+      <button class="setting-chip" type="button" data-whoami-toggle-role="${item.role}">${status === "guessed" ? "Вгадано" : "Пропущено"}</button>
+    `;
+    whoAmIRoundRoles.appendChild(row);
+  });
+
+  renderWhoAmIRoundScoreBoard();
+  whoAmIRoundNextBtn.textContent = isTimed && whoAmITeamCount > 0 && whoAmITimedTeamIndex < whoAmITeamCount - 1
+    ? "Наступна команда"
+    : "Показати результат";
+  whoAmIResultMode = isTimed ? "timed" : "single";
+  showScreen("whoAmIRound");
+}
+
+function renderWhoAmIRoundScoreBoard() {
+  if (!whoAmIRoundScoreBoard) {
+    return;
+  }
+  whoAmIRoundScoreBoard.innerHTML = "";
+  if (whoAmITeamCount <= 0) {
+    return;
+  }
+  whoAmITeamScores.forEach((scoreValue, index) => {
+    const row = document.createElement("div");
+    row.className = "team-score-row";
+    row.innerHTML = `<span>${getWhoAmITeamName(index)}</span><strong>${scoreValue}</strong>`;
+    whoAmIRoundScoreBoard.appendChild(row);
+  });
+}
+
+function continueAfterWhoAmIRound() {
+  if (whoAmIResultMode === "timed" && whoAmITeamCount > 0 && whoAmITimedTeamIndex < whoAmITeamCount - 1) {
+    whoAmITimedTeamIndex += 1;
+    startWhoAmITimedRound();
+    return;
+  }
+  showWhoAmIFinal();
+}
+
+function showWhoAmIFinal() {
+  clearWhoAmITimer();
+  const isTimed = whoAmIPartyMode === "timed";
+  whoAmIFinalTitle.textContent = "Гру завершено";
+  whoAmIFinalHero.innerHTML = "";
+  whoAmIFinalBoard.innerHTML = "";
+
+  if (isTimed && whoAmITeamCount > 0) {
+    const highest = Math.max.apply(null, whoAmITeamScores);
+    const winners = [];
+    whoAmITeamScores.forEach((scoreValue, index) => {
+      if (scoreValue === highest) {
+        winners.push(getWhoAmITeamName(index));
+      }
+      const row = document.createElement("div");
+      row.className = "whoami-role-row";
+      row.innerHTML = `<strong>${getWhoAmITeamName(index)}</strong><span>${scoreValue} очок</span>`;
+      whoAmIFinalBoard.appendChild(row);
+    });
+    whoAmIFinalSubtitle.textContent = winners.length > 1 ? `Нічия: ${winners.join(", ")}` : `Перемогла ${winners[0]}`;
+    whoAmIFinalHero.textContent = winners.length > 1 ? "Нічия" : "Перемога";
+    playGameCompleteSound(winners.length > 1 ? "tie" : "win");
+  } else if (isTimed) {
+    const guessed = whoAmITimedRoles.filter((item) => item.status === "guessed").length;
+    whoAmIFinalSubtitle.textContent = `Вгадано ролей: ${guessed}`;
+    whoAmIFinalHero.textContent = `${guessed}`;
+    playGameCompleteSound("win");
+  } else {
+    const ordered = whoAmIAssignments.slice().sort((a, b) => {
+      if (a.guessed && !b.guessed) {
+        return -1;
+      }
+      if (!a.guessed && b.guessed) {
+        return 1;
+      }
+      return (a.guessedRound || 999) - (b.guessedRound || 999);
+    });
+    ordered.forEach((assignment, index) => {
+      const row = document.createElement("div");
+      row.className = "whoami-role-row";
+      row.innerHTML = `<strong>${index + 1}. ${assignment.player}</strong><span>${assignment.role} · ${assignment.category}</span>`;
+      whoAmIFinalBoard.appendChild(row);
+    });
+    whoAmIFinalSubtitle.textContent = "Усі ролі відкрито.";
+    whoAmIFinalHero.textContent = "Фінал";
+    playGameCompleteSound("win");
+  }
+
+  showScreen("whoAmIFinal");
+}
+
+function openWhoAmIRules() {
+  if (!whoAmIRulesModal) {
+    return;
+  }
+  whoAmIRulesModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function closeWhoAmIRules() {
+  if (!whoAmIRulesModal) {
+    return;
+  }
+  whoAmIRulesModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function exitWhoAmIToMenu() {
+  clearWhoAmITimer();
+  showScreen("menu");
+}
+
 
 function setupEvents() {
   renderModes();
@@ -2613,6 +3575,155 @@ function setupEvents() {
     });
   }
 
+  whoAmIShowModeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      whoAmIShowMode = button.dataset.whoamiShowMode || "pass";
+      syncWhoAmIButtons();
+    });
+  });
+
+  whoAmIPartyModeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      whoAmIPartyMode = button.dataset.whoamiPartyMode || "turns";
+      updateWhoAmISettingsVisibility();
+      syncWhoAmIButtons();
+    });
+  });
+
+  whoAmIPlayerCountButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      whoAmIPlayerCount = Number(button.dataset.whoamiPlayers) || WHOAMI_DEFAULT_PLAYER_COUNT;
+      renderWhoAmIPlayerFields();
+      syncWhoAmIButtons();
+    });
+  });
+
+  whoAmIDifficultyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const difficulty = button.dataset.whoamiDifficulty || "";
+      if (whoAmISelectedDifficulties.indexOf(difficulty) >= 0) {
+        whoAmISelectedDifficulties = whoAmISelectedDifficulties.filter((item) => item !== difficulty);
+      } else {
+        whoAmISelectedDifficulties = whoAmISelectedDifficulties.concat(difficulty);
+      }
+      syncWhoAmIButtons();
+      renderWhoAmICategories();
+    });
+  });
+
+  whoAmIDurationButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      whoAmIDuration = Number(button.dataset.whoamiSeconds) || 60;
+      syncWhoAmIButtons();
+    });
+  });
+
+  whoAmITeamCountButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      whoAmITeamCount = Number(button.dataset.whoamiTeams) || 0;
+      renderWhoAmITeamFields();
+      syncWhoAmIButtons();
+    });
+  });
+
+  if (whoAmIMaybeBtn) {
+    whoAmIMaybeBtn.addEventListener("click", () => {
+      whoAmIAllowMaybe = !whoAmIAllowMaybe;
+      syncWhoAmIButtons();
+    });
+  }
+
+  if (whoAmIContinueMaybeBtn) {
+    whoAmIContinueMaybeBtn.addEventListener("click", () => {
+      whoAmIContinueAfterMaybe = !whoAmIContinueAfterMaybe;
+      syncWhoAmIButtons();
+    });
+  }
+
+  if (whoAmIStartBtn) {
+    whoAmIStartBtn.addEventListener("click", startWhoAmIGame);
+  }
+
+  if (whoAmIBackBtn) {
+    whoAmIBackBtn.addEventListener("click", exitWhoAmIToMenu);
+  }
+
+  if (whoAmIRevealPrimaryBtn) {
+    whoAmIRevealPrimaryBtn.addEventListener("click", handleWhoAmIRevealPrimary);
+  }
+
+  if (whoAmIRevealMenuBtn) {
+    whoAmIRevealMenuBtn.addEventListener("click", exitWhoAmIToMenu);
+  }
+
+  if (whoAmIYesBtn) {
+    whoAmIYesBtn.addEventListener("click", () => handleWhoAmIAnswer("yes"));
+  }
+
+  if (whoAmINoBtn) {
+    whoAmINoBtn.addEventListener("click", () => handleWhoAmIAnswer("no"));
+  }
+
+  if (whoAmIMaybeAnswerBtn) {
+    whoAmIMaybeAnswerBtn.addEventListener("click", () => handleWhoAmIAnswer("maybe"));
+  }
+
+  if (whoAmIGuessedBtn) {
+    whoAmIGuessedBtn.addEventListener("click", markWhoAmIGuessed);
+  }
+
+  if (whoAmISkipRoleBtn) {
+    whoAmISkipRoleBtn.addEventListener("click", skipWhoAmIRole);
+  }
+
+  if (whoAmIRulesBtn) {
+    whoAmIRulesBtn.addEventListener("click", openWhoAmIRules);
+  }
+
+  if (whoAmIEndRoundBtn) {
+    whoAmIEndRoundBtn.addEventListener("click", () => {
+      if (whoAmIPartyMode === "timed") {
+        finishWhoAmITimedRound();
+      } else {
+        showWhoAmIFinal();
+      }
+    });
+  }
+
+  if (whoAmIGameMenuBtn) {
+    whoAmIGameMenuBtn.addEventListener("click", exitWhoAmIToMenu);
+  }
+
+  if (whoAmIRoundNextBtn) {
+    whoAmIRoundNextBtn.addEventListener("click", continueAfterWhoAmIRound);
+  }
+
+  if (whoAmIRoundMenuBtn) {
+    whoAmIRoundMenuBtn.addEventListener("click", exitWhoAmIToMenu);
+  }
+
+  if (whoAmINewBtn) {
+    whoAmINewBtn.addEventListener("click", () => {
+      showScreen("whoAmISettings");
+    });
+  }
+
+  if (whoAmIFinalMenuBtn) {
+    whoAmIFinalMenuBtn.addEventListener("click", exitWhoAmIToMenu);
+  }
+
+  if (whoAmIRulesCloseBtn) {
+    whoAmIRulesCloseBtn.addEventListener("click", closeWhoAmIRules);
+  }
+
+  if (whoAmIRulesModal) {
+    whoAmIRulesModal.addEventListener("click", (event) => {
+      if (event.target.matches("[data-whoami-rules-close]")) {
+        closeWhoAmIRules();
+      }
+    });
+  }
+
   backToMenuBtn.addEventListener("click", () => {
     showScreen("menu");
   });
@@ -2652,6 +3763,10 @@ function setupEvents() {
 
     if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
       closeExitMenuModal();
+    }
+
+    if (event.key === "Escape" && whoAmIRulesModal && !whoAmIRulesModal.hidden) {
+      closeWhoAmIRules();
     }
 
     if (event.key === "Escape") {
@@ -2965,9 +4080,12 @@ function renderModes() {
       charades: "assets/game-modes/charades.png",
       wordguess: "assets/game-modes/wordguess.png",
     };
+    const modeIconMarkup = mode.id === "whoami"
+      ? '<span class="mode-card-svg-icon mode-card-whoami-icon"></span>'
+      : modeIcons[mode.id] ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async">` : "✨";
 
     button.innerHTML = `
-      <span class="mode-card-icon" aria-hidden="true">${modeIcons[mode.id] ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async">` : "✨"}</span>
+      <span class="mode-card-icon" aria-hidden="true">${modeIconMarkup}</span>
       <strong>${mode.title}</strong>
       <span class="mode-card-description">${mode.description}</span>
       <span class="mode-card-cta">Грати</span>
@@ -2985,6 +4103,17 @@ function renderModes() {
         document.body.classList.remove("single-card-mode");
         await loadWordGuessDictionary();
         showScreen("wordGuessSettings");
+        return;
+      }
+
+      if (isWhoAmI()) {
+        resetActiveGameState();
+        clearWhoAmITimer();
+        document.body.dataset.mode = mode.id;
+        document.body.classList.remove("single-card-mode");
+        await loadWhoAmIData();
+        renderWhoAmISettings();
+        showScreen("whoAmISettings");
         return;
       }
 
@@ -4735,6 +5864,11 @@ function showScreen(screenName) {
   settingsScreen.classList.remove("active");
   wordGuessSettingsScreen && wordGuessSettingsScreen.classList.remove("active");
   wordGuessGameScreen && wordGuessGameScreen.classList.remove("active");
+  whoAmISettingsScreen && whoAmISettingsScreen.classList.remove("active");
+  whoAmIRevealScreen && whoAmIRevealScreen.classList.remove("active");
+  whoAmIGameScreen && whoAmIGameScreen.classList.remove("active");
+  whoAmIRoundScreen && whoAmIRoundScreen.classList.remove("active");
+  whoAmIFinalScreen && whoAmIFinalScreen.classList.remove("active");
   teamReadyScreen.classList.remove("active");
   gameScreen.classList.remove("active");
   roundReviewScreen.classList.remove("active");
@@ -4757,6 +5891,26 @@ function showScreen(screenName) {
   if (screenName === "wordGuessGame") {
     wordGuessGameScreen && wordGuessGameScreen.classList.add("active");
     scheduleWordGuessViewportFit();
+  }
+
+  if (screenName === "whoAmISettings") {
+    whoAmISettingsScreen && whoAmISettingsScreen.classList.add("active");
+  }
+
+  if (screenName === "whoAmIReveal") {
+    whoAmIRevealScreen && whoAmIRevealScreen.classList.add("active");
+  }
+
+  if (screenName === "whoAmIGame") {
+    whoAmIGameScreen && whoAmIGameScreen.classList.add("active");
+  }
+
+  if (screenName === "whoAmIRound") {
+    whoAmIRoundScreen && whoAmIRoundScreen.classList.add("active");
+  }
+
+  if (screenName === "whoAmIFinal") {
+    whoAmIFinalScreen && whoAmIFinalScreen.classList.add("active");
   }
 
   if (screenName === "teamReady") {
