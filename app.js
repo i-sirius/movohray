@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.3";
+const DATA_VERSION = "0.5.4";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -213,7 +213,7 @@ let whoAmIData = null;
 let whoAmICategories = [];
 let whoAmISelectedCategoryNames = [];
 let whoAmISelectedDifficulties = ["easy", "medium"];
-let whoAmIShowMode = "host";
+let whoAmIShowMode = "forehead";
 let whoAmIPartyMode = "turns";
 let whoAmIPlayerCount = WHOAMI_DEFAULT_PLAYER_COUNT;
 let whoAmIPlayers = [];
@@ -2885,7 +2885,20 @@ function renderWhoAmICategoryModalList() {
     const isSelected = whoAmISelectedCategoryNames.indexOf(category.name) >= 0;
     button.className = "whoami-category-option";
     button.type = "button";
-    button.innerHTML = `<span>${category.name}</span><small>${getWhoAmICategoryCount(category)} ролей</small>`;
+    const title = document.createElement("span");
+    title.className = "whoami-category-option-title";
+    const nameText = document.createElement("span");
+    nameText.textContent = category.name;
+    const check = document.createElement("span");
+    check.className = "whoami-category-check";
+    check.setAttribute("aria-hidden", "true");
+    check.textContent = "✓";
+    title.appendChild(nameText);
+    title.appendChild(check);
+    const countText = document.createElement("small");
+    countText.textContent = `${getWhoAmICategoryCount(category)} ролей`;
+    button.appendChild(title);
+    button.appendChild(countText);
     button.classList.toggle("selected", isSelected);
     button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     button.addEventListener("click", () => {
@@ -2935,10 +2948,11 @@ function getWhoAmICategoryCount(category) {
 
 function syncWhoAmISetupSummaries() {
   if (whoAmIPlayerCountSummary) {
-    whoAmIPlayerCountSummary.textContent = `Гравців: ${whoAmIPlayerCount}`;
+    whoAmIPlayerCountSummary.textContent = `Кількість: ${whoAmIPlayerCount}`;
   }
   if (whoAmIEditPlayersBtn) {
-    whoAmIEditPlayersBtn.textContent = `Гравці · ${whoAmIPlayerCount}`;
+    whoAmIEditPlayersBtn.textContent = "Змінити імена";
+    whoAmIEditPlayersBtn.setAttribute("aria-label", `Змінити імена гравців, зараз ${whoAmIPlayerCount}`);
   }
 }
 
@@ -4159,7 +4173,7 @@ function setupEvents() {
 
   whoAmIShowModeButtons.forEach((button) => {
     button.addEventListener("click", () => {
-    whoAmIShowMode = button.dataset.whoamiShowMode || "host";
+      whoAmIShowMode = button.dataset.whoamiShowMode || "forehead";
       syncWhoAmIButtons();
     });
   });
