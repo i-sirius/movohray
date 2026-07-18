@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.4";
+const DATA_VERSION = "0.5.5";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -21,37 +21,101 @@ const LEGACY_IOS_MATCH = /OS (?:9|10|11|12)_/i.test(navigator.userAgent || "");
 if (LEGACY_IOS_MATCH) {
   document.documentElement.classList.add("legacy-ios");
 }
-const GAME_SOUND_MASTER_VOLUME = 0.22;
+const GAME_SOUND_MASTER_VOLUME = 0.28;
+const GAME_SOUND_LEVELS = {
+  ui: 0.18,
+  feedback: 0.7,
+  transition: 0.55,
+  round: 0.8,
+  finale: 0.95,
+};
 const GAME_SOUND_PATTERNS = {
+  uiClick: [
+    { frequency: 520, start: 0, duration: 0.08, volume: 0.08, type: "triangle", level: "ui", attack: 0.012, release: 0.06 },
+  ],
+  uiOpen: [
+    { frequency: 392, start: 0, duration: 0.14, volume: 0.08, type: "sine", level: "ui", attack: 0.012, release: 0.1 },
+    { frequency: 587, start: 0.08, duration: 0.14, volume: 0.06, type: "triangle", level: "ui", attack: 0.012, release: 0.12 },
+  ],
+  uiClose: [
+    { frequency: 440, start: 0, duration: 0.14, volume: 0.055, type: "sine", level: "ui", attack: 0.012, release: 0.1 },
+    { frequency: 330, start: 0.07, duration: 0.14, volume: 0.045, type: "triangle", level: "ui", attack: 0.012, release: 0.11 },
+  ],
+  positiveTick: [
+    { frequency: 523.25, start: 0, duration: 0.16, volume: 0.18, type: "sine", level: "feedback", attack: 0.01, release: 0.12 },
+    { frequency: 659.25, start: 0.09, duration: 0.18, volume: 0.14, type: "triangle", level: "feedback", attack: 0.012, release: 0.16 },
+  ],
   correct: [
-    { frequency: 620, start: 0, duration: 0.07, volume: 0.5, type: "sine" },
-    { frequency: 880, start: 0.07, duration: 0.11, volume: 0.42, type: "sine" },
+    { frequency: 523.25, start: 0, duration: 0.26, volume: 0.34, type: "sine", level: "feedback", attack: 0.012, release: 0.2 },
+    { frequency: 659.25, start: 0.13, duration: 0.26, volume: 0.28, type: "triangle", level: "feedback", attack: 0.012, release: 0.22 },
+    { frequency: 783.99, start: 0.28, duration: 0.18, volume: 0.18, type: "sine", level: "feedback", attack: 0.008, release: 0.16 },
+    { frequency: 1174.66, start: 0.38, duration: 0.11, volume: 0.06, type: "sine", level: "ui", attack: 0.006, release: 0.08 },
+  ],
+  wrong: [
+    { frequency: 196, start: 0, duration: 0.19, volume: 0.24, type: "triangle", level: "feedback", attack: 0.012, release: 0.16 },
+    { frequency: 146.83, start: 0.055, duration: 0.14, volume: 0.1, type: "sine", level: "feedback", attack: 0.012, release: 0.12 },
   ],
   skipped: [
-    { frequency: 255, start: 0, duration: 0.09, volume: 0.38, type: "triangle" },
-    { frequency: 196, start: 0.09, duration: 0.12, volume: 0.3, type: "triangle" },
+    { frequency: 392, glideTo: 261.63, start: 0, duration: 0.28, volume: 0.24, type: "triangle", level: "feedback", attack: 0.014, release: 0.2 },
+    { frequency: 523.25, glideTo: 392, start: 0.08, duration: 0.18, volume: 0.08, type: "sine", level: "ui", attack: 0.012, release: 0.14 },
+    { frequency: 220, start: 0.27, duration: 0.06, volume: 0.07, type: "sine", level: "ui", attack: 0.006, release: 0.05 },
+  ],
+  turnChange: [
+    { frequency: 349.23, start: 0, duration: 0.16, volume: 0.16, type: "sine", level: "transition", attack: 0.012, release: 0.13 },
+    { frequency: 440, start: 0.12, duration: 0.18, volume: 0.14, type: "triangle", level: "transition", attack: 0.012, release: 0.15 },
+  ],
+  roundStart: [
+    { frequency: 329.63, start: 0, duration: 0.16, volume: 0.18, type: "sine", level: "round", attack: 0.014, release: 0.13 },
+    { frequency: 493.88, start: 0.12, duration: 0.18, volume: 0.2, type: "triangle", level: "round", attack: 0.014, release: 0.14 },
+    { frequency: 659.25, start: 0.27, duration: 0.2, volume: 0.16, type: "sine", level: "round", attack: 0.014, release: 0.16 },
   ],
   roundComplete: [
-    { frequency: 392, start: 0, duration: 0.08, volume: 0.34, type: "sine" },
-    { frequency: 523, start: 0.1, duration: 0.08, volume: 0.36, type: "sine" },
-    { frequency: 659, start: 0.2, duration: 0.18, volume: 0.38, type: "sine" },
+    { frequency: 392, start: 0, duration: 0.28, volume: 0.28, type: "triangle", level: "round", attack: 0.016, release: 0.22 },
+    { frequency: 493.88, start: 0.2, duration: 0.28, volume: 0.28, type: "sine", level: "round", attack: 0.016, release: 0.22 },
+    { frequency: 587.33, start: 0.42, duration: 0.34, volume: 0.24, type: "triangle", level: "round", attack: 0.016, release: 0.28 },
   ],
   gameComplete: [
-    { frequency: 523, start: 0, duration: 0.1, volume: 0.38, type: "sine" },
-    { frequency: 659, start: 0.1, duration: 0.1, volume: 0.4, type: "sine" },
-    { frequency: 784, start: 0.2, duration: 0.12, volume: 0.42, type: "sine" },
-    { frequency: 1047, start: 0.34, duration: 0.24, volume: 0.34, type: "sine" },
+    { frequency: 261.63, start: 0, duration: 0.34, volume: 0.24, type: "sine", level: "finale", attack: 0.018, release: 0.26 },
+    { frequency: 329.63, start: 0.18, duration: 0.34, volume: 0.26, type: "triangle", level: "finale", attack: 0.018, release: 0.26 },
+    { frequency: 392, start: 0.36, duration: 0.36, volume: 0.28, type: "sine", level: "finale", attack: 0.018, release: 0.28 },
+    { frequency: 523.25, start: 0.58, duration: 0.4, volume: 0.24, type: "triangle", level: "finale", attack: 0.018, release: 0.34 },
+    { frequency: 783.99, start: 0.86, duration: 0.28, volume: 0.12, type: "sine", level: "ui", attack: 0.01, release: 0.22 },
   ],
   gameLoss: [
-    { frequency: 330, start: 0, duration: 0.13, volume: 0.3, type: "triangle" },
-    { frequency: 277, start: 0.15, duration: 0.14, volume: 0.28, type: "triangle" },
-    { frequency: 220, start: 0.31, duration: 0.2, volume: 0.24, type: "triangle" },
+    { frequency: 329.63, glideTo: 261.63, start: 0, duration: 0.28, volume: 0.2, type: "triangle", level: "finale", attack: 0.016, release: 0.22 },
+    { frequency: 246.94, glideTo: 196, start: 0.22, duration: 0.3, volume: 0.18, type: "sine", level: "finale", attack: 0.016, release: 0.24 },
+    { frequency: 174.61, start: 0.52, duration: 0.18, volume: 0.1, type: "triangle", level: "feedback", attack: 0.014, release: 0.14 },
   ],
   tie: [
-    { frequency: 440, start: 0, duration: 0.1, volume: 0.32, type: "sine" },
-    { frequency: 440, start: 0.14, duration: 0.1, volume: 0.32, type: "sine" },
-    { frequency: 587, start: 0.29, duration: 0.17, volume: 0.34, type: "sine" },
+    { frequency: 392, start: 0, duration: 0.42, volume: 0.2, type: "sine", level: "finale", attack: 0.018, release: 0.3 },
+    { frequency: 493.88, start: 0.04, duration: 0.42, volume: 0.18, type: "triangle", level: "finale", attack: 0.018, release: 0.3 },
+    { frequency: 587.33, start: 0.08, duration: 0.46, volume: 0.16, type: "sine", level: "finale", attack: 0.018, release: 0.34 },
   ],
+  reveal: [
+    { frequency: 659.25, start: 0, duration: 0.13, volume: 0.09, type: "sine", level: "ui", attack: 0.01, release: 0.1 },
+    { frequency: 987.77, start: 0.08, duration: 0.18, volume: 0.075, type: "sine", level: "ui", attack: 0.008, release: 0.14 },
+  ],
+  medal: [
+    { frequency: 783.99, start: 0, duration: 0.12, volume: 0.1, type: "sine", level: "ui", attack: 0.008, release: 0.1 },
+    { frequency: 1174.66, start: 0.1, duration: 0.16, volume: 0.08, type: "sine", level: "ui", attack: 0.008, release: 0.13 },
+  ],
+  countdown: [
+    { frequency: 659.25, start: 0, duration: 0.08, volume: 0.1, type: "triangle", level: "ui", attack: 0.008, release: 0.06 },
+  ],
+};
+const GAME_SOUND_FILE_MAP = {
+  correct: `assets/sounds/correct.ogg?v=${DATA_VERSION}`,
+  skipped: `assets/sounds/skipped.ogg?v=${DATA_VERSION}`,
+  wrong: `assets/sounds/wrong.ogg?v=${DATA_VERSION}`,
+  turnChange: `assets/sounds/turn-change.ogg?v=${DATA_VERSION}`,
+  roundStart: `assets/sounds/round-start.ogg?v=${DATA_VERSION}`,
+  countdown: `assets/sounds/countdown.ogg?v=${DATA_VERSION}`,
+  roundComplete: `assets/sounds/round-complete.ogg?v=${DATA_VERSION}`,
+  reveal: `assets/sounds/reveal.ogg?v=${DATA_VERSION}`,
+  gameComplete: `assets/sounds/game-win.ogg?v=${DATA_VERSION}`,
+  gameLoss: `assets/sounds/game-loss.ogg?v=${DATA_VERSION}`,
+  tie: `assets/sounds/game-tie.ogg?v=${DATA_VERSION}`,
+  medal: `assets/sounds/medal.ogg?v=${DATA_VERSION}`,
 };
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const WORD_GUESS_MODE_STORAGE_KEY = "movohray-wordguess-mode";
@@ -184,6 +248,9 @@ let gameAudioContext = null;
 let isGameAudioUnlocked = false;
 let isGameSoundEnabled = true;
 let isHapticFeedbackEnabled = true;
+let gameSoundBufferCache = {};
+let gameSoundBufferPromises = {};
+let gameSoundBufferFailures = {};
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
@@ -203,6 +270,7 @@ let wordGuessFinished = false;
 let wordGuessHintUsed = false;
 let wordGuessHintLevel = 0;
 let wordGuessHintLetters = [];
+let wordGuessInvalidClearTimeoutId = null;
 let wordGuessFeedbackChoice = "";
 let wordGuessMessageTimeoutId = null;
 let wordGuessFinaleEffectTimeoutId = null;
@@ -941,6 +1009,9 @@ function getPreferredSoundSetting() {
 
 function applySoundSetting(isEnabled) {
   isGameSoundEnabled = Boolean(isEnabled);
+  if (isGameSoundEnabled && gameAudioContext) {
+    preloadGameSoundBuffers();
+  }
 
   if (settingsSoundToggleBtn) {
     settingsSoundToggleBtn.setAttribute("aria-pressed", isGameSoundEnabled ? "true" : "false");
@@ -1519,6 +1590,9 @@ function renderWordGuessBoard() {
 
     const submittedGuess = wordGuessGuesses[rowIndex];
     const isActiveRow = rowIndex === wordGuessGuesses.length && !wordGuessFinished;
+    if (isActiveRow) {
+      row.classList.add("is-active");
+    }
     const activeLetters = isActiveRow ? Array.from(wordGuessCurrentGuess) : [];
 
     for (let cellIndex = 0; cellIndex < wordLength; cellIndex++) {
@@ -1725,21 +1799,23 @@ function submitWordGuess() {
   const validationMessage = getWordGuessValidationMessage(guess, wordLength, getWordGuessAllowsRepeats());
 
   if (validationMessage) {
+    playGameSound("wrong");
     addWordGuessAttemptLog(guess, "invalid", [], validationMessage);
     setWordGuessMessage(validationMessage);
-    shakeWordGuessBoard();
-    wordGuessCurrentGuess = "";
     renderWordGuessBoard();
+    shakeWordGuessBoard();
+    clearInvalidWordGuessAfterShake();
     renderWordGuessHistory();
     return;
   }
 
   if (!wordGuessAllowedGuesses.has(guess)) {
+    playGameSound("wrong");
     addWordGuessAttemptLog(guess, "invalid", [], "Немає в словнику гри");
     setWordGuessMessage("Немає в словнику гри");
-    shakeWordGuessBoard();
-    wordGuessCurrentGuess = "";
     renderWordGuessBoard();
+    shakeWordGuessBoard();
+    clearInvalidWordGuessAfterShake();
     renderWordGuessHistory();
     return;
   }
@@ -1752,6 +1828,7 @@ function submitWordGuess() {
   };
   wordGuessGuesses.push(acceptedGuess);
   addWordGuessAttemptLog(guess, "valid", statuses, "");
+  playGameSound("reveal");
 
   updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
@@ -2096,19 +2173,21 @@ function updateWordGuessHintState() {
   }
 
   if (wordGuessHintSecondBtn) {
-    wordGuessHintSecondBtn.disabled = !isSecondAvailable;
+    wordGuessHintSecondBtn.disabled = !wordGuessTarget;
     wordGuessHintSecondBtn.classList.toggle("is-available", isSecondAvailable);
     wordGuessHintSecondBtn.classList.toggle("is-used", isSecondUsed);
     wordGuessHintSecondBtn.setAttribute("aria-pressed", isSecondUsed ? "true" : "false");
+    wordGuessHintSecondBtn.setAttribute("aria-disabled", isSecondAvailable ? "false" : "true");
     wordGuessHintSecondBtn.setAttribute("aria-label", isSecondUsed ? "Показати другу підказку ще раз" : "Друга підказка відкриється після першої");
     wordGuessHintSecondBtn.title = isSecondAvailable ? "Підказка 2" : "Підказка 2 відкриється після першої";
   }
 
   if (wordGuessHintThirdBtn) {
-    wordGuessHintThirdBtn.disabled = !isThirdAvailable;
+    wordGuessHintThirdBtn.disabled = !wordGuessTarget;
     wordGuessHintThirdBtn.classList.toggle("is-available", isThirdAvailable);
     wordGuessHintThirdBtn.classList.toggle("is-used", isThirdUsed);
     wordGuessHintThirdBtn.setAttribute("aria-pressed", isThirdUsed ? "true" : "false");
+    wordGuessHintThirdBtn.setAttribute("aria-disabled", isThirdAvailable ? "false" : "true");
     wordGuessHintThirdBtn.setAttribute("aria-label", isThirdUsed ? "Показати третю підказку ще раз" : "Третя підказка відкриється після другої");
     wordGuessHintThirdBtn.title = isThirdAvailable ? "Підказка 3" : "Підказка 3 відкриється після другої";
   }
@@ -2118,6 +2197,7 @@ function showWordGuessFirstHint() {
   if (!wordGuessTarget) {
     return;
   }
+  playGameSound("reveal");
 
   if (wordGuessHintLevel === 0) {
     wordGuessHintLevel = 1;
@@ -2137,8 +2217,12 @@ function showWordGuessFirstHint() {
 
 function showWordGuessSecondHint() {
   if (!wordGuessTarget || wordGuessHintLevel < 1) {
+    playGameSound("wrong");
+    triggerInvalidShake(wordGuessHintSecondBtn);
+    setWordGuessMessage("Спочатку відкрийте підказку 1");
     return;
   }
+  playGameSound("reveal");
 
   if (wordGuessHintLevel === 1) {
     wordGuessHintLevel = 2;
@@ -2162,8 +2246,12 @@ function showWordGuessSecondHint() {
 
 function showWordGuessThirdHint() {
   if (!wordGuessTarget || wordGuessHintLevel < 2) {
+    playGameSound("wrong");
+    triggerInvalidShake(wordGuessHintThirdBtn);
+    setWordGuessMessage("Спочатку відкрийте підказку 2");
     return;
   }
+  playGameSound("reveal");
 
   if (wordGuessHintLevel === 2) {
     wordGuessHintLevel = 3;
@@ -2516,18 +2604,48 @@ function toggleWordGuessResultHistory() {
   renderWordGuessHistory();
 }
 
-function shakeWordGuessBoard() {
-  if (!wordGuessBoard) {
+function triggerInvalidShake(element) {
+  if (!element) {
     return;
   }
 
-  wordGuessBoard.classList.remove("is-invalid");
-  void wordGuessBoard.offsetWidth;
-  wordGuessBoard.classList.add("is-invalid");
+  if (element._invalidShakeTimeoutId) {
+    window.clearTimeout(element._invalidShakeTimeoutId);
+    element._invalidShakeTimeoutId = null;
+  }
 
-  setTimeout(() => {
-    wordGuessBoard.classList.remove("is-invalid");
-  }, 360);
+  element.classList.remove("is-invalid-shaking");
+  void element.offsetWidth;
+  element.classList.add("is-invalid-shaking");
+  element._invalidShakeTimeoutId = window.setTimeout(() => {
+    element.classList.remove("is-invalid-shaking");
+    element._invalidShakeTimeoutId = null;
+  }, 420);
+}
+
+function getActiveWordGuessRow() {
+  if (!wordGuessBoard) {
+    return null;
+  }
+
+  return wordGuessBoard.querySelector(".word-guess-row.is-active");
+}
+
+function shakeWordGuessBoard() {
+  triggerInvalidShake(getActiveWordGuessRow() || wordGuessBoard);
+}
+
+function clearInvalidWordGuessAfterShake() {
+  if (wordGuessInvalidClearTimeoutId) {
+    window.clearTimeout(wordGuessInvalidClearTimeoutId);
+    wordGuessInvalidClearTimeoutId = null;
+  }
+
+  wordGuessInvalidClearTimeoutId = window.setTimeout(() => {
+    wordGuessCurrentGuess = "";
+    renderWordGuessBoard();
+    wordGuessInvalidClearTimeoutId = null;
+  }, 420);
 }
 
 function setWordGuessMessage(message) {
@@ -3227,11 +3345,13 @@ function handleWhoAmIRevealPrimary() {
     whoAmIRevealTitle.textContent = assignment.player;
     whoAmIRevealInstruction.textContent = "Усі запам'ятали? Натисніть кнопку, щоб сховати роль.";
     whoAmIRevealPrimaryBtn.textContent = "Усі запам'ятали";
+    playGameSound("reveal");
     playHapticFeedback("tap");
     return;
   }
 
   whoAmIRevealIndex += 1;
+  playGameSound("uiClose");
   if (whoAmIRevealIndex >= whoAmIAssignments.length) {
     showWhoAmITurnIntro();
     return;
@@ -3256,6 +3376,7 @@ function changeWhoAmIRevealRole() {
 }
 
 function beginWhoAmITurn() {
+  playGameSound("turnChange");
   showWhoAmITurnIntro();
 }
 
@@ -3406,10 +3527,12 @@ function showWhoAmISpoiler(button) {
     target.classList.add("is-revealed");
   }
 
+  playGameSound("reveal");
   whoAmISpoilerTimeoutId = window.setTimeout(hideWhoAmISpoiler, 2500);
 }
 
 function hideWhoAmISpoiler() {
+  const hadVisibleSpoiler = !!whoAmIActiveSpoilerButton;
   if (whoAmISpoilerTimeoutId) {
     window.clearTimeout(whoAmISpoilerTimeoutId);
     whoAmISpoilerTimeoutId = null;
@@ -3433,6 +3556,9 @@ function hideWhoAmISpoiler() {
   }
 
   whoAmIActiveSpoilerButton = null;
+  if (hadVisibleSpoiler) {
+    playGameSound("uiClose");
+  }
 }
 
 function bindWhoAmISpoilerButton(button) {
@@ -3556,7 +3682,8 @@ function handleWhoAmIAnswer(type) {
   assignment[type] += 1;
 
   if (type === "yes") {
-    playCorrectSound();
+    playGameSound("positiveTick");
+    playHapticFeedback("tap");
   } else {
     playSkipSound();
   }
@@ -3617,7 +3744,7 @@ function confirmWhoAmIGuessed() {
 
   assignment.guessed = true;
   assignment.guessedRound = whoAmIRound;
-  playGameCompleteSound("win");
+  playCorrectSound();
 
   if (whoAmIPartyMode === "timed") {
     whoAmITimedRoles.push({
@@ -3659,6 +3786,7 @@ function openWhoAmIConfirmModal(assignment) {
   }
   whoAmIConfirmModal.hidden = false;
   document.body.classList.add("modal-open");
+  playGameSound("uiOpen");
 }
 
 function closeWhoAmIConfirmModal() {
@@ -3667,6 +3795,7 @@ function closeWhoAmIConfirmModal() {
   }
   document.body.classList.remove("modal-open");
   whoAmIPendingGuessAssignment = null;
+  playGameSound("uiClose");
 }
 
 function skipWhoAmIRole() {
@@ -3730,6 +3859,9 @@ function startWhoAmITimer() {
     whoAmITimeLeft -= 1;
     if (whoAmITimerText) {
       whoAmITimerText.textContent = whoAmITimeLeft;
+    }
+    if (whoAmITimeLeft > 0 && whoAmITimeLeft <= 3) {
+      playGameSound("countdown");
     }
     if (whoAmITimeLeft <= 0) {
       finishWhoAmITimedRound();
@@ -3809,56 +3941,229 @@ function continueAfterWhoAmIRound() {
   showWhoAmIFinal();
 }
 
+function getFinalMedalSymbol(place) {
+  if (place === 1) {
+    return "🏆";
+  }
+  if (place === 2) {
+    return "🥈";
+  }
+  if (place === 3) {
+    return "🥉";
+  }
+  return String(place || "");
+}
+
+function clearElement(element) {
+  if (element) {
+    element.innerHTML = "";
+  }
+}
+
+function appendTextElement(parent, tagName, className, text) {
+  if (!parent || text === undefined || text === null || text === "") {
+    return null;
+  }
+  const element = document.createElement(tagName);
+  if (className) {
+    element.className = className;
+  }
+  element.textContent = text;
+  parent.appendChild(element);
+  return element;
+}
+
+function createFinalResultCard(entry, options = {}) {
+  const place = entry.place || 0;
+  const isPodium = Boolean(options.isPodium);
+  const item = document.createElement("article");
+  item.className = "game-final-entry";
+  item.classList.toggle("is-podium", isPodium);
+  item.classList.toggle("is-rank-1", place === 1);
+  item.classList.toggle("is-rank-2", place === 2);
+  item.classList.toggle("is-rank-3", place === 3);
+  item.classList.toggle("is-tied", Boolean(entry.isTied));
+  if (place) {
+    item.setAttribute("data-place", String(place));
+  }
+
+  const badge = document.createElement("span");
+  badge.className = "game-final-medal";
+  badge.setAttribute("aria-hidden", "true");
+  badge.textContent = place <= 3 && place > 0 ? getFinalMedalSymbol(place) : String(place || "•");
+  item.appendChild(badge);
+
+  const copy = document.createElement("div");
+  copy.className = "game-final-entry-copy";
+
+  appendTextElement(copy, "span", "game-final-entry-kicker", entry.kicker || (place ? `${place} місце` : ""));
+  appendTextElement(copy, "strong", "game-final-entry-name", entry.name);
+
+  if (entry.role) {
+    appendTextElement(copy, "span", "game-final-entry-role", entry.role);
+  }
+
+  if (entry.score !== undefined && entry.score !== null && entry.score !== "") {
+    appendTextElement(copy, "span", "game-final-entry-score", `${entry.score} ${entry.scoreLabel || "очок"}`);
+  }
+
+  const metaParts = [];
+  if (entry.category) {
+    metaParts.push(entry.category);
+  }
+  if (entry.detail) {
+    metaParts.push(entry.detail);
+  }
+  appendTextElement(copy, "small", "game-final-entry-detail", metaParts.join(" · "));
+
+  item.appendChild(copy);
+  return item;
+}
+
+function shouldUsePodium(entries, isTie) {
+  if (isTie || !entries || entries.length < 3) {
+    return false;
+  }
+  return entries[0] && entries[1] && entries[2]
+    && entries[0].place === 1
+    && entries[1].place === 2
+    && entries[2].place === 3;
+}
+
+function renderGameFinalResults(resultData) {
+  if (!resultData || !resultData.container) {
+    return;
+  }
+
+  const container = resultData.container;
+  clearElement(container);
+  container.className = `game-final-results mode-${resultData.mode || "generic"}`;
+  container.classList.toggle("is-tie", Boolean(resultData.isTie));
+
+  if (resultData.titleElement) {
+    resultData.titleElement.textContent = resultData.title || "Гру завершено";
+  }
+  if (resultData.subtitleElement) {
+    resultData.subtitleElement.textContent = resultData.subtitle || "";
+  }
+
+  const entries = resultData.entries || [];
+  const usePodium = shouldUsePodium(entries, Boolean(resultData.isTie));
+
+  if (usePodium) {
+    const podium = document.createElement("div");
+    podium.className = "game-final-podium";
+    [entries[1], entries[0], entries[2]].forEach((entry) => {
+      podium.appendChild(createFinalResultCard(entry, { isPodium: true }));
+    });
+    container.appendChild(podium);
+
+    if (entries.length > 3) {
+      const list = document.createElement("div");
+      list.className = "game-final-list";
+      entries.slice(3).forEach((entry) => {
+        list.appendChild(createFinalResultCard(entry));
+      });
+      container.appendChild(list);
+    }
+  } else {
+    const list = document.createElement("div");
+    list.className = "game-final-list";
+    entries.forEach((entry) => {
+      list.appendChild(createFinalResultCard(entry));
+    });
+    container.appendChild(list);
+  }
+
+  playGameSound("reveal");
+  if (usePodium) {
+    window.setTimeout(() => {
+      playGameSound("medal");
+    }, 680);
+  }
+}
+
+function getRankedTeamResultEntries(scores, nameGetter, scoreLabel, roundsGetter) {
+  const sorted = scores.map((scoreValue, index) => ({
+    index,
+    name: nameGetter(index),
+    score: scoreValue,
+  })).sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    return a.index - b.index;
+  });
+
+  let previousScore = null;
+  let previousPlace = 0;
+  return sorted.map((team, index) => {
+    const place = previousScore === team.score ? previousPlace : index + 1;
+    previousScore = team.score;
+    previousPlace = place;
+    const rounds = typeof roundsGetter === "function" ? roundsGetter(team.index) : 0;
+    return {
+      place,
+      name: team.name,
+      score: team.score,
+      scoreLabel,
+      detail: rounds ? `${rounds} раунд(ів)` : "",
+    };
+  });
+}
+
 function showWhoAmIFinal() {
   clearWhoAmITimer();
   const isTimed = whoAmIPartyMode === "timed";
-  whoAmIFinalTitle.textContent = "Гру завершено";
-  whoAmIFinalHero.innerHTML = "";
-  whoAmIFinalHero.hidden = true;
-  whoAmIFinalBoard.innerHTML = "";
-  whoAmIFinalBoard.className = "whoami-final-board";
+  clearElement(whoAmIFinalHero);
+  if (whoAmIFinalHero) {
+    whoAmIFinalHero.hidden = true;
+  }
 
   if (isTimed && whoAmITeamCount > 0) {
     const highest = Math.max.apply(null, whoAmITeamScores);
-    const winners = [];
-    const teamRows = whoAmITeamScores.map((scoreValue, index) => ({
-      name: getWhoAmITeamName(index),
-      score: scoreValue,
-    })).sort((a, b) => b.score - a.score);
-
-    teamRows.forEach((team, index) => {
-      if (team.score === highest) {
-        winners.push(team.name);
-      }
-      const row = document.createElement("div");
-      row.className = `whoami-final-row ${index < 3 ? "is-podium" : ""} is-rank-${index + 1}`;
-      row.innerHTML = `
-        <span class="whoami-final-place">${index + 1}</span>
-        <div>
-          <strong>${team.name}</strong>
-          <small>${team.score} очок</small>
-        </div>
-      `;
-      whoAmIFinalBoard.appendChild(row);
+    const entries = getRankedTeamResultEntries(whoAmITeamScores, getWhoAmITeamName, "ролей");
+    const winners = entries.filter((entry) => entry.score === highest).map((entry) => entry.name);
+    const isTie = winners.length > 1;
+    entries.forEach((entry) => {
+      entry.isTied = isTie && entry.score === highest;
     });
-    whoAmIFinalSubtitle.textContent = winners.length > 1 ? `Нічия: ${winners.join(", ")}` : `Перемогла ${winners[0]}`;
-    playGameCompleteSound(winners.length > 1 ? "tie" : "win");
+    renderGameFinalResults({
+      mode: "whoami",
+      title: isTie ? "Нічия" : "Гру завершено",
+      subtitle: isTie ? `Команди ${winners.join(", ")} мають однаковий результат.` : `Перемогла ${winners[0]}.`,
+      entries,
+      isTie,
+      container: whoAmIFinalBoard,
+      titleElement: whoAmIFinalTitle,
+      subtitleElement: whoAmIFinalSubtitle,
+    });
+    window.setTimeout(() => {
+      playGameCompleteSound(isTie ? "tie" : "win");
+    }, 240);
   } else if (isTimed) {
     const guessed = whoAmITimedRoles.filter((item) => item.status === "guessed").length;
-    whoAmIFinalSubtitle.textContent = `Вгадано ролей: ${guessed}`;
-    whoAmITimedRoles.forEach((item, index) => {
-      const row = document.createElement("div");
-      row.className = "whoami-final-row";
-      row.innerHTML = `
-        <span class="whoami-final-place">${index + 1}</span>
-        <div>
-          <strong>${item.role}</strong>
-          <small>${item.category} · ${item.status === "guessed" ? "вгадано" : "пропущено"}</small>
-        </div>
-      `;
-      whoAmIFinalBoard.appendChild(row);
+    const entries = whoAmITimedRoles.map((item, index) => ({
+      place: 0,
+      kicker: `роль ${index + 1}`,
+      name: item.player || `Роль ${index + 1}`,
+      role: item.role,
+      category: item.category,
+      detail: item.status === "guessed" ? "вгадано" : "пропущено",
+    }));
+    renderGameFinalResults({
+      mode: "whoami",
+      title: "Усі ролі відкрито",
+      subtitle: `Вгадано ролей: ${guessed}.`,
+      entries,
+      isTie: true,
+      container: whoAmIFinalBoard,
+      titleElement: whoAmIFinalTitle,
+      subtitleElement: whoAmIFinalSubtitle,
     });
-    playGameCompleteSound("win");
+    window.setTimeout(() => {
+      playGameCompleteSound("win");
+    }, 240);
   } else {
     const allGuessed = whoAmIAssignments.length > 0 && whoAmIAssignments.every((assignment) => assignment.guessed);
     const ordered = whoAmIAssignments.slice().sort((a, b) => {
@@ -3874,23 +4179,32 @@ function showWhoAmIFinal() {
       return (a.turns || 0) - (b.turns || 0);
     });
 
-    whoAmIFinalTitle.textContent = allGuessed ? "Усі ролі відгадано" : "Гру завершено";
-    whoAmIFinalSubtitle.textContent = allGuessed ? "Усі учасники відкрили свої ролі." : "Підсумок ролей і ходів.";
-    ordered.forEach((assignment, index) => {
-      const row = document.createElement("div");
-      const isPodium = !allGuessed && assignment.guessed && index < 3;
-      row.className = `whoami-final-row ${isPodium ? "is-podium" : ""} is-rank-${index + 1}`;
-      row.innerHTML = `
-        <span class="whoami-final-place">${allGuessed ? "✓" : index + 1}</span>
-        <div>
-          <strong>${assignment.player}</strong>
-          <small>${assignment.role} · ${assignment.category}</small>
-          <em>${assignment.guessed ? `відгадав у колі ${assignment.guessedRound || whoAmIRound}` : assignment.skipped ? "вибув" : "роль не відгадано"}</em>
-        </div>
-      `;
-      whoAmIFinalBoard.appendChild(row);
+    const entries = ordered.map((assignment, index) => {
+      const guessedDetail = assignment.guessed
+        ? `відгадав у колі ${assignment.guessedRound || whoAmIRound}`
+        : assignment.skipped ? "вибув" : "роль не відгадано";
+      return {
+        place: allGuessed ? 0 : index + 1,
+        kicker: allGuessed ? "роль відкрита" : "",
+        name: assignment.player,
+        role: assignment.role,
+        category: assignment.category,
+        detail: guessedDetail,
+      };
     });
-    playGameCompleteSound("win");
+    renderGameFinalResults({
+      mode: "whoami",
+      title: allGuessed ? "Усі ролі відкрито" : "Гру завершено",
+      subtitle: allGuessed ? "Учасники рівнозначно відкрили свої ролі." : "Підсумок ролей і ходів.",
+      entries,
+      isTie: allGuessed,
+      container: whoAmIFinalBoard,
+      titleElement: whoAmIFinalTitle,
+      subtitleElement: whoAmIFinalSubtitle,
+    });
+    window.setTimeout(() => {
+      playGameCompleteSound("win");
+    }, 240);
   }
 
   showScreen("whoAmIFinal");
@@ -3902,6 +4216,7 @@ function openWhoAmIRules() {
   }
   whoAmIRulesModal.hidden = false;
   document.body.classList.add("modal-open");
+  playGameSound("uiOpen");
 }
 
 function closeWhoAmIRules() {
@@ -3910,6 +4225,7 @@ function closeWhoAmIRules() {
   }
   whoAmIRulesModal.hidden = true;
   document.body.classList.remove("modal-open");
+  playGameSound("uiClose");
 }
 
 function openWhoAmIParticipants() {
@@ -3920,6 +4236,7 @@ function openWhoAmIParticipants() {
   renderWhoAmIParticipantsList();
   whoAmIParticipantsModal.hidden = false;
   document.body.classList.add("modal-open");
+  playGameSound("uiOpen");
 }
 
 function closeWhoAmIParticipants() {
@@ -3929,6 +4246,7 @@ function closeWhoAmIParticipants() {
   }
   whoAmIParticipantsModal.hidden = true;
   document.body.classList.remove("modal-open");
+  playGameSound("uiClose");
 }
 
 function renderWhoAmIParticipantsList() {
@@ -3991,6 +4309,10 @@ function setupEvents() {
   if (appSettingsBtn) {
     appSettingsBtn.addEventListener("click", openAppSettings);
   }
+
+  document.querySelectorAll(".mode-settings-button").forEach((button) => {
+    button.addEventListener("click", openAppSettings);
+  });
 
   if (appSettingsCloseBtn) {
     appSettingsCloseBtn.addEventListener("click", closeAppSettings);
@@ -5730,6 +6052,7 @@ function beginPreparedRound() {
   showNextWord();
   updateGameInfo();
   updateTeamScoreBoard();
+  playGameSound("roundStart");
   startTimer();
 }
 
@@ -5744,6 +6067,9 @@ function startTimer() {
   timerId = setInterval(() => {
     timeLeft--;
     updateGameInfo();
+    if (timeLeft > 0 && timeLeft <= 3) {
+      playGameSound("countdown");
+    }
 
     if (timeLeft <= 0) {
       finishRound("time");
@@ -5804,6 +6130,7 @@ function showSingleNextCard() {
 
   isSwipeLocked = true;
   animateWordCard("fly-up");
+  playGameSound("turnChange");
 
   clearWordActionTimeout();
   wordActionTimeoutId = setTimeout(() => {
@@ -6521,34 +6848,52 @@ function confirmRoundResults() {
 }
 
 function showWinnerScreen() {
-  const highestScore = Math.max(...teamScores);
+  const highestScore = Math.max.apply(null, teamScores);
   const tiedIndices = teamScores.reduce((accumulator, scoreValue, index) => {
     if (scoreValue === highestScore) {
       accumulator.push(index);
     }
     return accumulator;
   }, []);
+  const entries = getRankedTeamResultEntries(teamScores, getTeamName, "очок", (index) => roundsPlayedByTeam[index] || 0);
+  const tiedNames = tiedIndices.map((index) => getTeamName(index));
+  const isTie = tiedIndices.length > 1;
 
-  if (tiedIndices.length > 1) {
-    const teamNamesList = tiedIndices.map((index) => getTeamName(index)).join(", ");
-    updateWinnerScoreBoard();
-    renderWinnerHero("🤝 Нічия", teamNamesList, "tie");
-    winnerTitle.textContent = "Гру завершено";
-    winnerSubtitle.textContent = `Команди ${teamNamesList} набрали однакову кількість очок.`;
-    winnerTeamsList.textContent = `Найвищий рахунок: ${highestScore}`;
+  entries.forEach((entry) => {
+    entry.isTied = isTie && entry.score === highestScore;
+  });
+
+  renderGameFinalResults({
+    mode: isCharades() ? "charades" : "alias",
+    title: isTie ? "Нічия" : "Гру завершено",
+    subtitle: isTie
+      ? `Команди ${tiedNames.join(", ")} набрали однакову кількість очок.`
+      : `Перемогла ${getTeamName(tiedIndices[0])}.`,
+    entries,
+    isTie,
+    container: winnerScoreBoard,
+    titleElement: winnerTitle,
+    subtitleElement: winnerSubtitle,
+  });
+
+  if (winnerHero) {
+    winnerHero.hidden = true;
+    winnerHero.innerHTML = "";
+  }
+
+  if (winnerTeamsList) {
+    winnerTeamsList.textContent = isTie ? `Найвищий рахунок: ${highestScore}` : `Фінальний рахунок: ${highestScore}`;
+  }
+
+  if (isTie) {
     playAgainBtn.textContent = "Додатковий раунд";
   } else {
-    const winnerIndex = tiedIndices[0];
-    const winnerName = getTeamName(winnerIndex);
-    updateWinnerScoreBoard(winnerIndex);
-    renderWinnerHero("🏆 Переможець", winnerName, "winner");
-    winnerTitle.textContent = "Гру завершено";
-    winnerSubtitle.textContent = `Перемогла ${winnerName}.`;
-    winnerTeamsList.textContent = `Фінальний рахунок: ${highestScore}`;
     playAgainBtn.textContent = "Нова гра";
   }
 
-  playGameCompleteSound(tiedIndices.length > 1 ? "tie" : "win");
+  window.setTimeout(() => {
+    playGameCompleteSound(isTie ? "tie" : "win");
+  }, 240);
   showScreen("winner");
 }
 
@@ -6779,9 +7124,161 @@ function unlockGameAudio() {
     oscillator.start(startTime);
     oscillator.stop(startTime + 0.02);
     isGameAudioUnlocked = true;
+    preloadGameSoundBuffers();
   } catch (error) {
     // Sound is optional; the game must keep working if audio is blocked.
   }
+}
+
+function decodeGameAudioData(context, arrayBuffer) {
+  return new Promise((resolve, reject) => {
+    let isSettled = false;
+    const finishResolve = (buffer) => {
+      if (isSettled) {
+        return;
+      }
+      isSettled = true;
+      resolve(buffer);
+    };
+    const finishReject = (error) => {
+      if (isSettled) {
+        return;
+      }
+      isSettled = true;
+      reject(error);
+    };
+
+    try {
+      const decodeResult = context.decodeAudioData(arrayBuffer, finishResolve, finishReject);
+      if (decodeResult && typeof decodeResult.then === "function") {
+        decodeResult.then(finishResolve).catch(finishReject);
+      }
+    } catch (error) {
+      finishReject(error);
+    }
+  });
+}
+
+function loadGameSoundBuffer(eventName) {
+  const soundPath = GAME_SOUND_FILE_MAP[eventName];
+  if (!soundPath || gameSoundBufferFailures[eventName]) {
+    return null;
+  }
+  if (gameSoundBufferCache[eventName]) {
+    return Promise.resolve(gameSoundBufferCache[eventName]);
+  }
+  if (gameSoundBufferPromises[eventName]) {
+    return gameSoundBufferPromises[eventName];
+  }
+
+  const context = getGameAudioContext();
+  if (!context || typeof fetch !== "function") {
+    return null;
+  }
+
+  gameSoundBufferPromises[eventName] = fetch(soundPath)
+    .then((response) => {
+      if (!response || !response.ok) {
+        throw new Error("Sound request failed");
+      }
+      return response.arrayBuffer();
+    })
+    .then((arrayBuffer) => decodeGameAudioData(context, arrayBuffer))
+    .then((buffer) => {
+      gameSoundBufferCache[eventName] = buffer;
+      return buffer;
+    })
+    .catch((error) => {
+      gameSoundBufferFailures[eventName] = true;
+      return null;
+    });
+
+  return gameSoundBufferPromises[eventName];
+}
+
+function preloadGameSoundBuffers() {
+  if (!isGameSoundEnabled) {
+    return;
+  }
+
+  Object.keys(GAME_SOUND_FILE_MAP).forEach((eventName) => {
+    loadGameSoundBuffer(eventName);
+  });
+}
+
+function playBufferedGameSound(eventName) {
+  const buffer = gameSoundBufferCache[eventName];
+  if (!buffer) {
+    loadGameSoundBuffer(eventName);
+    return false;
+  }
+
+  const context = getGameAudioContext();
+  if (!context) {
+    return false;
+  }
+
+  try {
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    const levelName = eventName === "gameComplete" || eventName === "gameWin" || eventName === "gameLoss" || eventName === "tie" || eventName === "gameTie"
+      ? "finale"
+      : eventName === "roundComplete" || eventName === "roundStart" ? "round" : eventName === "turnChange" ? "transition" : "feedback";
+    const levelVolume = getSoundLevelVolume(levelName);
+    const startTime = context.currentTime + 0.004;
+    const volume = Math.max(0.0001, GAME_SOUND_MASTER_VOLUME * levelVolume);
+
+    source.buffer = buffer;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.linearRampToValueAtTime(volume, startTime + 0.018);
+    gain.gain.setValueAtTime(volume, startTime + Math.max(0.02, buffer.duration - 0.05));
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + buffer.duration);
+    source.connect(gain);
+    gain.connect(context.destination);
+    source.start(startTime);
+    source.stop(startTime + buffer.duration + 0.02);
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function getSoundLevelVolume(levelName) {
+  return GAME_SOUND_LEVELS[levelName] || GAME_SOUND_LEVELS.feedback;
+}
+
+function scheduleEnvelope(gain, startTime, duration, volume, note) {
+  const attack = Math.min(note.attack || 0.014, duration / 3);
+  const release = Math.min(note.release || 0.16, Math.max(0.04, duration - attack));
+  const sustainUntil = Math.max(startTime + attack + 0.01, startTime + duration - release);
+  const endTime = startTime + duration;
+
+  gain.gain.setValueAtTime(0.0001, startTime);
+  gain.gain.linearRampToValueAtTime(volume, startTime + attack);
+  gain.gain.setValueAtTime(volume, sustainUntil);
+  gain.gain.exponentialRampToValueAtTime(0.0001, endTime);
+}
+
+function playToneLayer(context, baseTime, note) {
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  const startTime = baseTime + (note.start || 0);
+  const duration = Math.max(0.05, note.duration || 0.18);
+  const levelVolume = getSoundLevelVolume(note.level || "feedback");
+  const noteVolume = Math.max(0.0001, (note.volume || 0.2) * levelVolume * GAME_SOUND_MASTER_VOLUME);
+
+  oscillator.type = note.type || "sine";
+  oscillator.frequency.setValueAtTime(note.frequency || 440, startTime);
+  if (note.glideTo) {
+    oscillator.frequency.linearRampToValueAtTime(note.glideTo, startTime + duration * 0.78);
+  }
+
+  scheduleEnvelope(gain, startTime, duration, noteVolume, note);
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+  oscillator.start(startTime);
+  oscillator.stop(startTime + duration + 0.04);
 }
 
 function playToneSequence(sequence = []) {
@@ -6798,31 +7295,28 @@ function playToneSequence(sequence = []) {
     context.resume().catch(() => {});
   }
 
-  const baseTime = context.currentTime + 0.01;
+  const baseTime = context.currentTime + 0.012;
 
   sequence.forEach((note) => {
     try {
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      const startTime = baseTime + (note.start || 0);
-      const duration = Math.max(0.04, note.duration || 0.1);
-      const noteVolume = Math.max(0.0001, (note.volume || 0.3) * GAME_SOUND_MASTER_VOLUME);
-
-      oscillator.type = note.type || "sine";
-      oscillator.frequency.setValueAtTime(note.frequency || 440, startTime);
-
-      gain.gain.setValueAtTime(0.0001, startTime);
-      gain.gain.linearRampToValueAtTime(noteVolume, startTime + Math.min(0.025, duration / 3));
-      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
-
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(startTime);
-      oscillator.stop(startTime + duration + 0.03);
+      playToneLayer(context, baseTime, note);
     } catch (error) {
       // Ignore individual failed notes; audio feedback is non-critical.
     }
   });
+}
+
+function playGameSound(eventName = "uiClick") {
+  if (!isGameSoundEnabled) {
+    return;
+  }
+
+  if (playBufferedGameSound(eventName)) {
+    return;
+  }
+
+  const sequence = GAME_SOUND_PATTERNS[eventName] || GAME_SOUND_PATTERNS.uiClick;
+  playToneSequence(sequence);
 }
 
 function playHapticFeedback(type = "tap") {
@@ -6848,34 +7342,34 @@ function playHapticFeedback(type = "tap") {
 }
 
 function playCorrectSound() {
-  playToneSequence(GAME_SOUND_PATTERNS.correct);
+  playGameSound("correct");
   playHapticFeedback("correct");
 }
 
 function playSkipSound() {
-  playToneSequence(GAME_SOUND_PATTERNS.skipped);
+  playGameSound("skipped");
   playHapticFeedback("skipped");
 }
 
 function playRoundCompleteSound() {
-  playToneSequence(GAME_SOUND_PATTERNS.roundComplete);
+  playGameSound("roundComplete");
   playHapticFeedback("roundComplete");
 }
 
 function playGameCompleteSound(result = "win") {
   if (result === "loss") {
-    playToneSequence(GAME_SOUND_PATTERNS.gameLoss);
+    playGameSound("gameLoss");
     playHapticFeedback("gameLoss");
     return;
   }
 
   if (result === "tie") {
-    playToneSequence(GAME_SOUND_PATTERNS.tie);
+    playGameSound("tie");
     playHapticFeedback("tie");
     return;
   }
 
-  playToneSequence(GAME_SOUND_PATTERNS.gameComplete);
+  playGameSound("gameComplete");
   playHapticFeedback("gameComplete");
 }
 

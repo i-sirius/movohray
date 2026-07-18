@@ -4523,16 +4523,22 @@ body[data-theme="dark"] .word-guess-key-utility {
   box-shadow: 0 18px 42px rgba(115, 49, 69, 0.18);
 }
 
-.word-guess-board.is-invalid {
-  animation: wordGuessShake 0.34s ease;
+.is-invalid-shaking {
+  animation: invalid-shake 380ms ease-out;
 }
 
-@keyframes wordGuessShake {
+@keyframes invalid-shake {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-7px); }
-  40% { transform: translateX(6px); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(5px); }
   60% { transform: translateX(-4px); }
-  80% { transform: translateX(3px); }
+  80% { transform: translateX(2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-invalid-shaking {
+    animation: none;
+  }
 }
 
 .word-guess-keyboard {
@@ -7975,7 +7981,7 @@ body[data-theme="dark"] .app-settings-btn {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.26);
 }
 
-body:not([data-screen="menu"]):not([data-screen="settings"]) .app-settings-btn,
+body:not([data-screen="menu"]) .app-settings-btn,
 body.required-update-open .app-settings-btn,
 body.word-guess-result-open .app-settings-btn {
   display: none;
@@ -10432,16 +10438,32 @@ body[data-theme="dark"] .mode-card-icon {
 .setup-titlebar,
 .settings-header .setup-titlebar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 40px;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 12px;
   width: 100%;
 }
 
-.setup-rules-btn {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
+.mode-setup-header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 1px;
+}
+
+.mode-setup-header-actions > button,
+.setup-rules-btn,
+.mode-settings-button {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   border: 1px solid rgba(111, 106, 168, 0.18);
   background: rgba(255, 255, 255, 0.62);
@@ -10449,12 +10471,24 @@ body[data-theme="dark"] .mode-card-icon {
   font-size: 18px;
   font-weight: 900;
   line-height: 1;
+  box-sizing: border-box;
   box-shadow: 0 8px 20px rgba(56, 64, 104, 0.1);
 }
 
-body[data-theme="dark"] .setup-rules-btn {
+.mode-settings-button {
+  font-size: 19px;
+}
+
+.mode-settings-button span {
+  display: block;
+  line-height: 1;
+}
+
+body[data-theme="dark"] .setup-rules-btn,
+body[data-theme="dark"] .mode-settings-button {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.14);
+  color: #ecfdff;
 }
 
 #settingsScreen .settings-card,
@@ -10981,7 +11015,8 @@ body[data-theme="dark"] .whoami-category-option.selected {
   border-color: rgba(143, 214, 217, 0.42);
 }
 
-body[data-theme="dark"] .setup-rules-btn {
+body[data-theme="dark"] .setup-rules-btn,
+body[data-theme="dark"] .mode-settings-button {
   background: rgba(127, 215, 223, 0.18);
   border-color: rgba(174, 194, 255, 0.42);
   color: #ecfdff;
@@ -11447,6 +11482,19 @@ body[data-theme="dark"] .whoami-category-mini-btn {
     grid-template-columns: 1fr;
   }
 
+  .mode-setup-header-actions {
+    gap: 6px;
+  }
+
+  .mode-setup-header-actions > button,
+  .setup-rules-btn,
+  .mode-settings-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
   .whoami-setup-compact-row,
   .whoami-category-summary-card {
     grid-template-columns: 1fr;
@@ -11482,5 +11530,329 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 
   .word-guess-key-wide {
     font-size: clamp(9px, 3vw, 11px);
+  }
+}
+
+/* 0.5.5 - shared final results and stable Who Am I overlay */
+#whoAmIFinalScreen.screen.active {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  background: rgba(12, 16, 28, 0.76);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+#whoAmIFinalScreen .card {
+  width: min(720px, 100%);
+  max-width: 100%;
+  min-width: 0;
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: linear-gradient(145deg, rgba(255, 252, 248, 0.98), rgba(246, 250, 252, 0.96));
+}
+
+#whoAmIFinalScreen .card-inner,
+#winnerScreen .card-inner,
+#whoAmIFinalBoard,
+#winnerScoreBoard,
+.game-final-results,
+.game-final-podium,
+.game-final-list,
+.game-final-entry,
+.game-final-entry-copy {
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#whoAmIFinalBoard,
+#winnerScoreBoard {
+  width: 100%;
+  margin: 14px 0 18px;
+  overflow: visible;
+}
+
+.game-final-results {
+  display: grid;
+  gap: 14px;
+}
+
+.game-final-podium {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 12px;
+}
+
+.game-final-list {
+  display: grid;
+  gap: 9px;
+}
+
+.game-final-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 12px 13px;
+  border: 1px solid rgba(111, 106, 168, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 18px rgba(54, 49, 94, 0.06);
+}
+
+.game-final-entry.is-podium {
+  padding: 14px;
+  background: rgba(255, 250, 240, 0.88);
+}
+
+.game-final-entry.is-rank-1 {
+  padding-block: 18px;
+  border-color: rgba(218, 166, 68, 0.5);
+  background:
+    radial-gradient(circle at 84% 14%, rgba(255, 214, 112, 0.28), transparent 42%),
+    linear-gradient(145deg, rgba(255, 247, 226, 0.98), rgba(255, 253, 246, 0.94));
+  box-shadow: 0 16px 34px rgba(177, 123, 34, 0.14);
+}
+
+.game-final-entry.is-rank-2 {
+  border-color: rgba(158, 173, 194, 0.42);
+  background: linear-gradient(145deg, rgba(241, 246, 251, 0.96), rgba(255, 255, 255, 0.9));
+}
+
+.game-final-entry.is-rank-3 {
+  border-color: rgba(191, 128, 78, 0.36);
+  background: linear-gradient(145deg, rgba(255, 239, 225, 0.92), rgba(255, 252, 248, 0.9));
+}
+
+.game-final-entry.is-tied {
+  border-color: rgba(111, 106, 168, 0.34);
+  background: linear-gradient(145deg, rgba(241, 237, 245, 0.95), rgba(255, 255, 255, 0.88));
+}
+
+.game-final-medal {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(111, 106, 168, 0.1);
+  color: var(--color-text);
+  font-size: 21px;
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.game-final-entry.is-rank-1 .game-final-medal {
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 213, 95, 0.42);
+  box-shadow: 0 0 22px rgba(255, 194, 76, 0.34);
+  font-size: 27px;
+}
+
+.game-final-entry.is-rank-2 .game-final-medal {
+  background: rgba(197, 207, 222, 0.44);
+}
+
+.game-final-entry.is-rank-3 .game-final-medal {
+  background: rgba(221, 157, 96, 0.3);
+}
+
+.game-final-entry-copy {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.game-final-entry-kicker,
+.game-final-entry-detail {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.game-final-entry-name {
+  color: var(--color-text);
+  font-size: clamp(18px, 3.5vw, 24px);
+  font-weight: 1000;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.game-final-entry-score {
+  color: var(--accent);
+  font-size: clamp(22px, 4.5vw, 34px);
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.game-final-entry-role {
+  color: var(--color-text);
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 1000;
+  line-height: 1.02;
+  overflow-wrap: anywhere;
+}
+
+.game-final-results.mode-whoami .game-final-entry-role {
+  color: #633fb4;
+}
+
+.game-final-actions,
+#winnerScreen .card-inner > #playAgainBtn,
+#winnerScreen .card-inner > #winnerToMenuBtn,
+#whoAmIFinalScreen .card-inner > #whoAmINewBtn,
+#whoAmIFinalScreen .card-inner > #whoAmIFinalMenuBtn {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+#winnerScreen .card-inner > #playAgainBtn,
+#winnerScreen .card-inner > #winnerToMenuBtn,
+#whoAmIFinalScreen .card-inner > #whoAmINewBtn,
+#whoAmIFinalScreen .card-inner > #whoAmIFinalMenuBtn {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 8px;
+  padding: 0 18px;
+  border-radius: 18px;
+  line-height: 1.15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body[data-theme="dark"] #whoAmIFinalScreen .card {
+  background: linear-gradient(145deg, rgba(19, 25, 43, 0.98), rgba(27, 34, 58, 0.96));
+  border-color: rgba(143, 214, 217, 0.2);
+}
+
+body[data-theme="dark"] .game-final-entry {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(198, 218, 235, 0.14);
+  box-shadow: none;
+}
+
+body[data-theme="dark"] .game-final-entry.is-rank-1 {
+  background:
+    radial-gradient(circle at 84% 14%, rgba(255, 205, 93, 0.16), transparent 42%),
+    linear-gradient(145deg, rgba(45, 42, 63, 0.95), rgba(31, 35, 56, 0.94));
+  border-color: rgba(255, 213, 95, 0.32);
+}
+
+body[data-theme="dark"] .game-final-entry.is-rank-2 {
+  background: rgba(204, 218, 235, 0.08);
+  border-color: rgba(204, 218, 235, 0.2);
+}
+
+body[data-theme="dark"] .game-final-entry.is-rank-3 {
+  background: rgba(231, 153, 95, 0.09);
+  border-color: rgba(231, 153, 95, 0.2);
+}
+
+body[data-theme="dark"] .game-final-entry.is-tied {
+  background: rgba(127, 215, 223, 0.08);
+  border-color: rgba(127, 215, 223, 0.24);
+}
+
+body[data-theme="dark"] .game-final-entry-name,
+body[data-theme="dark"] .game-final-entry-role {
+  color: #f7fbff;
+}
+
+body[data-theme="dark"] .game-final-entry-kicker,
+body[data-theme="dark"] .game-final-entry-detail {
+  color: #c7d3e6;
+}
+
+body[data-theme="dark"] .game-final-results.mode-whoami .game-final-entry-role {
+  color: #b9f3f5;
+}
+
+body[data-theme="dark"] .game-final-medal {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f7fbff;
+}
+
+@media (min-width: 721px) {
+  #winnerScreen .card-inner,
+  #whoAmIFinalScreen .card-inner {
+    text-align: center;
+  }
+
+  #winnerScreen .card-inner > #playAgainBtn,
+  #whoAmIFinalScreen .card-inner > #whoAmINewBtn {
+    display: inline-flex;
+    width: min(64%, 420px);
+    margin-right: 10px;
+  }
+
+  #winnerScreen .card-inner > #winnerToMenuBtn,
+  #whoAmIFinalScreen .card-inner > #whoAmIFinalMenuBtn {
+    display: inline-flex;
+    width: min(32%, 220px);
+  }
+}
+
+@media (max-width: 720px) {
+  #whoAmIFinalScreen.screen.active {
+    align-items: stretch;
+    padding: 12px;
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+
+  #whoAmIFinalScreen .card {
+    max-height: calc(100vh - 24px);
+  }
+
+  .game-final-podium {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .game-final-entry.is-rank-1 {
+    order: 1;
+  }
+
+  .game-final-entry.is-rank-2 {
+    order: 2;
+  }
+
+  .game-final-entry.is-rank-3 {
+    order: 3;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .game-final-entry.is-rank-1 .game-final-medal {
+    animation: finalMedalPulse 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes finalMedalPulse {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-2px) scale(1.04);
   }
 }
