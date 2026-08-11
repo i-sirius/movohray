@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.5.5";
+const DATA_VERSION = "0.6.0";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
@@ -242,6 +242,7 @@ let skipped = 0;
 let timeLeft = 60;
 let timerId = null;
 let wasTimerRunningBeforeExitModal = false;
+let wasWhoAmITimerRunningBeforeExitModal = false;
 let isThemesPopoverOpen = false;
 let isRoundPaused = false;
 let gameAudioContext = null;
@@ -251,6 +252,13 @@ let isHapticFeedbackEnabled = true;
 let gameSoundBufferCache = {};
 let gameSoundBufferPromises = {};
 let gameSoundBufferFailures = {};
+let pendingExitDestination = "menu";
+let pendingExitFromPopState = false;
+let appHistoryInitialized = false;
+let isHandlingPopState = false;
+let edgeSwipeState = null;
+let edgeSwipeFrameId = null;
+let edgeSwipeHapticFired = false;
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
@@ -480,6 +488,8 @@ const roundReviewProgress = document.getElementById("roundReviewProgress");
 const roundReviewList = document.getElementById("roundReviewList");
 const confirmRoundBtn = document.getElementById("confirmRoundBtn");
 const exitMenuModal = document.getElementById("exitMenuModal");
+const exitModalTitle = document.getElementById("exitModalTitle");
+const exitModalDescription = document.getElementById("exitModalDescription");
 const stayInGameBtn = document.getElementById("stayInGameBtn");
 const confirmExitMenuBtn = document.getElementById("confirmExitMenuBtn");
 const winnerTitle = document.getElementById("winnerTitle");
@@ -529,11 +539,15 @@ const wordGuessKeyboard = document.getElementById("wordGuessKeyboard");
 const wordGuessResult = document.getElementById("wordGuessResult");
 const wordGuessResultTitle = document.getElementById("wordGuessResultTitle");
 const wordGuessResultText = document.getElementById("wordGuessResultText");
+const wordGuessResultStats = document.getElementById("wordGuessResultStats");
 const wordGuessNewBtn = document.getElementById("wordGuessNewBtn");
 const wordGuessMenuBtn = document.getElementById("wordGuessMenuBtn");
 const wordGuessShareBtn = document.getElementById("wordGuessShareBtn");
 const wordGuessDictionaryLinks = document.getElementById("wordGuessDictionaryLinks");
 const wordGuessResultDebug = document.getElementById("wordGuessResultDebug");
+const appToast = document.getElementById("appToast");
+const edgeSwipeUnderlay = document.getElementById("edgeSwipeUnderlay");
+let appToastTimeoutId = null;
 const wordGuessFeedback = document.getElementById("wordGuessFeedback");
 const wordGuessLikeBtn = document.getElementById("wordGuessLikeBtn");
 const wordGuessDislikeBtn = document.getElementById("wordGuessDislikeBtn");
@@ -651,6 +665,8 @@ async function init() {
   renderWordGuessBoard();
   renderWordGuessKeyboard();
   setupEvents();
+  initializeAppHistory();
+  setupEdgeSwipeNavigation();
   registerServiceWorker();
 }
 
@@ -1935,16 +1951,43 @@ function buildWordGuessShareText() {
   ].filter(Boolean).join("\n");
 }
 
+function showAppToast(message) {
+  if (!appToast) {
+    return;
+  }
+
+  if (appToastTimeoutId) {
+    clearTimeout(appToastTimeoutId);
+  }
+
+  appToast.textContent = message;
+  appToast.hidden = false;
+  appToast.classList.remove("is-visible");
+  window.requestAnimationFrame(function () {
+    appToast.classList.add("is-visible");
+  });
+
+  appToastTimeoutId = setTimeout(function () {
+    appToast.classList.remove("is-visible");
+    setTimeout(function () {
+      if (!appToast.classList.contains("is-visible")) {
+        appToast.hidden = true;
+      }
+    }, 180);
+  }, 2200);
+}
+
 async function shareWordGuessResult() {
   const shareText = buildWordGuessShareText();
   try {
     if (navigator.share) {
       await navigator.share({ title: "Мовограй — Вгадай слово", text: shareText });
+      showAppToast("Результат поширено");
       return;
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       await navigator.clipboard.writeText(shareText);
-      setWordGuessMessage("Результат скопійовано");
+      showAppToast("Результат скопійовано");
       return;
     }
     const fallback = document.createElement("textarea");
@@ -1956,11 +1999,11 @@ async function shareWordGuessResult() {
     fallback.select();
     document.execCommand("copy");
     fallback.remove();
-    setWordGuessMessage("Результат скопійовано");
+    showAppToast("Результат скопійовано");
   } catch (error) {
     if (!(error && error.name === "AbortError")) {
       console.warn("Не вдалося розшарити результат", error);
-      setWordGuessMessage("Не вдалося розшарити результат");
+      showAppToast("Не вдалося поділитися");
     }
   }
 }
@@ -1975,7 +2018,7 @@ function finishWordGuessGame(isWon) {
   const validAttempts = wordGuessGuesses.length;
 
   if (wordGuessResultTitle) {
-    wordGuessResultTitle.textContent = isWon ? "Вгадано!" : "Спроби закінчились";
+    wordGuessResultTitle.textContent = isWon ? "Слово відгадано" : "Спроби закінчилися";
   }
 
   if (wordGuessResultText) {
@@ -1989,18 +2032,30 @@ function finishWordGuessGame(isWon) {
     targetWord.className = "word-guess-result-word";
     targetWord.textContent = targetLabel;
 
-    const summary = document.createElement("span");
-    summary.className = "word-guess-result-summary";
-    summary.textContent = `Зараховано ${validAttempts} ${getAttemptWord(validAttempts)} · перевірено всього: ${totalAttempts}${invalidAttempts > 0 ? ` · не в залік: ${invalidAttempts}` : ""}`;
-
     const hintSummary = document.createElement("span");
     hintSummary.className = `word-guess-result-hints is-level-${wordGuessHintLevel}`;
     hintSummary.textContent = getWordGuessHintResultLabel();
 
     wordGuessResultText.appendChild(targetCaption);
     wordGuessResultText.appendChild(targetWord);
-    wordGuessResultText.appendChild(summary);
     wordGuessResultText.appendChild(hintSummary);
+  }
+
+  if (wordGuessResultStats) {
+    wordGuessResultStats.innerHTML = "";
+    [
+      ["Спроби", validAttempts],
+      ["Перевірено", totalAttempts],
+      ["Незалік", invalidAttempts],
+    ].forEach(function (item) {
+      const stat = document.createElement("span");
+      stat.className = "word-guess-result-stat";
+      stat.textContent = item[0] + ": ";
+      const value = document.createElement("strong");
+      value.textContent = String(item[1]);
+      stat.appendChild(value);
+      wordGuessResultStats.appendChild(stat);
+    });
   }
 
   if (wordGuessResultDebug) {
@@ -2018,6 +2073,8 @@ function finishWordGuessGame(isWon) {
     wordGuessResult.classList.toggle("is-lost", !isWon);
     wordGuessResult.hidden = false;
   }
+
+  syncAppHistory("wordGuessGame", "push", "result");
 
   setWordGuessBackgroundLocked(true);
   playGameCompleteSound(isWon ? "win" : "loss");
@@ -2457,6 +2514,12 @@ function renderWordGuessResultAttempts() {
     }
 
     row.appendChild(lettersWrap);
+    if (isInvalidAttempt) {
+      const invalidBadge = document.createElement("span");
+      invalidBadge.className = "word-guess-result-invalid-badge";
+      invalidBadge.textContent = "Не зараховано";
+      row.appendChild(invalidBadge);
+    }
     list.appendChild(row);
   });
 
@@ -3469,6 +3532,12 @@ function renderWhoAmIGame() {
   }
 
   const showForehead = whoAmIShowMode === "forehead";
+  if (whoAmIGameScreen) {
+    whoAmIGameScreen.classList.toggle("is-whoami-timed", isTimed);
+    whoAmIGameScreen.classList.toggle("is-whoami-turns", whoAmIPartyMode === "turns");
+    whoAmIGameScreen.classList.toggle("is-whoami-forehead", showForehead);
+    whoAmIGameScreen.classList.toggle("is-whoami-host", !showForehead);
+  }
   whoAmIForeheadCard.hidden = !showForehead;
   if (showForehead) {
     whoAmIForeheadCategory.textContent = assignment.category;
@@ -4284,24 +4353,566 @@ function renderWhoAmIParticipantsList() {
 }
 
 function exitWhoAmIToMenu() {
-  clearWhoAmITimer();
-  hideWhoAmISpoiler();
-  closeWhoAmIParticipants();
-  closeWhoAmIConfirmModal();
-  showScreen("menu");
+  requestAppBack({ source: "control", destination: "menu" });
+}
+
+function getCurrentAppScreenName() {
+  return document.body.dataset.screen || "menu";
+}
+
+function isAppStandalone() {
+  return Boolean(
+    (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
+    || window.navigator.standalone === true
+  );
+}
+
+function getAppNavigationLevel(screenName) {
+  if (screenName === "menu") {
+    return "menu";
+  }
+
+  if (screenName === "settings" || screenName === "wordGuessSettings" || screenName === "whoAmISettings") {
+    return "setup";
+  }
+
+  if (screenName === "winner" || screenName === "result" || screenName === "whoAmIFinal") {
+    return "result";
+  }
+
+  if (screenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden) {
+    return "result";
+  }
+
+  return "active";
+}
+
+function syncAppHistory(screenName, historyMode, forcedLevel) {
+  if (!window.history || !window.history.replaceState) {
+    return;
+  }
+
+  const mode = historyMode || "push";
+  if (mode === "none") {
+    return;
+  }
+
+  const level = forcedLevel || getAppNavigationLevel(screenName);
+  const state = {
+    movohray: true,
+    screen: screenName,
+    level: level,
+  };
+  const currentState = window.history.state;
+  const sameLevel = Boolean(currentState && currentState.movohray && currentState.level === level);
+
+  if (mode === "force-push") {
+    window.history.pushState(state, document.title, window.location.href);
+  } else if (!appHistoryInitialized || mode === "replace" || sameLevel) {
+    window.history.replaceState(state, document.title, window.location.href);
+  } else {
+    window.history.pushState(state, document.title, window.location.href);
+  }
+
+  appHistoryInitialized = true;
+}
+
+function initializeAppHistory() {
+  syncAppHistory(getCurrentAppScreenName(), "replace");
+  window.addEventListener("popstate", function () {
+    if (isHandlingPopState) {
+      return;
+    }
+
+    isHandlingPopState = true;
+    requestAppBack({ source: "popstate" });
+    isHandlingPopState = false;
+  });
+}
+
+function restoreCurrentHistoryEntry() {
+  syncAppHistory(getCurrentAppScreenName(), "force-push");
+}
+
+function hasOpenAppOverlay() {
+  return Boolean(
+    (exitMenuModal && !exitMenuModal.hidden)
+    || (whoAmIConfirmModal && !whoAmIConfirmModal.hidden)
+    || (whoAmIParticipantsModal && !whoAmIParticipantsModal.hidden)
+    || (whoAmIRulesModal && !whoAmIRulesModal.hidden)
+    || (whoAmICategoriesModal && !whoAmICategoriesModal.hidden)
+    || (whoAmIPlayersModal && !whoAmIPlayersModal.hidden)
+    || (setupRulesModal && !setupRulesModal.hidden)
+    || (wordGuessInfoModal && !wordGuessInfoModal.hidden)
+    || (appSettingsModal && !appSettingsModal.hidden)
+    || whoAmIActiveSpoilerButton
+    || isThemesPopoverOpen
+    || isWordGuessHistoryOpen
+    || document.querySelector("details[open]")
+  );
+}
+
+function closeTopAppOverlay() {
+  if (exitMenuModal && !exitMenuModal.hidden) {
+    closeExitMenuModal();
+    return true;
+  }
+
+  if (whoAmIConfirmModal && !whoAmIConfirmModal.hidden) {
+    closeWhoAmIConfirmModal();
+    return true;
+  }
+
+  if (whoAmIParticipantsModal && !whoAmIParticipantsModal.hidden) {
+    closeWhoAmIParticipants();
+    return true;
+  }
+
+  if (whoAmIRulesModal && !whoAmIRulesModal.hidden) {
+    closeWhoAmIRules();
+    return true;
+  }
+
+  if (whoAmICategoriesModal && !whoAmICategoriesModal.hidden) {
+    closeWhoAmICategoriesModal();
+    return true;
+  }
+
+  if (whoAmIPlayersModal && !whoAmIPlayersModal.hidden) {
+    closeWhoAmIPlayersModal();
+    return true;
+  }
+
+  if (setupRulesModal && !setupRulesModal.hidden) {
+    closeSetupRules();
+    return true;
+  }
+
+  if (wordGuessInfoModal && !wordGuessInfoModal.hidden) {
+    closeWordGuessInfoModal();
+    return true;
+  }
+
+  if (appSettingsModal && !appSettingsModal.hidden) {
+    closeAppSettings();
+    return true;
+  }
+
+  if (whoAmIActiveSpoilerButton) {
+    hideWhoAmISpoiler();
+    return true;
+  }
+
+  if (isThemesPopoverOpen) {
+    closeThemesPopover();
+    return true;
+  }
+
+  if (isWordGuessHistoryOpen) {
+    closeWordGuessHistory();
+    return true;
+  }
+
+  const openDetails = Array.from(document.querySelectorAll("details[open]"));
+  if (openDetails.length > 0) {
+    openDetails[openDetails.length - 1].removeAttribute("open");
+    return true;
+  }
+
+  return false;
+}
+
+function leaveWordGuessGame() {
+  if (wordGuessMessageTimeoutId) {
+    clearTimeout(wordGuessMessageTimeoutId);
+    wordGuessMessageTimeoutId = null;
+  }
+  setWordGuessBackgroundLocked(false);
+  clearWordGuessFinaleEffect();
+  closeWordGuessHistory();
+  if (wordGuessResult) {
+    wordGuessResult.hidden = true;
+  }
+  wordGuessFinished = false;
+}
+
+function navigateAfterAppBack(destination, historyMode) {
+  if (destination === "wordGuessSettings") {
+    leaveWordGuessGame();
+    showScreen("wordGuessSettings", { historyMode: historyMode });
+    return;
+  }
+
+  if (destination === "settings") {
+    resetActiveGameState();
+    showScreen("settings", { historyMode: historyMode });
+    return;
+  }
+
+  if (destination === "whoAmISettings") {
+    clearWhoAmITimer();
+    hideWhoAmISpoiler();
+    closeWhoAmIParticipants();
+    closeWhoAmIConfirmModal();
+    showScreen("whoAmISettings", { historyMode: historyMode });
+    return;
+  }
+
+  if (destination === "menu") {
+    if (isWordGuess()) {
+      leaveWordGuessGame();
+    } else {
+      resetActiveGameState();
+    }
+    if (isWhoAmI()) {
+      clearWhoAmITimer();
+      hideWhoAmISpoiler();
+      closeWhoAmIParticipants();
+      closeWhoAmIConfirmModal();
+    }
+    showScreen("menu", { historyMode: historyMode });
+  }
+}
+
+function requestAppBack(options) {
+  const settings = options || {};
+  const source = settings.source || "control";
+  const screenName = getCurrentAppScreenName();
+  const historyMode = "replace";
+
+  if (document.body.classList.contains("required-update-open")) {
+    return false;
+  }
+
+  const wasExitModalOpen = Boolean(exitMenuModal && !exitMenuModal.hidden);
+  if (closeTopAppOverlay()) {
+    if (source === "popstate" && !wasExitModalOpen) {
+      restoreCurrentHistoryEntry();
+    }
+    return true;
+  }
+
+  if (screenName === "menu") {
+    return false;
+  }
+
+  if (settings.destination === "menu") {
+    if (screenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden) {
+      navigateAfterAppBack("menu", historyMode);
+      return true;
+    }
+
+    if (screenName === "winner" || screenName === "result") {
+      navigateAfterAppBack("menu", historyMode);
+      return true;
+    }
+  }
+
+  if (screenName === "settings" || screenName === "wordGuessSettings" || screenName === "whoAmISettings") {
+    navigateAfterAppBack("menu", historyMode);
+    return true;
+  }
+
+  if (screenName === "wordGuessGame") {
+    if (wordGuessResult && !wordGuessResult.hidden) {
+      navigateAfterAppBack("wordGuessSettings", historyMode);
+      return true;
+    }
+
+    openExitMenuModal(settings.destination === "menu" ? "menu" : "wordGuessSettings", source === "popstate");
+    return true;
+  }
+
+  if (screenName === "winner") {
+    navigateAfterAppBack(settings.destination === "menu" ? "menu" : "settings", historyMode);
+    return true;
+  }
+
+  if (screenName === "whoAmIFinal") {
+    navigateAfterAppBack(settings.destination === "menu" ? "menu" : "whoAmISettings", historyMode);
+    return true;
+  }
+
+  if (screenName === "whoAmIReveal" || screenName === "whoAmIGame" || screenName === "whoAmIRound") {
+    openExitMenuModal(settings.destination === "menu" ? "menu" : "whoAmISettings", source === "popstate");
+    return true;
+  }
+
+  if (screenName === "teamReady" || screenName === "game" || screenName === "roundReview" || screenName === "result") {
+    openExitMenuModal(settings.destination === "menu" ? "menu" : "settings", source === "popstate");
+    return true;
+  }
+
+  navigateAfterAppBack("menu", historyMode);
+  return true;
+}
+
+function getEdgeSwipeTouch(touchList, identifier) {
+  for (let index = 0; index < touchList.length; index++) {
+    if (touchList[index].identifier === identifier) {
+      return touchList[index];
+    }
+  }
+  return null;
+}
+
+function isEdgeSwipeIgnoredTarget(target) {
+  if (!target || !target.closest) {
+    return false;
+  }
+
+  if (target.closest("input, textarea, select, button, [contenteditable], [data-swipe-back-ignore], input[type=range]")) {
+    return true;
+  }
+
+  let current = target;
+  while (current && current !== document.body) {
+    if (current.scrollWidth > current.clientWidth + 2) {
+      return true;
+    }
+    current = current.parentElement;
+  }
+
+  return false;
+}
+
+function getEdgeSwipeVisualTarget() {
+  if (exitMenuModal && !exitMenuModal.hidden) {
+    return exitMenuModal;
+  }
+  if (whoAmIConfirmModal && !whoAmIConfirmModal.hidden) {
+    return whoAmIConfirmModal;
+  }
+  if (whoAmIParticipantsModal && !whoAmIParticipantsModal.hidden) {
+    return whoAmIParticipantsModal;
+  }
+  if (whoAmIRulesModal && !whoAmIRulesModal.hidden) {
+    return whoAmIRulesModal;
+  }
+  if (whoAmICategoriesModal && !whoAmICategoriesModal.hidden) {
+    return whoAmICategoriesModal;
+  }
+  if (whoAmIPlayersModal && !whoAmIPlayersModal.hidden) {
+    return whoAmIPlayersModal;
+  }
+  if (setupRulesModal && !setupRulesModal.hidden) {
+    return setupRulesModal;
+  }
+  if (wordGuessInfoModal && !wordGuessInfoModal.hidden) {
+    return wordGuessInfoModal;
+  }
+  if (appSettingsModal && !appSettingsModal.hidden) {
+    return appSettingsModal;
+  }
+  if (wordGuessResult && !wordGuessResult.hidden) {
+    return wordGuessResult;
+  }
+  return document.querySelector(".screen.active");
+}
+
+function canStartEdgeSwipe() {
+  if (document.body.classList.contains("required-update-open")) {
+    return false;
+  }
+  return hasOpenAppOverlay() || getCurrentAppScreenName() !== "menu";
+}
+
+function renderEdgeSwipeOffset() {
+  edgeSwipeFrameId = null;
+  if (!edgeSwipeState || !edgeSwipeState.target) {
+    return;
+  }
+  edgeSwipeState.target.style.setProperty("--edge-swipe-x", edgeSwipeState.offset + "px");
+}
+
+function scheduleEdgeSwipeOffset(offset) {
+  if (!edgeSwipeState) {
+    return;
+  }
+  edgeSwipeState.offset = offset;
+  if (!edgeSwipeFrameId) {
+    edgeSwipeFrameId = window.requestAnimationFrame(renderEdgeSwipeOffset);
+  }
+}
+
+function clearEdgeSwipeVisuals() {
+  if (edgeSwipeFrameId) {
+    window.cancelAnimationFrame(edgeSwipeFrameId);
+    edgeSwipeFrameId = null;
+  }
+  if (edgeSwipeState && edgeSwipeState.target) {
+    edgeSwipeState.target.classList.remove("is-edge-swipe-target", "is-edge-swiping", "is-edge-swipe-completing", "is-edge-swipe-cancelling");
+    edgeSwipeState.target.style.removeProperty("--edge-swipe-x");
+  }
+  document.body.classList.remove("is-edge-swiping");
+  edgeSwipeState = null;
+  edgeSwipeHapticFired = false;
+}
+
+function cancelEdgeSwipe() {
+  if (!edgeSwipeState || !edgeSwipeState.target) {
+    clearEdgeSwipeVisuals();
+    return;
+  }
+  edgeSwipeState.target.classList.remove("is-edge-swiping");
+  edgeSwipeState.target.classList.add("is-edge-swipe-cancelling");
+  scheduleEdgeSwipeOffset(0);
+  const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.setTimeout(clearEdgeSwipeVisuals, reducedMotion ? 90 : 170);
+}
+
+function completeEdgeSwipe() {
+  if (!edgeSwipeState || !edgeSwipeState.target) {
+    clearEdgeSwipeVisuals();
+    return;
+  }
+  if (!edgeSwipeHapticFired) {
+    edgeSwipeHapticFired = true;
+    playHapticFeedback("tap");
+  }
+  edgeSwipeState.target.classList.remove("is-edge-swiping");
+  edgeSwipeState.target.classList.add("is-edge-swipe-completing");
+  scheduleEdgeSwipeOffset(Math.ceil(edgeSwipeState.width * 1.04));
+  const reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.setTimeout(function () {
+    clearEdgeSwipeVisuals();
+    requestAppBack({ source: "swipe" });
+  }, reducedMotion ? 90 : 210);
+}
+
+function setupEdgeSwipeNavigation() {
+  document.addEventListener("touchstart", function (event) {
+    if (!isAppStandalone() || event.touches.length !== 1 || isSwipeLocked || !canStartEdgeSwipe()) {
+      return;
+    }
+
+    const touch = event.touches[0];
+    const landscape = window.innerWidth > window.innerHeight;
+    const edgeWidth = landscape ? 52 : 28;
+    if (touch.clientX > edgeWidth || isEdgeSwipeIgnoredTarget(event.target)) {
+      return;
+    }
+
+    const visualTarget = getEdgeSwipeVisualTarget();
+    if (!visualTarget) {
+      return;
+    }
+
+    edgeSwipeState = {
+      identifier: touch.identifier,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      startTime: Date.now(),
+      offset: 0,
+      intent: "pending",
+      target: visualTarget,
+      width: Math.max(1, window.innerWidth || document.documentElement.clientWidth || 360),
+    };
+    edgeSwipeHapticFired = false;
+  }, { passive: true });
+
+  document.addEventListener("touchmove", function (event) {
+    if (!edgeSwipeState) {
+      return;
+    }
+    const touch = getEdgeSwipeTouch(event.touches, edgeSwipeState.identifier);
+    if (!touch) {
+      return;
+    }
+
+    const deltaX = touch.clientX - edgeSwipeState.startX;
+    const deltaY = touch.clientY - edgeSwipeState.startY;
+    if (edgeSwipeState.intent === "pending") {
+      if (Math.abs(deltaX) < 10 && Math.abs(deltaY) < 10) {
+        return;
+      }
+      if (deltaX <= 0 || Math.abs(deltaX) <= Math.abs(deltaY) * 1.25) {
+        edgeSwipeState = null;
+        return;
+      }
+      edgeSwipeState.intent = "horizontal";
+      edgeSwipeState.target.classList.add("is-edge-swipe-target", "is-edge-swiping");
+      document.body.classList.add("is-edge-swiping");
+    }
+
+    event.preventDefault();
+    const offset = Math.min(edgeSwipeState.width * 0.92, Math.max(0, deltaX));
+    scheduleEdgeSwipeOffset(offset);
+
+    if (!edgeSwipeHapticFired && offset >= edgeSwipeState.width * 0.28) {
+      edgeSwipeHapticFired = true;
+      playHapticFeedback("tap");
+    }
+  }, { passive: false });
+
+  document.addEventListener("touchend", function (event) {
+    if (!edgeSwipeState) {
+      return;
+    }
+    const touch = getEdgeSwipeTouch(event.changedTouches, edgeSwipeState.identifier);
+    if (!touch || edgeSwipeState.intent !== "horizontal") {
+      clearEdgeSwipeVisuals();
+      return;
+    }
+
+    const deltaX = Math.max(0, touch.clientX - edgeSwipeState.startX);
+    const elapsed = Math.max(1, Date.now() - edgeSwipeState.startTime);
+    const velocity = deltaX / elapsed;
+    const shouldComplete = deltaX >= edgeSwipeState.width * 0.28
+      || (deltaX >= 90 && velocity >= 0.35)
+      || (deltaX >= 45 && velocity >= 0.42);
+
+    if (shouldComplete) {
+      completeEdgeSwipe();
+    } else {
+      cancelEdgeSwipe();
+    }
+  }, { passive: true });
+
+  document.addEventListener("touchcancel", function () {
+    if (edgeSwipeState) {
+      cancelEdgeSwipe();
+    }
+  }, { passive: true });
+}
+
+function syncAppViewportHeight() {
+  const visualHeight = window.visualViewport ? window.visualViewport.height : 0;
+  const viewportHeight = visualHeight || window.innerHeight || document.documentElement.clientHeight || 0;
+  if (viewportHeight > 0) {
+    document.documentElement.style.setProperty("--app-viewport-height", Math.round(viewportHeight) + "px");
+  }
 }
 
 
 function setupEvents() {
   renderModes();
   setupGameAudioUnlockEvents();
+  syncAppViewportHeight();
 
-  window.addEventListener("resize", scheduleWordGuessViewportFit);
+  window.addEventListener("resize", function () {
+    syncAppViewportHeight();
+    scheduleWordGuessViewportFit();
+    if (edgeSwipeState) {
+      clearEdgeSwipeVisuals();
+    }
+  });
   window.addEventListener("orientationchange", () => {
+    if (edgeSwipeState) {
+      clearEdgeSwipeVisuals();
+    }
+    window.setTimeout(syncAppViewportHeight, 160);
     window.setTimeout(scheduleWordGuessViewportFit, 160);
   });
 
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden && edgeSwipeState) {
+      clearEdgeSwipeVisuals();
+    }
+  });
+
   if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", syncAppViewportHeight);
     window.visualViewport.addEventListener("resize", scheduleWordGuessViewportFit);
     window.visualViewport.addEventListener("scroll", scheduleWordGuessViewportFit);
   }
@@ -4376,15 +4987,13 @@ function setupEvents() {
 
   if (wordGuessBackBtn) {
     wordGuessBackBtn.addEventListener("click", () => {
-      showScreen("menu");
+      requestAppBack({ source: "control" });
     });
   }
 
   if (wordGuessTopMenuBtn) {
     wordGuessTopMenuBtn.addEventListener("click", () => {
-      setWordGuessBackgroundLocked(false);
-      clearWordGuessFinaleEffect();
-      showScreen("menu");
+      requestAppBack({ source: "control", destination: "menu" });
     });
   }
 
@@ -4487,9 +5096,7 @@ function setupEvents() {
 
   if (wordGuessMenuBtn) {
     wordGuessMenuBtn.addEventListener("click", () => {
-      setWordGuessBackgroundLocked(false);
-      clearWordGuessFinaleEffect();
-      showScreen("menu");
+      requestAppBack({ source: "control", destination: "menu" });
     });
   }
 
@@ -4720,7 +5327,7 @@ function setupEvents() {
   });
 
   backToMenuBtn.addEventListener("click", () => {
-    showScreen("menu");
+    requestAppBack({ source: "control" });
   });
 
   menuExitButtons.forEach((button) => {
@@ -4744,46 +5351,13 @@ function setupEvents() {
   }
 
   document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      requestAppBack({ source: "escape" });
+      return;
+    }
+
     if (isScreenActive(wordGuessGameScreen)) {
       handleWordGuessPhysicalKey(event);
-    }
-
-    if (event.key === "Escape" && wordGuessInfoModal && !wordGuessInfoModal.hidden) {
-      closeWordGuessInfoModal();
-    }
-
-    if (event.key === "Escape" && setupRulesModal && !setupRulesModal.hidden) {
-      closeSetupRules();
-    }
-
-    if (event.key === "Escape" && appSettingsModal && !appSettingsModal.hidden) {
-      closeAppSettings();
-    }
-
-    if (event.key === "Escape" && exitMenuModal && !exitMenuModal.hidden) {
-      closeExitMenuModal();
-    }
-
-    if (event.key === "Escape" && whoAmIRulesModal && !whoAmIRulesModal.hidden) {
-      closeWhoAmIRules();
-    }
-
-    if (event.key === "Escape" && whoAmIParticipantsModal && !whoAmIParticipantsModal.hidden) {
-      closeWhoAmIParticipants();
-    }
-
-    if (event.key === "Escape" && whoAmIConfirmModal && !whoAmIConfirmModal.hidden) {
-      closeWhoAmIConfirmModal();
-    }
-
-    if (event.key === "Escape") {
-      hideWhoAmISpoiler();
-      closeWordGuessHistory();
-      closeWordGuessStartPickers();
-      closeWhoAmISetupDropdowns();
-      closeWhoAmIPlayersModal();
-      closeWhoAmICategoriesModal();
-      closeThemesPopover();
     }
   });
 
@@ -5026,6 +5600,51 @@ function setupEvents() {
     resetWordCardPosition();
   });
 
+  if (!window.PointerEvent) {
+    wordCard.addEventListener("touchstart", function (event) {
+      if (event.touches.length !== 1 || isSwipeLocked || isRoundPaused) {
+        return;
+      }
+      const touch = event.touches[0];
+      activePointerId = touch.identifier;
+      pointerStartY = touch.clientY;
+      dragOffsetY = 0;
+      dragVelocityY = 0;
+      wordCard.classList.remove("fly-up", "fly-down");
+      wordCard.style.transition = "transform 0.16s ease";
+      wordCard.style.transform = "";
+    }, { passive: true });
+
+    wordCard.addEventListener("touchmove", function (event) {
+      const touch = getEdgeSwipeTouch(event.touches, activePointerId);
+      if (!touch || isSwipeLocked || isRoundPaused) {
+        return;
+      }
+      event.preventDefault();
+      const deltaY = touch.clientY - pointerStartY;
+      dragVelocityY = deltaY - dragOffsetY;
+      dragOffsetY = deltaY;
+      wordCard.style.transform = "translateY(" + (dragOffsetY * 0.8) + "px)";
+    }, { passive: false });
+
+    wordCard.addEventListener("touchend", function (event) {
+      const touch = getEdgeSwipeTouch(event.changedTouches, activePointerId);
+      if (!touch) {
+        return;
+      }
+      const dragDistance = pointerStartY - touch.clientY;
+      activePointerId = null;
+      if (!handleSwipe(dragDistance)) {
+        resetWordCardPosition();
+      }
+    }, { passive: true });
+
+    wordCard.addEventListener("touchcancel", function () {
+      activePointerId = null;
+      resetWordCardPosition();
+    }, { passive: true });
+  }
+
   finishEarlyBtn.addEventListener("click", () => {
     finishRound("manual");
   });
@@ -5042,8 +5661,7 @@ function setupEvents() {
 
   if (singleSettingsBtn) {
     singleSettingsBtn.addEventListener("click", () => {
-      resetSwipeState();
-      showScreen("settings");
+      requestAppBack({ source: "control" });
     });
   }
 
@@ -5076,12 +5694,12 @@ function setupEvents() {
   }
 
   resultToMenuBtn.addEventListener("click", () => {
-    showScreen("menu");
+    requestAppBack({ source: "control", destination: "menu" });
   });
 
   if (winnerToMenuBtn) {
     winnerToMenuBtn.addEventListener("click", () => {
-      showScreen("menu");
+      requestAppBack({ source: "control", destination: "menu" });
     });
   }
 }
@@ -5763,10 +6381,12 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
   };
 
   if (hasDifficultyLevels(category)) {
-    return difficulties.flatMap((difficultyId) => {
+    const normalizedWords = [];
+    difficulties.forEach((difficultyId) => {
       const words = Array.isArray(category.levels[difficultyId]) ? category.levels[difficultyId] : [];
-      return normalizeEntries(words, difficultyId);
+      normalizeEntries(words, difficultyId).forEach((entry) => normalizedWords.push(entry));
     });
+    return normalizedWords;
   }
 
   const words = Array.isArray(category.words) ? category.words : [];
@@ -5951,15 +6571,12 @@ function resetActiveGameState() {
 }
 
 function handleMenuExitRequest() {
-  if (hasActiveGameProgress()) {
-    openExitMenuModal();
-    return;
-  }
-
-  confirmExitToMenu();
+  requestAppBack({ source: "control", destination: "menu" });
 }
 
-function openExitMenuModal() {
+function openExitMenuModal(destination, fromPopState) {
+  pendingExitDestination = destination || "menu";
+  pendingExitFromPopState = Boolean(fromPopState);
   if (!exitMenuModal) {
     confirmExitToMenu();
     return;
@@ -5971,8 +6588,20 @@ function openExitMenuModal() {
     timerId = null;
   }
 
+  wasWhoAmITimerRunningBeforeExitModal = Boolean(whoAmITimerId && isScreenActive(whoAmIGameScreen));
+  if (wasWhoAmITimerRunningBeforeExitModal) {
+    clearWhoAmITimer();
+  }
+
   exitMenuModal.hidden = false;
   document.body.classList.add("modal-open");
+
+  if (exitModalTitle) {
+    exitModalTitle.textContent = "Завершити поточну гру?";
+  }
+  if (exitModalDescription) {
+    exitModalDescription.textContent = "Результат буде втрачено.";
+  }
 
   if (stayInGameBtn) {
     stayInGameBtn.focus();
@@ -5991,7 +6620,16 @@ function closeExitMenuModal() {
     startTimer();
   }
 
+  if (wasWhoAmITimerRunningBeforeExitModal && isScreenActive(whoAmIGameScreen) && whoAmITimeLeft > 0) {
+    startWhoAmITimer();
+  }
+
   wasTimerRunningBeforeExitModal = false;
+  wasWhoAmITimerRunningBeforeExitModal = false;
+  if (pendingExitFromPopState) {
+    pendingExitFromPopState = false;
+    restoreCurrentHistoryEntry();
+  }
 }
 
 function confirmExitToMenu() {
@@ -5999,8 +6637,12 @@ function confirmExitToMenu() {
     exitMenuModal.hidden = true;
   }
   document.body.classList.remove("modal-open");
-  resetActiveGameState();
-  showScreen("menu");
+  const historyMode = pendingExitFromPopState ? "none" : "replace";
+  const destination = pendingExitDestination || "menu";
+  pendingExitFromPopState = false;
+  wasTimerRunningBeforeExitModal = false;
+  wasWhoAmITimerRunningBeforeExitModal = false;
+  navigateAfterAppBack(destination, historyMode);
 }
 
 function startRound() {
@@ -6078,7 +6720,11 @@ function startTimer() {
 }
 
 function getCurrentWordPool() {
-  return getEffectiveSelectedCategories().flatMap((category) => getCategoryWordsByDifficulty(category));
+  const wordPool = [];
+  getEffectiveSelectedCategories().forEach((category) => {
+    getCategoryWordsByDifficulty(category).forEach((entry) => wordPool.push(entry));
+  });
+  return wordPool;
 }
 
 function startSingleCardGame() {
@@ -6897,7 +7543,9 @@ function showWinnerScreen() {
   showScreen("winner");
 }
 
-function showScreen(screenName) {
+function showScreen(screenName, options) {
+  const navigationOptions = options || {};
+  const previousScreenName = getCurrentAppScreenName();
   closeThemesPopover();
   if (screenName !== "wordGuessSettings") {
     closeWordGuessStartPickers();
@@ -6985,6 +7633,12 @@ function showScreen(screenName) {
   if (screenName === "winner") {
     winnerScreen.classList.add("active");
   }
+
+  if (previousScreenName !== screenName) {
+    window.scrollTo(0, 0);
+  }
+
+  syncAppHistory(screenName, navigationOptions.historyMode || "push", navigationOptions.historyLevel || "");
 }
 
 function handleSwipe(swipeDistance) {

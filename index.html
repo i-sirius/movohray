@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Мовограй</title>
   <meta name="description" content="Українські ігри зі словами для компанії." />
   <meta name="application-name" content="Мовограй" />
@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?v=0.5.5" />
+  <link rel="manifest" href="manifest.webmanifest?v=0.6.0" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?v=0.5.5" />
+  <link rel="stylesheet" href="styles.css?v=0.6.0" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
@@ -55,7 +55,7 @@
         </button>
       </div>
       <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.5.5</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.6.0</p>
     </div>
   </div>
   <main class="app">
@@ -87,7 +87,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.5.5</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.0</p>
         </div>
       </div>
     </section>
@@ -303,25 +303,36 @@
 
           <div id="wordGuessBoard" class="word-guess-board" aria-label="Поле гри"></div>
           <p id="wordGuessMessage" class="message word-guess-message" role="status" aria-live="polite"></p>
-          <div id="wordGuessKeyboard" class="word-guess-keyboard" aria-label="Українська клавіатура"></div>
+          <div id="wordGuessKeyboard" class="word-guess-keyboard" data-swipe-back-ignore aria-label="Українська клавіатура"></div>
 
-          <div id="wordGuessResult" class="word-guess-result" hidden>
-            <h2 id="wordGuessResultTitle">Вгадано!</h2>
-            <div class="word-guess-result-word-wrap">
-              <div id="wordGuessResultText" class="word-guess-result-text"></div>
-              <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn word-guess-share-compact" type="button" aria-label="Поділитися результатом"><span aria-hidden="true">↗</span><span>Поділитися</span></button>
-            </div>
-            <div id="wordGuessResultAttempts" class="word-guess-result-attempts" aria-label="Перевірені спроби"></div>
-            <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
-            <div class="word-guess-result-actions">
+          <div id="wordGuessResult" class="word-guess-result word-guess-result-screen" hidden>
+            <header class="word-guess-result-header">
+              <span class="word-guess-result-app-title">Вгадай слово</span>
+              <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn word-guess-share-compact" type="button" aria-label="Поділитися результатом">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Поділитися</span>
+              </button>
+            </header>
+            <main class="word-guess-result-content">
+              <section class="word-guess-result-summary-block" aria-labelledby="wordGuessResultTitle">
+                <h2 id="wordGuessResultTitle">Слово відгадано</h2>
+                <div id="wordGuessResultText" class="word-guess-result-text"></div>
+                <div id="wordGuessResultStats" class="word-guess-result-stats" aria-label="Статистика гри"></div>
+              </section>
+              <section id="wordGuessResultAttempts" class="word-guess-result-attempts word-guess-result-board" aria-label="Перевірені спроби"></section>
+              <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
+              <section class="word-guess-result-details">
+                <div class="word-guess-dictionaries">
+                  <span>Почитайте тлумачення загаданого слова у словничку</span>
+                  <div id="wordGuessDictionaryLinks" class="word-guess-dictionary-links"></div>
+                </div>
+                <p id="wordGuessResultDebug" class="word-guess-result-debug" aria-label="Службова інформація"></p>
+              </section>
+            </main>
+            <footer class="word-guess-result-actions">
               <button id="wordGuessNewBtn" class="primary-btn" type="button">Нова гра</button>
               <button id="wordGuessMenuBtn" class="secondary-btn" type="button">У головне меню</button>
-            </div>
-            <div class="word-guess-dictionaries">
-              <span>Почитати тлумачення загаданого слова у словниках:</span>
-              <div id="wordGuessDictionaryLinks" class="word-guess-dictionary-links"></div>
-            </div>
-            <p id="wordGuessResultDebug" class="word-guess-result-debug" aria-label="Службова інформація"></p>
+            </footer>
           </div>
         </div>
       </div>
@@ -692,7 +703,7 @@
 
           <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
 
-          <div id="wordCard" class="word-card">
+          <div id="wordCard" class="word-card" data-swipe-back-ignore>
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
             <div id="pauseOverlay" class="pause-overlay" hidden>
               <strong>Пауза</strong>
@@ -803,8 +814,8 @@
     <div id="exitMenuModal" class="exit-modal" hidden>
       <div class="exit-modal-backdrop" data-exit-modal-close></div>
       <div class="exit-modal-card" role="dialog" aria-modal="true" aria-labelledby="exitModalTitle" aria-describedby="exitModalDescription">
-        <h2 id="exitModalTitle">Вийти в меню?</h2>
-        <p id="exitModalDescription">Поточний прогрес гри буде втрачено.</p>
+        <h2 id="exitModalTitle">Завершити поточну гру?</h2>
+        <p id="exitModalDescription">Результат буде втрачено.</p>
         <div class="exit-modal-actions">
           <button id="stayInGameBtn" class="secondary-btn" type="button">Залишитись</button>
           <button id="confirmExitMenuBtn" class="primary-btn" type="button">Вийти</button>
@@ -813,6 +824,13 @@
     </div>
   </main>
 
-  <script src="app.js?v=0.5.5"></script>
+  <div id="edgeSwipeUnderlay" class="edge-swipe-underlay" aria-hidden="true">
+    <span class="edge-swipe-underlay-icon">‹</span>
+    <span class="edge-swipe-underlay-label">Назад</span>
+  </div>
+
+  <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+  <script src="app.js?v=0.6.0"></script>
 </body>
 </html>
