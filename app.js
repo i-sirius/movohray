@@ -9,8 +9,8 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.1";
-const DATA_BUILD = "2026-08-13";
+const DATA_VERSION = "0.6.2";
+const DATA_BUILD = "2026-08-14";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
@@ -147,6 +147,10 @@ const WORD_GUESS_STATUS_PRIORITY = {
   present: 2,
   correct: 3,
 };
+const WORD_GUESS_FLIP_DURATION_MS = 300;
+const WORD_GUESS_FLIP_STAGGER_MS = 50;
+const WORD_GUESS_FLIP_MIDPOINT_MS = 190;
+const WORD_GUESS_FLIP_WATCHDOG_GRACE_MS = 220;
 const DICTIONARY_LINKS = [
   {
     name: "СУМ",
@@ -301,6 +305,9 @@ let wordGuessHintUsed = false;
 let wordGuessHintLevel = 0;
 let wordGuessHintLetters = [];
 let wordGuessInvalidClearTimeoutId = null;
+let wordGuessInputLocked = false;
+let wordGuessRevealGeneration = 0;
+let wordGuessRevealState = null;
 let wordGuessFeedbackChoice = "";
 let wordGuessMessageTimeoutId = null;
 let wordGuessFinaleEffectTimeoutId = null;
@@ -1960,6 +1967,8 @@ async function startWordGuessGame() {
       return false;
     }
 
+  cancelWordGuessReveal();
+  clearWordGuessInvalidClearTimer();
   wordGuessTarget = wordGuessAnswerWords[Math.floor(Math.random() * wordGuessAnswerWords.length)];
   wordGuessGuesses = [];
   wordGuessAttemptLog = [];
@@ -2000,6 +2009,29 @@ async function startWordGuessGame() {
   }
 }
 
+function getWordGuessStatusLabel(status) {
+  if (status === "correct") {
+    return "правильне місце";
+  }
+  if (status === "present") {
+    return "є в слові";
+  }
+  return "немає в слові";
+}
+
+function applyWordGuessCellStatus(cell, letter, status) {
+  if (!cell) {
+    return;
+  }
+  cell.classList.remove("is-filled", "is-flip-pending", "is-correct", "is-present", "is-absent");
+  cell.classList.add(`is-${status || "absent"}`);
+  cell.dataset.status = status || "absent";
+  cell.setAttribute(
+    "aria-label",
+    `${String(letter || "").toLocaleUpperCase("uk-UA")}: ${getWordGuessStatusLabel(status)}`,
+  );
+}
+
 function renderWordGuessBoard() {
   if (!wordGuessBoard) {
     return;
@@ -2031,7 +2063,13 @@ function renderWordGuessBoard() {
 
       if (submittedGuess) {
         letter = submittedGuess.letters[cellIndex] || "";
-        cell.classList.add(`is-${submittedGuess.statuses[cellIndex] || "absent"}`);
+        const isRevealingRow = wordGuessRevealState && wordGuessRevealState.rowIndex === rowIndex;
+        const isCellRevealed = !isRevealingRow || cellIndex < wordGuessRevealState.revealedCount;
+        if (isCellRevealed) {
+          applyWordGuessCellStatus(cell, letter, submittedGuess.statuses[cellIndex] || "absent");
+        } else {
+          cell.classList.add("is-filled", "is-flip-pending");
+        }
       } else if (isActiveRow && activeLetters[cellIndex]) {
         letter = activeLetters[cellIndex];
         cell.classList.add("is-filled");
@@ -2073,6 +2111,170 @@ function renderWordGuessKeyboard() {
   scheduleWordGuessViewportFit();
 }
 
+function prefersReducedWordGuessMotion() {
+  return Boolean(
+    window.matchMedia
+    && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+}
+
+function setWordGuessInputLocked(isLocked) {
+  wordGuessInputLocked = Boolean(isLocked);
+  if (wordGuessGameScreen) {
+    wordGuessGameScreen.classList.toggle("is-word-guess-revealing", wordGuessInputLocked);
+  }
+  if (wordGuessBoard) {
+    wordGuessBoard.classList.toggle("is-revealing", wordGuessInputLocked);
+    wordGuessBoard.setAttribute("aria-busy", wordGuessInputLocked ? "true" : "false");
+  }
+  if (wordGuessKeyboard) {
+    wordGuessKeyboard.setAttribute("aria-disabled", wordGuessInputLocked ? "true" : "false");
+    wordGuessKeyboard.querySelectorAll("[data-word-guess-key]").forEach(function (button) {
+      button.disabled = wordGuessInputLocked || wordGuessFinished;
+    });
+  }
+}
+
+function clearWordGuessInvalidClearTimer() {
+  if (!wordGuessInvalidClearTimeoutId) {
+    return;
+  }
+  window.clearTimeout(wordGuessInvalidClearTimeoutId);
+  wordGuessInvalidClearTimeoutId = null;
+}
+
+function cancelWordGuessReveal() {
+  wordGuessRevealGeneration += 1;
+  const revealState = wordGuessRevealState;
+  wordGuessRevealState = null;
+  if (revealState) {
+    revealState.completed = true;
+    revealState.timeoutIds.forEach(function (timeoutId) {
+      window.clearTimeout(timeoutId);
+    });
+    if (revealState.frameId) {
+      window.cancelAnimationFrame(revealState.frameId);
+    }
+    if (revealState.lastCell && revealState.endHandler) {
+      revealState.lastCell.removeEventListener("animationend", revealState.endHandler);
+      revealState.lastCell.removeEventListener("webkitAnimationEnd", revealState.endHandler);
+    }
+  }
+  if (wordGuessBoard) {
+    wordGuessBoard.querySelectorAll(".word-guess-cell.is-flipping").forEach(function (cell) {
+      cell.classList.remove("is-flipping");
+      cell.style.animationDelay = "";
+      cell.style.webkitAnimationDelay = "";
+    });
+  }
+  setWordGuessInputLocked(false);
+}
+
+function revealWordGuessAcceptedRow(rowIndex, acceptedGuess, onComplete) {
+  const statuses = acceptedGuess.statuses.slice();
+  const letters = acceptedGuess.letters.slice();
+  const generation = ++wordGuessRevealGeneration;
+
+  if (prefersReducedWordGuessMotion()) {
+    wordGuessRevealState = null;
+    renderWordGuessBoard();
+    if (onComplete) {
+      onComplete();
+    }
+    renderWordGuessKeyboard();
+    return;
+  }
+
+  wordGuessRevealState = {
+    id: generation,
+    rowIndex,
+    revealedCount: 0,
+    timeoutIds: [],
+    frameId: null,
+    lastCell: null,
+    endHandler: null,
+    completed: false,
+  };
+  setWordGuessInputLocked(true);
+  renderWordGuessBoard();
+
+  const revealState = wordGuessRevealState;
+  const row = wordGuessBoard && wordGuessBoard.children[rowIndex];
+  const cells = row ? Array.from(row.querySelectorAll(".word-guess-cell")) : [];
+
+  const completeReveal = function () {
+    if (
+      !wordGuessRevealState
+      || wordGuessRevealState !== revealState
+      || revealState.id !== wordGuessRevealGeneration
+      || revealState.completed
+    ) {
+      return;
+    }
+    revealState.completed = true;
+    revealState.timeoutIds.forEach(function (timeoutId) {
+      window.clearTimeout(timeoutId);
+    });
+    if (revealState.lastCell && revealState.endHandler) {
+      revealState.lastCell.removeEventListener("animationend", revealState.endHandler);
+      revealState.lastCell.removeEventListener("webkitAnimationEnd", revealState.endHandler);
+    }
+    cells.forEach(function (cell, cellIndex) {
+      applyWordGuessCellStatus(cell, letters[cellIndex], statuses[cellIndex]);
+      cell.classList.remove("is-flipping");
+      cell.style.animationDelay = "";
+      cell.style.webkitAnimationDelay = "";
+    });
+    revealState.revealedCount = cells.length;
+    wordGuessRevealState = null;
+    setWordGuessInputLocked(false);
+    renderWordGuessBoard();
+    if (onComplete) {
+      onComplete();
+    }
+    renderWordGuessKeyboard();
+  };
+
+  if (cells.length !== letters.length || cells.length === 0) {
+    completeReveal();
+    return;
+  }
+
+  revealState.lastCell = cells[cells.length - 1];
+  revealState.endHandler = function (event) {
+    if (!event || event.target === revealState.lastCell) {
+      completeReveal();
+    }
+  };
+  revealState.lastCell.addEventListener("animationend", revealState.endHandler);
+  revealState.lastCell.addEventListener("webkitAnimationEnd", revealState.endHandler);
+
+  revealState.frameId = window.requestAnimationFrame(function () {
+    if (!wordGuessRevealState || wordGuessRevealState !== revealState || revealState.completed) {
+      return;
+    }
+    cells.forEach(function (cell, cellIndex) {
+      const delay = cellIndex * WORD_GUESS_FLIP_STAGGER_MS;
+      cell.style.animationDelay = `${delay}ms`;
+      cell.style.webkitAnimationDelay = `${delay}ms`;
+      cell.classList.add("is-flipping");
+      const midpointId = window.setTimeout(function () {
+        if (!wordGuessRevealState || wordGuessRevealState !== revealState || revealState.completed) {
+          return;
+        }
+        applyWordGuessCellStatus(cell, letters[cellIndex], statuses[cellIndex]);
+        revealState.revealedCount = Math.max(revealState.revealedCount, cellIndex + 1);
+      }, delay + WORD_GUESS_FLIP_MIDPOINT_MS);
+      revealState.timeoutIds.push(midpointId);
+    });
+  });
+
+  const watchdogDelay = WORD_GUESS_FLIP_DURATION_MS
+    + WORD_GUESS_FLIP_STAGGER_MS * Math.max(0, cells.length - 1)
+    + WORD_GUESS_FLIP_WATCHDOG_GRACE_MS;
+  revealState.timeoutIds.push(window.setTimeout(completeReveal, watchdogDelay));
+}
+
 
 function setWordGuessBackgroundLocked(isLocked) {
   const locked = Boolean(isLocked);
@@ -2110,17 +2312,21 @@ function fitWordGuessBoardToViewport() {
   const boardGap = Number.parseFloat(boardStyle.rowGap || boardStyle.gap || "6") || 6;
   const sampleRow = wordGuessBoard.querySelector(".word-guess-row");
   const rowGap = Number.parseFloat(window.getComputedStyle(sampleRow || wordGuessBoard).columnGap || "6") || 6;
-  const isBrowserShell = document.body.classList.contains("is-browser-shell");
-  const bottomReserve = isBrowserShell ? 108 : 34;
+  const bottomReserve = 20;
   const availableHeight = Math.max(150, viewportHeight - boardRect.top - keyboardRect.height - bottomReserve);
-  const availableWidth = Math.max(220, wordGuessBoard.clientWidth || boardRect.width || 320);
+  const boardParent = wordGuessBoard.parentElement;
+  const parentWidth = (boardParent && boardParent.clientWidth) || wordGuessBoard.clientWidth || boardRect.width || 320;
+  const maxBoardWidth = wordLength >= 7 ? 560 : wordLength === 6 ? 552 : 540;
+  const availableWidth = Math.max(220, Math.min(parentWidth, maxBoardWidth));
   const heightCell = Math.floor((availableHeight - boardGap * Math.max(0, attempts - 1)) / attempts);
   const widthCell = Math.floor((availableWidth - rowGap * Math.max(0, wordLength - 1)) / wordLength);
-  const maxCell = wordLength >= 7 ? 50 : wordLength === 6 ? 54 : 60;
+  const maxCell = wordLength >= 7 ? 78 : wordLength === 6 ? 88 : 104;
   const minCell = attempts >= 7 ? 28 : 32;
   const fittedCell = Math.max(minCell, Math.min(maxCell, heightCell, widthCell));
+  const fittedBoardWidth = fittedCell * wordLength + rowGap * Math.max(0, wordLength - 1);
 
   wordGuessBoard.style.setProperty("--word-guess-cell-size", `${fittedCell}px`);
+  wordGuessBoard.style.setProperty("--word-guess-board-width", `${fittedBoardWidth}px`);
 }
 
 function scheduleWordGuessViewportFit() {
@@ -2158,7 +2364,7 @@ function createWordGuessKey(key, label, variant = "") {
     button.classList.add(`is-${status}`);
   }
 
-  if (wordGuessFinished) {
+  if (wordGuessFinished || wordGuessInputLocked) {
     button.disabled = true;
   }
 
@@ -2166,7 +2372,7 @@ function createWordGuessKey(key, label, variant = "") {
 }
 
 function handleWordGuessInput(rawKey) {
-  if (wordGuessFinished || !isScreenActive(wordGuessGameScreen)) {
+  if (wordGuessFinished || wordGuessInputLocked || !isScreenActive(wordGuessGameScreen)) {
     return;
   }
 
@@ -2223,6 +2429,9 @@ function handleWordGuessPhysicalKey(event) {
 }
 
 function submitWordGuess() {
+  if (wordGuessFinished || wordGuessInputLocked || !isScreenActive(wordGuessGameScreen)) {
+    return;
+  }
   const wordLength = getWordGuessLength();
   const guess = normalizeWordGuessWord(wordGuessCurrentGuess);
   const validationMessage = getWordGuessValidationMessage(guess, wordLength, getWordGuessAllowsRepeats());
@@ -2259,19 +2468,19 @@ function submitWordGuess() {
   addWordGuessAttemptLog(guess, "valid", statuses, "");
   playGameSound("reveal");
 
+  clearWordGuessInvalidClearTimer();
   updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
   setWordGuessMessage("");
-  renderWordGuessHistory();
-
-  if (guess === wordGuessTarget) {
-    finishWordGuessGame(true);
-  } else if (wordGuessGuesses.length >= getWordGuessAttempts()) {
-    finishWordGuessGame(false);
-  }
-
-  renderWordGuessBoard();
-  renderWordGuessKeyboard();
+  const isWon = guess === wordGuessTarget;
+  const isLost = !isWon && wordGuessGuesses.length >= getWordGuessAttempts();
+  const rowIndex = wordGuessGuesses.length - 1;
+  revealWordGuessAcceptedRow(rowIndex, acceptedGuess, function () {
+    renderWordGuessHistory();
+    if (isWon || isLost) {
+      finishWordGuessGame(isWon);
+    }
+  });
 }
 
 function evaluateWordGuess(guess, target) {
@@ -2664,7 +2873,7 @@ function updateWordGuessHintState() {
 }
 
 function showWordGuessFirstHint() {
-  if (!wordGuessTarget) {
+  if (!wordGuessTarget || wordGuessInputLocked) {
     return;
   }
   playGameSound("reveal");
@@ -2686,6 +2895,9 @@ function showWordGuessFirstHint() {
 }
 
 function showWordGuessSecondHint() {
+  if (wordGuessInputLocked) {
+    return;
+  }
   if (!wordGuessTarget || wordGuessHintLevel < 1) {
     playGameSound("wrong");
     triggerInvalidShake(wordGuessHintSecondBtn);
@@ -2715,6 +2927,9 @@ function showWordGuessSecondHint() {
 }
 
 function showWordGuessThirdHint() {
+  if (wordGuessInputLocked) {
+    return;
+  }
   if (!wordGuessTarget || wordGuessHintLevel < 2) {
     playGameSound("wrong");
     triggerInvalidShake(wordGuessHintThirdBtn);
@@ -3112,10 +3327,7 @@ function shakeWordGuessBoard() {
 }
 
 function clearInvalidWordGuessAfterShake() {
-  if (wordGuessInvalidClearTimeoutId) {
-    window.clearTimeout(wordGuessInvalidClearTimeoutId);
-    wordGuessInvalidClearTimeoutId = null;
-  }
+  clearWordGuessInvalidClearTimer();
 
   wordGuessInvalidClearTimeoutId = window.setTimeout(() => {
     wordGuessCurrentGuess = "";
@@ -5066,6 +5278,8 @@ function cancelPendingWordGuessStart() {
 
 function leaveWordGuessGame() {
   cancelPendingWordGuessStart();
+  cancelWordGuessReveal();
+  clearWordGuessInvalidClearTimer();
   if (wordGuessMessageTimeoutId) {
     clearTimeout(wordGuessMessageTimeoutId);
     wordGuessMessageTimeoutId = null;
