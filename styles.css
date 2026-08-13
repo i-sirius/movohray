@@ -486,6 +486,7 @@ body[data-theme="dark"] .logo-img-dark {
 }
 
 h1 {
+  font-size: 36px;
   font-size: clamp(30px, 4vw, 42px);
   margin: 0 0 12px;
   color: var(--color-text);
@@ -816,6 +817,7 @@ h2 {
 .mode-title {
   color: var(--accent);
   font-weight: 800;
+  font-size: 32px;
   font-size: clamp(26px, 6vw, 36px);
   line-height: 1.08;
   margin: 4px 0 8px;
@@ -1138,6 +1140,7 @@ h2 {
   margin: 0 auto 12px;
   max-width: min(100%, 560px);
   color: var(--color-text);
+  font-size: 24px;
   font-size: clamp(22px, 5vw, 27px);
   line-height: 1.12;
   font-weight: 900;
@@ -1268,6 +1271,7 @@ h2 {
   width: 100%;
   max-width: 100%;
   color: var(--color-text);
+  font-size: 20px;
   font-size: clamp(18px, 4.8vw, 24px);
   font-weight: 950;
   line-height: 1.12;
@@ -1369,6 +1373,10 @@ h2 {
 
 .timer-ring {
   position: absolute;
+  top: -7px;
+  right: -7px;
+  bottom: -7px;
+  left: -7px;
   inset: -7px;
   width: calc(100% + 14px);
   height: calc(100% + 14px);
@@ -1515,6 +1523,7 @@ h2 {
 
 .word-guess-header h1 {
   margin: 0;
+  font-size: 30px;
   font-size: clamp(24px, 5vw, 34px);
 }
 
@@ -1539,6 +1548,7 @@ h2 {
   background: var(--color-surface);
   color: var(--color-text);
   border: 2px solid var(--color-border);
+  font-size: 28px;
   font-size: clamp(22px, 7vw, 34px);
   font-weight: 950;
   line-height: 1;
@@ -1624,6 +1634,7 @@ h2 {
   border: 1px solid var(--color-border);
   background: var(--color-surface-strong);
   color: var(--color-text);
+  font-size: 15px;
   font-size: clamp(13px, 3vw, 17px);
   font-weight: 950;
   line-height: 1;
@@ -1711,6 +1722,10 @@ h2 {
 .pause-overlay {
   position: absolute;
   z-index: 8;
+  top: 18px;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
   inset: 18px;
   display: grid;
   place-content: center;
@@ -2232,6 +2247,7 @@ h2 {
 }
 
 .word-card p {
+  font-size: 48px;
   font-size: clamp(36px, 6vw, 58px);
   font-weight: 900;
   margin: 0;
@@ -2383,6 +2399,10 @@ h2 {
 #gameScreen.is-paused .game-layout::after {
   content: "";
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 1;
   pointer-events: none;
@@ -2522,6 +2542,10 @@ h2 {
 
 .exit-modal {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 100;
   display: grid;
@@ -2531,6 +2555,10 @@ h2 {
 
 .exit-modal-backdrop {
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   background: rgba(39, 49, 79, 0.34);
   backdrop-filter: blur(6px);
@@ -3234,6 +3262,10 @@ body[data-theme="dark"] .exit-modal-backdrop {
   }
 
   #gameScreen .timer-ring {
+    top: -6px;
+    right: -6px;
+    bottom: -6px;
+    left: -6px;
     inset: -6px;
     width: calc(100% + 12px);
     height: calc(100% + 12px);
@@ -3309,6 +3341,10 @@ body[data-theme="dark"] .exit-modal-backdrop {
   }
 
   #gameScreen .pause-overlay {
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
     inset: 10px;
     border-radius: 20px;
   }
@@ -3775,6 +3811,10 @@ body[data-theme="dark"] .exit-modal-backdrop {
   }
 
   #gameScreen .timer-ring {
+    top: -6px;
+    right: -6px;
+    bottom: -6px;
+    left: -6px;
     inset: -6px;
     width: calc(100% + 12px);
     height: calc(100% + 12px);
@@ -3859,6 +3899,10 @@ body[data-theme="dark"] .exit-modal-backdrop {
   }
 
   #gameScreen .pause-overlay {
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
     inset: 10px;
     border-radius: 20px;
   }
@@ -5354,6 +5398,7 @@ body[data-theme="dark"] .word-guess-result-history-btn[aria-expanded="true"] {
 .word-guess-screen-title {
   margin: 0 auto 10px;
   color: var(--color-text);
+  font-size: 36px;
   font-size: clamp(30px, 8vw, 44px);
   line-height: 1.02;
   font-weight: 950;
@@ -5434,6 +5479,10 @@ body[data-theme="dark"] .word-guess-result-history-btn[aria-expanded="true"] {
 
 .word-guess-info-modal {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 150;
   display: grid;
@@ -5443,6 +5492,10 @@ body[data-theme="dark"] .word-guess-result-history-btn[aria-expanded="true"] {
 
 .word-guess-info-backdrop {
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   background: rgba(39, 49, 79, 0.2);
   backdrop-filter: blur(3px);
@@ -7536,7 +7589,6 @@ body[data-theme="dark"] .word-guess-key.is-hinted {
 
 body.required-update-open {
   overflow: hidden;
-  touch-action: none;
 }
 
 body.required-update-open .app,
@@ -7547,11 +7599,25 @@ body.required-update-open .theme-toggle-btn {
 
 .required-update-overlay {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 9999;
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
   place-items: center;
-  padding: max(22px, env(safe-area-inset-top)) 18px max(22px, env(safe-area-inset-bottom));
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  padding: 22px 18px;
+  padding-top: max(22px, env(safe-area-inset-top, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  padding-bottom: max(22px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  overflow: hidden;
   background:
     radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.2), transparent 34%),
     rgba(15, 20, 34, 0.74);
@@ -7560,8 +7626,17 @@ body.required-update-open .theme-toggle-btn {
 }
 
 .required-update-card {
+  width: 100%;
+  max-width: 520px;
   width: min(520px, 100%);
+  min-height: 0;
+  max-height: 100%;
+  padding: 32px;
   padding: clamp(26px, 6vw, 42px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   border-radius: 34px;
   text-align: center;
   color: #243050;
@@ -7587,6 +7662,7 @@ body.required-update-open .theme-toggle-btn {
 .required-update-eyebrow {
   margin: 0 0 10px;
   color: #c33f54;
+  font-size: 22px;
   font-size: clamp(18px, 4.8vw, 28px);
   font-weight: 1000;
   letter-spacing: 0.08em;
@@ -7596,6 +7672,7 @@ body.required-update-open .theme-toggle-btn {
 .required-update-card h2 {
   margin: 0;
   color: #243050;
+  font-size: 34px;
   font-size: clamp(28px, 7vw, 42px);
   line-height: 1.05;
 }
@@ -7604,6 +7681,7 @@ body.required-update-open .theme-toggle-btn {
   margin: 18px auto 0;
   max-width: 420px;
   color: #5d6680;
+  font-size: 16px;
   font-size: clamp(15px, 3.8vw, 18px);
   line-height: 1.48;
   font-weight: 800;
@@ -7618,6 +7696,7 @@ body.required-update-open .theme-toggle-btn {
   color: white;
   background: linear-gradient(145deg, #4c9aa3, #5d60b4);
   box-shadow: 0 18px 36px rgba(76, 143, 150, 0.35);
+  font-size: 26px;
   font-size: clamp(22px, 6vw, 34px);
   font-weight: 1000;
   text-transform: uppercase;
@@ -7631,6 +7710,15 @@ body.required-update-open .theme-toggle-btn {
 .required-update-btn:disabled {
   opacity: 0.7;
   cursor: wait;
+}
+
+.required-update-card .required-update-status {
+  max-width: 420px;
+  margin: 12px auto 0;
+  color: #a62f45;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.35;
 }
 
 .required-update-note {
@@ -7654,6 +7742,10 @@ body[data-theme="dark"] .required-update-card p {
   color: #c5ccdf;
 }
 
+body[data-theme="dark"] .required-update-card .required-update-status {
+  color: #ff9caf;
+}
+
 body[data-theme="dark"] .required-update-eyebrow {
   color: #ff9caf;
 }
@@ -7672,6 +7764,65 @@ body[data-theme="dark"] .required-update-eyebrow {
   .required-update-btn {
     min-height: 66px;
     border-radius: 22px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 480px) {
+  .required-update-overlay {
+    padding: 8px 12px;
+    padding-top: max(8px, env(safe-area-inset-top, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+  }
+
+  .required-update-card {
+    max-width: 640px;
+    width: min(640px, 100%);
+    padding: 14px 18px;
+    border-radius: 24px;
+  }
+
+  .required-update-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 6px;
+    font-size: 24px;
+  }
+
+  .required-update-eyebrow {
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  .required-update-card h2 {
+    font-size: 24px;
+  }
+
+  .required-update-card p {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .required-update-btn {
+    min-height: 44px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 18px;
+  }
+
+  .required-update-card .required-update-status {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .required-update-note {
+    margin-top: 6px !important;
+    font-size: 11px !important;
+    line-height: 1.25;
   }
 }
 
@@ -7939,6 +8090,10 @@ body[data-theme="dark"] #roundReviewScreen .round-review-toggle {
 /* 0.4.25 — finale animations for Word Guess win/loss */
 .word-guess-finale-effects {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 90;
   pointer-events: none;
@@ -8256,6 +8411,10 @@ body.word-guess-result-open .app-settings-btn {
 
 .app-settings-modal {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 120;
   display: grid;
@@ -8265,6 +8424,10 @@ body.word-guess-result-open .app-settings-btn {
 
 .app-settings-backdrop {
   position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   background: rgba(20, 24, 38, 0.42);
   backdrop-filter: blur(12px);
@@ -10020,6 +10183,7 @@ body[data-theme="dark"] .word-guess-share-compact {
 
 .whoami-role-box strong {
   color: var(--accent);
+  font-size: 48px;
   font-size: clamp(34px, 9vw, 64px);
   line-height: 1;
 }
@@ -10048,6 +10212,7 @@ body[data-theme="dark"] .word-guess-share-compact {
 .whoami-game-header h1 {
   margin: 2px 0;
   color: var(--accent);
+  font-size: 34px;
   font-size: clamp(26px, 6vw, 44px);
   line-height: 1.05;
 }
@@ -10092,6 +10257,7 @@ body[data-theme="dark"] .word-guess-share-compact {
 }
 
 .whoami-forehead-card strong {
+  font-size: 56px;
   font-size: clamp(42px, 12vw, 92px);
   line-height: 0.95;
   overflow-wrap: anywhere;
@@ -10367,6 +10533,7 @@ body[data-theme="dark"] .whoami-role-row {
 
 .whoami-spoiler-value strong {
   color: #8c3f31;
+  font-size: 40px;
   font-size: clamp(28px, 8vw, 54px);
   line-height: 1;
 }
@@ -10737,6 +10904,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
 
 .word-guess-result-app-title {
   min-width: 0;
+  font-size: 22px;
   font-size: clamp(20px, 5.4vw, 25px);
   font-weight: 900;
 }
@@ -10788,6 +10956,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
 .word-guess-result.word-guess-result-screen h2 {
   margin: 0 0 5px;
   color: var(--color-primary);
+  font-size: 16px;
   font-size: clamp(15px, 4vw, 18px);
   font-weight: 900;
 }
@@ -10806,6 +10975,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
   margin: 0;
   overflow-wrap: anywhere;
   color: #397d84;
+  font-size: 48px;
   font-size: clamp(38px, 12vw, 72px);
   line-height: 1.05;
   letter-spacing: 0.035em;
@@ -10834,6 +11004,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
   border-radius: 12px;
   color: var(--color-muted);
   background: rgba(76, 143, 150, 0.09);
+  font-size: 14px;
   font-size: clamp(12px, 3.6vw, 15px);
   white-space: nowrap;
 }
@@ -10885,6 +11056,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
 
 .word-guess-result-attempt-word {
   grid-template-columns: repeat(var(--word-guess-length, 5), minmax(0, 1fr));
+  gap: 4px;
   gap: clamp(2px, 1vw, 5px);
   min-width: 0;
 }
@@ -10892,9 +11064,11 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
 .word-guess-result-attempt-letter {
   width: 100%;
   min-width: 0;
+  height: 32px;
   height: clamp(26px, 8.4vw, 38px);
   aspect-ratio: 1 / 1;
   border-radius: 8px;
+  font-size: 14px;
   font-size: clamp(11px, 3.8vw, 16px);
 }
 
@@ -10949,6 +11123,7 @@ body.word-guess-result-open .word-guess-inner > :not(.word-guess-result) {
   margin: 0;
   padding: 10px 13px;
   border-radius: 15px;
+  font-size: 16px;
   font-size: clamp(14px, 4vw, 17px);
 }
 
@@ -11502,6 +11677,7 @@ body[data-theme="dark"] .whoami-category-option.selected {
 .whoami-answer-grid button {
   min-height: 58px;
   border-radius: 16px;
+  font-size: 18px;
   font-size: clamp(16px, 3.5vw, 20px);
 }
 
@@ -11534,6 +11710,10 @@ body[data-theme="dark"] .whoami-player-item {
 
 #whoAmIFinalScreen.screen.active {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 80;
   display: grid;
@@ -11568,6 +11748,7 @@ body[data-theme="dark"] .whoami-player-item {
 }
 
 #whoAmIFinalHero strong {
+  font-size: 32px;
   font-size: clamp(26px, 8vw, 46px);
   line-height: 1;
 }
@@ -12030,10 +12211,12 @@ body[data-screen="wordGuessGame"] .app,
 
 .word-guess-key-wide {
   grid-column: span 2;
+  font-size: 11px;
   font-size: clamp(10px, 2.8vw, 12px);
 }
 
 .word-guess-key-utility {
+  font-size: 17px;
   font-size: clamp(15px, 4vw, 18px);
 }
 
@@ -12288,6 +12471,10 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 /* 0.5.5 - shared final results and stable Who Am I overlay */
 #whoAmIFinalScreen.screen.active {
   position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   z-index: 80;
   display: flex;
@@ -12442,6 +12629,7 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 
 .game-final-entry-name {
   color: var(--color-text);
+  font-size: 20px;
   font-size: clamp(18px, 3.5vw, 24px);
   font-weight: 1000;
   line-height: 1.1;
@@ -12450,6 +12638,7 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 
 .game-final-entry-score {
   color: var(--accent);
+  font-size: 28px;
   font-size: clamp(22px, 4.5vw, 34px);
   font-weight: 1000;
   line-height: 1;
@@ -12457,6 +12646,7 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 
 .game-final-entry-role {
   color: var(--color-text);
+  font-size: 32px;
   font-size: clamp(24px, 5vw, 40px);
   font-weight: 1000;
   line-height: 1.02;
@@ -13365,5 +13555,60 @@ body[data-theme="dark"] .game-final-medal {
 
   #whoAmIGameScreen .whoami-mobile-actions:empty {
     display: none;
+  }
+}
+
+/* 0.6.1 - scoped Safari/iOS 12 geometry and flex-gap fallbacks */
+html.legacy-ios .word-guess-board {
+  width: 100%;
+  max-width: 330px;
+}
+
+html.legacy-ios .word-guess-row {
+  grid-template-columns: repeat(var(--word-guess-length, 5), minmax(0, 1fr));
+}
+
+html.legacy-ios .word-guess-cell {
+  width: 100%;
+  height: 42px;
+  font-size: 24px;
+}
+
+html.legacy-ios .settings-chip-grid > * {
+  margin: 5px;
+}
+
+html.legacy-ios .word-guess-mode-picker > * {
+  margin: 4px;
+}
+
+html.legacy-ios .mode-setup-header-actions > * + * {
+  margin-left: 8px;
+}
+
+html.legacy-ios .game-hud-team-line > * + * {
+  margin-left: 8px;
+}
+
+html.legacy-ios .app-settings-option > * + * {
+  margin-left: 14px;
+}
+
+html.legacy-ios .word-guess-result-header > * + * {
+  margin-left: 12px;
+}
+
+html.legacy-ios .word-guess-share-compact > * + * {
+  margin-left: 7px;
+}
+
+html.legacy-ios .word-guess-select-summary strong {
+  margin-right: 7px;
+}
+
+@media (max-width: 360px), (max-height: 640px) {
+  html.legacy-ios .word-guess-cell {
+    height: 36px;
+    font-size: 22px;
   }
 }

@@ -9,11 +9,14 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.0";
+const DATA_VERSION = "0.6.1";
+const DATA_BUILD = "2026-08-13";
+const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
-const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-version";
-const UPDATE_COMPLETED_STORAGE_KEY = "movohray-update-completed-version";
+const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
+const SERVICE_WORKER_ACTIVATION_TIMEOUT_MS = 45000;
+const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-revision";
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
 const HAPTIC_STORAGE_KEY = "movohray-haptic";
@@ -104,18 +107,18 @@ const GAME_SOUND_PATTERNS = {
   ],
 };
 const GAME_SOUND_FILE_MAP = {
-  correct: `assets/sounds/correct.ogg?v=${DATA_VERSION}`,
-  skipped: `assets/sounds/skipped.ogg?v=${DATA_VERSION}`,
-  wrong: `assets/sounds/wrong.ogg?v=${DATA_VERSION}`,
-  turnChange: `assets/sounds/turn-change.ogg?v=${DATA_VERSION}`,
-  roundStart: `assets/sounds/round-start.ogg?v=${DATA_VERSION}`,
-  countdown: `assets/sounds/countdown.ogg?v=${DATA_VERSION}`,
-  roundComplete: `assets/sounds/round-complete.ogg?v=${DATA_VERSION}`,
-  reveal: `assets/sounds/reveal.ogg?v=${DATA_VERSION}`,
-  gameComplete: `assets/sounds/game-win.ogg?v=${DATA_VERSION}`,
-  gameLoss: `assets/sounds/game-loss.ogg?v=${DATA_VERSION}`,
-  tie: `assets/sounds/game-tie.ogg?v=${DATA_VERSION}`,
-  medal: `assets/sounds/medal.ogg?v=${DATA_VERSION}`,
+  correct: getRevisionedAssetUrl("assets/sounds/correct.ogg"),
+  skipped: getRevisionedAssetUrl("assets/sounds/skipped.ogg"),
+  wrong: getRevisionedAssetUrl("assets/sounds/wrong.ogg"),
+  turnChange: getRevisionedAssetUrl("assets/sounds/turn-change.ogg"),
+  roundStart: getRevisionedAssetUrl("assets/sounds/round-start.ogg"),
+  countdown: getRevisionedAssetUrl("assets/sounds/countdown.ogg"),
+  roundComplete: getRevisionedAssetUrl("assets/sounds/round-complete.ogg"),
+  reveal: getRevisionedAssetUrl("assets/sounds/reveal.ogg"),
+  gameComplete: getRevisionedAssetUrl("assets/sounds/game-win.ogg"),
+  gameLoss: getRevisionedAssetUrl("assets/sounds/game-loss.ogg"),
+  tie: getRevisionedAssetUrl("assets/sounds/game-tie.ogg"),
+  medal: getRevisionedAssetUrl("assets/sounds/medal.ogg"),
 };
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const WORD_GUESS_MODE_STORAGE_KEY = "movohray-wordguess-mode";
@@ -128,6 +131,8 @@ const WORD_GUESS_DEFAULT_ATTEMPTS = 5;
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
 const modeCategoryCache = {};
+const modeCategoryPromises = {};
+let modeSelectionRequestId = 0;
 const WORD_GUESS_DATA_FILE = "wordguess.json";
 const WHOAMI_DATA_FILE = "whoami.json";
 const WHOAMI_DEFAULT_PLAYER_COUNT = 4;
@@ -241,6 +246,12 @@ let score = 0;
 let skipped = 0;
 let timeLeft = 60;
 let timerId = null;
+let roundTimerDeadlineMs = 0;
+let roundTimerRemainingMs = 60000;
+let roundTimerLastCountdownSecond = null;
+let roundTimerIsActive = false;
+let roundTimerPauseReasons = {};
+let roundTimerFinishStarted = false;
 let wasTimerRunningBeforeExitModal = false;
 let wasWhoAmITimerRunningBeforeExitModal = false;
 let isThemesPopoverOpen = false;
@@ -259,9 +270,20 @@ let isHandlingPopState = false;
 let edgeSwipeState = null;
 let edgeSwipeFrameId = null;
 let edgeSwipeHapticFired = false;
+let updateCheckPromise = null;
+let lastOptionalUpdateNoticeRevision = "";
+let pendingAppToastMessage = "";
+let serviceWorkerRegistrationPromise = null;
+let isServiceWorkerRegistrationScheduled = false;
+let isServiceWorkerLifecycleBound = false;
+let isUpdateReloadPending = false;
+let requiredUpdateAttemptGeneration = 0;
+let cancelRequiredUpdateActivation = null;
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
+let wordGuessDictionaryDataPromise = null;
+let wordGuessStartRequestId = 0;
 let wordGuessLoadedModeKey = "";
 let selectedWordGuessLength = readWordGuessNumberPreference(WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_DEFAULT_LENGTH);
 let selectedWordGuessAttempts = readWordGuessNumberPreference(WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_DEFAULT_ATTEMPTS);
@@ -286,6 +308,7 @@ let isWordGuessHistoryOpen = false;
 let isWordGuessResultHistoryOpen = false;
 
 let whoAmIData = null;
+let whoAmIDataPromise = null;
 let whoAmICategories = [];
 let whoAmISelectedCategoryNames = [];
 let whoAmISelectedDifficulties = ["easy", "medium"];
@@ -306,6 +329,11 @@ let whoAmIRound = 1;
 let whoAmIRoundLog = [];
 let whoAmITimerId = null;
 let whoAmITimeLeft = 60;
+let whoAmITimerDeadlineMs = 0;
+let whoAmITimerRemainingMs = 60000;
+let whoAmITimerLastCountdownSecond = null;
+let whoAmITimerIsActive = false;
+let whoAmITimerPauseReasons = {};
 let whoAmITimedRoles = [];
 let whoAmITimedTeamIndex = 0;
 let whoAmIResultMode = "continue";
@@ -634,7 +662,7 @@ const whoAmIConfirmText = document.getElementById("whoAmIConfirmText");
 const whoAmIConfirmYesBtn = document.getElementById("whoAmIConfirmYesBtn");
 const whoAmIConfirmNoBtn = document.getElementById("whoAmIConfirmNoBtn");
 
-init();
+init().catch(handleAppInitializationError);
 
 function updateStandaloneModeClass() {
   const isStandalone = Boolean(
@@ -650,7 +678,9 @@ async function init() {
   applyBrandText();
   updateStandaloneModeClass();
   initializeTheme();
+  initializeSoundSetting();
   initializeHapticSetting();
+  registerServiceWorker();
   checkRequiredUpdate();
   await loadModeCategories(selectedMode);
   renderCategories();
@@ -666,31 +696,84 @@ async function init() {
   renderWordGuessKeyboard();
   setupEvents();
   initializeAppHistory();
+  flushPendingAppToast();
   setupEdgeSwipeNavigation();
-  registerServiceWorker();
 }
 
+function handleAppInitializationError(error) {
+  console.error("Не вдалося ініціалізувати Мовограй", error);
+  showAppToastWhenReady("Не вдалося повністю запустити гру. Оновіть сторінку.");
+}
 
-async function checkRequiredUpdate() {
-  const remoteVersion = await fetchRemoteVersion();
-
-  if (!isRemoteVersionNewer(remoteVersion)) {
-    markCurrentVersionAsSeen();
-    removeRequiredUpdateOverlay();
+function showAppToastWhenReady(message) {
+  if (!appToast) {
+    pendingAppToastMessage = message;
     return;
   }
-
-  showRequiredUpdateOverlay(remoteVersion);
+  showAppToast(message);
 }
 
-async function fetchRemoteVersion() {
+function flushPendingAppToast() {
+  if (!pendingAppToastMessage) {
+    return;
+  }
+  const message = pendingAppToastMessage;
+  pendingAppToastMessage = "";
+  showAppToast(message);
+}
+
+function getRevisionedAssetUrl(path) {
+  return `${path}?rev=${encodeURIComponent(DATA_REVISION)}`;
+}
+
+function checkRequiredUpdate() {
+  if (updateCheckPromise) {
+    return updateCheckPromise;
+  }
+
+  const checkPromise = fetchRemoteRelease().then((remoteRelease) => {
+    if (!remoteRelease) {
+      return null;
+    }
+
+    const localRelease = getLocalReleaseInfo();
+    if (compareReleaseInfo(remoteRelease, localRelease) <= 0) {
+      removeRequiredUpdateOverlay();
+      clearCompletedUpdateTarget(localRelease);
+      return remoteRelease;
+    }
+
+    if (remoteRelease.required) {
+      showRequiredUpdateOverlay(remoteRelease);
+    } else {
+      removeRequiredUpdateOverlay();
+      showOptionalUpdateNotice(remoteRelease);
+    }
+    return remoteRelease;
+  });
+
+  updateCheckPromise = checkPromise.then(
+    (result) => {
+      updateCheckPromise = null;
+      return result;
+    },
+    (error) => {
+      updateCheckPromise = null;
+      console.warn("Не вдалося перевірити оновлення гри", error);
+      return null;
+    },
+  );
+  return updateCheckPromise;
+}
+
+async function fetchRemoteRelease() {
   const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
   const timeoutId = controller
     ? window.setTimeout(() => controller.abort(), VERSION_CHECK_TIMEOUT_MS)
     : null;
 
   try {
-    const versionUrl = `${VERSION_CHECK_FILE}?t=${Date.now()}&local=${encodeURIComponent(DATA_VERSION)}`;
+    const versionUrl = `${VERSION_CHECK_FILE}?t=${Date.now()}&local=${encodeURIComponent(DATA_REVISION)}`;
     const request = new Request(versionUrl, {
       cache: "no-store",
       headers: {
@@ -706,15 +789,43 @@ async function fetchRemoteVersion() {
     }
 
     const data = await response.json();
-    return normalizeVersionLabel((data && data.version) || "");
+    return normalizeReleaseInfo(data);
   } catch (error) {
     console.warn("Не вдалося перевірити версію гри", error);
-    return "";
+    return null;
   } finally {
     if (timeoutId) {
       window.clearTimeout(timeoutId);
     }
   }
+}
+
+function normalizeBuildLabel(build) {
+  const normalizedBuild = String(build || "").trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(normalizedBuild) ? normalizedBuild : "";
+}
+
+function normalizeReleaseInfo(data) {
+  const version = normalizeVersionLabel(data && data.version);
+  if (!version) {
+    return null;
+  }
+  const build = normalizeBuildLabel(data && data.build);
+  return {
+    version,
+    build,
+    revision: build ? `${version}-${build.replace(/-/g, "")}` : version,
+    required: Boolean(data && data.required),
+  };
+}
+
+function getLocalReleaseInfo() {
+  return {
+    version: DATA_VERSION,
+    build: DATA_BUILD,
+    revision: DATA_REVISION,
+    required: true,
+  };
 }
 
 function normalizeVersionLabel(version) {
@@ -752,46 +863,83 @@ function compareVersionLabels(leftVersion, rightVersion) {
   return 0;
 }
 
-function isRemoteVersionNewer(remoteVersion) {
-  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion);
-
-  if (!normalizedRemoteVersion) {
-    return false;
+function compareReleaseInfo(leftRelease, rightRelease) {
+  if (!leftRelease || !rightRelease) {
+    return 0;
   }
-
-  return compareVersionLabels(normalizedRemoteVersion, DATA_VERSION) > 0;
+  const versionComparison = compareVersionLabels(leftRelease.version, rightRelease.version);
+  if (versionComparison !== 0) {
+    return versionComparison;
+  }
+  if (!leftRelease.build || !rightRelease.build) {
+    return 0;
+  }
+  if (leftRelease.build > rightRelease.build) {
+    return 1;
+  }
+  if (leftRelease.build < rightRelease.build) {
+    return -1;
+  }
+  return 0;
 }
 
-function markCurrentVersionAsSeen() {
-  const normalizedVersion = normalizeVersionLabel(DATA_VERSION);
+function clearCompletedUpdateTarget(localRelease) {
   try {
-    localStorage.setItem("movohray-last-seen-version", normalizedVersion);
-    localStorage.setItem(UPDATE_COMPLETED_STORAGE_KEY, normalizedVersion);
-    const pendingTargetVersion = normalizeVersionLabel(localStorage.getItem(UPDATE_TARGET_STORAGE_KEY) || "");
-    if (!pendingTargetVersion || compareVersionLabels(normalizedVersion, pendingTargetVersion) >= 0) {
+    const pendingRevision = String(localStorage.getItem(UPDATE_TARGET_STORAGE_KEY) || "").trim();
+    if (!pendingRevision) {
+      return;
+    }
+    const revisionMatch = /^(\d+(?:\.\d+)*)-(\d{4})(\d{2})(\d{2})$/.exec(pendingRevision);
+    const pendingRelease = revisionMatch ? {
+      version: revisionMatch[1],
+      build: `${revisionMatch[2]}-${revisionMatch[3]}-${revisionMatch[4]}`,
+    } : null;
+    if (!pendingRelease || compareReleaseInfo(localRelease, pendingRelease) >= 0) {
       localStorage.removeItem(UPDATE_TARGET_STORAGE_KEY);
     }
   } catch (error) {
-    // Version marker is only a cache-safety helper.
+    // The loaded revision remains the source of truth if storage is unavailable.
   }
 }
 
 function removeRequiredUpdateOverlay() {
   const existingOverlay = document.getElementById("requiredUpdateOverlay");
+  const hadRequiredUpdate = Boolean(existingOverlay || document.body.classList.contains("required-update-open"));
+  if (hadRequiredUpdate) {
+    requiredUpdateAttemptGeneration += 1;
+    if (cancelRequiredUpdateActivation) {
+      cancelRequiredUpdateActivation();
+    }
+    isUpdateReloadPending = false;
+  }
   if (existingOverlay) {
     existingOverlay.remove();
   }
   document.body.classList.remove("required-update-open");
+  if (roundTimerPauseReasons["required-update"]) {
+    resumeRoundTimer("required-update");
+  }
+  if (whoAmITimerPauseReasons["required-update"]) {
+    resumeWhoAmITimer("required-update");
+  }
 }
 
-function showRequiredUpdateOverlay(remoteVersion) {
-  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion);
-  const normalizedLocalVersion = normalizeVersionLabel(DATA_VERSION);
+function showOptionalUpdateNotice(remoteRelease) {
+  if (!remoteRelease || lastOptionalUpdateNoticeRevision === remoteRelease.revision) {
+    return;
+  }
+  lastOptionalUpdateNoticeRevision = remoteRelease.revision;
+  showAppToastWhenReady(`Доступне оновлення v${remoteRelease.version}. Воно застосовується після наступного відкриття.`);
+}
 
-  if (!isRemoteVersionNewer(normalizedRemoteVersion)) {
+function showRequiredUpdateOverlay(remoteRelease) {
+  if (!remoteRelease || compareReleaseInfo(remoteRelease, getLocalReleaseInfo()) <= 0) {
     removeRequiredUpdateOverlay();
     return;
   }
+
+  pauseRoundTimer("required-update");
+  pauseWhoAmITimer("required-update");
 
   const existingOverlay = document.getElementById("requiredUpdateOverlay");
   if (existingOverlay) {
@@ -808,126 +956,322 @@ function showRequiredUpdateOverlay(remoteVersion) {
   overlay.setAttribute("aria-labelledby", "requiredUpdateTitle");
   overlay.setAttribute("aria-describedby", "requiredUpdateText");
 
-  overlay.innerHTML = `
-    <div class="required-update-card">
-      <div class="required-update-icon" aria-hidden="true">↻</div>
-      <p class="required-update-eyebrow">ПОТРІБНО ОНОВИТИ</p>
-      <h2 id="requiredUpdateTitle">Доступна нова версія гри</h2>
-      <p id="requiredUpdateText">
-        На пристрої відкрилася стара копія гри v${DATA_VERSION}, а на сайті вже є v${normalizedRemoteVersion}.
-        Натисни кнопку, щоб завантажити нову версію зі свіжими словами та виправленнями.
-      </p>
-      <button id="requiredUpdateBtn" class="required-update-btn" type="button">Оновити гру</button>
-      <p class="required-update-note">Після оновлення сторінка перезавантажиться автоматично.</p>
-    </div>
-  `;
+  const card = document.createElement("div");
+  card.className = "required-update-card";
+  const icon = appendTextElement(card, "div", "required-update-icon", "↻");
+  icon.setAttribute("aria-hidden", "true");
+  appendTextElement(card, "p", "required-update-eyebrow", "ПОТРІБНО ОНОВИТИ");
+  const title = appendTextElement(card, "h2", "", "Доступна нова версія гри");
+  title.id = "requiredUpdateTitle";
+  const text = appendTextElement(
+    card,
+    "p",
+    "",
+    `На пристрої відкрилася ревізія ${DATA_REVISION}, а на сайті вже є ${remoteRelease.revision}. Натисни кнопку, щоб завантажити оновлення.`,
+  );
+  text.id = "requiredUpdateText";
+  const updateButton = appendTextElement(card, "button", "required-update-btn", "Оновити гру");
+  updateButton.id = "requiredUpdateBtn";
+  updateButton.type = "button";
+  updateButton.dataset.remoteVersion = remoteRelease.version;
+  updateButton.dataset.remoteBuild = remoteRelease.build;
+  updateButton.dataset.remoteRevision = remoteRelease.revision;
+  const updateStatus = document.createElement("p");
+  updateStatus.className = "required-update-status";
+  updateStatus.id = "requiredUpdateStatus";
+  updateStatus.textContent = "";
+  updateStatus.setAttribute("role", "status");
+  updateStatus.setAttribute("aria-live", "polite");
+  updateStatus.hidden = true;
+  card.appendChild(updateStatus);
+  appendTextElement(card, "p", "required-update-note", "Після оновлення сторінка перезавантажиться автоматично.");
+  overlay.appendChild(card);
 
   document.body.appendChild(overlay);
 
-  const updateButton = document.getElementById("requiredUpdateBtn");
-  if (updateButton) {
-    updateButton.dataset.remoteVersion = normalizedRemoteVersion;
-    updateButton.focus();
-    updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton, normalizedRemoteVersion));
-  }
+  updateButton.focus();
+  updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton, remoteRelease));
 }
 
-async function forceRequiredUpdate(button, remoteVersion = "") {
-  const normalizedRemoteVersion = normalizeVersionLabel(remoteVersion || (button && button.dataset ? button.dataset.remoteVersion : "") || "");
+function beginRequiredUpdateAttempt() {
+  requiredUpdateAttemptGeneration += 1;
+  if (cancelRequiredUpdateActivation) {
+    cancelRequiredUpdateActivation();
+  }
+  return requiredUpdateAttemptGeneration;
+}
 
+function isRequiredUpdateAttemptCurrent(attemptId) {
+  return attemptId === requiredUpdateAttemptGeneration
+    && document.body.classList.contains("required-update-open");
+}
+
+function setRequiredUpdateAttemptPending(button) {
+  const status = document.getElementById("requiredUpdateStatus");
+  if (status) {
+    status.textContent = "";
+    status.hidden = true;
+  }
   if (button) {
     button.disabled = true;
     button.textContent = "Оновлюємо...";
+    button.setAttribute("aria-busy", "true");
+  }
+}
+
+function setRequiredUpdateAttemptFailed(button) {
+  const status = document.getElementById("requiredUpdateStatus");
+  if (status) {
+    status.textContent = "Не вдалося перевірити оновлення. Перевірте з’єднання та спробуйте ще раз.";
+    status.hidden = false;
+  }
+  if (button) {
+    button.disabled = false;
+    button.textContent = "Оновити гру";
+    button.removeAttribute("aria-busy");
+  }
+}
+
+function updateServiceWorkerWithTimeout(registration, attemptId) {
+  return new Promise((resolve, reject) => {
+    let isSettled = false;
+    let timeoutId = null;
+    const finish = (error) => {
+      if (isSettled) {
+        return;
+      }
+      isSettled = true;
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    };
+
+    timeoutId = window.setTimeout(() => {
+      finish(new Error("Service worker update timed out"));
+    }, SERVICE_WORKER_UPDATE_TIMEOUT_MS);
+
+    let updatePromise;
+    try {
+      updatePromise = registration.update();
+    } catch (error) {
+      finish(error);
+      return;
+    }
+
+    Promise.resolve(updatePromise).then(
+      () => {
+        if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+          finish(new Error("Service worker update attempt is no longer current"));
+          return;
+        }
+        finish();
+      },
+      (error) => finish(error || new Error("Service worker update failed")),
+    );
+  });
+}
+
+async function forceRequiredUpdate(button, remoteRelease) {
+  const attemptId = beginRequiredUpdateAttempt();
+  const targetRelease = remoteRelease || normalizeReleaseInfo({
+    version: button && button.dataset ? button.dataset.remoteVersion : "",
+    build: button && button.dataset ? button.dataset.remoteBuild : "",
+    required: true,
+  });
+
+  setRequiredUpdateAttemptPending(button);
+  isUpdateReloadPending = true;
+  try {
+    if ("serviceWorker" in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration("./");
+      if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+        return false;
+      }
+      const expectedScope = new URL("./", document.baseURI).href;
+      if (registration && registration.scope === expectedScope) {
+        await updateServiceWorkerWithTimeout(registration, attemptId);
+        if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+          return false;
+        }
+        await activateWaitingServiceWorker(registration, attemptId);
+      }
+    }
+  } catch (error) {
+    if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+      return false;
+    }
+    console.warn("Не вдалося активувати оновлення service worker", error);
+    isUpdateReloadPending = false;
+    setRequiredUpdateAttemptFailed(button);
+    return false;
+  }
+
+  if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+    return false;
   }
 
   try {
-    if (normalizedRemoteVersion) {
-      localStorage.setItem(UPDATE_TARGET_STORAGE_KEY, normalizedRemoteVersion);
+    if (targetRelease) {
+      localStorage.setItem(UPDATE_TARGET_STORAGE_KEY, targetRelease.revision);
     }
-    sessionStorage.setItem("movohray-force-update-at", Date.now().toString());
   } catch (error) {
     // Reload still works if storage is unavailable.
   }
 
-  try {
-    if ("serviceWorker" in navigator) {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(
-        registrations.map(async (registration) => {
-          if (registration.waiting) {
-            registration.waiting.postMessage({ type: "SKIP_WAITING" });
-          }
-          if (registration.installing) {
-            registration.installing.postMessage({ type: "SKIP_WAITING" });
-          }
-          await registration.unregister();
-        })
-      );
-    }
-
-    if ("caches" in window) {
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames
-          .filter((cacheName) => cacheName.startsWith("movohray-cache-"))
-          .map((cacheName) => caches.delete(cacheName))
-      );
-    }
-  } catch (error) {
-    console.warn("Не вдалося повністю очистити кеш перед оновленням", error);
-  }
-
   const cleanUrl = new URL("index.html", window.location.href);
   cleanUrl.searchParams.set("updated", Date.now().toString());
-  if (normalizedRemoteVersion) {
-    cleanUrl.searchParams.set("target", normalizedRemoteVersion);
+  if (targetRelease) {
+    cleanUrl.searchParams.set("target", targetRelease.revision);
   }
   window.location.replace(cleanUrl.toString());
+  return true;
+}
+
+function activateWaitingServiceWorker(registration, attemptId) {
+  return new Promise((resolve, reject) => {
+    let isSettled = false;
+    let activationRequested = false;
+    let timeoutId = null;
+    let installingWorker = null;
+    let handleInstallingState = null;
+    const handleControllerChange = () => finish();
+    const cleanup = () => {
+      navigator.serviceWorker.removeEventListener("controllerchange", handleControllerChange);
+      if (installingWorker && handleInstallingState) {
+        installingWorker.removeEventListener("statechange", handleInstallingState);
+      }
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+    const finish = (error) => {
+      if (isSettled) {
+        return;
+      }
+      isSettled = true;
+      cleanup();
+      if (cancelRequiredUpdateActivation === cancelActivation) {
+        cancelRequiredUpdateActivation = null;
+      }
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    };
+    const cancelActivation = () => finish(new Error("Service worker activation was invalidated"));
+    const requestActivation = (worker) => {
+      if (isSettled || !isRequiredUpdateAttemptCurrent(attemptId)) {
+        return false;
+      }
+      const waitingWorker = registration.waiting || worker;
+      if (waitingWorker && waitingWorker.state === "installed") {
+        if (!activationRequested) {
+          activationRequested = true;
+          try {
+            waitingWorker.postMessage({ type: "SKIP_WAITING" });
+          } catch (error) {
+            finish(error);
+            return false;
+          }
+        }
+        return true;
+      }
+      return false;
+    };
+
+    cancelRequiredUpdateActivation = cancelActivation;
+    timeoutId = window.setTimeout(() => {
+      finish(new Error("Service worker activation timed out"));
+    }, SERVICE_WORKER_ACTIVATION_TIMEOUT_MS);
+    navigator.serviceWorker.addEventListener("controllerchange", handleControllerChange);
+
+    const activationStarted = requestActivation();
+    if (isSettled || activationStarted) {
+      return;
+    }
+    installingWorker = registration.installing;
+    if (!installingWorker) {
+      finish();
+      return;
+    }
+    handleInstallingState = () => {
+      if (!isRequiredUpdateAttemptCurrent(attemptId)) {
+        cancelActivation();
+        return;
+      }
+      if (installingWorker.state === "installed") {
+        requestActivation(installingWorker);
+      } else if (installingWorker.state === "activated") {
+        finish();
+      } else if (installingWorker.state === "redundant") {
+        finish(new Error("Service worker installation became redundant"));
+      }
+    };
+    installingWorker.addEventListener("statechange", handleInstallingState);
+    handleInstallingState();
+  });
 }
 
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator) || !window.isSecureContext) {
-    return;
+    return null;
   }
 
-  let isControllerChangeHandled = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (isControllerChangeHandled || document.body.classList.contains("required-update-open")) {
-      return;
-    }
+  if (!isServiceWorkerLifecycleBound) {
+    isServiceWorkerLifecycleBound = true;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!isUpdateReloadPending) {
+        checkRequiredUpdate();
+      }
+    });
+  }
 
-    isControllerChangeHandled = true;
-    checkRequiredUpdate();
-  });
+  if (document.readyState === "complete") {
+    return registerCurrentServiceWorker();
+  }
+  if (!isServiceWorkerRegistrationScheduled) {
+    isServiceWorkerRegistrationScheduled = true;
+    window.addEventListener("load", () => {
+      isServiceWorkerRegistrationScheduled = false;
+      registerCurrentServiceWorker();
+    }, { once: true });
+  }
+  return null;
+}
 
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register(`./service-worker.js?v=${encodeURIComponent(DATA_VERSION)}`, { scope: "./" })
-      .then((registration) => {
-        registration.update().catch(() => {});
-
-        if (registration.waiting && navigator.serviceWorker.controller) {
-          registration.waiting.postMessage({ type: "SKIP_WAITING" });
-          checkRequiredUpdate();
+function registerCurrentServiceWorker() {
+  if (serviceWorkerRegistrationPromise) {
+    return serviceWorkerRegistrationPromise;
+  }
+  serviceWorkerRegistrationPromise = navigator.serviceWorker
+    .register(getRevisionedAssetUrl("./service-worker.js"), { scope: "./" })
+    .then((registration) => {
+      registration.update().catch(() => {});
+      registration.addEventListener("updatefound", () => {
+        const installingWorker = registration.installing;
+        if (!installingWorker) {
+          return;
         }
-
-        registration.addEventListener("updatefound", () => {
-          const installingWorker = registration.installing;
-          if (!installingWorker) {
-            return;
+        installingWorker.addEventListener("statechange", () => {
+          if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
+            checkRequiredUpdate();
           }
-
-          installingWorker.addEventListener("statechange", () => {
-            if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
-              installingWorker.postMessage({ type: "SKIP_WAITING" });
-              checkRequiredUpdate();
-            }
-          });
         });
-      })
-      .catch((error) => {
-        console.warn("Не вдалося зареєструвати service worker", error);
       });
-  });
+      return registration;
+    })
+    .catch((error) => {
+      serviceWorkerRegistrationPromise = null;
+      console.warn("Не вдалося зареєструвати service worker", error);
+      return null;
+    });
+  return serviceWorkerRegistrationPromise;
 }
 
 function applyBrandText() {
@@ -1121,19 +1465,26 @@ function openAppSettings() {
 
   appSettingsModal.hidden = false;
   document.body.classList.add("app-settings-open");
+  pauseRoundTimer("app-settings");
+  pauseWhoAmITimer("app-settings");
 
   if (appSettingsCloseBtn) {
     appSettingsCloseBtn.focus();
   }
 }
 
-function closeAppSettings() {
+function closeAppSettings(options) {
+  const settings = options || {};
   if (!appSettingsModal) {
     return;
   }
 
   appSettingsModal.hidden = true;
   document.body.classList.remove("app-settings-open");
+  if (settings.resumeTimer !== false) {
+    resumeRoundTimer("app-settings");
+    resumeWhoAmITimer("app-settings");
+  }
 }
 
 function initializeTheme() {
@@ -1155,24 +1506,42 @@ async function loadModeCategories(modeId = selectedMode) {
   const mode = modeConfigs.find((item) => item.id === modeId) || modeConfigs[0];
 
   if (modeCategoryCache[mode.id]) {
-    categories = modeCategoryCache[mode.id];
-    return;
+    if (selectedMode === mode.id) {
+      categories = modeCategoryCache[mode.id];
+    }
+    return true;
   }
 
   try {
-    const dictionaryUrl = `${mode.dataFile}?v=${encodeURIComponent(DATA_VERSION)}`;
-    const response = await fetch(dictionaryUrl);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (!modeCategoryPromises[mode.id]) {
+      const dictionaryUrl = getRevisionedAssetUrl(mode.dataFile);
+      modeCategoryPromises[mode.id] = fetch(dictionaryUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((loadedCategories) => {
+          modeCategoryCache[mode.id] = loadedCategories;
+          modeCategoryPromises[mode.id] = null;
+          return loadedCategories;
+        });
     }
 
-    const loadedCategories = await response.json();
-    modeCategoryCache[mode.id] = loadedCategories;
-    categories = loadedCategories;
+    const loadedCategories = await modeCategoryPromises[mode.id];
+    if (selectedMode === mode.id) {
+      categories = loadedCategories;
+    }
+    return true;
   } catch (error) {
+    modeCategoryPromises[mode.id] = null;
     console.error(`Не вдалося завантажити ${mode.dataFile}`, error);
-    categories = [];
-    settingsMessage.textContent = "Не вдалося завантажити словник режиму.";
+    if (selectedMode === mode.id) {
+      categories = [];
+      settingsMessage.textContent = "Не вдалося завантажити словник режиму.";
+    }
+    return false;
   }
 }
 
@@ -1195,16 +1564,28 @@ async function loadWordGuessDictionary() {
 
   try {
     if (!wordGuessDictionaryData) {
-      const dictionaryUrl = `${WORD_GUESS_DATA_FILE}?v=${encodeURIComponent(DATA_VERSION)}`;
-      const response = await fetch(dictionaryUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+      if (!wordGuessDictionaryDataPromise) {
+        const dictionaryUrl = getRevisionedAssetUrl(WORD_GUESS_DATA_FILE);
+        wordGuessDictionaryDataPromise = fetch(dictionaryUrl)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            wordGuessDictionaryData = data;
+            wordGuessDictionaryDataPromise = null;
+            return data;
+          });
       }
-
-      wordGuessDictionaryData = await response.json();
+      await wordGuessDictionaryDataPromise;
     }
 
     const data = wordGuessDictionaryData;
+    if (selectedModeKey !== getSelectedWordGuessModeKey()) {
+      return false;
+    }
     const dictionaryModeKey = getSelectedWordGuessDictionaryKey();
     const modeData = getWordGuessModeData(data, dictionaryModeKey);
     const wordLength = selectedWordGuessLength;
@@ -1247,6 +1628,7 @@ async function loadWordGuessDictionary() {
 
     return true;
   } catch (error) {
+    wordGuessDictionaryDataPromise = null;
     console.error(`Не вдалося завантажити ${WORD_GUESS_DATA_FILE}`, error);
     wordGuessConfig = null;
     wordGuessLoadedModeKey = "";
@@ -1381,15 +1763,19 @@ function renderWordGuessModeSelector() {
   }
 
   if (wordGuessLengthSummary) {
-    wordGuessLengthSummary.innerHTML = `<strong>${wordLength}</strong> ${getLetterWord(wordLength)}`;
+    clearElement(wordGuessLengthSummary);
+    appendTextElement(wordGuessLengthSummary, "strong", "", String(wordLength));
+    wordGuessLengthSummary.appendChild(document.createTextNode(` ${getLetterWord(wordLength)}`));
   }
 
   if (wordGuessAttemptsSummary) {
-    wordGuessAttemptsSummary.innerHTML = `<strong>${attempts}</strong> ${getAttemptWord(attempts)}`;
+    clearElement(wordGuessAttemptsSummary);
+    appendTextElement(wordGuessAttemptsSummary, "strong", "", String(attempts));
+    wordGuessAttemptsSummary.appendChild(document.createTextNode(` ${getAttemptWord(attempts)}`));
   }
 
   if (wordGuessRepeatsSummary) {
-    wordGuessRepeatsSummary.innerHTML = allowRepeats
+    wordGuessRepeatsSummary.textContent = allowRepeats
       ? "З повторами літер"
       : "Без повторення літер";
   }
@@ -1544,14 +1930,35 @@ function getWordGuessDebugLabel() {
   return `v${DATA_VERSION} · загадування: ${answerCount} · спроби: ${allowedCount}`;
 }
 
+function isWordGuessStartContextValid(startRequestId, startScreenName) {
+  if (startRequestId !== wordGuessStartRequestId || !isWordGuess()) {
+    return false;
+  }
+  const isSettingsStart = startScreenName === "wordGuessSettings";
+  const isResultStart = startScreenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden;
+  return Boolean((isSettingsStart || isResultStart) && getCurrentAppScreenName() === startScreenName);
+}
+
 async function startWordGuessGame() {
+  const startScreenName = getCurrentAppScreenName();
+  const startRequestId = ++wordGuessStartRequestId;
+  if (!isWordGuessStartContextValid(startRequestId, startScreenName)) {
+    return false;
+  }
+  if (wordGuessStartBtn) {
+    wordGuessStartBtn.disabled = true;
+  }
   setWordGuessBackgroundLocked(false);
   clearWordGuessFinaleEffect();
-  const isDictionaryReady = await loadWordGuessDictionary();
-  if (!isDictionaryReady) {
-    showScreen("wordGuessSettings");
-    return;
-  }
+  try {
+    const isDictionaryReady = await loadWordGuessDictionary();
+    if (!isWordGuessStartContextValid(startRequestId, startScreenName)) {
+      return false;
+    }
+    if (!isDictionaryReady) {
+      showScreen("wordGuessSettings");
+      return false;
+    }
 
   wordGuessTarget = wordGuessAnswerWords[Math.floor(Math.random() * wordGuessAnswerWords.length)];
   wordGuessGuesses = [];
@@ -1584,7 +1991,13 @@ async function startWordGuessGame() {
   renderWordGuessKeyboard();
   renderWordGuessHistory();
   updateWordGuessHintState();
-  showScreen("wordGuessGame");
+    showScreen("wordGuessGame");
+    return true;
+  } finally {
+    if (wordGuessStartBtn && startRequestId === wordGuessStartRequestId) {
+      wordGuessStartBtn.disabled = false;
+    }
+  }
 }
 
 function renderWordGuessBoard() {
@@ -2843,12 +3256,21 @@ async function loadWhoAmIData() {
   }
 
   try {
-    const response = await fetch(`${WHOAMI_DATA_FILE}?v=${encodeURIComponent(DATA_VERSION)}`);
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (!whoAmIDataPromise) {
+      whoAmIDataPromise = fetch(getRevisionedAssetUrl(WHOAMI_DATA_FILE))
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          whoAmIDataPromise = null;
+          return data;
+        });
     }
 
-    whoAmIData = await response.json();
+    whoAmIData = await whoAmIDataPromise;
     whoAmICategories = normalizeWhoAmICategories(whoAmIData);
     if (whoAmICategories.length === 0) {
       throw new Error("Empty whoami dictionary");
@@ -2865,6 +3287,7 @@ async function loadWhoAmIData() {
     renderWhoAmISettings();
     return true;
   } catch (error) {
+    whoAmIDataPromise = null;
     console.error(`Не вдалося завантажити ${WHOAMI_DATA_FILE}`, error);
     whoAmIData = null;
     whoAmICategories = [];
@@ -3360,6 +3783,10 @@ function startWhoAmITimedGame() {
 function startWhoAmITimedRound() {
   whoAmITimedRoles = [];
   whoAmITimeLeft = whoAmIDuration;
+  whoAmITimerRemainingMs = whoAmIDuration * 1000;
+  whoAmITimerLastCountdownSecond = null;
+  whoAmITimerPauseReasons = {};
+  whoAmITimerIsActive = true;
   whoAmICurrentIndex = 0;
   startWhoAmIActiveTurn();
   startWhoAmITimer();
@@ -3709,12 +4136,10 @@ function renderWhoAmIPlayersBoard() {
     item.classList.toggle("is-done", assignment.guessed);
     item.classList.toggle("is-out", assignment.skipped);
     const status = index === whoAmICurrentIndex ? "грає" : assignment.guessed ? "відгадав" : assignment.skipped ? "вибув" : "у грі";
-    item.innerHTML = `
-      <strong>${assignment.player}</strong>
-      <span>${status}</span>
-      <em>роль прихована</em>
-      <small>так ${assignment.yes} · ні ${assignment.no}</small>
-    `;
+    appendTextElement(item, "strong", "", assignment.player);
+    appendTextElement(item, "span", "", status);
+    appendTextElement(item, "em", "", "роль прихована");
+    appendTextElement(item, "small", "", `так ${assignment.yes} · ні ${assignment.no}`);
     whoAmIPlayersBoard.appendChild(item);
   });
 }
@@ -3724,7 +4149,9 @@ function renderWhoAmITimedBoard() {
   const skippedCount = whoAmITimedRoles.filter((item) => item.status === "skipped").length;
   const summary = document.createElement("div");
   summary.className = "whoami-player-item is-current";
-  summary.innerHTML = `<strong>${guessed}</strong><span>вгадано</span><small>${skippedCount} пропущено</small>`;
+  appendTextElement(summary, "strong", "", String(guessed));
+  appendTextElement(summary, "span", "", "вгадано");
+  appendTextElement(summary, "small", "", `${skippedCount} пропущено`);
   whoAmIPlayersBoard.appendChild(summary);
 
   if (whoAmITeamCount > 0) {
@@ -3732,7 +4159,9 @@ function renderWhoAmITimedBoard() {
       const item = document.createElement("div");
       item.className = "whoami-player-item";
       item.classList.toggle("is-current", index === whoAmITimedTeamIndex);
-      item.innerHTML = `<strong>${getWhoAmITeamName(index)}</strong><span>${scoreValue} очок</span><small>${index === whoAmITimedTeamIndex ? "грає зараз" : "очікує"}</small>`;
+      appendTextElement(item, "strong", "", getWhoAmITeamName(index));
+      appendTextElement(item, "span", "", `${scoreValue} очок`);
+      appendTextElement(item, "small", "", index === whoAmITimedTeamIndex ? "грає зараз" : "очікує");
       whoAmIPlayersBoard.appendChild(item);
     });
   }
@@ -3806,7 +4235,7 @@ function changeWhoAmICurrentRole() {
 
 function confirmWhoAmIGuessed() {
   const assignment = whoAmIPendingGuessAssignment || getWhoAmICurrentAssignment();
-  closeWhoAmIConfirmModal();
+  closeWhoAmIConfirmModal({ resumeTimer: false });
   if (!assignment) {
     return;
   }
@@ -3825,6 +4254,8 @@ function confirmWhoAmIGuessed() {
       whoAmITeamScores[whoAmITimedTeamIndex] += 1;
     }
     whoAmIAssignments[0] = null;
+    delete whoAmITimerPauseReasons["guess-confirm"];
+    resumeWhoAmITimer();
     beginWhoAmITurn();
     return;
   }
@@ -3853,18 +4284,23 @@ function openWhoAmIConfirmModal(assignment) {
   if (whoAmIConfirmText) {
     whoAmIConfirmText.textContent = `${assignment.player} справді правильно назвав свою роль?`;
   }
+  pauseWhoAmITimer("guess-confirm");
   whoAmIConfirmModal.hidden = false;
   document.body.classList.add("modal-open");
   playGameSound("uiOpen");
 }
 
-function closeWhoAmIConfirmModal() {
+function closeWhoAmIConfirmModal(options) {
+  const settings = options || {};
   if (whoAmIConfirmModal) {
     whoAmIConfirmModal.hidden = true;
   }
   document.body.classList.remove("modal-open");
   whoAmIPendingGuessAssignment = null;
   playGameSound("uiClose");
+  if (settings.resumeTimer !== false) {
+    resumeWhoAmITimer("guess-confirm");
+  }
 }
 
 function skipWhoAmIRole() {
@@ -3922,30 +4358,106 @@ function moveToNextWhoAmIPlayer() {
   beginWhoAmITurn();
 }
 
-function startWhoAmITimer() {
-  clearWhoAmITimer();
-  whoAmITimerId = setInterval(() => {
-    whoAmITimeLeft -= 1;
-    if (whoAmITimerText) {
-      whoAmITimerText.textContent = whoAmITimeLeft;
-    }
-    if (whoAmITimeLeft > 0 && whoAmITimeLeft <= 3) {
-      playGameSound("countdown");
-    }
-    if (whoAmITimeLeft <= 0) {
-      finishWhoAmITimedRound();
-    }
-  }, 1000);
+function hasTimerPauseReasons(reasons) {
+  return Object.keys(reasons).some((reason) => reasons[reason]);
 }
 
-function clearWhoAmITimer() {
+function clearWhoAmITimerHandle() {
   if (whoAmITimerId) {
     clearInterval(whoAmITimerId);
     whoAmITimerId = null;
   }
 }
 
+function isWhoAmITimedStageActive() {
+  return whoAmIPartyMode === "timed"
+    && (isScreenActive(whoAmIGameScreen) || isScreenActive(whoAmIRevealScreen));
+}
+
+function updateWhoAmITimerFromDeadline(now) {
+  if (!whoAmITimerIsActive || !whoAmITimerDeadlineMs) {
+    return;
+  }
+  whoAmITimerRemainingMs = Math.max(0, whoAmITimerDeadlineMs - (typeof now === "number" ? now : Date.now()));
+  const nextSeconds = Math.max(0, Math.ceil(whoAmITimerRemainingMs / 1000));
+  whoAmITimeLeft = nextSeconds;
+  if (whoAmITimerText) {
+    whoAmITimerText.textContent = whoAmITimeLeft;
+  }
+  if (nextSeconds > 0 && nextSeconds <= 3 && nextSeconds !== whoAmITimerLastCountdownSecond) {
+    whoAmITimerLastCountdownSecond = nextSeconds;
+    playGameSound("countdown");
+  }
+  if (whoAmITimerRemainingMs <= 0) {
+    finishWhoAmITimedRound();
+  }
+}
+
+function startWhoAmITimerInterval() {
+  if (whoAmITimerId || !whoAmITimerIsActive || hasTimerPauseReasons(whoAmITimerPauseReasons) || whoAmITimerRemainingMs <= 0) {
+    return;
+  }
+  whoAmITimerId = setInterval(updateWhoAmITimerFromDeadline, 250);
+}
+
+function startWhoAmITimer() {
+  clearWhoAmITimerHandle();
+  if (!whoAmITimerIsActive || hasTimerPauseReasons(whoAmITimerPauseReasons) || whoAmITimerRemainingMs <= 0) {
+    return;
+  }
+  whoAmITimerDeadlineMs = Date.now() + whoAmITimerRemainingMs;
+  updateWhoAmITimerFromDeadline();
+  startWhoAmITimerInterval();
+}
+
+function pauseWhoAmITimer(reason) {
+  if (!reason || !whoAmITimerIsActive) {
+    return false;
+  }
+  if (!whoAmITimerPauseReasons[reason]) {
+    if (whoAmITimerId && whoAmITimerDeadlineMs) {
+      whoAmITimerRemainingMs = Math.max(0, whoAmITimerDeadlineMs - Date.now());
+      whoAmITimeLeft = Math.max(0, Math.ceil(whoAmITimerRemainingMs / 1000));
+    }
+    whoAmITimerPauseReasons[reason] = true;
+  }
+  whoAmITimerDeadlineMs = 0;
+  clearWhoAmITimerHandle();
+  if (whoAmITimerText) {
+    whoAmITimerText.textContent = whoAmITimeLeft;
+  }
+  return true;
+}
+
+function resumeWhoAmITimer(reason) {
+  if (reason) {
+    delete whoAmITimerPauseReasons[reason];
+  }
+  if (!whoAmITimerIsActive || hasTimerPauseReasons(whoAmITimerPauseReasons) || !isWhoAmITimedStageActive()) {
+    return;
+  }
+  if (whoAmITimerId) {
+    return;
+  }
+  if (whoAmITimerRemainingMs <= 0) {
+    finishWhoAmITimedRound();
+    return;
+  }
+  startWhoAmITimer();
+}
+
+function clearWhoAmITimer() {
+  clearWhoAmITimerHandle();
+  whoAmITimerDeadlineMs = 0;
+  whoAmITimerRemainingMs = 0;
+  whoAmITimerIsActive = false;
+  whoAmITimerPauseReasons = {};
+}
+
 function finishWhoAmITimedRound() {
+  if (!whoAmITimerIsActive) {
+    return;
+  }
   clearWhoAmITimer();
   playRoundCompleteSound();
   showWhoAmIRound("timed");
@@ -3969,11 +4481,11 @@ function showWhoAmIRound(mode) {
     const row = document.createElement("div");
     row.className = "whoami-role-row";
     const status = item.status || (item.guessed ? "guessed" : item.skipped ? "skipped" : "active");
-    row.innerHTML = `
-      <strong>${item.role}</strong>
-      <span>${item.category}</span>
-      <button class="setting-chip" type="button" data-whoami-toggle-role="${item.role}">${status === "guessed" ? "Вгадано" : "Пропущено"}</button>
-    `;
+    appendTextElement(row, "strong", "", item.role);
+    appendTextElement(row, "span", "", item.category);
+    const statusButton = appendTextElement(row, "button", "setting-chip", status === "guessed" ? "Вгадано" : "Пропущено");
+    statusButton.type = "button";
+    statusButton.dataset.whoamiToggleRole = item.role;
     whoAmIRoundRoles.appendChild(row);
   });
 
@@ -3996,7 +4508,8 @@ function renderWhoAmIRoundScoreBoard() {
   whoAmITeamScores.forEach((scoreValue, index) => {
     const row = document.createElement("div");
     row.className = "team-score-row";
-    row.innerHTML = `<span>${getWhoAmITeamName(index)}</span><strong>${scoreValue}</strong>`;
+    appendTextElement(row, "span", "", getWhoAmITeamName(index));
+    appendTextElement(row, "strong", "", String(scoreValue));
     whoAmIRoundScoreBoard.appendChild(row);
   });
 }
@@ -4285,16 +4798,21 @@ function openWhoAmIRules() {
   }
   whoAmIRulesModal.hidden = false;
   document.body.classList.add("modal-open");
+  pauseWhoAmITimer("rules");
   playGameSound("uiOpen");
 }
 
-function closeWhoAmIRules() {
+function closeWhoAmIRules(options) {
+  const settings = options || {};
   if (!whoAmIRulesModal) {
     return;
   }
   whoAmIRulesModal.hidden = true;
   document.body.classList.remove("modal-open");
   playGameSound("uiClose");
+  if (settings.resumeTimer !== false) {
+    resumeWhoAmITimer("rules");
+  }
 }
 
 function openWhoAmIParticipants() {
@@ -4305,10 +4823,12 @@ function openWhoAmIParticipants() {
   renderWhoAmIParticipantsList();
   whoAmIParticipantsModal.hidden = false;
   document.body.classList.add("modal-open");
+  pauseWhoAmITimer("participants");
   playGameSound("uiOpen");
 }
 
-function closeWhoAmIParticipants() {
+function closeWhoAmIParticipants(options) {
+  const settings = options || {};
   hideWhoAmISpoiler();
   if (!whoAmIParticipantsModal) {
     return;
@@ -4316,6 +4836,9 @@ function closeWhoAmIParticipants() {
   whoAmIParticipantsModal.hidden = true;
   document.body.classList.remove("modal-open");
   playGameSound("uiClose");
+  if (settings.resumeTimer !== false) {
+    resumeWhoAmITimer("participants");
+  }
 }
 
 function renderWhoAmIParticipantsList() {
@@ -4334,21 +4857,30 @@ function renderWhoAmIParticipantsList() {
     row.className = "whoami-participant-row";
     row.classList.toggle("is-current", isCurrent);
     row.classList.toggle("is-done", assignment.guessed);
-    row.innerHTML = `
-      <div>
-        <strong>${assignment.player}</strong>
-        <span>${status}</span>
-      </div>
-      <div class="whoami-participant-role">
-        ${isRevealed
-          ? `<strong class="whoami-open-role">${assignment.role}</strong><small>${assignment.category}</small>`
-          : `<button class="whoami-spoiler-btn compact" type="button" aria-controls="${roleId}">Утримуйте роль</button><span id="${roleId}" class="whoami-spoiler-value compact" hidden><strong>${assignment.role}</strong><small>${assignment.category}</small></span>`}
-      </div>
-    `;
+    const playerDetails = document.createElement("div");
+    appendTextElement(playerDetails, "strong", "", assignment.player);
+    appendTextElement(playerDetails, "span", "", status);
+    row.appendChild(playerDetails);
+    const roleDetails = document.createElement("div");
+    roleDetails.className = "whoami-participant-role";
+    if (isRevealed) {
+      appendTextElement(roleDetails, "strong", "whoami-open-role", assignment.role);
+      appendTextElement(roleDetails, "small", "", assignment.category);
+    } else {
+      const spoilerButton = appendTextElement(roleDetails, "button", "whoami-spoiler-btn compact", "Утримуйте роль");
+      spoilerButton.type = "button";
+      spoilerButton.setAttribute("aria-controls", roleId);
+      const spoilerValue = document.createElement("span");
+      spoilerValue.id = roleId;
+      spoilerValue.className = "whoami-spoiler-value compact";
+      spoilerValue.hidden = true;
+      appendTextElement(spoilerValue, "strong", "", assignment.role);
+      appendTextElement(spoilerValue, "small", "", assignment.category);
+      roleDetails.appendChild(spoilerValue);
+      bindWhoAmISpoilerButton(spoilerButton);
+    }
+    row.appendChild(roleDetails);
     whoAmIParticipantsList.appendChild(row);
-
-    const spoilerButton = row.querySelector(".whoami-spoiler-btn");
-    bindWhoAmISpoilerButton(spoilerButton);
   });
 }
 
@@ -4522,7 +5054,18 @@ function closeTopAppOverlay() {
   return false;
 }
 
+function cancelPendingWordGuessStart() {
+  wordGuessStartRequestId += 1;
+  if (wordGuessStartBtn) {
+    wordGuessStartBtn.disabled = false;
+  }
+  if (wordGuessSettingsMessage && wordGuessSettingsMessage.textContent === "Завантажуємо словник...") {
+    wordGuessSettingsMessage.textContent = "";
+  }
+}
+
 function leaveWordGuessGame() {
+  cancelPendingWordGuessStart();
   if (wordGuessMessageTimeoutId) {
     clearTimeout(wordGuessMessageTimeoutId);
     wordGuessMessageTimeoutId = null;
@@ -4552,8 +5095,8 @@ function navigateAfterAppBack(destination, historyMode) {
   if (destination === "whoAmISettings") {
     clearWhoAmITimer();
     hideWhoAmISpoiler();
-    closeWhoAmIParticipants();
-    closeWhoAmIConfirmModal();
+    closeWhoAmIParticipants({ resumeTimer: false });
+    closeWhoAmIConfirmModal({ resumeTimer: false });
     showScreen("whoAmISettings", { historyMode: historyMode });
     return;
   }
@@ -4567,8 +5110,8 @@ function navigateAfterAppBack(destination, historyMode) {
     if (isWhoAmI()) {
       clearWhoAmITimer();
       hideWhoAmISpoiler();
-      closeWhoAmIParticipants();
-      closeWhoAmIConfirmModal();
+      closeWhoAmIParticipants({ resumeTimer: false });
+      closeWhoAmIConfirmModal({ resumeTimer: false });
     }
     showScreen("menu", { historyMode: historyMode });
   }
@@ -4906,8 +5449,15 @@ function setupEvents() {
   });
 
   document.addEventListener("visibilitychange", function () {
-    if (document.hidden && edgeSwipeState) {
-      clearEdgeSwipeVisuals();
+    if (document.hidden) {
+      if (edgeSwipeState) {
+        clearEdgeSwipeVisuals();
+      }
+      pauseRoundTimer("visibility");
+      pauseWhoAmITimer("visibility");
+    } else {
+      resumeRoundTimer("visibility");
+      resumeWhoAmITimer("visibility");
     }
   });
 
@@ -5714,6 +6264,7 @@ function renderModes() {
   activeModes.forEach((mode) => {
     const button = document.createElement("button");
     button.className = `mode-card mode-card-${mode.id} mode-card-active`;
+    button.type = "button";
 
     const modeIcons = {
       explain: "assets/game-icons/alias.png",
@@ -5721,17 +6272,28 @@ function renderModes() {
       wordguess: "assets/game-icons/wordguess.png",
       whoami: "assets/game-icons/whoami.png",
     };
-    const modeIconMarkup = modeIcons[mode.id]
-      ? `<img src="${modeIcons[mode.id]}?v=${DATA_VERSION}" alt="" decoding="async" onerror="this.hidden=true;this.nextElementSibling.hidden=false;"><span class="mode-card-icon-fallback" hidden>?</span>`
-      : '<span class="mode-card-icon-fallback">?</span>';
-
-    button.innerHTML = `
-      <span class="mode-card-icon" aria-hidden="true">${modeIconMarkup}</span>
-      <strong>${mode.title}</strong>
-      <span class="mode-card-description">${mode.description}</span>
-    `;
+    const iconWrap = document.createElement("span");
+    iconWrap.className = "mode-card-icon";
+    iconWrap.setAttribute("aria-hidden", "true");
+    const iconFallback = appendTextElement(iconWrap, "span", "mode-card-icon-fallback", "?");
+    if (modeIcons[mode.id]) {
+      const icon = document.createElement("img");
+      icon.src = getRevisionedAssetUrl(modeIcons[mode.id]);
+      icon.alt = "";
+      icon.decoding = "async";
+      iconFallback.hidden = true;
+      icon.addEventListener("error", () => {
+        icon.hidden = true;
+        iconFallback.hidden = false;
+      });
+      iconWrap.insertBefore(icon, iconFallback);
+    }
+    button.appendChild(iconWrap);
+    appendTextElement(button, "strong", "", mode.title);
+    appendTextElement(button, "span", "mode-card-description", mode.description);
 
     button.addEventListener("click", async () => {
+      const selectionRequestId = ++modeSelectionRequestId;
       selectedMode = mode.id;
       selectedCategories = [];
       selectedCategory = null;
@@ -5742,6 +6304,9 @@ function renderModes() {
         document.body.dataset.mode = mode.id;
         document.body.classList.remove("single-card-mode");
         await loadWordGuessDictionary();
+        if (selectionRequestId !== modeSelectionRequestId || selectedMode !== mode.id) {
+          return;
+        }
         showScreen("wordGuessSettings");
         return;
       }
@@ -5752,6 +6317,9 @@ function renderModes() {
         document.body.dataset.mode = mode.id;
         document.body.classList.remove("single-card-mode");
         await loadWhoAmIData();
+        if (selectionRequestId !== modeSelectionRequestId || selectedMode !== mode.id) {
+          return;
+        }
         renderWhoAmISettings();
         showScreen("whoAmISettings");
         return;
@@ -5765,6 +6333,9 @@ function renderModes() {
         syncCharadesOptionButtons();
       }
       await loadModeCategories(selectedMode);
+      if (selectionRequestId !== modeSelectionRequestId || selectedMode !== mode.id) {
+        return;
+      }
       updateModeLabels();
       renderCategories();
       settingsMessage.textContent = "";
@@ -5779,15 +6350,17 @@ function renderModes() {
   if (upcomingModes.length > 0) {
     const upcomingBox = document.createElement("div");
     upcomingBox.className = "upcoming-modes";
-    upcomingBox.innerHTML = `
-      <div class="upcoming-modes-copy">
-        <strong>Незабаром</strong>
-        <span>Готуємо нові режими для компанії.</span>
-      </div>
-      <div class="upcoming-mode-chips">
-        ${upcomingModes.map((mode) => `<span class="upcoming-mode-chip">${mode.title.replace(/\s*\([^)]*\)/g, "")}</span>`).join("")}
-      </div>
-    `;
+    const upcomingCopy = document.createElement("div");
+    upcomingCopy.className = "upcoming-modes-copy";
+    appendTextElement(upcomingCopy, "strong", "", "Незабаром");
+    appendTextElement(upcomingCopy, "span", "", "Готуємо нові режими для компанії.");
+    upcomingBox.appendChild(upcomingCopy);
+    const upcomingChips = document.createElement("div");
+    upcomingChips.className = "upcoming-mode-chips";
+    upcomingModes.forEach((mode) => {
+      appendTextElement(upcomingChips, "span", "upcoming-mode-chip", mode.title.replace(/\s*\([^)]*\)/g, ""));
+    });
+    upcomingBox.appendChild(upcomingChips);
     modeList.appendChild(upcomingBox);
   }
 }
@@ -6542,14 +7115,14 @@ function hasActiveGameProgress() {
 }
 
 function resetActiveGameState() {
-  clearInterval(timerId);
-  timerId = null;
+  destroyRoundTimer();
   setRoundPaused(false, { resumeTimer: false });
   wasTimerRunningBeforeExitModal = false;
   resetSwipeState();
   score = 0;
   skipped = 0;
   timeLeft = selectedDuration;
+  roundTimerRemainingMs = selectedDuration * 1000;
   roundResults = null;
   roundWords = [];
   currentEntry = null;
@@ -6582,15 +7155,14 @@ function openExitMenuModal(destination, fromPopState) {
     return;
   }
 
-  wasTimerRunningBeforeExitModal = Boolean(timerId && isScreenActive(gameScreen) && !isSingleCardMode());
+  wasTimerRunningBeforeExitModal = Boolean(roundTimerIsActive && isScreenActive(gameScreen) && !isSingleCardMode());
   if (wasTimerRunningBeforeExitModal) {
-    clearInterval(timerId);
-    timerId = null;
+    pauseRoundTimer("exit");
   }
 
-  wasWhoAmITimerRunningBeforeExitModal = Boolean(whoAmITimerId && isScreenActive(whoAmIGameScreen));
+  wasWhoAmITimerRunningBeforeExitModal = Boolean(whoAmITimerIsActive && isWhoAmITimedStageActive());
   if (wasWhoAmITimerRunningBeforeExitModal) {
-    clearWhoAmITimer();
+    pauseWhoAmITimer("exit");
   }
 
   exitMenuModal.hidden = false;
@@ -6616,12 +7188,12 @@ function closeExitMenuModal() {
   exitMenuModal.hidden = true;
   document.body.classList.remove("modal-open");
 
-  if (wasTimerRunningBeforeExitModal && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult && !isRoundPaused) {
-    startTimer();
+  if (wasTimerRunningBeforeExitModal) {
+    resumeRoundTimer("exit");
   }
 
-  if (wasWhoAmITimerRunningBeforeExitModal && isScreenActive(whoAmIGameScreen) && whoAmITimeLeft > 0) {
-    startWhoAmITimer();
+  if (wasWhoAmITimerRunningBeforeExitModal) {
+    resumeWhoAmITimer("exit");
   }
 
   wasTimerRunningBeforeExitModal = false;
@@ -6642,15 +7214,23 @@ function confirmExitToMenu() {
   pendingExitFromPopState = false;
   wasTimerRunningBeforeExitModal = false;
   wasWhoAmITimerRunningBeforeExitModal = false;
+  destroyRoundTimer();
+  clearWhoAmITimer();
   navigateAfterAppBack(destination, historyMode);
 }
 
 function startRound() {
   resetSwipeState();
+  destroyRoundTimer();
   setRoundPaused(false, { resumeTimer: false });
   score = 0;
   skipped = 0;
   timeLeft = selectedDuration;
+  roundTimerRemainingMs = selectedDuration * 1000;
+  roundTimerLastCountdownSecond = null;
+  roundTimerPauseReasons = {};
+  roundTimerIsActive = false;
+  roundTimerFinishStarted = false;
   roundResults = null;
   roundWords = [];
   currentEntry = null;
@@ -6695,28 +7275,97 @@ function beginPreparedRound() {
   updateGameInfo();
   updateTeamScoreBoard();
   playGameSound("roundStart");
+  roundTimerIsActive = true;
   startTimer();
 }
 
 function startTimer() {
-  clearInterval(timerId);
+  clearRoundTimerHandle();
 
-  if (isRoundPaused) {
-    timerId = null;
+  if (!roundTimerIsActive || hasTimerPauseReasons(roundTimerPauseReasons) || isRoundPaused || roundTimerRemainingMs <= 0) {
     return;
   }
+  roundTimerDeadlineMs = Date.now() + roundTimerRemainingMs;
+  updateRoundTimerFromDeadline();
+  startRoundTimerInterval();
+}
 
-  timerId = setInterval(() => {
-    timeLeft--;
-    updateGameInfo();
-    if (timeLeft > 0 && timeLeft <= 3) {
-      playGameSound("countdown");
+function clearRoundTimerHandle() {
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+}
+
+function updateRoundTimerFromDeadline(now) {
+  if (!roundTimerIsActive || !roundTimerDeadlineMs || roundTimerFinishStarted) {
+    return;
+  }
+  roundTimerRemainingMs = Math.max(0, roundTimerDeadlineMs - (typeof now === "number" ? now : Date.now()));
+  const nextSeconds = Math.max(0, Math.ceil(roundTimerRemainingMs / 1000));
+  timeLeft = nextSeconds;
+  updateGameInfo();
+  if (nextSeconds > 0 && nextSeconds <= 3 && nextSeconds !== roundTimerLastCountdownSecond) {
+    roundTimerLastCountdownSecond = nextSeconds;
+    playGameSound("countdown");
+  }
+  if (roundTimerRemainingMs <= 0) {
+    roundTimerFinishStarted = true;
+    finishRound("time");
+  }
+}
+
+function startRoundTimerInterval() {
+  if (timerId || !roundTimerIsActive || hasTimerPauseReasons(roundTimerPauseReasons) || roundTimerRemainingMs <= 0) {
+    return;
+  }
+  timerId = setInterval(updateRoundTimerFromDeadline, 250);
+}
+
+function pauseRoundTimer(reason) {
+  if (!reason || !roundTimerIsActive) {
+    return false;
+  }
+  if (!roundTimerPauseReasons[reason]) {
+    if (timerId && roundTimerDeadlineMs) {
+      roundTimerRemainingMs = Math.max(0, roundTimerDeadlineMs - Date.now());
+      timeLeft = Math.max(0, Math.ceil(roundTimerRemainingMs / 1000));
     }
+    roundTimerPauseReasons[reason] = true;
+  }
+  roundTimerDeadlineMs = 0;
+  clearRoundTimerHandle();
+  updateGameInfo();
+  return true;
+}
 
-    if (timeLeft <= 0) {
+function resumeRoundTimer(reason) {
+  if (reason) {
+    delete roundTimerPauseReasons[reason];
+  }
+  if (!roundTimerIsActive || hasTimerPauseReasons(roundTimerPauseReasons) || !isScreenActive(gameScreen) || isRoundPaused || isAwaitingLastWordResult) {
+    return;
+  }
+  if (timerId) {
+    return;
+  }
+  if (roundTimerRemainingMs <= 0) {
+    if (!roundTimerFinishStarted) {
+      roundTimerFinishStarted = true;
       finishRound("time");
     }
-  }, 1000);
+    return;
+  }
+  startTimer();
+}
+
+function destroyRoundTimer() {
+  clearRoundTimerHandle();
+  roundTimerDeadlineMs = 0;
+  roundTimerRemainingMs = 0;
+  roundTimerIsActive = false;
+  roundTimerPauseReasons = {};
+  roundTimerFinishStarted = false;
 }
 
 function getCurrentWordPool() {
@@ -6728,7 +7377,7 @@ function getCurrentWordPool() {
 }
 
 function startSingleCardGame() {
-  clearInterval(timerId);
+  destroyRoundTimer();
   setRoundPaused(false, { resumeTimer: false });
   resetSwipeState();
   score = 0;
@@ -6788,13 +7437,15 @@ function showSingleNextCard() {
 }
 
 function setRoundPaused(paused, options = {}) {
-  const { resumeTimer = true } = options;
+  const resumeTimer = options && options.resumeTimer !== undefined ? options.resumeTimer : true;
+  const wasManuallyPaused = Boolean(roundTimerPauseReasons.manual);
   const nextPausedState = Boolean(paused) && timeLeft > 0 && !isSingleCardMode() && isScreenActive(gameScreen) && !isAwaitingLastWordResult;
   isRoundPaused = nextPausedState;
 
   if (isRoundPaused) {
-    clearInterval(timerId);
-    timerId = null;
+    pauseRoundTimer("manual");
+  } else if (resumeTimer || wasManuallyPaused) {
+    delete roundTimerPauseReasons.manual;
   }
 
   if (wordCard) {
@@ -6820,8 +7471,8 @@ function setRoundPaused(paused, options = {}) {
     correctBtn.disabled = isRoundPaused;
   }
 
-  if (!isRoundPaused && resumeTimer && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult && !isSingleCardMode()) {
-    startTimer();
+  if (!isRoundPaused && resumeTimer && wasManuallyPaused && isScreenActive(gameScreen) && timeLeft > 0 && !isAwaitingLastWordResult && !isSingleCardMode()) {
+    resumeRoundTimer("manual");
   }
 }
 
@@ -7029,10 +7680,8 @@ function updateTeamScoreBoard(includeCurrentRound = false) {
 
     const visibleScore = includeCurrentRound && index === currentTeamIndex ? scoreValue + score : scoreValue;
     const progressPercent = Math.min(100, Math.round((visibleScore / selectedTargetScore) * 100));
-    row.innerHTML = `
-      <strong>${getTeamName(index)}</strong>
-      <span>${visibleScore}/${selectedTargetScore}</span>
-    `;
+    appendTextElement(row, "strong", "", getTeamName(index));
+    appendTextElement(row, "span", "", `${visibleScore}/${selectedTargetScore}`);
 
     const progress = document.createElement("div");
     progress.className = "progress-bar";
@@ -7055,10 +7704,8 @@ function updateResultTeamScoreBoard() {
     const row = document.createElement("div");
     row.className = "team-score-row";
     const progressPercent = Math.min(100, Math.round((scoreValue / selectedTargetScore) * 100));
-    row.innerHTML = `
-      <strong>${getTeamName(index)}</strong>
-      <span>${scoreValue}</span>
-    `;
+    appendTextElement(row, "strong", "", getTeamName(index));
+    appendTextElement(row, "span", "", String(scoreValue));
 
     const progress = document.createElement("div");
     progress.className = "progress-bar";
@@ -7190,16 +7837,17 @@ function shouldGuessLastWordAfterTime() {
 }
 
 function finishRound(reason = "manual") {
-  clearInterval(timerId);
-  timerId = null;
-  setRoundPaused(false, { resumeTimer: false });
-
   if (isAwaitingLastWordResult) {
     return;
   }
+  clearRoundTimerHandle();
+  roundTimerDeadlineMs = 0;
+  roundTimerPauseReasons = {};
+  setRoundPaused(false, { resumeTimer: false });
 
   if (reason === "time" && currentEntry) {
     if (shouldGuessLastWordAfterTime()) {
+      roundTimerIsActive = false;
       isAwaitingLastWordResult = true;
       updateActionButtonLabels();
       updatePauseControl();
@@ -7214,11 +7862,12 @@ function finishRound(reason = "manual") {
     recalculateRoundCounters();
   }
 
+  roundTimerIsActive = false;
   showRoundReview();
 }
 
 function showRoundReview() {
-  clearInterval(timerId);
+  destroyRoundTimer();
   resetSwipeState();
   isRoundReviewWordsExpanded = false;
   recalculateRoundCounters();
