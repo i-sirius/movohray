@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.3";
+const DATA_VERSION = "0.6.3a";
 const DATA_BUILD = "2026-08-15";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
 const ASSET_REVISION = DATA_REVISION;
@@ -895,27 +895,36 @@ function getLocalReleaseInfo() {
 }
 
 function normalizeVersionLabel(version) {
-  return String(version || "")
-    .trim()
-    .replace(/^v/i, "")
-    .replace(/[^0-9.].*$/, "");
+  const match = /^v?(\d+(?:\.\d+)*)([a-z]*)$/i.exec(String(version || "").trim());
+  if (!match) {
+    return "";
+  }
+  return `${match[1]}${String(match[2] || "").toLowerCase()}`;
 }
 
-function parseVersionParts(version) {
-  return normalizeVersionLabel(version)
-    .split(".")
-    .map((part) => Number.parseInt(part, 10))
-    .map((part) => (Number.isFinite(part) ? part : 0));
+function parseVersionLabel(version) {
+  const normalized = normalizeVersionLabel(version);
+  const match = /^(\d+(?:\.\d+)*)([a-z]*)$/i.exec(normalized);
+  if (!match) {
+    return { parts: [0], suffix: "" };
+  }
+  return {
+    parts: match[1]
+      .split(".")
+      .map((part) => Number.parseInt(part, 10))
+      .map((part) => (Number.isFinite(part) ? part : 0)),
+    suffix: String(match[2] || "").toLowerCase(),
+  };
 }
 
 function compareVersionLabels(leftVersion, rightVersion) {
-  const left = parseVersionParts(leftVersion);
-  const right = parseVersionParts(rightVersion);
-  const maxLength = Math.max(left.length, right.length);
+  const left = parseVersionLabel(leftVersion);
+  const right = parseVersionLabel(rightVersion);
+  const maxLength = Math.max(left.parts.length, right.parts.length);
 
   for (let index = 0; index < maxLength; index += 1) {
-    const leftPart = left[index] || 0;
-    const rightPart = right[index] || 0;
+    const leftPart = left.parts[index] || 0;
+    const rightPart = right.parts[index] || 0;
 
     if (leftPart > rightPart) {
       return 1;
@@ -926,7 +935,16 @@ function compareVersionLabels(leftVersion, rightVersion) {
     }
   }
 
-  return 0;
+  if (left.suffix === right.suffix) {
+    return 0;
+  }
+  if (!left.suffix) {
+    return -1;
+  }
+  if (!right.suffix) {
+    return 1;
+  }
+  return left.suffix > right.suffix ? 1 : -1;
 }
 
 function compareReleaseInfo(leftRelease, rightRelease) {
@@ -955,7 +973,7 @@ function clearCompletedUpdateTarget(localRelease) {
     if (!pendingRevision) {
       return;
     }
-    const revisionMatch = /^(\d+(?:\.\d+)*)-(\d{4})(\d{2})(\d{2})$/.exec(pendingRevision);
+    const revisionMatch = /^(\d+(?:\.\d+)*[a-z]*)-(\d{4})(\d{2})(\d{2})$/i.exec(pendingRevision);
     const pendingRelease = revisionMatch ? {
       version: revisionMatch[1],
       build: `${revisionMatch[2]}-${revisionMatch[3]}-${revisionMatch[4]}`,
@@ -1826,6 +1844,24 @@ function updateWordCardMotionWidth() {
 
   wordCardMotion.style.width = `${targetWidth}px`;
   wordCardMotion.style.marginLeft = `${Math.round(-targetWidth / 2)}px`;
+
+  // 0.6.3a: on phones the gesture area may be very tall. Keep the physical
+  // token compact instead of stretching its SVG to the full card height.
+  const isPhoneLayout = window.innerWidth <= 599;
+  if (isPhoneLayout) {
+    const containerHeight = wordCard.clientHeight || wordCard.getBoundingClientRect().height || 320;
+    const heightCap = Math.max(145, Math.min(255, containerHeight * 0.72));
+    const targetHeight = Math.round(Math.max(145, Math.min(heightCap, targetWidth * 0.58)));
+    wordCardMotion.style.top = "50%";
+    wordCardMotion.style.bottom = "auto";
+    wordCardMotion.style.height = `${targetHeight}px`;
+    wordCardMotion.style.marginTop = `${Math.round(-targetHeight / 2)}px`;
+  } else {
+    wordCardMotion.style.top = "";
+    wordCardMotion.style.bottom = "";
+    wordCardMotion.style.height = "";
+    wordCardMotion.style.marginTop = "";
+  }
 
   const usableTextWidth = targetWidth * 0.78;
   wordCard.classList.toggle("word-card-text-compact", measuredTextWidth > usableTextWidth);

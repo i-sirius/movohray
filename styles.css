@@ -14151,3 +14151,12 @@ body[data-mode="explain"] #gameScreen .word-card.word-card-text-extra-compact .w
     max-width: 80%;
   }
 }
+
+
+/* 0.6.3a — keep the physical word token compact on phones.
+   Width remains content-aware in JS; height no longer follows the tall gesture area. */
+@media (max-width: 599px) {
+  #gameScreen .word-card-motion {
+    max-height: 255px;
+  }
+}
