@@ -166,39 +166,39 @@
         },
         {
           "text": "морський коник",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "летюча миша",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "полярний ведмідь",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "садовий равлик",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "плямистий гепард",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "червона лисиця",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сірий вовк",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "річкова видра",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "домашній хом’як",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "поні",
@@ -610,11 +610,11 @@
         },
         {
           "text": "майстер ремонту",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "оператор камери",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "фармацевт",
@@ -646,7 +646,7 @@
         },
         {
           "text": "оператор дрона",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "доглядальник",
@@ -654,18 +654,6 @@
         },
         {
           "text": "радіоведучий",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений лікар",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений кухар",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений водій",
           "kind": "noun"
         }
       ],
@@ -1122,23 +1110,23 @@
         },
         {
           "text": "тенісний корт",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лижна траса",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "бігова доріжка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "плавальна доріжка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "спортивна форма",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "фітнес-браслет",
@@ -1178,7 +1166,7 @@
         },
         {
           "text": "легка атлетика",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дриблінг",
@@ -1193,12 +1181,28 @@
           "kind": "noun"
         },
         {
-          "text": "командний капітан",
+          "text": "підтягування",
           "kind": "noun"
         },
         {
-          "text": "підтягування",
-          "kind": "noun"
+          "text": "капітан команди",
+          "kind": "phrase"
+        },
+        {
+          "text": "забити гол",
+          "kind": "phrase"
+        },
+        {
+          "text": "кидати м’яч у кошик",
+          "kind": "phrase"
+        },
+        {
+          "text": "стрибати через скакалку",
+          "kind": "phrase"
+        },
+        {
+          "text": "подавати тенісний м’яч",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -1345,6 +1349,26 @@
         {
           "text": "дистанція",
           "kind": "noun"
+        },
+        {
+          "text": "пробігти марафон",
+          "kind": "phrase"
+        },
+        {
+          "text": "відбити пенальті",
+          "kind": "phrase"
+        },
+        {
+          "text": "підняти штангу",
+          "kind": "phrase"
+        },
+        {
+          "text": "плисти батерфляєм",
+          "kind": "phrase"
+        },
+        {
+          "text": "фінішувати першим",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -1582,39 +1606,39 @@
         },
         {
           "text": "прасувальна дошка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "постільна білизна",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кухонна губка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дверна ручка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кімнатна рослина",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "вхідний килимок",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "білизняний кошик",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "книжкова полиця",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зарядний пристрій",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ганчірка",
@@ -1634,7 +1658,7 @@
         },
         {
           "text": "кнопка дзвінка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "тертка",
@@ -1654,19 +1678,19 @@
         },
         {
           "text": "пральна машина",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зубна щітка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "побутовий фільтр",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кухонна дошка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сервіз",
@@ -1682,31 +1706,31 @@
         },
         {
           "text": "настінний годинник",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сміттєвий пакет",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "настільна лампа",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ванна кімната",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "душова кабіна",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кухонна витяжка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "мікрохвильова піч",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "електрочайник",
@@ -1714,7 +1738,7 @@
         },
         {
           "text": "домашня аптечка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "шафа-купе",
@@ -1725,44 +1749,44 @@
           "kind": "noun"
         },
         {
-          "text": "домашній стіл",
-          "kind": "noun"
+          "text": "мити посуд",
+          "kind": "phrase"
         },
         {
-          "text": "домашній стілець",
-          "kind": "noun"
+          "text": "прасувати сорочку",
+          "kind": "phrase"
         },
         {
-          "text": "домашній ліжко",
-          "kind": "noun"
+          "text": "застеляти ліжко",
+          "kind": "phrase"
         },
         {
-          "text": "домашній шафа",
-          "kind": "noun"
+          "text": "виносити сміття",
+          "kind": "phrase"
         },
         {
-          "text": "домашній лампа",
-          "kind": "noun"
+          "text": "пилососити килим",
+          "kind": "phrase"
         },
         {
-          "text": "домашній двері",
-          "kind": "noun"
+          "text": "міняти лампочку",
+          "kind": "phrase"
         },
         {
-          "text": "домашній вікно",
-          "kind": "noun"
+          "text": "збирати меблі",
+          "kind": "phrase"
         },
         {
-          "text": "домашній ложка",
-          "kind": "noun"
+          "text": "поливати квіти",
+          "kind": "phrase"
         },
         {
-          "text": "домашній чашка",
-          "kind": "noun"
+          "text": "відчиняти двері",
+          "kind": "phrase"
         },
         {
-          "text": "домашній тарілка",
-          "kind": "noun"
+          "text": "витирати пил",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -1941,6 +1965,22 @@
         {
           "text": "ущільнювач",
           "kind": "noun"
+        },
+        {
+          "text": "прочищати раковину",
+          "kind": "phrase"
+        },
+        {
+          "text": "вішати картину на стіну",
+          "kind": "phrase"
+        },
+        {
+          "text": "шукати загублений пульт",
+          "kind": "phrase"
+        },
+        {
+          "text": "складати випрану білизну",
+          "kind": "phrase"
         }
       ],
       "hard": []
@@ -2089,11 +2129,11 @@
         },
         {
           "text": "теплі спогади",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "легка тривога",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "збентеження",
@@ -2104,303 +2144,88 @@
           "kind": "noun"
         },
         {
-          "text": "тихий радість",
-          "kind": "noun"
+          "text": "стрибати від радості",
+          "kind": "phrase"
         },
         {
-          "text": "тихий сум",
-          "kind": "noun"
+          "text": "плакати від щастя",
+          "kind": "phrase"
         },
         {
-          "text": "тихий страх",
-          "kind": "noun"
+          "text": "тремтіти від страху",
+          "kind": "phrase"
         },
         {
-          "text": "тихий злість",
-          "kind": "noun"
+          "text": "червоніти від сорому",
+          "kind": "phrase"
         },
         {
-          "text": "щирий радість",
-          "kind": "noun"
+          "text": "ображено мовчати",
+          "kind": "phrase"
         },
         {
-          "text": "щирий сум",
-          "kind": "noun"
+          "text": "сміятися до сліз",
+          "kind": "phrase"
         },
         {
-          "text": "щирий страх",
-          "kind": "noun"
+          "text": "полегшено зітхнути",
+          "kind": "phrase"
         },
         {
-          "text": "щирий злість",
-          "kind": "noun"
+          "text": "нервово чекати",
+          "kind": "phrase"
         },
         {
-          "text": "щирий подив",
-          "kind": "noun"
+          "text": "сильно здивуватися",
+          "kind": "phrase"
         },
         {
-          "text": "щирий сором",
-          "kind": "noun"
+          "text": "заздрісний погляд",
+          "kind": "phrase"
         },
         {
-          "text": "щирий гордість",
-          "kind": "noun"
+          "text": "втратити терпіння",
+          "kind": "phrase"
         },
         {
-          "text": "щирий спокій",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий цікавість",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий образа",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий сміх",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий сльози",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий любов",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий щастя",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий радіти",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий сумувати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий сердитися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий боятися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий плакати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий дивуватися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий соромитися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий нудьгувати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий пишатися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий хвилюватися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий мріяти",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий заблукати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий поспішати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий чекати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий ховатися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий загадка",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий прощатися",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий відпочивати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий успіх",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий змерзнути",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий засмагати",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий посмішка",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий сльоза",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий страшно",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий весело",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий настрій",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий захоплення",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий розчарування",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий тривога",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий ніжність",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий провина",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий заздрість",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий полегшення",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий нетерпіння",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий вдячність",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий розгубленість",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий самотність",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий упевненість",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий натхнення",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий співчуття",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий хвилювання",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий відчай",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий роздратування",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий захват",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий довіра",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий збентеження",
-          "kind": "noun"
-        },
-        {
-          "text": "щирий нетерплячість",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий радість",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий сум",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий страх",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий злість",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий подив",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий сором",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий гордість",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий спокій",
-          "kind": "noun"
-        },
-        {
-          "text": "раптовий цікавість",
-          "kind": "noun"
+          "text": "міцно обіймати",
+          "kind": "phrase"
         }
       ],
-      "medium": [],
+      "medium": [
+        {
+          "text": "закохатися з першого погляду",
+          "kind": "phrase"
+        },
+        {
+          "text": "ледве стримувати сміх",
+          "kind": "phrase"
+        },
+        {
+          "text": "не вірити своїм очам",
+          "kind": "phrase"
+        },
+        {
+          "text": "ховати сльози",
+          "kind": "phrase"
+        },
+        {
+          "text": "розгублено озиратися",
+          "kind": "phrase"
+        },
+        {
+          "text": "заспокоювати друга",
+          "kind": "phrase"
+        },
+        {
+          "text": "боятися темряви",
+          "kind": "phrase"
+        },
+        {
+          "text": "сумувати за домом",
+          "kind": "phrase"
+        }
+      ],
       "hard": []
     }
   },
@@ -2543,59 +2368,55 @@
         },
         {
           "text": "пасажирський вагон",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "залізнична станція",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "багажне відділення",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "посадковий талон",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дорожній знак",
-          "kind": "noun"
-        },
-        {
-          "text": "паливна заправка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пожежна машина",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "поліцейське авто",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "підводний човен",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ремонт дороги",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пересадковий вузол",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пасажирський потік",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "рейсовий автобус",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "міський трафік",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "автомийка",
@@ -2603,15 +2424,35 @@
         },
         {
           "text": "автобусна зупинка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "нічний поїзд",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ремінь безпеки",
-          "kind": "noun"
+          "kind": "phrase"
+        },
+        {
+          "text": "автозаправна станція",
+          "kind": "phrase"
+        },
+        {
+          "text": "купувати квиток на поїзд",
+          "kind": "phrase"
+        },
+        {
+          "text": "чекати літак",
+          "kind": "phrase"
+        },
+        {
+          "text": "пристебнути ремінь безпеки",
+          "kind": "phrase"
+        },
+        {
+          "text": "завантажувати валізу",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -2754,6 +2595,22 @@
         {
           "text": "заправка",
           "kind": "noun"
+        },
+        {
+          "text": "пересідати на інший потяг",
+          "kind": "phrase"
+        },
+        {
+          "text": "стояти в дорожньому заторі",
+          "kind": "phrase"
+        },
+        {
+          "text": "запізнитися на автобус",
+          "kind": "phrase"
+        },
+        {
+          "text": "проходити контроль в аеропорту",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -3027,31 +2884,31 @@
         },
         {
           "text": "овочевий салат",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сирна запіканка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "яблучний пиріг",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лимонний чай",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "гарбузова каша",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ягідний морс",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "картопляні деруни",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пюре",
@@ -3499,191 +3356,123 @@
         },
         {
           "text": "чарівна паличка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "таємний портал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "летючий килим",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зачарований ліс",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "магічний напій",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "чарівна книга",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "скляна туфелька",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "золотий ключик",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "магічний ліс",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "таємний прохід",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "королівський бал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "потаємна кімната",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "загадковий ключ",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "міфічний герой",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "казковий герой",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "старий мудрець",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "підземне царство",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "тридев’яте царство",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "золота рибка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "чарівне дзеркало",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сонний велетень",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "чарівний принц",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
-          "text": "чарівний король",
-          "kind": "noun"
+          "text": "дракон охороняє скарб",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний замок",
-          "kind": "noun"
+          "text": "принцеса в башті",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний чарівник",
-          "kind": "noun"
+          "text": "відьма варить зілля",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний фея",
-          "kind": "noun"
+          "text": "лицар на коні",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний меч",
-          "kind": "noun"
+          "text": "джин із лампи",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний скарб",
-          "kind": "noun"
+          "text": "русалка на березі",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний корона",
-          "kind": "noun"
+          "text": "гном із ліхтарем",
+          "kind": "phrase"
         },
         {
-          "text": "чарівний єдиноріг",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний пірат",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний щит",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний чобіт",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний мантія",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний паличка",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний трон",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний джин",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний гоблін",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний троль",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний магія",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний лицар",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний відьма",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний велетень",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний ельф",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний чаклунство",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний гном",
-          "kind": "noun"
-        },
-        {
-          "text": "чарівний русалка",
-          "kind": "noun"
+          "text": "магічний портал",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -3778,6 +3567,38 @@
         {
           "text": "легенда",
           "kind": "noun"
+        },
+        {
+          "text": "замок із привидами",
+          "kind": "phrase"
+        },
+        {
+          "text": "невидимий плащ",
+          "kind": "phrase"
+        },
+        {
+          "text": "зачарований меч",
+          "kind": "phrase"
+        },
+        {
+          "text": "розбудити велетня",
+          "kind": "phrase"
+        },
+        {
+          "text": "перетворитися на жабу",
+          "kind": "phrase"
+        },
+        {
+          "text": "відкрити таємний портал",
+          "kind": "phrase"
+        },
+        {
+          "text": "втекти від дракона",
+          "kind": "phrase"
+        },
+        {
+          "text": "знайти чарівний скарб",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -3915,87 +3736,87 @@
         },
         {
           "text": "овочеве рагу",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "курячий бульйон",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "рибна юшка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "домашній пиріг",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "яблучний штрудель",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "банановий коктейль",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "томатний соус",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "медовий пряник",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "горіхова паста",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "печена картопля",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "рисова каша",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "гречані млинці",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сирна тарілка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "фруктовий кошик",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "гаряче какао",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "молочний коктейль",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "свіжий хліб",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "домашній компот",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "овочева нарізка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "солодкий перець",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зелений горошок",
-          "kind": "noun"
+          "kind": "phrase"
         }
       ],
       "medium": [],
@@ -4068,28 +3889,8 @@
           "kind": "noun"
         },
         {
-          "text": "досвідчений актор",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений співак",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений фермер",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений пекар",
-          "kind": "noun"
-        },
-        {
-          "text": "досвідчений пілот",
-          "kind": "noun"
-        },
-        {
           "text": "квиткова каса",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лиходій",
@@ -4097,15 +3898,15 @@
         },
         {
           "text": "епізодична роль",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "головна роль",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "другий план",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кастинг",
@@ -4133,11 +3934,11 @@
         },
         {
           "text": "романтична комедія",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "фантастичний сюжет",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кінопрем’єра",
@@ -4148,148 +3949,60 @@
           "kind": "noun"
         },
         {
-          "text": "головний фільм",
-          "kind": "noun"
-        },
-        {
           "text": "головний герой",
-          "kind": "noun"
-        },
-        {
-          "text": "головний екран",
-          "kind": "noun"
-        },
-        {
-          "text": "головний квиток",
-          "kind": "noun"
-        },
-        {
-          "text": "головний попкорн",
-          "kind": "noun"
-        },
-        {
-          "text": "головний сцена",
-          "kind": "noun"
-        },
-        {
-          "text": "головний камера",
-          "kind": "noun"
-        },
-        {
-          "text": "головний казка",
-          "kind": "noun"
-        },
-        {
-          "text": "головний принцеса",
-          "kind": "noun"
-        },
-        {
-          "text": "головний дракон",
-          "kind": "noun"
-        },
-        {
-          "text": "головний титри",
-          "kind": "noun"
-        },
-        {
-          "text": "головний лиходій",
-          "kind": "noun"
-        },
-        {
-          "text": "головний сценарій",
-          "kind": "noun"
-        },
-        {
-          "text": "головний серіал",
-          "kind": "noun"
-        },
-        {
-          "text": "головний епізод",
-          "kind": "noun"
-        },
-        {
-          "text": "головний трейлер",
-          "kind": "noun"
-        },
-        {
-          "text": "головний прем’єра",
-          "kind": "noun"
-        },
-        {
-          "text": "головний комедія",
-          "kind": "noun"
-        },
-        {
-          "text": "головний драма",
-          "kind": "noun"
-        },
-        {
-          "text": "головний детектив",
-          "kind": "noun"
-        },
-        {
-          "text": "головний аніматор",
-          "kind": "noun"
-        },
-        {
-          "text": "головний озвучення",
-          "kind": "noun"
-        },
-        {
-          "text": "головний декорація",
-          "kind": "noun"
-        },
-        {
-          "text": "головний монтаж",
-          "kind": "noun"
-        },
-        {
-          "text": "головний саундтрек",
-          "kind": "noun"
-        },
-        {
-          "text": "головний кінотеатр",
-          "kind": "noun"
-        },
-        {
-          "text": "головний дубляж",
-          "kind": "noun"
-        },
-        {
-          "text": "головний кастинг",
-          "kind": "noun"
-        },
-        {
-          "text": "головний масовка",
-          "kind": "noun"
-        },
-        {
-          "text": "головний кінозал",
-          "kind": "noun"
-        },
-        {
-          "text": "головний субтитри",
-          "kind": "noun"
-        },
-        {
-          "text": "головний монтажер",
-          "kind": "noun"
-        },
-        {
-          "text": "головний продюсер",
-          "kind": "noun"
-        },
-        {
-          "text": "головний каскадер",
-          "kind": "noun"
-        },
-        {
-          "text": "головний кіномова",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "казковий супергерой",
-          "kind": "noun"
+          "kind": "phrase"
+        },
+        {
+          "text": "червона доріжка",
+          "kind": "phrase"
+        },
+        {
+          "text": "знімальний майданчик",
+          "kind": "phrase"
+        },
+        {
+          "text": "актор забув текст",
+          "kind": "phrase"
+        },
+        {
+          "text": "режисер кричить мотор",
+          "kind": "phrase"
+        },
+        {
+          "text": "лиходій у масці",
+          "kind": "phrase"
+        },
+        {
+          "text": "супергерой рятує місто",
+          "kind": "phrase"
+        },
+        {
+          "text": "принцеса в замку",
+          "kind": "phrase"
+        },
+        {
+          "text": "каскадер стрибає з даху",
+          "kind": "phrase"
+        },
+        {
+          "text": "кінозірка дає автограф",
+          "kind": "phrase"
+        },
+        {
+          "text": "глядач їсть попкорн",
+          "kind": "phrase"
+        },
+        {
+          "text": "кінокамера знімає сцену",
+          "kind": "phrase"
+        },
+        {
+          "text": "прем’єра фільму",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -4320,6 +4033,38 @@
         {
           "text": "гонщик",
           "kind": "noun"
+        },
+        {
+          "text": "актор грає дві ролі",
+          "kind": "phrase"
+        },
+        {
+          "text": "режисер знімає дубль",
+          "kind": "phrase"
+        },
+        {
+          "text": "озвучувати мультфільм",
+          "kind": "phrase"
+        },
+        {
+          "text": "знімати сцену погоні",
+          "kind": "phrase"
+        },
+        {
+          "text": "вручати кінопремію",
+          "kind": "phrase"
+        },
+        {
+          "text": "позувати фотографам",
+          "kind": "phrase"
+        },
+        {
+          "text": "дивитися трейлер",
+          "kind": "phrase"
+        },
+        {
+          "text": "акторська проба",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -4397,11 +4142,11 @@
         },
         {
           "text": "магнітне поле",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дослідна пробірка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пробірка",
@@ -4469,19 +4214,19 @@
         },
         {
           "text": "науковий журнал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "контрольна група",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зразок ґрунту",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дослідна станція",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "спостереження",
@@ -4489,226 +4234,103 @@
         },
         {
           "text": "хімічна реакція",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "географічна карта",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "фізичний закон",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "математична задача",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "біологічний вид",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "науковий дослід",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий вчений",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий число",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий магніт",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий скло",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий світло",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий тінь",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий планета",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий колба",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий лупа",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий пробірка",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий мікроб",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий вага",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий мікроскоп",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий телескоп",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий молекула",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий атом",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий енергія",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий гіпотеза",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий теорія",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий електрика",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий хімія",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий еволюція",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий генетика",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий доказ",
-          "kind": "noun"
-        },
-        {
-          "text": "науковий відкриття",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний число",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний скло",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний тінь",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний колба",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний лупа",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний вага",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний атом",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний хімія",
-          "kind": "noun"
-        },
-        {
-          "text": "лабораторний доказ",
-          "kind": "noun"
-        },
-        {
-          "text": "точний дослід",
-          "kind": "noun"
-        },
-        {
-          "text": "точний вчений",
-          "kind": "noun"
-        },
-        {
-          "text": "точний число",
-          "kind": "noun"
-        },
-        {
-          "text": "точний магніт",
-          "kind": "noun"
-        },
-        {
-          "text": "точний скло",
-          "kind": "noun"
-        },
-        {
-          "text": "точний світло",
-          "kind": "noun"
-        },
-        {
-          "text": "точний тінь",
-          "kind": "noun"
-        },
-        {
-          "text": "точний планета",
-          "kind": "noun"
-        },
-        {
-          "text": "точний колба",
-          "kind": "noun"
-        },
-        {
-          "text": "точний лупа",
-          "kind": "noun"
-        },
-        {
-          "text": "точний пробірка",
-          "kind": "noun"
-        },
-        {
-          "text": "точний мікроб",
-          "kind": "noun"
-        },
-        {
-          "text": "точний вага",
-          "kind": "noun"
-        },
-        {
-          "text": "точний лабораторія",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "гроші",
           "kind": "noun"
+        },
+        {
+          "text": "дослід із магнітом",
+          "kind": "phrase"
+        },
+        {
+          "text": "модель атома",
+          "kind": "phrase"
+        },
+        {
+          "text": "запуск ракети",
+          "kind": "phrase"
+        },
+        {
+          "text": "сонячне затемнення",
+          "kind": "phrase"
+        },
+        {
+          "text": "робота з мікроскопом",
+          "kind": "phrase"
+        },
+        {
+          "text": "електричний струм",
+          "kind": "phrase"
+        },
+        {
+          "text": "виверження вулкана",
+          "kind": "phrase"
+        },
+        {
+          "text": "космічна орбіта",
+          "kind": "phrase"
+        },
+        {
+          "text": "змішувати реактиви",
+          "kind": "phrase"
         }
       ],
-      "medium": [],
+      "medium": [
+        {
+          "text": "ланцюгова реакція",
+          "kind": "phrase"
+        },
+        {
+          "text": "закон тяжіння",
+          "kind": "phrase"
+        },
+        {
+          "text": "збирати електричне коло",
+          "kind": "phrase"
+        },
+        {
+          "text": "спостерігати за зірками",
+          "kind": "phrase"
+        },
+        {
+          "text": "вирощувати кристал",
+          "kind": "phrase"
+        },
+        {
+          "text": "досліджувати клітину",
+          "kind": "phrase"
+        },
+        {
+          "text": "вимірювати температуру",
+          "kind": "phrase"
+        },
+        {
+          "text": "будувати модель молекули",
+          "kind": "phrase"
+        }
+      ],
       "hard": [
         {
           "text": "справедливість",
@@ -4797,6 +4419,22 @@
         {
           "text": "загадка",
           "kind": "noun"
+        },
+        {
+          "text": "проводити науковий експеримент",
+          "kind": "phrase"
+        },
+        {
+          "text": "розглядати бактерії в мікроскоп",
+          "kind": "phrase"
+        },
+        {
+          "text": "керувати марсоходом",
+          "kind": "phrase"
+        },
+        {
+          "text": "запускати супутник на орбіту",
+          "kind": "phrase"
         }
       ]
     }
@@ -4864,27 +4502,27 @@
         },
         {
           "text": "кабінет лікаря",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "медична довідка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "перша допомога",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ранкова зарядка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сонячний опік",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лікарняна палата",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "нежить",
@@ -4911,20 +4549,12 @@
           "kind": "noun"
         },
         {
-          "text": "здоровий раціон",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий сон",
-          "kind": "noun"
-        },
-        {
           "text": "питний режим",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "корисна звичка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "симптом",
@@ -4944,219 +4574,67 @@
         },
         {
           "text": "режим дня",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зубна паста",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "здорове харчування",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "питна вода",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
-          "text": "медичний ліки",
-          "kind": "noun"
+          "text": "мити руки",
+          "kind": "phrase"
         },
         {
-          "text": "медичний зуб",
-          "kind": "noun"
+          "text": "чистити зуби",
+          "kind": "phrase"
         },
         {
-          "text": "медичний серце",
-          "kind": "noun"
+          "text": "робити зарядку",
+          "kind": "phrase"
         },
         {
-          "text": "медичний рука",
-          "kind": "noun"
+          "text": "прийняти ліки",
+          "kind": "phrase"
         },
         {
-          "text": "медичний нога",
-          "kind": "noun"
+          "text": "накласти пластир",
+          "kind": "phrase"
         },
         {
-          "text": "медичний голова",
-          "kind": "noun"
+          "text": "виміряти температуру",
+          "kind": "phrase"
         },
         {
-          "text": "медичний кашель",
-          "kind": "noun"
+          "text": "кашляти в лікоть",
+          "kind": "phrase"
         },
         {
-          "text": "медичний сон",
-          "kind": "noun"
+          "text": "забинтувати руку",
+          "kind": "phrase"
         },
         {
-          "text": "медичний пластир",
-          "kind": "noun"
+          "text": "викликати швидку",
+          "kind": "phrase"
         },
         {
-          "text": "медичний градусник",
-          "kind": "noun"
+          "text": "міряти тиск",
+          "kind": "phrase"
         },
         {
-          "text": "медичний краплі",
-          "kind": "noun"
+          "text": "закапати ніс",
+          "kind": "phrase"
         },
         {
-          "text": "медичний таблетка",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний вправи",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний нежить",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний застуда",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний вітаміни",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний сироп",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний пігулка",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний стетоскоп",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний рецепт",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний аналіз",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний щеплення",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний маска",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний тонометр",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний бинт",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний термометр",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний дієта",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний імунітет",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний алергія",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний масаж",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний дихання",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний пульс",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний тиск",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний симптом",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний діагноз",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний санітарія",
-          "kind": "noun"
-        },
-        {
-          "text": "медичний плацебо",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий ліки",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий зуб",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий серце",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий рука",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий нога",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий голова",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий кашель",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий пластир",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий градусник",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий краплі",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий таблетка",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий вправи",
-          "kind": "noun"
-        },
-        {
-          "text": "здоровий нежить",
-          "kind": "noun"
+          "text": "слухати серце",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -5223,6 +4701,38 @@
         {
           "text": "самообстеження",
           "kind": "noun"
+        },
+        {
+          "text": "зробити щеплення",
+          "kind": "phrase"
+        },
+        {
+          "text": "здати аналіз крові",
+          "kind": "phrase"
+        },
+        {
+          "text": "пройти медогляд",
+          "kind": "phrase"
+        },
+        {
+          "text": "лікар слухає легені",
+          "kind": "phrase"
+        },
+        {
+          "text": "пацієнт на милицях",
+          "kind": "phrase"
+        },
+        {
+          "text": "перевірити зір",
+          "kind": "phrase"
+        },
+        {
+          "text": "робити масаж",
+          "kind": "phrase"
+        },
+        {
+          "text": "накласти гіпс",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -5268,23 +4778,23 @@
       "easy": [
         {
           "text": "зовнішній диск",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "розумний годинник",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сенсорний екран",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ігрова приставка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кнопка живлення",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "павербанк",
@@ -5296,11 +4806,11 @@
         },
         {
           "text": "електронна книга",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "голосовий помічник",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "смартлампа",
@@ -5308,271 +4818,99 @@
         },
         {
           "text": "електронний підпис",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "безпровідна мережа",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "розумний дім",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "захисне скло",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "електронна пошта",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "портативна колонка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зарядна станція",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "мережевий кабель",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "технічна підтримка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "оновлення системи",
+          "kind": "phrase"
+        },
+        {
+          "text": "заряджати телефон",
+          "kind": "phrase"
+        },
+        {
+          "text": "завис комп’ютер",
+          "kind": "phrase"
+        },
+        {
+          "text": "зламався принтер",
+          "kind": "phrase"
+        },
+        {
+          "text": "забув пароль",
+          "kind": "phrase"
+        },
+        {
+          "text": "увімкнути вайфай",
+          "kind": "phrase"
+        },
+        {
+          "text": "підключити навушники",
+          "kind": "phrase"
+        },
+        {
+          "text": "зробити скриншот",
+          "kind": "phrase"
+        },
+        {
+          "text": "відсканувати документ",
+          "kind": "phrase"
+        },
+        {
+          "text": "голосове повідомлення",
+          "kind": "phrase"
+        },
+        {
+          "text": "відеодзвінок",
           "kind": "noun"
         },
         {
-          "text": "цифровий телефон",
-          "kind": "noun"
+          "text": "розрядився павербанк",
+          "kind": "phrase"
         },
         {
-          "text": "цифровий комп’ютер",
-          "kind": "noun"
+          "text": "оновити систему",
+          "kind": "phrase"
         },
         {
-          "text": "цифровий ноутбук",
-          "kind": "noun"
+          "text": "підключити зарядку",
+          "kind": "phrase"
         },
         {
-          "text": "цифровий планшет",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий кнопка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий зарядка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий мишка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий колонка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий пульт",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий флешка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий кабель",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий сенсор",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий павербанк",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий батарейка",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий смартфон",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий навушники",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий проектор",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий сканер",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий роутер",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий процесор",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий монітор",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий пам’ять",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий додаток",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий пароль",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий браузер",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий датчик",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий оновлення",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий геймпад",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий інтерфейс",
-          "kind": "noun"
-        },
-        {
-          "text": "цифровий алгоритм",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний телефон",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний комп’ютер",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний ноутбук",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний планшет",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний кнопка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний зарядка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний мишка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний колонка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний пульт",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний флешка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний кабель",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний сенсор",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний павербанк",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний батарейка",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний смартфон",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний навушники",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний проектор",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний сканер",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний роутер",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний процесор",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний монітор",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний пам’ять",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний додаток",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний пароль",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний браузер",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний датчик",
-          "kind": "noun"
-        },
-        {
-          "text": "розумний оновлення",
-          "kind": "noun"
+          "text": "шукати пульт",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -5715,6 +5053,38 @@
         {
           "text": "камера",
           "kind": "noun"
+        },
+        {
+          "text": "перезавантажити роутер",
+          "kind": "phrase"
+        },
+        {
+          "text": "встановити програму",
+          "kind": "phrase"
+        },
+        {
+          "text": "підключити проєктор",
+          "kind": "phrase"
+        },
+        {
+          "text": "налаштувати розумний дім",
+          "kind": "phrase"
+        },
+        {
+          "text": "розблокувати телефон обличчям",
+          "kind": "phrase"
+        },
+        {
+          "text": "завантажити файл у хмару",
+          "kind": "phrase"
+        },
+        {
+          "text": "підключитися до відеоконференції",
+          "kind": "phrase"
+        },
+        {
+          "text": "відновити забутий пароль",
+          "kind": "phrase"
         }
       ],
       "hard": []
@@ -5775,27 +5145,27 @@
         },
         {
           "text": "пішохідна вулиця",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "дитячий майданчик",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "підземний перехід",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "торговий центр",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "житловий квартал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "вуличний музикант",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сквер",
@@ -5819,27 +5189,27 @@
         },
         {
           "text": "підземний паркінг",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зупинка транспорту",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "міська рада",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пішохідний міст",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "міський парк",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "спальний район",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "велодоріжка",
@@ -5847,255 +5217,79 @@
         },
         {
           "text": "старе місто",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "міська бібліотека",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зупинка трамвая",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "паркувальне місце",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "поштове відділення",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
-          "text": "міський вулиця",
-          "kind": "noun"
+          "text": "переходити дорогу",
+          "kind": "phrase"
         },
         {
-          "text": "міський будинок",
-          "kind": "noun"
+          "text": "чекати автобус",
+          "kind": "phrase"
         },
         {
-          "text": "міський площа",
-          "kind": "noun"
+          "text": "стояти в заторі",
+          "kind": "phrase"
         },
         {
-          "text": "міський магазин",
-          "kind": "noun"
+          "text": "годувати голубів",
+          "kind": "phrase"
         },
         {
-          "text": "міський школа",
-          "kind": "noun"
+          "text": "сидіти на лавці",
+          "kind": "phrase"
         },
         {
-          "text": "міський лікарня",
-          "kind": "noun"
+          "text": "купувати квиток",
+          "kind": "phrase"
         },
         {
-          "text": "міський міст",
-          "kind": "noun"
+          "text": "шукати адресу",
+          "kind": "phrase"
         },
         {
-          "text": "міський світлофор",
-          "kind": "noun"
+          "text": "заходити в метро",
+          "kind": "phrase"
         },
         {
-          "text": "міський зупинка",
-          "kind": "noun"
+          "text": "гуляти в парку",
+          "kind": "phrase"
         },
         {
-          "text": "міський двір",
-          "kind": "noun"
+          "text": "переходити міст",
+          "kind": "phrase"
         },
         {
-          "text": "міський кафе",
-          "kind": "noun"
+          "text": "чекати на світлофорі",
+          "kind": "phrase"
         },
         {
-          "text": "міський лавка",
-          "kind": "noun"
+          "text": "паркувати автомобіль",
+          "kind": "phrase"
         },
         {
-          "text": "міський кіоск",
-          "kind": "noun"
+          "text": "заходити в аптеку",
+          "kind": "phrase"
         },
         {
-          "text": "міський сквер",
-          "kind": "noun"
-        },
-        {
-          "text": "міський провулок",
-          "kind": "noun"
-        },
-        {
-          "text": "міський вітрина",
-          "kind": "noun"
-        },
-        {
-          "text": "міський перехід",
-          "kind": "noun"
-        },
-        {
-          "text": "міський під’їзд",
-          "kind": "noun"
-        },
-        {
-          "text": "міський перехрестя",
-          "kind": "noun"
-        },
-        {
-          "text": "міський тротуар",
-          "kind": "noun"
-        },
-        {
-          "text": "міський пішохід",
-          "kind": "noun"
-        },
-        {
-          "text": "міський транспорт",
-          "kind": "noun"
-        },
-        {
-          "text": "міський район",
-          "kind": "noun"
-        },
-        {
-          "text": "міський бібліотека",
-          "kind": "noun"
-        },
-        {
-          "text": "міський музей",
-          "kind": "noun"
-        },
-        {
-          "text": "міський театр",
-          "kind": "noun"
-        },
-        {
-          "text": "міський аптека",
-          "kind": "noun"
-        },
-        {
-          "text": "міський пошта",
-          "kind": "noun"
-        },
-        {
-          "text": "міський фонтан",
-          "kind": "noun"
-        },
-        {
-          "text": "міський пам’ятник",
-          "kind": "noun"
-        },
-        {
-          "text": "міський паркування",
-          "kind": "noun"
-        },
-        {
-          "text": "міський метро",
-          "kind": "noun"
-        },
-        {
-          "text": "міський зонування",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний вулиця",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний будинок",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний парк",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний площа",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний магазин",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний школа",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний лікарня",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний міст",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний світлофор",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний зупинка",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний двір",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний кафе",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний лавка",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний кіоск",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний сквер",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний провулок",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний вітрина",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний перехід",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний під’їзд",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний тротуар",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний пішохід",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний транспорт",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний район",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний музей",
-          "kind": "noun"
-        },
-        {
-          "text": "вуличний театр",
-          "kind": "noun"
+          "text": "пити каву в кафе",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -6150,6 +5344,38 @@
         {
           "text": "паркування",
           "kind": "noun"
+        },
+        {
+          "text": "заблукати в метро",
+          "kind": "phrase"
+        },
+        {
+          "text": "шукати вільне паркомісце",
+          "kind": "phrase"
+        },
+        {
+          "text": "переходити підземний перехід",
+          "kind": "phrase"
+        },
+        {
+          "text": "чекати трамвай на зупинці",
+          "kind": "phrase"
+        },
+        {
+          "text": "дивитися на вуличного музиканта",
+          "kind": "phrase"
+        },
+        {
+          "text": "фотографувати міський фонтан",
+          "kind": "phrase"
+        },
+        {
+          "text": "зустрітися біля пам’ятника",
+          "kind": "phrase"
+        },
+        {
+          "text": "поспішати через перехрестя",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -6239,23 +5465,23 @@
         },
         {
           "text": "робочий стіл",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ранкова нарада",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "електронний лист",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "робочий чат",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "офісний принтер",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "нотатник",
@@ -6283,23 +5509,23 @@
         },
         {
           "text": "електронна таблиця",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "спільний документ",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "спільна зустріч",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "робочий простір",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "робоча нотатка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "відеонарада",
@@ -6307,19 +5533,19 @@
         },
         {
           "text": "планування задач",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "командний чат",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "обідня перерва",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "офісна кухня",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "відеозустріч",
@@ -6327,11 +5553,11 @@
         },
         {
           "text": "квартальний звіт",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "паперова форма",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кава-брейк",
@@ -6339,203 +5565,63 @@
         },
         {
           "text": "графік відпусток",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "робочий календар",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
-          "text": "робочий папір",
-          "kind": "noun"
+          "text": "друкувати документ",
+          "kind": "phrase"
         },
         {
-          "text": "робочий папка",
-          "kind": "noun"
+          "text": "пити каву на роботі",
+          "kind": "phrase"
         },
         {
-          "text": "робочий лист",
-          "kind": "noun"
+          "text": "підписати договір",
+          "kind": "phrase"
         },
         {
-          "text": "робочий нарада",
-          "kind": "noun"
+          "text": "надіслати лист",
+          "kind": "phrase"
         },
         {
-          "text": "робочий офіс",
-          "kind": "noun"
+          "text": "перенести зустріч",
+          "kind": "phrase"
         },
         {
-          "text": "робочий колега",
-          "kind": "noun"
+          "text": "робочий дзвінок",
+          "kind": "phrase"
         },
         {
-          "text": "робочий план",
-          "kind": "noun"
+          "text": "заповнювати таблицю",
+          "kind": "phrase"
         },
         {
-          "text": "робочий стікер",
-          "kind": "noun"
+          "text": "готувати презентацію",
+          "kind": "phrase"
         },
         {
-          "text": "робочий маркер",
-          "kind": "noun"
+          "text": "запізнитися на нараду",
+          "kind": "phrase"
         },
         {
-          "text": "робочий скріпка",
-          "kind": "noun"
+          "text": "шукати скріпку",
+          "kind": "phrase"
         },
         {
-          "text": "робочий бейдж",
-          "kind": "noun"
+          "text": "міняти папір у принтері",
+          "kind": "phrase"
         },
         {
-          "text": "робочий нотатник",
-          "kind": "noun"
+          "text": "писати нотатку",
+          "kind": "phrase"
         },
         {
-          "text": "робочий принтер",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий степлер",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий блокнот",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий крісло",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий ліфт",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий документ",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий звіт",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий проєкт",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий дедлайн",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий переговори",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий договір",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий заявка",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий таблиця",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий листування",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий співбесіда",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий резюме",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий графік",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий стратегія",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий пріоритети",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий узгодження",
-          "kind": "noun"
-        },
-        {
-          "text": "робочий пріоритет",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний папір",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний папка",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний лист",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний нарада",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний офіс",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний колега",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний план",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний стікер",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний маркер",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний скріпка",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний бейдж",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний нотатник",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний степлер",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний блокнот",
-          "kind": "noun"
-        },
-        {
-          "text": "офісний крісло",
-          "kind": "noun"
+          "text": "приклеїти стікер",
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -6602,6 +5688,38 @@
         {
           "text": "відеодзвінок",
           "kind": "noun"
+        },
+        {
+          "text": "співбесіда на роботу",
+          "kind": "phrase"
+        },
+        {
+          "text": "проводити відеоконференцію",
+          "kind": "phrase"
+        },
+        {
+          "text": "узгоджувати проєкт",
+          "kind": "phrase"
+        },
+        {
+          "text": "здавати квартальний звіт",
+          "kind": "phrase"
+        },
+        {
+          "text": "розподіляти задачі",
+          "kind": "phrase"
+        },
+        {
+          "text": "працювати понаднормово",
+          "kind": "phrase"
+        },
+        {
+          "text": "забути пароль від пошти",
+          "kind": "phrase"
+        },
+        {
+          "text": "презентувати нову ідею",
+          "kind": "phrase"
         }
       ],
       "hard": [
@@ -6759,43 +5877,43 @@
         },
         {
           "text": "художня виставка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "музейний експонат",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "концертний зал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "читальний зал",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "народний костюм",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "сцена театру",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "народний танець",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "класична музика",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "капітан корабля",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "музейна зала",
-          "kind": "noun"
+          "kind": "phrase"
         }
       ],
       "medium": [
@@ -7195,27 +6313,27 @@
         },
         {
           "text": "сосновий ліс",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "гірська стежка",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "зоряне небо",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "космічна станція",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "місячний кратер",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "ранкова роса",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "річка",
@@ -7383,51 +6501,51 @@
         },
         {
           "text": "кам’янистий берег",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "морський бриз",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лісова тиша",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "річкова долина",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "квітучий сад",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "осіннє листя",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "літня спека",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "пташине гніздо",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "лісовий струмок",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "кам’яниста дорога",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "піщаний берег",
-          "kind": "noun"
+          "kind": "phrase"
         },
         {
           "text": "туманна долина",
-          "kind": "noun"
+          "kind": "phrase"
         }
       ],
       "medium": [

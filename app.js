@@ -9,9 +9,10 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.2";
-const DATA_BUILD = "2026-08-14";
+const DATA_VERSION = "0.6.3";
+const DATA_BUILD = "2026-08-15";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
+const ASSET_REVISION = DATA_REVISION;
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -20,6 +21,50 @@ const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-revision";
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
 const HAPTIC_STORAGE_KEY = "movohray-haptic";
+const WORD_CARD_SETTINGS_STORAGE_KEY = "movohray-word-card-settings-v2";
+const WORD_CARD_SHAPES = [
+  { id: "organic", className: "word-card-shape-organic", label: "М’яка шайба" },
+  { id: "splat", className: "word-card-shape-splat", label: "Асиметрична клякса" },
+  { id: "pebble", className: "word-card-shape-pebble", label: "Камінчик / жетон" },
+  { id: "sticker", className: "word-card-shape-sticker", label: "Стікер-клякса" },
+  { id: "cloud", className: "word-card-shape-cloud", label: "Хмаринка" },
+  { id: "splash", className: "word-card-shape-splash", label: "Крапля-сплеш" },
+  { id: "gummy", className: "word-card-shape-gummy", label: "Жуйка / мармелад" },
+  { id: "paper", className: "word-card-shape-paper", label: "Паперова пляма" },
+];
+const WORD_CARD_SHAPE_CLASS_NAMES = WORD_CARD_SHAPES.map((shape) => shape.className);
+const WORD_CARD_SHAPE_ID_SET = new Set(WORD_CARD_SHAPES.map((shape) => shape.id));
+const WORD_CARD_OUTLINE_MODES = new Set(["off", "random", "on"]);
+const WORD_CARD_FLIGHT_DURATION_MS = 320;
+const DEFAULT_WORD_CARD_SETTINGS = {
+  useAllShapes: true,
+  enabledShapes: WORD_CARD_SHAPES.map((shape) => shape.id),
+  randomColors: true,
+  outlineModes: {
+    light: "random",
+    dark: "random",
+  },
+};
+const WORD_CARD_LIGHT_PALETTES = [
+  { fillTop: "#fff8ea", fillBottom: "#fdeacc", outline: "rgba(255,255,255,0.96)", text: "#2f3a67" },
+  { fillTop: "#dff7fb", fillBottom: "#bdeff4", outline: "rgba(255,255,255,0.96)", text: "#27435f" },
+  { fillTop: "#ffe0ee", fillBottom: "#f8b7d4", outline: "rgba(255,250,253,0.96)", text: "#4a2949" },
+  { fillTop: "#f0f8cf", fillBottom: "#cfe88a", outline: "rgba(255,255,247,0.96)", text: "#324126" },
+  { fillTop: "#efe8ff", fillBottom: "#d9cbff", outline: "rgba(255,255,255,0.95)", text: "#372d68" },
+  { fillTop: "#ffe6d7", fillBottom: "#f6c78f", outline: "rgba(255,251,246,0.95)", text: "#563825" },
+];
+const WORD_CARD_DARK_PALETTES = [
+  { fillTop: "#39476f", fillBottom: "#243052", outline: "rgba(222, 230, 255, 0.90)", text: "#eef2ff" },
+  { fillTop: "#225a63", fillBottom: "#173f4d", outline: "rgba(205, 245, 250, 0.86)", text: "#e7fcff" },
+  { fillTop: "#693352", fillBottom: "#47223a", outline: "rgba(255, 226, 241, 0.86)", text: "#ffe9f5" },
+  { fillTop: "#5d6121", fillBottom: "#3e4317", outline: "rgba(240, 248, 196, 0.84)", text: "#f8fbe3" },
+  { fillTop: "#51417c", fillBottom: "#362a56", outline: "rgba(232, 225, 255, 0.86)", text: "#f2eeff" },
+  { fillTop: "#6a4423", fillBottom: "#4c3017", outline: "rgba(255, 234, 209, 0.85)", text: "#fff3e6" },
+];
+let wordCardSettings = null;
+let lastWordCardShapeId = "";
+let currentWordCardShapeId = "";
+let lastWordCardPaletteIndexByTheme = { light: -1, dark: -1 };
 const LEGACY_IOS_MATCH = /OS (?:9|10|11|12)_/i.test(navigator.userAgent || "");
 if (LEGACY_IOS_MATCH) {
   document.documentElement.classList.add("legacy-ios");
@@ -149,8 +194,16 @@ const WORD_GUESS_STATUS_PRIORITY = {
 };
 const WORD_GUESS_FLIP_DURATION_MS = 300;
 const WORD_GUESS_FLIP_STAGGER_MS = 50;
-const WORD_GUESS_FLIP_MIDPOINT_MS = 190;
+const WORD_GUESS_FLIP_MIDPOINT_MS = 150;
 const WORD_GUESS_FLIP_WATCHDOG_GRACE_MS = 220;
+const WORD_GUESS_BLOCKED_TARGETS = new Set([
+  "адрес", "аптечка", "баночка", "білет", "блюдо", "дощик", "димок", "дубок",
+  "ескім", "зірочка", "косий", "курочка", "лісок", "лютий", "матір", "молочко",
+  "нотка", "нотки", "німий", "ніхто", "окрас", "паличка", "песик", "пиріжок",
+  "робочий", "рукавиц", "сирок", "соломин", "сомик", "сонечко", "струнні",
+  "сухарик", "турбо", "ужгород", "хатинка", "хотин", "цукорок", "чужий",
+  "щедро", "шмель",
+]);
 const DICTIONARY_LINKS = [
   {
     name: "СУМ",
@@ -450,6 +503,10 @@ const settingsHapticToggleBtn = document.getElementById("settingsHapticToggleBtn
 const settingsHapticIcon = document.getElementById("settingsHapticIcon");
 const settingsHapticTitle = document.getElementById("settingsHapticTitle");
 const settingsHapticText = document.getElementById("settingsHapticText");
+const wordCardUseAllShapesToggle = document.getElementById("wordCardUseAllShapesToggle");
+const wordCardRandomColorsToggle = document.getElementById("wordCardRandomColorsToggle");
+const wordCardShapeCheckboxes = Array.from(document.querySelectorAll("[data-word-card-shape]"));
+const wordCardOutlineModeButtons = Array.from(document.querySelectorAll("[data-outline-theme][data-outline-mode]"));
 const appTitle = document.getElementById("appTitle");
 const appSubtitle = document.getElementById("appSubtitle");
 const menuVersionInfo = document.getElementById("menuVersionInfo");
@@ -493,6 +550,7 @@ const teamProgressFill = document.getElementById("teamProgressFill");
 const roundProgressFill = document.getElementById("roundProgressFill");
 const wordText = document.getElementById("wordText");
 const wordCard = document.getElementById("wordCard");
+const wordCardMotion = document.getElementById("wordCardMotion");
 const wordCategoryBadge = document.getElementById("wordCategoryBadge");
 const wordModeHint = document.getElementById("wordModeHint");
 const swipeHint = document.getElementById("swipeHint");
@@ -687,6 +745,7 @@ async function init() {
   initializeTheme();
   initializeSoundSetting();
   initializeHapticSetting();
+  initializeWordCardSettings();
   registerServiceWorker();
   checkRequiredUpdate();
   await loadModeCategories(selectedMode);
@@ -730,7 +789,7 @@ function flushPendingAppToast() {
 }
 
 function getRevisionedAssetUrl(path) {
-  return `${path}?rev=${encodeURIComponent(DATA_REVISION)}`;
+  return `${path}?rev=${encodeURIComponent(ASSET_REVISION)}`;
 }
 
 function checkRequiredUpdate() {
@@ -1356,6 +1415,11 @@ function applyTheme(theme) {
   if (settingsThemeText) {
     settingsThemeText.textContent = nextTheme === "dark" ? "Перемкнути на світле оформлення" : "Перемкнути на темне оформлення";
   }
+
+  if (wordCardSettings) {
+    renderWordCardSettingsControls();
+    refreshCurrentWordCardAppearance();
+  }
 }
 
 function getPreferredSoundSetting() {
@@ -1463,6 +1527,389 @@ function toggleSoundSetting() {
   } catch (error) {
     // Sound still changes for the current session if persistence is blocked.
   }
+}
+
+function getDefaultWordCardSettings() {
+  return {
+    useAllShapes: true,
+    enabledShapes: WORD_CARD_SHAPES.map((shape) => shape.id),
+    randomColors: true,
+    outlineModes: {
+      light: "random",
+      dark: "random",
+    },
+  };
+}
+
+function normalizeWordCardSettings(rawSettings) {
+  const defaults = getDefaultWordCardSettings();
+  const normalized = {
+    useAllShapes: defaults.useAllShapes,
+    enabledShapes: [...defaults.enabledShapes],
+    randomColors: defaults.randomColors,
+    outlineModes: { ...defaults.outlineModes },
+  };
+
+  if (rawSettings && typeof rawSettings === "object") {
+    if (typeof rawSettings.useAllShapes === "boolean") {
+      normalized.useAllShapes = rawSettings.useAllShapes;
+    }
+    if (Array.isArray(rawSettings.enabledShapes)) {
+      const uniqueShapes = rawSettings.enabledShapes.filter((shapeId, index, source) => (
+        typeof shapeId === "string"
+        && WORD_CARD_SHAPE_ID_SET.has(shapeId)
+        && source.indexOf(shapeId) === index
+      ));
+      if (uniqueShapes.length > 0) {
+        normalized.enabledShapes = uniqueShapes;
+      }
+    }
+    if (typeof rawSettings.randomColors === "boolean") {
+      normalized.randomColors = rawSettings.randomColors;
+    }
+    if (rawSettings.outlineModes && typeof rawSettings.outlineModes === "object") {
+      ["light", "dark"].forEach((theme) => {
+        const nextMode = rawSettings.outlineModes[theme];
+        if (WORD_CARD_OUTLINE_MODES.has(nextMode)) {
+          normalized.outlineModes[theme] = nextMode;
+        }
+      });
+    }
+  }
+
+  if (normalized.enabledShapes.length === 0) {
+    normalized.enabledShapes = [...defaults.enabledShapes];
+  }
+
+  return normalized;
+}
+
+function persistWordCardSettings() {
+  if (!wordCardSettings) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(WORD_CARD_SETTINGS_STORAGE_KEY, JSON.stringify(wordCardSettings));
+  } catch (error) {
+    // Ignore storage errors; settings still apply in current session.
+  }
+}
+
+function getPreferredWordCardSettings() {
+  try {
+    const savedSettings = localStorage.getItem(WORD_CARD_SETTINGS_STORAGE_KEY);
+    if (savedSettings) {
+      return normalizeWordCardSettings(JSON.parse(savedSettings));
+    }
+  } catch (error) {
+    // Ignore corrupted storage and fall back to defaults.
+  }
+
+  return normalizeWordCardSettings(null);
+}
+
+function getEnabledWordCardShapeIds() {
+  const safeSettings = wordCardSettings || getDefaultWordCardSettings();
+  const enabledShapes = Array.isArray(safeSettings.enabledShapes)
+    ? safeSettings.enabledShapes.filter((shapeId) => WORD_CARD_SHAPE_ID_SET.has(shapeId))
+    : [];
+
+  if (safeSettings.useAllShapes || enabledShapes.length === 0) {
+    return WORD_CARD_SHAPES.map((shape) => shape.id);
+  }
+
+  return enabledShapes;
+}
+
+function renderWordCardSettingsControls() {
+  const safeSettings = wordCardSettings || getDefaultWordCardSettings();
+
+  if (wordCardUseAllShapesToggle) {
+    wordCardUseAllShapesToggle.checked = safeSettings.useAllShapes;
+  }
+
+  if (wordCardRandomColorsToggle) {
+    wordCardRandomColorsToggle.checked = safeSettings.randomColors;
+  }
+
+  wordCardShapeCheckboxes.forEach((checkbox) => {
+    const shapeId = checkbox.dataset.wordCardShape;
+    checkbox.checked = safeSettings.useAllShapes || safeSettings.enabledShapes.includes(shapeId);
+    checkbox.disabled = safeSettings.useAllShapes;
+    const option = checkbox.closest(".app-settings-check");
+    if (option) {
+      option.classList.toggle("is-disabled", safeSettings.useAllShapes);
+    }
+  });
+
+  wordCardOutlineModeButtons.forEach((button) => {
+    const theme = button.dataset.outlineTheme;
+    const mode = button.dataset.outlineMode;
+    const isSelected = safeSettings.outlineModes[theme] === mode;
+    button.classList.toggle("is-selected", isSelected);
+    button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+  });
+}
+
+function initializeWordCardSettings() {
+  wordCardSettings = getPreferredWordCardSettings();
+  renderWordCardSettingsControls();
+}
+
+function updateWordCardUseAllShapes(isEnabled) {
+  wordCardSettings = normalizeWordCardSettings({
+    ...wordCardSettings,
+    useAllShapes: Boolean(isEnabled),
+  });
+  persistWordCardSettings();
+  renderWordCardSettingsControls();
+  refreshCurrentWordCardAppearance();
+}
+
+function updateWordCardRandomColors(isEnabled) {
+  wordCardSettings = normalizeWordCardSettings({
+    ...wordCardSettings,
+    randomColors: Boolean(isEnabled),
+  });
+  persistWordCardSettings();
+  renderWordCardSettingsControls();
+  refreshCurrentWordCardAppearance();
+}
+
+function updateWordCardShapeSelection(shapeId, isEnabled) {
+  if (!WORD_CARD_SHAPE_ID_SET.has(shapeId)) {
+    return;
+  }
+
+  const currentEnabled = getEnabledWordCardShapeIds();
+  let nextEnabled = currentEnabled.filter((currentId) => currentId !== shapeId);
+  if (isEnabled) {
+    nextEnabled.push(shapeId);
+  }
+  nextEnabled = WORD_CARD_SHAPES.map((shape) => shape.id).filter((id) => nextEnabled.includes(id));
+
+  if (nextEnabled.length === 0) {
+    renderWordCardSettingsControls();
+    showAppToastWhenReady("Залиш хоча б одну форму картки.");
+    return;
+  }
+
+  wordCardSettings = normalizeWordCardSettings({
+    ...wordCardSettings,
+    useAllShapes: false,
+    enabledShapes: nextEnabled,
+  });
+  persistWordCardSettings();
+  renderWordCardSettingsControls();
+  refreshCurrentWordCardAppearance();
+}
+
+function updateWordCardOutlineMode(theme, mode) {
+  if (!WORD_CARD_OUTLINE_MODES.has(mode) || (theme !== "light" && theme !== "dark")) {
+    return;
+  }
+
+  wordCardSettings = normalizeWordCardSettings({
+    ...wordCardSettings,
+    outlineModes: {
+      ...((wordCardSettings && wordCardSettings.outlineModes) ? wordCardSettings.outlineModes : {}),
+      [theme]: mode,
+    },
+  });
+  persistWordCardSettings();
+  renderWordCardSettingsControls();
+  refreshCurrentWordCardAppearance();
+}
+
+function getCurrentThemeName() {
+  return document.body.dataset.theme === "dark" ? "dark" : "light";
+}
+
+function getWordCardPalettePool(theme) {
+  return theme === "dark" ? WORD_CARD_DARK_PALETTES : WORD_CARD_LIGHT_PALETTES;
+}
+
+function getDefaultWordCardPalette(theme) {
+  return theme === "dark"
+    ? { fillTop: "#252d45", fillBottom: "#1f263a", outline: "rgba(222, 226, 242, 0.84)", text: "#eef2ff" }
+    : { fillTop: "#fffdf8", fillBottom: "#fff7e8", outline: "rgba(255, 255, 255, 0.96)", text: "#2f3a67" };
+}
+
+function pickRandomIndex(items, previousIndex) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return -1;
+  }
+
+  let nextIndex = Math.floor(Math.random() * items.length);
+  if (items.length > 1 && nextIndex === previousIndex) {
+    const step = 1 + Math.floor(Math.random() * (items.length - 1));
+    nextIndex = (nextIndex + step) % items.length;
+  }
+  return nextIndex;
+}
+
+function chooseNextWordCardShapeId() {
+  const enabledShapeIds = getEnabledWordCardShapeIds();
+  if (enabledShapeIds.length === 0) {
+    return WORD_CARD_SHAPES[0].id;
+  }
+
+  let nextShapeId = enabledShapeIds[Math.floor(Math.random() * enabledShapeIds.length)];
+  if (enabledShapeIds.length > 1 && nextShapeId === lastWordCardShapeId) {
+    const currentIndex = enabledShapeIds.indexOf(nextShapeId);
+    const step = 1 + Math.floor(Math.random() * (enabledShapeIds.length - 1));
+    nextShapeId = enabledShapeIds[(currentIndex + step) % enabledShapeIds.length];
+  }
+
+  lastWordCardShapeId = nextShapeId;
+  return nextShapeId;
+}
+
+function chooseWordCardPalette(theme) {
+  const palettePool = getWordCardPalettePool(theme);
+  if (!wordCardSettings || !wordCardSettings.randomColors || palettePool.length === 0) {
+    return getDefaultWordCardPalette(theme);
+  }
+
+  const paletteIndex = pickRandomIndex(palettePool, lastWordCardPaletteIndexByTheme[theme]);
+  lastWordCardPaletteIndexByTheme[theme] = paletteIndex;
+  return palettePool[paletteIndex] || getDefaultWordCardPalette(theme);
+}
+
+function resolveWordCardOutlineEnabled(theme) {
+  const mode = wordCardSettings && wordCardSettings.outlineModes ? wordCardSettings.outlineModes[theme] : "random";
+  if (mode === "on") {
+    return true;
+  }
+  if (mode === "off") {
+    return false;
+  }
+  return Math.random() >= 0.5;
+}
+
+function updateWordCardMotionWidth() {
+  if (!wordCard || !wordCardMotion || !wordText) {
+    return;
+  }
+
+  const containerWidth = wordCard.clientWidth || wordCard.getBoundingClientRect().width || 680;
+  if (!containerWidth) {
+    return;
+  }
+
+  const computedStyle = window.getComputedStyle(wordText);
+  const fontSize = parseFloat(computedStyle.fontSize) || 40;
+  const fontWeight = computedStyle.fontWeight || "900";
+  const fontFamily = computedStyle.fontFamily || "sans-serif";
+  let measuredTextWidth = String(wordText.textContent || "").length * fontSize * 0.58;
+
+  try {
+    const canvas = updateWordCardMotionWidth.canvas || (updateWordCardMotionWidth.canvas = document.createElement("canvas"));
+    const context = canvas.getContext("2d");
+    if (context) {
+      context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+      measuredTextWidth = context.measureText(String(wordText.textContent || "")).width;
+    }
+  } catch (error) {
+    // The character-count estimate above is sufficient as a safe fallback.
+  }
+
+  const text = String(wordText.textContent || "").trim();
+  const isMultiWord = /\s/.test(text);
+  const minRatio = isMultiWord ? 0.74 : 0.58;
+  const minWidth = Math.min(containerWidth, Math.max(270, containerWidth * minRatio));
+  const maxWidth = Math.max(minWidth, containerWidth * 0.985);
+  const horizontalBreathingRoom = Math.max(112, Math.min(180, containerWidth * 0.22));
+  const desiredWidth = measuredTextWidth + horizontalBreathingRoom;
+  const targetWidth = Math.round(Math.max(minWidth, Math.min(maxWidth, desiredWidth)));
+
+  wordCardMotion.style.width = `${targetWidth}px`;
+  wordCardMotion.style.marginLeft = `${Math.round(-targetWidth / 2)}px`;
+
+  const usableTextWidth = targetWidth * 0.78;
+  wordCard.classList.toggle("word-card-text-compact", measuredTextWidth > usableTextWidth);
+  wordCard.classList.toggle("word-card-text-extra-compact", measuredTextWidth > usableTextWidth * 1.45);
+}
+
+function applyWordCardShapeClass(shapeId) {
+  if (!wordCard) {
+    return;
+  }
+
+  WORD_CARD_SHAPE_CLASS_NAMES.forEach((className) => {
+    wordCard.classList.remove(className);
+  });
+
+  const shape = WORD_CARD_SHAPES.find((item) => item.id === shapeId) || WORD_CARD_SHAPES[0];
+  currentWordCardShapeId = shape.id;
+  wordCard.classList.add(shape.className);
+  updateWordCardMotionWidth();
+}
+
+function applyWordCardPalette(palette) {
+  if (!wordCard) {
+    return;
+  }
+
+  const safePalette = palette || getDefaultWordCardPalette(getCurrentThemeName());
+  wordCard.style.setProperty("--word-card-fill-top", safePalette.fillTop);
+  wordCard.style.setProperty("--word-card-fill-bottom", safePalette.fillBottom);
+  wordCard.style.setProperty("--word-card-outline-color", safePalette.outline);
+  wordCard.style.setProperty("--word-card-text-color", safePalette.text);
+}
+
+function applyWordCardOutline(enabled) {
+  if (!wordCard) {
+    return;
+  }
+
+  wordCard.classList.toggle("word-card-outline-on", Boolean(enabled));
+}
+
+function clearWordCardAppearance() {
+  if (!wordCard) {
+    return;
+  }
+
+  WORD_CARD_SHAPE_CLASS_NAMES.forEach((className) => {
+    wordCard.classList.remove(className);
+  });
+  wordCard.classList.remove("word-card-outline-on");
+  wordCard.style.removeProperty("--word-card-fill-top");
+  wordCard.style.removeProperty("--word-card-fill-bottom");
+  wordCard.style.removeProperty("--word-card-outline-color");
+  wordCard.style.removeProperty("--word-card-text-color");
+}
+
+function applyConfiguredWordCardAppearance(options) {
+  if (!wordCard) {
+    return;
+  }
+
+  const settings = options || {};
+  if (selectedMode !== "explain" && selectedMode !== "charades") {
+    currentWordCardShapeId = "";
+    clearWordCardAppearance();
+    return;
+  }
+
+  const enabledShapeIds = getEnabledWordCardShapeIds();
+  const preserveShape = settings.preserveShape === true && currentWordCardShapeId && enabledShapeIds.includes(currentWordCardShapeId);
+  const shapeId = preserveShape ? currentWordCardShapeId : chooseNextWordCardShapeId();
+  applyWordCardShapeClass(shapeId);
+
+  const theme = getCurrentThemeName();
+  applyWordCardPalette(chooseWordCardPalette(theme));
+  applyWordCardOutline(resolveWordCardOutlineEnabled(theme));
+}
+
+function refreshCurrentWordCardAppearance() {
+  if (!wordCard) {
+    return;
+  }
+
+  applyConfiguredWordCardAppearance({ preserveShape: true });
 }
 
 function openAppSettings() {
@@ -1599,7 +2046,8 @@ async function loadWordGuessDictionary() {
     const attempts = selectedWordGuessAttempts;
     const allowRepeats = selectedWordGuessAllowRepeats;
     const rawAnswerWords = Array.isArray(modeData.answers) ? modeData.answers : modeData.words || [];
-    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats);
+    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats)
+      .filter((word) => !WORD_GUESS_BLOCKED_TARGETS.has(word));
     const allowedGuessWords = normalizeWordGuessList(
       Array.isArray(modeData.allowedGuesses) ? modeData.allowedGuesses : answerWords,
       wordLength,
@@ -2085,11 +2533,12 @@ function renderWordGuessBoard() {
   scheduleWordGuessViewportFit();
 }
 
-function renderWordGuessKeyboard() {
+function renderWordGuessKeyboard(revealedLetters = []) {
   if (!wordGuessKeyboard) {
     return;
   }
 
+  const revealOrder = Array.isArray(revealedLetters) ? revealedLetters : [];
   wordGuessKeyboard.innerHTML = "";
 
   WORD_GUESS_KEYBOARD_ROWS.forEach((letters, rowIndex) => {
@@ -2097,7 +2546,7 @@ function renderWordGuessKeyboard() {
     row.className = `word-guess-key-row word-guess-letter-row word-guess-key-row-${rowIndex + 1}`;
 
     letters.forEach((letter) => {
-      row.appendChild(createWordGuessKey(letter, letter.toLocaleUpperCase("uk-UA")));
+      row.appendChild(createWordGuessKey(letter, letter.toLocaleUpperCase("uk-UA"), "", revealOrder));
     });
 
     wordGuessKeyboard.appendChild(row);
@@ -2173,6 +2622,7 @@ function cancelWordGuessReveal() {
 function revealWordGuessAcceptedRow(rowIndex, acceptedGuess, onComplete) {
   const statuses = acceptedGuess.statuses.slice();
   const letters = acceptedGuess.letters.slice();
+  const keyboardRevealLetters = acceptedGuess.keyboardRevealLetters || [];
   const generation = ++wordGuessRevealGeneration;
 
   if (prefersReducedWordGuessMotion()) {
@@ -2181,7 +2631,7 @@ function revealWordGuessAcceptedRow(rowIndex, acceptedGuess, onComplete) {
     if (onComplete) {
       onComplete();
     }
-    renderWordGuessKeyboard();
+    renderWordGuessKeyboard(keyboardRevealLetters);
     return;
   }
 
@@ -2232,7 +2682,7 @@ function revealWordGuessAcceptedRow(rowIndex, acceptedGuess, onComplete) {
     if (onComplete) {
       onComplete();
     }
-    renderWordGuessKeyboard();
+    renderWordGuessKeyboard(keyboardRevealLetters);
   };
 
   if (cells.length !== letters.length || cells.length === 0) {
@@ -2335,7 +2785,7 @@ function scheduleWordGuessViewportFit() {
   });
 }
 
-function createWordGuessKey(key, label, variant = "") {
+function createWordGuessKey(key, label, variant = "", revealedLetters = []) {
   const button = document.createElement("button");
   const status = wordGuessKeyStatuses[key];
   button.type = "button";
@@ -2362,6 +2812,14 @@ function createWordGuessKey(key, label, variant = "") {
 
   if (status) {
     button.classList.add(`is-${status}`);
+
+    const revealIndex = Array.isArray(revealedLetters) ? revealedLetters.indexOf(key) : -1;
+    if (revealIndex >= 0) {
+      button.classList.add("is-status-revealing");
+      const revealDelay = revealIndex * 35;
+      button.style.animationDelay = `${revealDelay}ms`;
+      button.style.webkitAnimationDelay = `${revealDelay}ms`;
+    }
   }
 
   if (wordGuessFinished || wordGuessInputLocked) {
@@ -2469,7 +2927,7 @@ function submitWordGuess() {
   playGameSound("reveal");
 
   clearWordGuessInvalidClearTimer();
-  updateWordGuessKeyboardStatuses(guess, statuses);
+  acceptedGuess.keyboardRevealLetters = updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
   setWordGuessMessage("");
   const isWon = guess === wordGuessTarget;
@@ -2516,6 +2974,8 @@ function evaluateWordGuess(guess, target) {
 }
 
 function updateWordGuessKeyboardStatuses(guess, statuses) {
+  const changedLetters = [];
+
   Array.from(guess).forEach((letter, index) => {
     const currentStatus = wordGuessKeyStatuses[letter];
     const nextStatus = statuses[index];
@@ -2524,8 +2984,13 @@ function updateWordGuessKeyboardStatuses(guess, statuses) {
 
     if (nextPriority > currentPriority) {
       wordGuessKeyStatuses[letter] = nextStatus;
+      if (!changedLetters.includes(letter)) {
+        changedLetters.push(letter);
+      }
     }
   });
+
+  return changedLetters;
 }
 
 function getWordGuessHintResultLabel() {
@@ -5643,6 +6108,7 @@ function syncAppViewportHeight() {
 
 
 function setupEvents() {
+  window.addEventListener("resize", updateWordCardMotionWidth);
   renderModes();
   setupGameAudioUnlockEvents();
   syncAppViewportHeight();
@@ -5712,6 +6178,30 @@ function setupEvents() {
   if (settingsHapticToggleBtn) {
     settingsHapticToggleBtn.addEventListener("click", toggleHapticSetting);
   }
+
+  if (wordCardUseAllShapesToggle) {
+    wordCardUseAllShapesToggle.addEventListener("change", (event) => {
+      updateWordCardUseAllShapes(event.currentTarget.checked);
+    });
+  }
+
+  if (wordCardRandomColorsToggle) {
+    wordCardRandomColorsToggle.addEventListener("change", (event) => {
+      updateWordCardRandomColors(event.currentTarget.checked);
+    });
+  }
+
+  wordCardShapeCheckboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", (event) => {
+      updateWordCardShapeSelection(event.currentTarget.dataset.wordCardShape, event.currentTarget.checked);
+    });
+  });
+
+  wordCardOutlineModeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      updateWordCardOutlineMode(button.dataset.outlineTheme, button.dataset.outlineMode);
+    });
+  });
 
   if (themeToggleBtn) {
     themeToggleBtn.addEventListener("click", toggleTheme);
@@ -6303,9 +6793,9 @@ function setupEvents() {
     pointerStartY = event.clientY;
     dragOffsetY = 0;
     dragVelocityY = 0;
-    wordCard.classList.remove("fly-up", "fly-down");
-    wordCard.style.transition = "transform 0.16s ease";
-    wordCard.style.transform = "";
+    wordCardMotion.classList.remove("fly-up", "fly-down");
+    wordCardMotion.style.transition = "transform 0.16s ease";
+    wordCardMotion.style.transform = "";
 
     if (wordCard.setPointerCapture) {
       wordCard.setPointerCapture(event.pointerId);
@@ -6325,9 +6815,9 @@ function setupEvents() {
       return;
     }
 
-    const springFactor = 0.8;
+    const springFactor = 0.95;
     const easedOffset = dragOffsetY * springFactor;
-    wordCard.style.transform = `translateY(${easedOffset}px)`;
+    wordCardMotion.style.transform = `translateY(${easedOffset}px)`;
   });
 
   wordCard.addEventListener("pointerup", (event) => {
@@ -6346,11 +6836,11 @@ function setupEvents() {
     const swipeHandled = handleSwipe(dragDistance);
 
     if (!swipeHandled) {
-      wordCard.style.transition = "transform 0.16s ease";
-      wordCard.style.transform = "";
+      wordCardMotion.style.transition = "transform 0.16s ease";
+      wordCardMotion.style.transform = "";
 
       setTimeout(() => {
-        wordCard.style.transition = "opacity 0.22s ease, background 0.22s ease, transform 0.22s ease";
+        wordCardMotion.style.transition = "opacity 0.22s ease, transform 0.22s ease";
       }, 160);
     }
   });
@@ -6374,9 +6864,9 @@ function setupEvents() {
       pointerStartY = touch.clientY;
       dragOffsetY = 0;
       dragVelocityY = 0;
-      wordCard.classList.remove("fly-up", "fly-down");
-      wordCard.style.transition = "transform 0.16s ease";
-      wordCard.style.transform = "";
+      wordCardMotion.classList.remove("fly-up", "fly-down");
+      wordCardMotion.style.transition = "transform 0.16s ease";
+      wordCardMotion.style.transform = "";
     }, { passive: true });
 
     wordCard.addEventListener("touchmove", function (event) {
@@ -6388,7 +6878,7 @@ function setupEvents() {
       const deltaY = touch.clientY - pointerStartY;
       dragVelocityY = deltaY - dragOffsetY;
       dragOffsetY = deltaY;
-      wordCard.style.transform = "translateY(" + (dragOffsetY * 0.8) + "px)";
+      wordCardMotion.style.transform = "translateY(" + (dragOffsetY * 0.95) + "px)";
     }, { passive: false });
 
     wordCard.addEventListener("touchend", function (event) {
@@ -6680,8 +7170,10 @@ function syncPhraseFilterButton() {
     return;
   }
 
-  phraseFilterBtn.classList.toggle("selected", excludePhrases);
-  phraseFilterBtn.setAttribute("aria-pressed", String(excludePhrases));
+  const phrasesEnabled = !excludePhrases;
+  phraseFilterBtn.classList.toggle("selected", phrasesEnabled);
+  phraseFilterBtn.setAttribute("aria-pressed", String(phrasesEnabled));
+  phraseFilterBtn.textContent = phrasesEnabled ? "Словосполучення: так" : "Словосполучення: ні";
 }
 
 function renderCategories() {
@@ -7001,21 +7493,6 @@ function getSelectedDifficultyLabel() {
   return selectedDifficulties.map((difficultyId) => getDifficultyName(difficultyId)).join(", ");
 }
 
-function getTaskKindLabel(kind = selectedCharadesKind) {
-  if (!isCharades()) {
-    return "";
-  }
-
-  const labels = {
-    noun: "Іменники",
-    action: "Дії",
-    phrase: "Фрази",
-    all: "Усе",
-  };
-
-  return labels[kind] || "";
-}
-
 function getCategorySummaryTitle() {
   if (selectedCategories.length === 0) {
     return "Категорії: Усі категорії";
@@ -7050,14 +7527,6 @@ function renderGameSummary() {
   title.textContent = label;
   gameCategoryName.appendChild(title);
 
-  const kindLabel = getTaskKindLabel();
-  if (kindLabel && isCharades()) {
-    const kindBadge = document.createElement("span");
-    kindBadge.className = "summary-kind-badge";
-    kindBadge.textContent = kindLabel;
-    gameCategoryName.appendChild(kindBadge);
-  }
-
   renderThemesPopover();
 }
 
@@ -7084,14 +7553,6 @@ function renderWordMeta(entry) {
   difficultyBadge.className = `word-meta-badge word-meta-difficulty word-meta-difficulty-${difficulty}`;
   difficultyBadge.textContent = (entry.difficultyName || getDifficultyName(difficulty)).toUpperCase();
   leftGroup.appendChild(difficultyBadge);
-
-  const kindLabel = getTaskKindLabel(entry.kind);
-  if (kindLabel && isCharades()) {
-    const kindBadge = document.createElement("span");
-    kindBadge.className = "word-meta-badge word-meta-kind";
-    kindBadge.textContent = kindLabel.toUpperCase();
-    leftGroup.appendChild(kindBadge);
-  }
 
   wordCategoryBadge.appendChild(leftGroup);
   wordCategoryBadge.appendChild(rightGroup);
@@ -7148,10 +7609,6 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
       }
 
       if (shouldExcludePhrases && isPhrase(text)) {
-        return false;
-      }
-
-      if (isCharades() && selectedCharadesKind !== "all" && kind !== selectedCharadesKind) {
         return false;
       }
 
@@ -7297,9 +7754,13 @@ function releaseWordCardPointer(pointerId) {
 }
 
 function resetWordCardPosition() {
-  wordCard.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe");
-  wordCard.style.transition = "opacity 0.22s ease, background 0.22s ease, transform 0.22s ease";
-  wordCard.style.transform = "";
+  if (!wordCardMotion) {
+    return;
+  }
+  wordCardMotion.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe");
+  wordCardMotion.style.transition = "opacity 0.22s ease, transform 0.22s ease";
+  wordCardMotion.style.transform = "";
+  wordCardMotion.style.opacity = "";
 }
 
 function resetSwipeState() {
@@ -7614,6 +8075,10 @@ function startSingleCardGame() {
   showNextWord();
 }
 
+function applyRandomWordCardShape() {
+  applyConfiguredWordCardAppearance();
+}
+
 function showNextWord() {
   if (deck.length === 0) {
     deck = shuffleArray([...getCurrentWordPool()]);
@@ -7624,6 +8089,9 @@ function showNextWord() {
   const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
   wordText.textContent = currentWord;
+  applyRandomWordCardShape();
+  updateWordCardMotionWidth();
+  window.requestAnimationFrame(updateWordCardMotionWidth);
   renderWordMeta(nextEntry);
 
   if (wordModeHint) {
@@ -7632,13 +8100,14 @@ function showNextWord() {
   }
 }
 
-function showSingleNextCard() {
+function showSingleNextCard(animationClass = "fly-up") {
   if (!isSingleCardMode() || isSwipeLocked) {
     return;
   }
 
+  const exitAnimationClass = animationClass === "fly-down" ? "fly-down" : "fly-up";
   isSwipeLocked = true;
-  animateWordCard("fly-up");
+  animateWordCard(exitAnimationClass);
   playGameSound("turnChange");
 
   clearWordActionTimeout();
@@ -7647,7 +8116,7 @@ function showSingleNextCard() {
     isSwipeLocked = false;
     wordActionTimeoutId = null;
     resetWordCardPosition();
-  }, 180);
+  }, WORD_CARD_FLIGHT_DURATION_MS);
 }
 
 function setRoundPaused(paused, options = {}) {
@@ -8513,7 +8982,7 @@ function handleSwipe(swipeDistance) {
 
   if (swipeDistance > minimumSwipeDistance) {
     if (isSingleCardMode()) {
-      showSingleNextCard();
+      showSingleNextCard("fly-up");
       return true;
     }
 
@@ -8521,7 +8990,7 @@ function handleSwipe(swipeDistance) {
     return true;
   } else if (swipeDistance < -minimumSwipeDistance) {
     if (isSingleCardMode()) {
-      showSingleNextCard();
+      showSingleNextCard("fly-down");
       return true;
     }
 
@@ -8579,19 +9048,28 @@ function handleRoundWordResult(result, animationClass) {
     isSwipeLocked = false;
     wordActionTimeoutId = null;
     resetWordCardPosition();
-  }, 220);
+  }, WORD_CARD_FLIGHT_DURATION_MS);
 }
 
 function animateWordCard(className) {
-  wordCard.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe");
-  wordCard.style.transition = "opacity 0.22s ease, background 0.22s ease, transform 0.22s ease";
-  wordCard.style.transform = "";
-  void wordCard.offsetWidth;
-  wordCard.classList.add(className);
+  if (!wordCardMotion) {
+    return;
+  }
 
-  setTimeout(() => {
-    wordCard.classList.remove(className);
-  }, 220);
+  const currentTransform = wordCardMotion.style.transform || "translateY(0px)";
+  const currentOpacity = wordCardMotion.style.opacity || "1";
+
+  wordCardMotion.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe");
+  wordCardMotion.style.transition = "none";
+  wordCardMotion.style.transform = currentTransform;
+  wordCardMotion.style.opacity = currentOpacity;
+  void wordCardMotion.offsetWidth;
+
+  wordCardMotion.classList.add(className);
+  void wordCardMotion.offsetWidth;
+  wordCardMotion.style.transition = `transform ${WORD_CARD_FLIGHT_DURATION_MS}ms cubic-bezier(0.16, 0.72, 0.20, 1), opacity 120ms ease ${WORD_CARD_FLIGHT_DURATION_MS - 120}ms`;
+  wordCardMotion.style.transform = "";
+  wordCardMotion.style.opacity = "";
 }
 
 function setupGameAudioUnlockEvents() {

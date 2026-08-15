@@ -13,17 +13,17 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.2-20260814" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.3-20260815" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.2-20260814" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.3-20260815" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
-    <span aria-hidden="true">⚙️</span>
+    <span aria-hidden="true">⚙︎</span>
   </button>
   <div id="appSettingsModal" class="app-settings-modal" hidden>
     <div class="app-settings-backdrop" data-app-settings-close></div>
@@ -54,8 +54,59 @@
           </span>
         </button>
       </div>
-      <p class="app-settings-note">Тут згодом з’являться інші налаштування гри.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.6.2</p>
+
+      <section class="app-settings-section">
+        <p class="app-settings-section-eyebrow">Alias та Крокодил</p>
+        <h3 class="app-settings-section-title">Картки слів</h3>
+
+        <label class="app-settings-toggle-row" for="wordCardUseAllShapesToggle">
+          <span>
+            <strong>Випадково з усіх форм</strong>
+            <small>Коли увімкнено — гра міксує весь набір форм.</small>
+          </span>
+          <input id="wordCardUseAllShapesToggle" type="checkbox" />
+        </label>
+
+        <div class="app-settings-checkbox-grid">
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="organic" /><span>М’яка шайба</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splat" /><span>Асиметрична клякса</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="pebble" /><span>Камінчик / жетон</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="sticker" /><span>Стікер-клякса</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="cloud" /><span>Хмаринка</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splash" /><span>Крапля-сплеш</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="gummy" /><span>Жуйка / мармелад</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="paper" /><span>Паперова пляма</span></label>
+        </div>
+
+        <label class="app-settings-toggle-row" for="wordCardRandomColorsToggle">
+          <span>
+            <strong>Рандомні кольори картки</strong>
+            <small>Якщо вимкнути — картки повернуться до базового кольору теми.</small>
+          </span>
+          <input id="wordCardRandomColorsToggle" type="checkbox" />
+        </label>
+
+        <div class="app-settings-outline-grid">
+          <div class="app-settings-outline-block">
+            <strong>Окантовка у світлій темі</strong>
+            <div class="app-settings-choice-row" role="group" aria-label="Окантовка у світлій темі">
+              <button class="app-settings-choice is-selected" type="button" data-outline-theme="light" data-outline-mode="off">Ніколи</button>
+              <button class="app-settings-choice" type="button" data-outline-theme="light" data-outline-mode="random">Випадково</button>
+              <button class="app-settings-choice" type="button" data-outline-theme="light" data-outline-mode="on">Завжди</button>
+            </div>
+          </div>
+          <div class="app-settings-outline-block">
+            <strong>Окантовка у темній темі</strong>
+            <div class="app-settings-choice-row" role="group" aria-label="Окантовка у темній темі">
+              <button class="app-settings-choice" type="button" data-outline-theme="dark" data-outline-mode="off">Ніколи</button>
+              <button class="app-settings-choice is-selected" type="button" data-outline-theme="dark" data-outline-mode="random">Випадково</button>
+              <button class="app-settings-choice" type="button" data-outline-theme="dark" data-outline-mode="on">Завжди</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <p class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
+      <p id="appSettingsVersion" class="app-settings-version">v0.6.3</p>
     </div>
   </div>
   <main class="app">
@@ -87,7 +138,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.2</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.3</p>
         </div>
       </div>
     </section>
@@ -113,9 +164,6 @@
                 </div>
                 <div class="mode-setup-header-actions">
                   <button id="settingsRulesBtn" class="setup-rules-btn mode-rules-button" type="button" aria-label="Показати правила">?</button>
-                  <button class="mode-settings-button" type="button" aria-label="Відкрити налаштування">
-                    <span aria-hidden="true">⚙️</span>
-                  </button>
                 </div>
               </div>
               <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
@@ -147,7 +195,7 @@
 
                   <div class="setting-subsection">
                     <div class="settings-chip-grid compact-chip-grid">
-                      <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Без словосполучень</button>
+                      <button id="phraseFilterBtn" class="phrase-filter-btn setting-chip" type="button" aria-pressed="false">Словосполучення: так</button>
                     </div>
                   </div>
                 </div>
@@ -225,9 +273,6 @@
             </div>
             <div class="mode-setup-header-actions">
               <button id="wordGuessSettingsRulesBtn" class="setup-rules-btn mode-rules-button" type="button" aria-label="Показати правила">?</button>
-              <button class="mode-settings-button" type="button" aria-label="Відкрити налаштування">
-                <span aria-hidden="true">⚙️</span>
-              </button>
             </div>
           </div>
           <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
@@ -372,9 +417,6 @@
               </div>
               <div class="mode-setup-header-actions">
                 <button id="whoAmISettingsRulesBtn" class="setup-rules-btn mode-rules-button" type="button" aria-label="Показати правила">?</button>
-                <button class="mode-settings-button" type="button" aria-label="Відкрити налаштування">
-                  <span aria-hidden="true">⚙️</span>
-                </button>
               </div>
             </div>
             <p class="mode-description">Один гравець не бачить свою роль, а інші відповідають на його запитання: так або ні.</p>
@@ -703,14 +745,32 @@
 
           <div id="teamScoreBoard" class="team-score-board timed-game-ui"></div>
 
-          <div id="wordCard" class="word-card" data-swipe-back-ignore>
+          <div id="wordCard" class="word-card word-card-shape-organic" data-swipe-back-ignore>
+            <div id="wordCardMotion" class="word-card-motion" aria-hidden="false">
+              <svg class="word-card-blob" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="wordCardSurfaceGradient" x1="0" y1="0" x2="0.82" y2="1">
+                  <stop class="word-card-blob-stop-top" offset="0%"></stop>
+                  <stop class="word-card-blob-stop-bottom" offset="100%"></stop>
+                </linearGradient>
+              </defs>
+                            <path class="word-card-blob-shape word-card-blob-organic" d="M90 270 C76 188 128 112 226 91 C326 69 391 104 478 93 C583 79 682 65 787 94 C895 124 937 199 923 287 C908 384 819 430 708 420 C610 411 558 447 447 436 C333 425 223 439 151 383 C108 349 85 311 90 270 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-splat" d="M96 246 C59 188 101 126 164 126 C171 67 264 49 317 96 C360 51 449 58 483 113 C533 70 620 72 660 121 C709 88 793 108 801 166 C870 147 930 196 914 258 C955 306 918 372 850 373 C823 431 732 449 681 405 C630 458 535 449 497 397 C447 444 354 441 318 385 C253 418 170 391 166 333 C109 338 71 297 96 246 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-pebble" d="M123 278 C111 183 182 111 302 82 C430 52 596 60 735 94 C856 124 918 190 907 278 C896 376 806 427 675 440 C536 454 376 443 257 408 C169 382 116 335 123 278 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-sticker" d="M91 250 C62 188 107 132 173 126 C187 72 274 59 325 103 C373 62 456 67 495 116 C548 72 637 79 677 127 C725 98 805 117 813 171 C880 162 932 208 919 267 C954 316 919 374 854 379 C821 431 739 449 688 410 C637 456 550 449 506 402 C456 442 367 439 326 389 C264 421 181 397 169 340 C112 343 72 301 91 250 Z"></path>
+<path class="word-card-blob-shape word-card-blob-cloud" d="M84 286 C66 244 79 194 113 168 C126 116 177 84 235 90 C267 53 326 39 387 60 C436 28 506 28 556 60 C613 34 685 42 728 85 C791 78 850 113 875 168 C924 184 954 232 948 284 C944 345 895 394 835 397 C799 435 736 449 680 432 C631 464 560 471 501 445 C446 472 373 470 315 441 C255 458 180 439 140 396 C103 386 74 358 68 321 C52 311 48 295 84 286 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-splash" d="M101 248 C63 193 99 131 162 127 C170 68 265 50 320 97 C361 49 447 56 484 112 C533 72 622 72 663 119 C714 88 796 111 806 165 C871 148 931 195 917 258 C957 309 917 376 852 376 C824 432 731 447 682 404 C628 460 538 450 501 397 C448 444 354 444 319 385 C256 421 170 396 166 337 C112 342 74 300 101 248 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-gummy" d="M164 174 C203 110 311 96 391 124 C460 148 539 148 611 122 C698 91 801 111 839 178 C873 236 863 321 823 371 C780 424 691 443 618 417 C544 393 465 394 390 418 C305 445 200 425 157 367 C117 313 121 229 164 174 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-paper" d="M117 171 C150 129 210 123 266 136 C321 96 408 94 470 124 C542 87 639 88 704 124 C770 101 848 115 886 170 C920 219 917 285 879 334 C855 379 799 394 732 385 C670 423 594 431 522 404 C454 435 372 434 308 399 C238 418 161 403 124 356 C90 312 87 228 117 171 Z"></path>
+              </svg>
+              <p id="wordText">Слово</p>
+            </div>
             <div id="wordCategoryBadge" class="word-category-badge" aria-label="Дані картки"></div>
             <div id="pauseOverlay" class="pause-overlay" hidden>
               <strong>Пауза</strong>
               <span>Натисніть “Грати”, щоб продовжити</span>
             </div>
             <span id="wordModeHint" class="word-mode-hint" hidden></span>
-            <p id="wordText">Слово</p>
             <span id="swipeHint" class="swipe-hint">Свайп вгору — вгадано, вниз — пропустити</span>
           </div>
 
@@ -831,6 +891,6 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="app.js?rev=0.6.2-20260814"></script>
+  <script src="app.js?rev=0.6.3-20260815"></script>
 </body>
 </html>
