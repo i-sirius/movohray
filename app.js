@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.4a";
+const DATA_VERSION = "0.6.4b";
 const DATA_BUILD = "2026-08-16";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
 const ASSET_REVISION = DATA_REVISION;
@@ -310,19 +310,19 @@ const WORD_GUESS_ACHIEVEMENTS = [
   { id: "logo-secret", reward: "👆", titleKey: "achievementLogoSecretTitle", descriptionKey: "achievementLogoSecretDescription", category: "secrets", mystery: true, hintKey: "achievementLogoSecretHint" },
   { id: "gear-goblin", reward: "⚙️", titleKey: "achievementGearGoblinTitle", descriptionKey: "achievementGearGoblinDescription", category: "secrets", mystery: true, hintKey: "achievementGearGoblinHint" },
   { id: "trophy-tapper", reward: "🏆", titleKey: "achievementTrophyTapperTitle", descriptionKey: "achievementTrophyTapperDescription", category: "secrets", mystery: true, hintKey: "achievementTrophyTapperHint" },
-  { id: "rules-lawyer", reward: "📜", titleKey: "achievementRulesLawyerTitle", descriptionKey: "achievementRulesLawyerDescription", category: "oddities", mystery: true, hintKey: "achievementRulesLawyerHint" },
-  { id: "language-pinball", reward: "🗣️", titleKey: "achievementLanguagePinballTitle", descriptionKey: "achievementLanguagePinballDescription", category: "oddities", mystery: true, hintKey: "achievementLanguagePinballHint" },
-  { id: "length-carousel", reward: "📏", titleKey: "achievementLengthCarouselTitle", descriptionKey: "achievementLengthCarouselDescription", category: "oddities", mystery: true, hintKey: "achievementLengthCarouselHint" },
-  { id: "attempt-carousel", reward: "🎰", titleKey: "achievementAttemptCarouselTitle", descriptionKey: "achievementAttemptCarouselDescription", category: "oddities", mystery: true, hintKey: "achievementAttemptCarouselHint" },
-  { id: "repeat-switcher", reward: "🔁", titleKey: "achievementRepeatSwitcherTitle", descriptionKey: "achievementRepeatSwitcherDescription", category: "oddities", mystery: true, hintKey: "achievementRepeatSwitcherHint" },
+  { id: "rules-lawyer", reward: "📜", titleKey: "achievementRulesLawyerTitle", descriptionKey: "achievementRulesLawyerDescription", category: "secrets", mystery: true, hintKey: "achievementRulesLawyerHint" },
+  { id: "language-pinball", reward: "🗣️", titleKey: "achievementLanguagePinballTitle", descriptionKey: "achievementLanguagePinballDescription", category: "secrets", mystery: true, hintKey: "achievementLanguagePinballHint" },
+  { id: "length-carousel", reward: "📏", titleKey: "achievementLengthCarouselTitle", descriptionKey: "achievementLengthCarouselDescription", category: "secrets", mystery: true, hintKey: "achievementLengthCarouselHint" },
+  { id: "attempt-carousel", reward: "🎰", titleKey: "achievementAttemptCarouselTitle", descriptionKey: "achievementAttemptCarouselDescription", category: "secrets", mystery: true, hintKey: "achievementAttemptCarouselHint" },
+  { id: "repeat-switcher", reward: "🔁", titleKey: "achievementRepeatSwitcherTitle", descriptionKey: "achievementRepeatSwitcherDescription", category: "secrets", mystery: true, hintKey: "achievementRepeatSwitcherHint" },
   { id: "museum-night-shift", reward: "🏺", titleKey: "achievementMuseumNightShiftTitle", descriptionKey: "achievementMuseumNightShiftDescription", category: "secrets", mystery: true, hintKey: "achievementMuseumNightShiftHint" },
   { id: "theme-chameleon", reward: "🦎", titleKey: "achievementThemeChameleonTitle", descriptionKey: "achievementThemeChameleonDescription", category: "secrets", mystery: true, hintKey: "achievementThemeChameleonHint" },
-  { id: "feedback-pioneer", reward: "📡", titleKey: "achievementFeedbackPioneerTitle", descriptionKey: "achievementFeedbackPioneerDescription", category: "oddities" },
-  { id: "bug-hunter", reward: "🐞", titleKey: "achievementBugHunterTitle", descriptionKey: "achievementBugHunterDescription", category: "oddities" },
-  { id: "word-fan", reward: "👍", titleKey: "achievementWordFanTitle", descriptionKey: "achievementWordFanDescription", category: "oddities" },
-  { id: "word-critic", reward: "👎", titleKey: "achievementWordCriticTitle", descriptionKey: "achievementWordCriticDescription", category: "oddities" },
-  { id: "balanced-critic", reward: "⚖️", titleKey: "achievementBalancedCriticTitle", descriptionKey: "achievementBalancedCriticDescription", category: "oddities", mystery: true, hintKey: "achievementBalancedCriticHint" },
-  { id: "share-trio", reward: "📤", titleKey: "achievementShareTrioTitle", descriptionKey: "achievementShareTrioDescription", category: "oddities" },
+  { id: "feedback-pioneer", reward: "📡", titleKey: "achievementFeedbackPioneerTitle", descriptionKey: "achievementFeedbackPioneerDescription", category: "secrets" },
+  { id: "bug-hunter", reward: "🐞", titleKey: "achievementBugHunterTitle", descriptionKey: "achievementBugHunterDescription", category: "secrets" },
+  { id: "word-fan", reward: "👍", titleKey: "achievementWordFanTitle", descriptionKey: "achievementWordFanDescription", category: "secrets" },
+  { id: "word-critic", reward: "👎", titleKey: "achievementWordCriticTitle", descriptionKey: "achievementWordCriticDescription", category: "secrets" },
+  { id: "balanced-critic", reward: "⚖️", titleKey: "achievementBalancedCriticTitle", descriptionKey: "achievementBalancedCriticDescription", category: "secrets", mystery: true, hintKey: "achievementBalancedCriticHint" },
+  { id: "share-trio", reward: "📤", titleKey: "achievementShareTrioTitle", descriptionKey: "achievementShareTrioDescription", category: "secrets" },
   { id: "empty-enter-seven", reward: "🫥", titleKey: "achievementEmptyEnterSevenTitle", descriptionKey: "achievementEmptyEnterSevenDescription", category: "chaos", mystery: true, hintKey: "achievementEmptyEnterSevenHint" },
   { id: "backspace-blizzard", reward: "❄️", titleKey: "achievementBackspaceBlizzardTitle", descriptionKey: "achievementBackspaceBlizzardDescription", category: "chaos", mystery: true, hintKey: "achievementBackspaceBlizzardHint" },
   { id: "invalid-tornado", reward: "🌪️", titleKey: "achievementInvalidTornadoTitle", descriptionKey: "achievementInvalidTornadoDescription", category: "chaos", mystery: true, hintKey: "achievementInvalidTornadoHint" },
@@ -340,8 +340,20 @@ const WORD_GUESS_ACHIEVEMENTS = [
   { id: "three-blackouts", reward: "🌚", titleKey: "achievementThreeBlackoutsTitle", descriptionKey: "achievementThreeBlackoutsDescription", category: "patterns", mystery: true, hintKey: "achievementThreeBlackoutsHint" },
   { id: "rainbow-collector", reward: "🎨", titleKey: "achievementRainbowCollectorTitle", descriptionKey: "achievementRainbowCollectorDescription", category: "patterns", mystery: true, hintKey: "achievementRainbowCollectorHint" },
   { id: "seven-chaos-win", reward: "🐙", titleKey: "achievementSevenChaosWinTitle", descriptionKey: "achievementSevenChaosWinDescription", category: "skill", mystery: true, hintKey: "achievementSevenChaosWinHint" },
+  { id: "ru-koshka", reward: "🐈", titleKey: "achievementRuKoshkaTitle", descriptionKey: "achievementRuKoshkaDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementRuKoshkaHint" },
+  { id: "ru-hochatsu", reward: "🫣", titleKey: "achievementRuHochatsuTitle", descriptionKey: "achievementRuHochatsuDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementRuHochatsuHint" },
+  { id: "uk-kishka", reward: "🐾", titleKey: "achievementUkKishkaTitle", descriptionKey: "achievementUkKishkaDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKishkaHint" },
+  { id: "uk-kapibar", reward: "🦫", titleKey: "achievementUkKapibarTitle", descriptionKey: "achievementUkKapibarDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKapibarHint" },
+  { id: "uk-khovrakh", reward: "🌾", titleKey: "achievementUkKhovrakhTitle", descriptionKey: "achievementUkKhovrakhDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKhovrakhHint" },
+  { id: "alias-first-point", reward: "💬", titleKey: "achievementAliasFirstPointTitle", descriptionKey: "achievementAliasFirstPointDescription", category: "milestones", game: "alias" },
+  { id: "alias-ten-round", reward: "🗯️", titleKey: "achievementAliasTenRoundTitle", descriptionKey: "achievementAliasTenRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-clean-five", reward: "🧼", titleKey: "achievementAliasCleanFiveTitle", descriptionKey: "achievementAliasCleanFiveDescription", category: "skill", game: "alias" },
+  { id: "charades-first-point", reward: "🎭", titleKey: "achievementCharadesFirstPointTitle", descriptionKey: "achievementCharadesFirstPointDescription", category: "milestones", game: "charades" },
+  { id: "charades-eight-round", reward: "🕺", titleKey: "achievementCharadesEightRoundTitle", descriptionKey: "achievementCharadesEightRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-clean-five", reward: "🤐", titleKey: "achievementCharadesCleanFiveTitle", descriptionKey: "achievementCharadesCleanFiveDescription", category: "skill", game: "charades" },
 ];
 const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
+  { id: "all", titleKey: "achievementCategoryAll" },
   { id: "skill", titleKey: "achievementCategorySkill" },
   { id: "patterns", titleKey: "achievementCategoryPatterns" },
   { id: "hints", titleKey: "achievementCategoryHints" },
@@ -350,8 +362,12 @@ const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
   { id: "streaks", titleKey: "achievementCategoryStreaks" },
   { id: "milestones", titleKey: "achievementCategoryMilestones" },
   { id: "secrets", titleKey: "achievementCategorySecrets" },
-  { id: "oddities", titleKey: "achievementCategoryOddities" },
 ];
+const MOVOHRAY_GLOBAL_ACHIEVEMENT_IDS = new Set([
+  "labs-easter", "hint-whisperer", "museum-visitor", "museum-curator", "day-night", "logo-secret",
+  "gear-goblin", "trophy-tapper", "rules-lawyer", "language-pinball", "length-carousel", "attempt-carousel",
+  "repeat-switcher", "museum-night-shift", "theme-chameleon", "feedback-pioneer", "bug-hunter"
+]);
 const WORD_GUESS_DEFAULT_MODE = "5";
 const WORD_GUESS_DEFAULT_LENGTH = 5;
 const WORD_GUESS_DEFAULT_ATTEMPTS = 5;
@@ -434,7 +450,18 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткі правила", shortRulesText: "Введи слово потрібної довжини. Зелений означає правильну позицію, жовтий — літера є у слові, рожевий — літери немає. Є три підказки.",
     labsEyebrow: "Labs · прихований тест", labsTitle: "Експериментальні функції", labsCopy: "Мова змінюється тільки у грі «Вгадай слово». Українська лишається основною; RU та EN — тестові словники.", labsLanguageAria: "Мова гри Вгадай слово",
     labsStatusUk: "Основний перевірений словник: українська.", labsStatusRu: "Русский: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.", labsStatusEn: "English: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.",
-    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Ще не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду",
+    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду", achievementDetailEyebrow: "Досягнення", achievementHowTo: "Як отримати", achievementBatchEyebrow: "Ще нагороди!", achievementBatchTitle: (count) => `Одразу ${count} досягнень!`, achievementBatchMore: (count) => `І ще +${count} — вони вже у колекції.`, achievementBatchDescription: "Не будемо засипати тебе сповіщеннями — решта вже чекає у колекції.", achievementBatchOpen: "Відкрити всі досягнення", achievementBatchSummaryAria: (count) => `Одночасно отримано ${count} досягнень. Відкрити колекцію.`, versionLabel: "Версія Мовограю", settingsOpen: "Відкрити налаштування", settingsTitle: "Налаштування", settingsClose: "Закрити налаштування", themeLight: "Світла тема", themeDark: "Темна тема", themeToLight: "Перемкнути на світле оформлення", themeToDark: "Перемкнути на темне оформлення", soundOn: "Звук увімкнено", soundOff: "Звук вимкнено", soundDisable: "Вимкнути звуки гри", soundEnable: "Увімкнути звуки гри", hapticOn: "Вібрація увімкнена", hapticOff: "Вібрація вимкнена", hapticDisable: "Легкі вібрації для ігрових дій", hapticEnable: "Увімкнути легку вібрацію", menuSubtitle: "Ігри зі словами для компанії.", menuModeNote: "Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?", menuRulesTitle: "Правила", menuRulesText1: "Обери режим, налаштуй гру і передай телефон тому, хто грає. У кожному режимі є короткі підказки на екрані.", menuRulesText2: "У компанії грайте в Alias або Крокодила, а «Вгадай слово» можна пройти самостійно за кілька хвилин.", hintsToolbarAria: "Підказки і правила", hintsClusterAria: "Три рівні підказок",
+    modeAliasTitle: "Поясни слово (Alias)", modeAliasDescription: "Пояснюй слово, не називаючи його.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показуй завдання жестами. Говорити не можна.", modeWhoAmITitle: "Хто я?", modeWhoAmIDescription: "Відгадуй персонажа за питаннями.",
+    setupGameSettings: "Налаштування гри", setupFormat: "Формат гри", setupSingle: "Одне слово", setupTimed: "На час", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Середньо", difficultyHard: "Складно", phrasesYes: "Словосполучення: так", phrasesNo: "Словосполучення: ні", setupRound: "Раунд", setupTime: "Час", setupAfterTime: "Після часу", setupFinishLast: "Довгадати", setupStop: "Стоп", setupGame: "Гра", setupTarget: "Ціль", setupTeams: "Команди", setupTeamNames: "Назви команд", teamNameBase: "Команда", allTopics: "Усі теми",
+    cardsEyebrow: "Alias та Крокодил", cardsTitle: "Картки слів", cardsAllShapesTitle: "Випадково з усіх форм", cardsAllShapesCopy: "Коли увімкнено — гра міксує весь набір форм.", cardsRandomColorsTitle: "Рандомні кольори картки", cardsRandomColorsCopy: "Якщо вимкнути — картки повернуться до базового кольору теми.", cardsOutlineLight: "Окантовка у світлій темі", cardsOutlineDark: "Окантовка у темній темі", choiceNever: "Ніколи", choiceRandom: "Випадково", choiceAlways: "Завжди", cardShapeOrganic: "М’яка шайба", cardShapeSplat: "Асиметрична клякса", cardShapePebble: "Камінчик / жетон", cardShapeSticker: "Стікер-клякса", cardShapeCloud: "Хмаринка", cardShapeSplash: "Крапля-сплеш", cardShapeGummy: "Жуйка / мармелад", cardShapePaper: "Паперова пляма", cardsNote: "Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.",
+    achievementCategoriesAria: "Категорії досягнень", achievementCategoryAll: "Всі", achievementSearchLabel: "Пошук досягнень", achievementSearchPlaceholder: "Знайти досягнення…", achievementSearchEmpty: "Нічого не знайдено. Спробуй інше слово або категорію.", achievementShowMore: "Показати ще", achievementGameWordGuess: "Вгадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
+    achievementRuKoshkaTitle: "Кішка з сусідньої локалі", achievementRuKoshkaDescription: "Десь поруч дуже знайомо нявкнуло російською.", achievementRuKoshkaHint: "У RU-режимі введи слово «КОШКА».",
+    achievementRuHochatsuTitle: "Хочацу — значить хочацу", achievementRuHochatsuDescription: "Словника це не переконало. Мовограй — трохи переконало.", achievementRuHochatsuHint: "У RU-режимі набери «ХОЧАЦУ» та натисни введення. Такого слова в словнику немає — це частина жарту.",
+    achievementUkKishkaTitle: "Кішка прийшла", achievementUkKishkaDescription: "Вона нічого не пояснюватиме. Вона просто тут.", achievementUkKishkaHint: "В українському режимі введи «КІШКА».",
+    achievementUkKapibarTitle: "Капібар? Капібар!", achievementUkKapibarDescription: "Граматика відійшла попити води біля басейну.", achievementUkKapibarHint: "В українському режимі набери «КАПІБАР» та натисни введення. Це локальний мем, а не словникова норма.",
+    achievementUkKhovrakhTitle: "Ховрах на зв’язку", achievementUkKhovrakhDescription: "Маленький степовий агент нарешті вийшов із нори.", achievementUkKhovrakhHint: "В українському режимі введи «ХОВРАХ».",
+    achievementAliasFirstPointTitle: "Є контакт!", achievementAliasFirstPointDescription: "Зарахуй хоча б одне вгадане слово в раунді Alias.", achievementAliasTenRoundTitle: "Рот працює швидше думок", achievementAliasTenRoundDescription: "Зарахуй 10 або більше слів за один раунд Alias.", achievementAliasCleanFiveTitle: "Без права на пас", achievementAliasCleanFiveDescription: "Зарахуй щонайменше 5 слів у раунді Alias без жодного пропуску.",
+    achievementCharadesFirstPointTitle: "Мова тіла", achievementCharadesFirstPointDescription: "Зарахуй хоча б одне вгадане завдання в Крокодилі.", achievementCharadesEightRoundTitle: "Пантоміма на турборежимі", achievementCharadesEightRoundDescription: "Зарахуй 8 або більше завдань за один раунд Крокодила.", achievementCharadesCleanFiveTitle: "Ні слова — і без пасів", achievementCharadesCleanFiveDescription: "Зарахуй щонайменше 5 завдань у Крокодилі без жодного пропуску.",
     achievementFirstWinTitle: "Перша перемога", achievementFirstWinDescription: "Здобудь свою першу перемогу у «Вгадай слово».",
     achievementFirstTryTitle: "З першої спроби", achievementFirstTryDescription: "Відгадай слово першою зарахованою спробою в одній партії.",
     achievementNoHintsTitle: "Чиста голова", achievementNoHintsDescription: "Виграй одну партію, не використавши жодної підказки.",
@@ -464,9 +491,9 @@ const WORD_GUESS_TEXT = {
     achievementThreeStreakTitle: "На вогні", achievementThreeStreakDescription: "Виграй 3 партії поспіль.",
     achievementTenGamesTitle: "Втягнувся", achievementTenGamesDescription: "Зіграй загалом 10 партій у «Вгадай слово».",
     achievementTwentyFiveGamesTitle: "Завсідник", achievementTwentyFiveGamesDescription: "Зіграй загалом 25 партій у «Вгадай слово».",
-    achievementMenuEyebrow: "Вгадай слово",
+    achievementMenuEyebrow: "Мовограй",
     achievementMenuTitle: "Досягнення",
-    achievementMenuCopy: "Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.",
+    achievementMenuCopy: "Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації в усіх іграх Мовограю.",
     achievementMenuOpen: "Відкрити досягнення",
     achievementCategoryOddities: "Дивацтва й Easter Eggs",
     achievementGearGoblinTitle: "Шестерня знає забагато",
@@ -660,7 +687,7 @@ const WORD_GUESS_TEXT = {
     achievementPhoenixDescription: "Навіть після серії відмов можна красиво злетіти.",
     achievementZeroToWordTitle: "З нуля в яблучко",
     achievementZeroToWordDescription: "Почни з повної темряви — і все одно знайди світло.",
-    achievementCategorySecrets: "Таємниці та Easter Eggs",
+    achievementCategorySecrets: "Секрети та Easter Eggs",
     achievementMysteryLabel: "Загадкова умова",
     achievementTapForHint: "Умова прихована",
     achievementHowTo: "Як відкрити",
@@ -875,7 +902,18 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткие правила", shortRulesText: "Введите слово выбранной длины. Зелёный — правильная позиция, жёлтый — буква есть в слове, розовый — буквы нет. Доступны три подсказки.",
     labsEyebrow: "Labs · скрытый тест", labsTitle: "Экспериментальные функции", labsCopy: "Язык меняется только в игре «Угадай слово». Украинский остаётся основным; RU и EN — тестовые словари.", labsLanguageAria: "Язык игры Угадай слово",
     labsStatusUk: "Основной проверенный словарь: украинский.", labsStatusRu: "Русский: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.", labsStatusEn: "English: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.",
-    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Ещё не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду",
+    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду", achievementDetailEyebrow: "Достижение", achievementHowTo: "Как получить", achievementBatchEyebrow: "Ещё награды!", achievementBatchTitle: (count) => `Сразу ${count} достижений!`, achievementBatchMore: (count) => `И ещё +${count} — они уже в коллекции.`, achievementBatchDescription: "Не будем засыпать тебя уведомлениями — остальные уже ждут в коллекции.", achievementBatchOpen: "Открыть все достижения", achievementBatchSummaryAria: (count) => `Одновременно получено ${count} достижений. Открыть коллекцию.`, versionLabel: "Версия Мовограя", settingsOpen: "Открыть настройки", settingsTitle: "Настройки", settingsClose: "Закрыть настройки", themeLight: "Светлая тема", themeDark: "Тёмная тема", themeToLight: "Переключить на светлое оформление", themeToDark: "Переключить на тёмное оформление", soundOn: "Звук включён", soundOff: "Звук выключен", soundDisable: "Выключить звуки игры", soundEnable: "Включить звуки игры", hapticOn: "Вибрация включена", hapticOff: "Вибрация выключена", hapticDisable: "Лёгкие вибрации для игровых действий", hapticEnable: "Включить лёгкую вибрацию", menuSubtitle: "Игры со словами для компании.", menuModeNote: "Режимы: Объясни слово, Покажи слово, Угадай слово и Кто я?", menuRulesTitle: "Правила", menuRulesText1: "Выбери режим, настрой игру и передай телефон тому, кто играет. В каждом режиме есть короткие подсказки на экране.", menuRulesText2: "В компании играйте в Alias или Крокодила, а «Угадай слово» можно пройти самостоятельно за несколько минут.", hintsToolbarAria: "Подсказки и правила", hintsClusterAria: "Три уровня подсказок",
+    modeAliasTitle: "Объясни слово (Alias)", modeAliasDescription: "Объясняй слово, не называя его.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показывай задания жестами. Говорить нельзя.", modeWhoAmITitle: "Кто я?", modeWhoAmIDescription: "Угадывай персонажа с помощью вопросов.",
+    setupGameSettings: "Настройки игры", setupFormat: "Формат игры", setupSingle: "Одно слово", setupTimed: "На время", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Средне", difficultyHard: "Сложно", phrasesYes: "Словосочетания: да", phrasesNo: "Словосочетания: нет", setupRound: "Раунд", setupTime: "Время", setupAfterTime: "После времени", setupFinishLast: "Доиграть слово", setupStop: "Стоп", setupGame: "Игра", setupTarget: "Цель", setupTeams: "Команды", setupTeamNames: "Названия команд", teamNameBase: "Команда", allTopics: "Все темы",
+    cardsEyebrow: "Alias и Крокодил", cardsTitle: "Карточки слов", cardsAllShapesTitle: "Случайно из всех форм", cardsAllShapesCopy: "Когда включено — игра смешивает весь набор форм.", cardsRandomColorsTitle: "Случайные цвета карточки", cardsRandomColorsCopy: "Если выключить — карточки вернутся к базовому цвету темы.", cardsOutlineLight: "Обводка в светлой теме", cardsOutlineDark: "Обводка в тёмной теме", choiceNever: "Никогда", choiceRandom: "Случайно", choiceAlways: "Всегда", cardShapeOrganic: "Мягкая шайба", cardShapeSplat: "Асимметричная клякса", cardShapePebble: "Камешек / жетон", cardShapeSticker: "Стикер-клякса", cardShapeCloud: "Облачко", cardShapeSplash: "Капля-сплэш", cardShapeGummy: "Жвачка / мармелад", cardShapePaper: "Бумажное пятно", cardsNote: "Новые формы, случайные цвета и обводка работают для больших карточек слов в Alias и Крокодиле.",
+    achievementCategoriesAria: "Категории достижений", achievementCategoryAll: "Все", achievementSearchLabel: "Поиск достижений", achievementSearchPlaceholder: "Найти достижение…", achievementSearchEmpty: "Ничего не найдено. Попробуй другое слово или категорию.", achievementShowMore: "Показать ещё", achievementGameWordGuess: "Угадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
+    achievementRuKoshkaTitle: "Кошка пришла", achievementRuKoshkaDescription: "Она ничего не объяснит. Она просто здесь.", achievementRuKoshkaHint: "В режиме RU введи «КОШКА».",
+    achievementRuHochatsuTitle: "Хочацу — значит Хотяцу", achievementRuHochatsuDescription: "Словарь не согласился. Мовограй немного согласился.", achievementRuHochatsuHint: "В режиме RU набери «ХОЧАЦУ» и нажми ввод. Такого слова в словаре нет — в этом и шутка.",
+    achievementUkKishkaTitle: "Кішка из соседней локали", achievementUkKishkaDescription: "Где-то рядом очень знакомо мяукнули по-украински.", achievementUkKishkaHint: "В украинском режиме введи «КІШКА».",
+    achievementUkKapibarTitle: "Капібар? Капібар!", achievementUkKapibarDescription: "Грамматика отошла попить воды у бассейна.", achievementUkKapibarHint: "В украинском режиме набери «КАПІБАР» и нажми ввод. Это локальный мем, а не словарная норма.",
+    achievementUkKhovrakhTitle: "Ховрах на связи", achievementUkKhovrakhDescription: "Маленький степной агент наконец вышел из норы.", achievementUkKhovrakhHint: "В украинском режиме введи «ХОВРАХ».",
+    achievementAliasFirstPointTitle: "Есть контакт!", achievementAliasFirstPointDescription: "Засчитай хотя бы одно угаданное слово за раунд Alias.", achievementAliasTenRoundTitle: "Рот быстрее мыслей", achievementAliasTenRoundDescription: "Засчитай 10 или больше слов за один раунд Alias.", achievementAliasCleanFiveTitle: "Без права на пас", achievementAliasCleanFiveDescription: "Засчитай минимум 5 слов за раунд Alias без единого пропуска.",
+    achievementCharadesFirstPointTitle: "Язык тела", achievementCharadesFirstPointDescription: "Засчитай хотя бы одно угаданное задание в Крокодиле.", achievementCharadesEightRoundTitle: "Пантомима на турборежиме", achievementCharadesEightRoundDescription: "Засчитай 8 или больше заданий за один раунд Крокодила.", achievementCharadesCleanFiveTitle: "Ни слова — и без пасов", achievementCharadesCleanFiveDescription: "Засчитай минимум 5 заданий в Крокодиле без единого пропуска.",
     achievementFirstWinTitle: "Первая победа", achievementFirstWinDescription: "Одержи свою первую победу в «Угадай слово».",
     achievementFirstTryTitle: "С первой попытки", achievementFirstTryDescription: "Угадай слово с первой зачтённой попытки в одной партии.",
     achievementNoHintsTitle: "Своя голова", achievementNoHintsDescription: "Выиграй одну партию, не используя ни одной подсказки.",
@@ -905,9 +943,9 @@ const WORD_GUESS_TEXT = {
     achievementThreeStreakTitle: "В огне", achievementThreeStreakDescription: "Выиграй 3 партии подряд.",
     achievementTenGamesTitle: "Втянулся", achievementTenGamesDescription: "Сыграй в сумме 10 партий в «Угадай слово».",
     achievementTwentyFiveGamesTitle: "Завсегдатай", achievementTwentyFiveGamesDescription: "Сыграй в сумме 25 партий в «Угадай слово».",
-    achievementMenuEyebrow: "Угадай слово",
+    achievementMenuEyebrow: "Мовограй",
     achievementMenuTitle: "Достижения",
-    achievementMenuCopy: "Собирай награды за мастерство, серии, эксперименты и забавные ситуации в игре.",
+    achievementMenuCopy: "Собирай награды за мастерство, серии, эксперименты и забавные ситуации во всех играх Мовограя.",
     achievementMenuOpen: "Открыть достижения",
     achievementCategoryOddities: "Странности и Easter Eggs",
     achievementGearGoblinTitle: "Шестерёнка знает слишком много",
@@ -1314,7 +1352,18 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Quick rules", shortRulesText: "Enter a word of the selected length. Green is the correct position, yellow means the letter exists elsewhere, pink means it is absent. Three hints are available.",
     labsEyebrow: "Labs · hidden test", labsTitle: "Experimental features", labsCopy: "The language changes only in Guess the word. Ukrainian remains the primary dictionary; RU and EN are experimental.", labsLanguageAria: "Guess the word language",
     labsStatusUk: "Primary verified dictionary: Ukrainian.", labsStatusRu: "Russian: experimental Labs mode. The dictionary is still being expanded and moderated.", labsStatusEn: "English: experimental Labs mode. The dictionary is still being expanded and moderated.",
-    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Not yet unlocked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement",
+    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Locked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement", achievementDetailEyebrow: "Achievement", achievementHowTo: "How to unlock", achievementBatchEyebrow: "More rewards!", achievementBatchTitle: (count) => `${count} achievements at once!`, achievementBatchMore: (count) => `And +${count} more — already in your collection.`, achievementBatchDescription: "We won't flood you with notifications — the rest are already waiting in your collection.", achievementBatchOpen: "Open all achievements", achievementBatchSummaryAria: (count) => `${count} achievements unlocked at once. Open the collection.`, versionLabel: "Movohray version", settingsOpen: "Open settings", settingsTitle: "Settings", settingsClose: "Close settings", themeLight: "Light theme", themeDark: "Dark theme", themeToLight: "Switch to light appearance", themeToDark: "Switch to dark appearance", soundOn: "Sound on", soundOff: "Sound off", soundDisable: "Turn game sounds off", soundEnable: "Turn game sounds on", hapticOn: "Haptics on", hapticOff: "Haptics off", hapticDisable: "Light haptics for game actions", hapticEnable: "Turn light haptics on", menuSubtitle: "Word games for friends and parties.", menuModeNote: "Modes: Explain a word, Charades, Guess the word, and Who am I?", menuRulesTitle: "Rules", menuRulesText1: "Choose a mode, set up the game, and hand the phone to the player. Each mode has short on-screen guidance.", menuRulesText2: "Play Alias or Charades with friends, while Guess the word can be played solo in a few minutes.", hintsToolbarAria: "Hints and rules", hintsClusterAria: "Three hint levels",
+    modeAliasTitle: "Explain a word (Alias)", modeAliasDescription: "Explain the word without saying it.", modeCharadesTitle: "Charades", modeCharadesDescription: "Act out the prompt using gestures. No talking.", modeWhoAmITitle: "Who am I?", modeWhoAmIDescription: "Guess the character by asking questions.",
+    setupGameSettings: "Game setup", setupFormat: "Game format", setupSingle: "One prompt", setupTimed: "Timed", setupWords: "Words", difficultyEasy: "Easy", difficultyMedium: "Medium", difficultyHard: "Hard", phrasesYes: "Phrases: on", phrasesNo: "Phrases: off", setupRound: "Round", setupTime: "Time", setupAfterTime: "When time is up", setupFinishLast: "Finish the prompt", setupStop: "Stop", setupGame: "Game", setupTarget: "Target", setupTeams: "Teams", setupTeamNames: "Team names", teamNameBase: "Team", allTopics: "All topics",
+    cardsEyebrow: "Alias & Charades", cardsTitle: "Word cards", cardsAllShapesTitle: "Random from all shapes", cardsAllShapesCopy: "When enabled, the game mixes the full set of card shapes.", cardsRandomColorsTitle: "Random card colors", cardsRandomColorsCopy: "Turn this off to use the theme's base card color.", cardsOutlineLight: "Outline in light theme", cardsOutlineDark: "Outline in dark theme", choiceNever: "Never", choiceRandom: "Random", choiceAlways: "Always", cardShapeOrganic: "Soft puck", cardShapeSplat: "Asymmetric blob", cardShapePebble: "Pebble / token", cardShapeSticker: "Blob sticker", cardShapeCloud: "Cloud", cardShapeSplash: "Splash drop", cardShapeGummy: "Gummy", cardShapePaper: "Paper blot", cardsNote: "New shapes, random colors, and outlines apply to the large word cards in Alias and Charades.",
+    achievementCategoriesAria: "Achievement categories", achievementCategoryAll: "All", achievementSearchLabel: "Search achievements", achievementSearchPlaceholder: "Find an achievement…", achievementSearchEmpty: "Nothing found. Try another word or category.", achievementShowMore: "Show more", achievementGameWordGuess: "Guess the word", achievementGameAlias: "Alias", achievementGameCharades: "Charades", achievementGameMovohray: "Movohray",
+    achievementRuKoshkaTitle: "The cat arrived", achievementRuKoshkaDescription: "It will explain nothing. It is simply here.", achievementRuKoshkaHint: "In RU mode, enter «КОШКА».",
+    achievementRuHochatsuTitle: "Hochatsu means Hochatsu", achievementRuHochatsuDescription: "The dictionary disagreed. Movohray disagreed a little less.", achievementRuHochatsuHint: "In RU mode, type «ХОЧАЦУ» and submit it. The word does not exist in the dictionary — that is the joke.",
+    achievementUkKishkaTitle: "A kitty from the next locale", achievementUkKishkaDescription: "Something nearby meowed very familiarly in Ukrainian.", achievementUkKishkaHint: "In Ukrainian mode, enter «КІШКА».",
+    achievementUkKapibarTitle: "Kapibar? Kapibar!", achievementUkKapibarDescription: "Grammar stepped away for a drink by the pool.", achievementUkKapibarHint: "In Ukrainian mode, type «КАПІБАР» and submit it. This is a local meme, not a dictionary norm.",
+    achievementUkKhovrakhTitle: "Ground squirrel online", achievementUkKhovrakhDescription: "The tiny steppe agent finally left the burrow.", achievementUkKhovrakhHint: "In Ukrainian mode, enter «ХОВРАХ».",
+    achievementAliasFirstPointTitle: "Contact!", achievementAliasFirstPointDescription: "Score at least one guessed word in an Alias round.", achievementAliasTenRoundTitle: "Mouth faster than thought", achievementAliasTenRoundDescription: "Score 10 or more words in a single Alias round.", achievementAliasCleanFiveTitle: "No passes allowed", achievementAliasCleanFiveDescription: "Score at least 5 words in an Alias round without a single skip.",
+    achievementCharadesFirstPointTitle: "Body language", achievementCharadesFirstPointDescription: "Score at least one guessed prompt in Charades.", achievementCharadesEightRoundTitle: "Turbo pantomime", achievementCharadesEightRoundDescription: "Score 8 or more prompts in a single Charades round.", achievementCharadesCleanFiveTitle: "No words, no passes", achievementCharadesCleanFiveDescription: "Score at least 5 prompts in Charades without a single skip.",
     achievementFirstWinTitle: "First victory", achievementFirstWinDescription: "Earn your first-ever win in Guess the word.",
     achievementFirstTryTitle: "First try", achievementFirstTryDescription: "Guess the word with the first counted attempt in a game.",
     achievementNoHintsTitle: "No training wheels", achievementNoHintsDescription: "Win one game without using any hints.",
@@ -1344,9 +1393,9 @@ const WORD_GUESS_TEXT = {
     achievementThreeStreakTitle: "On fire", achievementThreeStreakDescription: "Win 3 games in a row.",
     achievementTenGamesTitle: "Hooked", achievementTenGamesDescription: "Play 10 total Guess the word games.",
     achievementTwentyFiveGamesTitle: "Regular", achievementTwentyFiveGamesDescription: "Play 25 total Guess the word games.",
-    achievementMenuEyebrow: "Guess the word",
+    achievementMenuEyebrow: "Movohray",
     achievementMenuTitle: "Achievements",
-    achievementMenuCopy: "Collect awards for skill, streaks, experiments, and funny moments in the game.",
+    achievementMenuCopy: "Collect awards for skill, streaks, experiments, and funny moments across Movohray games.",
     achievementMenuOpen: "Open achievements",
     achievementCategoryOddities: "Oddities & Easter Eggs",
     achievementGearGoblinTitle: "The gear knows too much",
@@ -1746,6 +1795,11 @@ const WORD_GUESS_BLOCKED_TARGETS = new Set([
   "сухарик", "турбо", "ужгород", "хатинка", "хотин", "цукорок", "чужий",
   "щедро", "шмель",
 ]);
+const WORD_GUESS_BLOCKED_RU_TARGETS = new Set([
+  "двойка", "тройка", "четверка", "четвёрка", "пятерка", "пятёрка",
+  "шестерка", "шестёрка", "семерка", "семёрка", "восьмерка", "восьмёрка", "девятка", "десятка",
+]);
+
 const WORD_GUESS_DICTIONARY_LINKS = {
   uk: [
     { name: "СУМ", label: "словник «СУМ»", url: (word) => `https://sum.in.ua/s/${encodeURIComponent(word)}` },
@@ -1911,6 +1965,8 @@ let wordGuessHintNudgeTimeoutId = null;
 let wordGuessHintNudgeClearTimeoutId = null;
 let wordGuessAchievementsState = readWordGuessAchievementsState();
 let wordGuessAchievementToastQueue = [];
+let wordGuessAchievementToastPendingBatch = [];
+let wordGuessAchievementToastBatchTimeoutId = null;
 let wordGuessAchievementToastActive = false;
 let wordGuessGameStartedAtMs = 0;
 let wordGuessGameBackspaceCount = 0;
@@ -1923,6 +1979,8 @@ let wordGuessSecondHintUsedGuessCount = -1;
 let wordGuessThirdHintUsedGuessCount = -1;
 let wordGuessAchievementCardTapCounts = {};
 let wordGuessAchievementsModalCategoryId = WORD_GUESS_ACHIEVEMENT_CATEGORIES[0].id;
+let wordGuessAchievementsModalSearchQuery = "";
+let wordGuessAchievementsModalRenderLimit = 36;
 let wordGuessAchievementsModalDirty = true;
 let wordGuessAchievementsModalLocale = "";
 let wordGuessGameTypedLetters = new Set();
@@ -2081,6 +2139,29 @@ const wordCardShapeCheckboxes = Array.from(document.querySelectorAll("[data-word
 const wordCardOutlineModeButtons = Array.from(document.querySelectorAll("[data-outline-theme][data-outline-mode]"));
 const appTitle = document.getElementById("appTitle");
 const appSubtitle = document.getElementById("appSubtitle");
+const appSettingsTitle = document.getElementById("appSettingsTitle");
+const settingsScreenEyebrow = document.getElementById("settingsScreenEyebrow");
+const charadesFormatTitle = document.getElementById("charadesFormatTitle");
+const settingsWordsTitle = document.getElementById("settingsWordsTitle");
+const settingsRoundTitle = document.getElementById("settingsRoundTitle");
+const settingsTimeTitle = document.getElementById("settingsTimeTitle");
+const settingsAfterTimeTitle = document.getElementById("settingsAfterTimeTitle");
+const settingsGameTitle = document.getElementById("settingsGameTitle");
+const settingsTargetTitle = document.getElementById("settingsTargetTitle");
+const settingsTeamsTitle = document.getElementById("settingsTeamsTitle");
+const wordCardSettingsEyebrow = document.getElementById("wordCardSettingsEyebrow");
+const wordCardSettingsTitle = document.getElementById("wordCardSettingsTitle");
+const wordCardAllShapesTitle = document.getElementById("wordCardAllShapesTitle");
+const wordCardAllShapesText = document.getElementById("wordCardAllShapesText");
+const wordCardRandomColorsTitle = document.getElementById("wordCardRandomColorsTitle");
+const wordCardRandomColorsText = document.getElementById("wordCardRandomColorsText");
+const wordCardOutlineLightTitle = document.getElementById("wordCardOutlineLightTitle");
+const wordCardOutlineDarkTitle = document.getElementById("wordCardOutlineDarkTitle");
+const appSettingsNote = document.getElementById("appSettingsNote");
+const menuModeNote = document.getElementById("menuModeNote");
+const menuRulesTitle = document.getElementById("menuRulesTitle");
+const menuRulesText1 = document.getElementById("menuRulesText1");
+const menuRulesText2 = document.getElementById("menuRulesText2");
 const menuVersionInfo = document.getElementById("menuVersionInfo");
 const menuAchievementsBtn = document.getElementById("menuAchievementsBtn");
 const menuAchievementsTitle = document.getElementById("menuAchievementsTitle");
@@ -2092,8 +2173,21 @@ const achievementsModalEyebrow = document.getElementById("achievementsModalEyebr
 const achievementsModalTitle = document.getElementById("achievementsModalTitle");
 const achievementsModalProgress = document.getElementById("achievementsModalProgress");
 const achievementsModalCopy = document.getElementById("achievementsModalCopy");
+const achievementsModalSearchLabel = document.getElementById("achievementsModalSearchLabel");
+const achievementsModalSearchInput = document.getElementById("achievementsModalSearch");
 const achievementsModalCategoryNav = document.getElementById("achievementsModalCategoryNav");
 const achievementsModalGrid = document.getElementById("achievementsModalGrid");
+const achievementDetailModal = document.getElementById("achievementDetailModal");
+const achievementDetailCloseBtn = document.getElementById("achievementDetailCloseBtn");
+const achievementDetailReward = document.getElementById("achievementDetailReward");
+const achievementDetailEyebrow = document.getElementById("achievementDetailEyebrow");
+const achievementDetailGame = document.getElementById("achievementDetailGame");
+const achievementDetailTitle = document.getElementById("achievementDetailTitle");
+const achievementDetailDescription = document.getElementById("achievementDetailDescription");
+const achievementDetailHowTo = document.getElementById("achievementDetailHowTo");
+const achievementDetailHowToLabel = document.getElementById("achievementDetailHowToLabel");
+const achievementDetailHint = document.getElementById("achievementDetailHint");
+const achievementDetailStatus = document.getElementById("achievementDetailStatus");
 const settingsSupportEyebrow = document.getElementById("settingsSupportEyebrow");
 const settingsSupportTitle = document.getElementById("settingsSupportTitle");
 const settingsDeveloperReportBtn = document.getElementById("settingsDeveloperReportBtn");
@@ -3029,7 +3123,7 @@ function applyTheme(theme) {
 
   if (themeToggleBtn) {
     themeToggleBtn.setAttribute("aria-pressed", nextTheme === "dark" ? "true" : "false");
-    themeToggleBtn.setAttribute("aria-label", nextTheme === "dark" ? "Увімкнути світлу тему" : "Увімкнути темну тему");
+    themeToggleBtn.setAttribute("aria-label", nextTheme === "dark" ? getWordGuessText("themeToLight") : getWordGuessText("themeToDark"));
   }
 
   if (themeToggleIcon) {
@@ -3037,7 +3131,7 @@ function applyTheme(theme) {
   }
 
   if (themeToggleText) {
-    themeToggleText.textContent = nextTheme === "dark" ? "Світла тема" : "Темна тема";
+    themeToggleText.textContent = nextTheme === "dark" ? getWordGuessText("themeLight") : getWordGuessText("themeDark");
   }
 
   if (settingsThemeToggleBtn) {
@@ -3049,11 +3143,11 @@ function applyTheme(theme) {
   }
 
   if (settingsThemeTitle) {
-    settingsThemeTitle.textContent = nextTheme === "dark" ? "Світла тема" : "Темна тема";
+    settingsThemeTitle.textContent = nextTheme === "dark" ? getWordGuessText("themeLight") : getWordGuessText("themeDark");
   }
 
   if (settingsThemeText) {
-    settingsThemeText.textContent = nextTheme === "dark" ? "Перемкнути на світле оформлення" : "Перемкнути на темне оформлення";
+    settingsThemeText.textContent = nextTheme === "dark" ? getWordGuessText("themeToLight") : getWordGuessText("themeToDark");
   }
 
   if (wordCardSettings) {
@@ -3093,11 +3187,11 @@ function applySoundSetting(isEnabled) {
   }
 
   if (settingsSoundTitle) {
-    settingsSoundTitle.textContent = isGameSoundEnabled ? "Звук увімкнено" : "Звук вимкнено";
+    settingsSoundTitle.textContent = isGameSoundEnabled ? getWordGuessText("soundOn") : getWordGuessText("soundOff");
   }
 
   if (settingsSoundText) {
-    settingsSoundText.textContent = isGameSoundEnabled ? "Вимкнути звуки гри" : "Увімкнути звуки гри";
+    settingsSoundText.textContent = isGameSoundEnabled ? getWordGuessText("soundDisable") : getWordGuessText("soundEnable");
   }
 }
 
@@ -3133,13 +3227,13 @@ function applyHapticSetting(isEnabled) {
   }
 
   if (settingsHapticTitle) {
-    settingsHapticTitle.textContent = isHapticFeedbackEnabled ? "Вібрація увімкнена" : "Вібрація вимкнена";
+    settingsHapticTitle.textContent = isHapticFeedbackEnabled ? getWordGuessText("hapticOn") : getWordGuessText("hapticOff");
   }
 
   if (settingsHapticText) {
     settingsHapticText.textContent = isHapticFeedbackEnabled
-      ? "Легкі вібрації для вгадано/пропущено"
-      : "Увімкнути легку вібрацію";
+      ? getWordGuessText("hapticDisable")
+      : getWordGuessText("hapticEnable");
   }
 }
 
@@ -3817,6 +3911,24 @@ function getWordGuessAchievementDefinition(achievementId) {
   return WORD_GUESS_ACHIEVEMENTS.find(function (item) { return item.id === achievementId; }) || null;
 }
 
+function getWordGuessAchievementGameId(definition) {
+  if (!definition) return "wordguess";
+  if (definition.game) return definition.game;
+  if (MOVOHRAY_GLOBAL_ACHIEVEMENT_IDS.has(definition.id)) return "movohray";
+  return "wordguess";
+}
+
+function getWordGuessAchievementGameCopy(definition) {
+  const gameId = getWordGuessAchievementGameId(definition);
+  const games = {
+    wordguess: { icon: "🧩", label: getWordGuessText("achievementGameWordGuess") },
+    alias: { icon: "💬", label: getWordGuessText("achievementGameAlias") },
+    charades: { icon: "🎭", label: getWordGuessText("achievementGameCharades") },
+    movohray: { icon: "✨", label: getWordGuessText("achievementGameMovohray") },
+  };
+  return games[gameId] || games.wordguess;
+}
+
 function getWordGuessAchievementCopy(definition) {
   if (!definition) return { title: "", description: "", hint: "" };
   return {
@@ -3868,106 +3980,227 @@ function revealWordGuessAchievementHint(achievementId) {
   return true;
 }
 
+function openWordGuessAchievementDetail(achievementId) {
+  const definition = getWordGuessAchievementDefinition(achievementId);
+  if (!definition || !achievementDetailModal) return false;
+  const state = wordGuessAchievementsState.unlocked[achievementId] || null;
+  const copy = getWordGuessAchievementCopy(definition);
+  const revealed = Boolean(state || (wordGuessAchievementsState.revealedHints && wordGuessAchievementsState.revealedHints[achievementId]));
+  if (achievementDetailReward) achievementDetailReward.textContent = definition.reward;
+  if (achievementDetailEyebrow) achievementDetailEyebrow.textContent = getWordGuessText("achievementDetailEyebrow");
+  if (achievementDetailGame) { const gameCopy = getWordGuessAchievementGameCopy(definition); achievementDetailGame.textContent = `${gameCopy.icon} ${gameCopy.label}`; }
+  if (achievementDetailTitle) achievementDetailTitle.textContent = copy.title;
+  if (achievementDetailDescription) achievementDetailDescription.textContent = copy.description;
+  if (achievementDetailHowToLabel) achievementDetailHowToLabel.textContent = getWordGuessText("achievementHowTo");
+  if (achievementDetailHowTo) achievementDetailHowTo.hidden = Boolean(definition.mystery && !revealed);
+  if (achievementDetailHint) achievementDetailHint.textContent = copy.hint || copy.description;
+  if (achievementDetailStatus) {
+    achievementDetailStatus.textContent = state ? getWordGuessText("achievementUnlocked") : getWordGuessText("achievementLocked");
+    achievementDetailStatus.classList.toggle("is-unlocked", Boolean(state));
+  }
+  if (achievementDetailCloseBtn) achievementDetailCloseBtn.setAttribute("aria-label", getWordGuessText("close"));
+  achievementDetailModal.hidden = false;
+  document.body.classList.add("achievement-detail-open");
+  if (achievementDetailCloseBtn) achievementDetailCloseBtn.focus();
+  return true;
+}
+
+function closeWordGuessAchievementDetail() {
+  if (!achievementDetailModal) return;
+  achievementDetailModal.hidden = true;
+  document.body.classList.remove("achievement-detail-open");
+}
+
 function handleWordGuessAchievementCardTap(achievementId) {
   const definition = getWordGuessAchievementDefinition(achievementId);
-  if (!definition || !definition.mystery || !definition.hintKey) return;
-  if (wordGuessAchievementsState.revealedHints && wordGuessAchievementsState.revealedHints[achievementId]) return;
+  if (!definition) return;
+  const isUnlocked = Boolean(wordGuessAchievementsState.unlocked[achievementId]);
+  const isRevealed = Boolean(wordGuessAchievementsState.revealedHints && wordGuessAchievementsState.revealedHints[achievementId]);
+  if (!definition.mystery || !definition.hintKey || isUnlocked || isRevealed) {
+    openWordGuessAchievementDetail(achievementId);
+    return;
+  }
   const nextCount = (Number(wordGuessAchievementCardTapCounts[achievementId]) || 0) + 1;
   wordGuessAchievementCardTapCounts[achievementId] = nextCount;
   if (nextCount >= 3) {
     wordGuessAchievementCardTapCounts[achievementId] = 0;
     revealWordGuessAchievementHint(achievementId);
+    openWordGuessAchievementDetail(achievementId);
   }
+}
+
+function getWordGuessAchievementInterestScore(achievementId) {
+  const definition = getWordGuessAchievementDefinition(achievementId);
+  if (!definition) return 0;
+  let score = definition.mystery ? 10 : 0;
+  if (definition.category === "skill" || definition.category === "patterns") score += 4;
+  if (definition.category === "languages" || definition.category === "streaks") score += 3;
+  if (definition.category === "milestones") score += 1;
+  return score;
 }
 
 function queueWordGuessAchievementToast(achievementId) {
   if (!achievementId) return;
-  wordGuessAchievementToastQueue.push(achievementId);
+  wordGuessAchievementToastPendingBatch.push(achievementId);
+  if (wordGuessAchievementToastBatchTimeoutId) window.clearTimeout(wordGuessAchievementToastBatchTimeoutId);
+  wordGuessAchievementToastBatchTimeoutId = window.setTimeout(flushWordGuessAchievementToastBatch, 220);
+}
+
+function flushWordGuessAchievementToastBatch() {
+  wordGuessAchievementToastBatchTimeoutId = null;
+  if (wordGuessAchievementToastPendingBatch.length === 0) return;
+  const seen = {};
+  const ids = wordGuessAchievementToastPendingBatch.filter(function (id) {
+    if (seen[id]) return false;
+    seen[id] = true;
+    return true;
+  });
+  wordGuessAchievementToastPendingBatch = [];
+  ids.sort(function (a, b) { return getWordGuessAchievementInterestScore(b) - getWordGuessAchievementInterestScore(a); });
+  if (ids.length <= 2) {
+    ids.forEach(function (id) { wordGuessAchievementToastQueue.push({ type: "achievement", id: id }); });
+  } else {
+    const featuredCount = Math.min(4, ids.length);
+    wordGuessAchievementToastQueue.push({
+      type: "summary",
+      total: ids.length,
+      extra: Math.max(0, ids.length - featuredCount),
+      featuredIds: ids.slice(0, featuredCount),
+    });
+  }
   playNextWordGuessAchievementToast();
 }
 
 function playNextWordGuessAchievementToast() {
   if (wordGuessAchievementToastActive || wordGuessAchievementToastQueue.length === 0 || !document.body) return;
-  const achievementId = wordGuessAchievementToastQueue.shift();
-  const definition = getWordGuessAchievementDefinition(achievementId);
-  if (!definition) { playNextWordGuessAchievementToast(); return; }
+  const item = wordGuessAchievementToastQueue.shift();
+  const isSummary = item && item.type === "summary";
+  const achievementId = !isSummary && item ? item.id : "";
+  const definition = achievementId ? getWordGuessAchievementDefinition(achievementId) : null;
+  if (!isSummary && !definition) { playNextWordGuessAchievementToast(); return; }
   wordGuessAchievementToastActive = true;
-  const copy = getWordGuessAchievementCopy(definition);
+  const copy = definition ? getWordGuessAchievementCopy(definition) : null;
+  const summaryCount = isSummary ? Number(item.total || 0) : 0;
+  const summaryExtraCount = isSummary ? Number(item.extra || 0) : 0;
+  const summaryFeatured = isSummary && Array.isArray(item.featuredIds)
+    ? item.featuredIds.map(function (id) {
+        const featuredDefinition = getWordGuessAchievementDefinition(id);
+        if (!featuredDefinition) return null;
+        return { definition: featuredDefinition, copy: getWordGuessAchievementCopy(featuredDefinition) };
+      }).filter(Boolean)
+    : [];
   const toast = document.createElement("div");
-  toast.className = "word-guess-achievement-toast";
+  toast.className = `word-guess-achievement-toast${isSummary ? " is-summary is-celebration" : ""}`;
   toast.setAttribute("role", "button");
   toast.setAttribute("tabindex", "0");
   toast.setAttribute("aria-live", "polite");
-  toast.setAttribute("aria-label", `${getWordGuessText("achievementToast")} ${copy.title}. ${getWordGuessText("achievementToastOpen")}`);
-  toast.setAttribute("title", getWordGuessText("achievementToastOpen"));
+  toast.setAttribute("aria-label", isSummary ? formatWordGuessText("achievementBatchSummaryAria", summaryCount) : `${getWordGuessText("achievementToast")} ${copy.title}. ${getWordGuessText("achievementToastOpen")}`);
+  toast.setAttribute("title", isSummary ? getWordGuessText("achievementBatchOpen") : getWordGuessText("achievementToastOpen"));
 
   const reward = document.createElement("span");
   reward.className = "word-guess-achievement-toast-reward";
-  reward.textContent = definition.reward;
+  reward.textContent = isSummary && summaryFeatured.length ? summaryFeatured[0].definition.reward : (isSummary ? "🎁" : definition.reward);
   reward.setAttribute("aria-hidden", "true");
-
   const copyWrap = document.createElement("span");
   copyWrap.className = "word-guess-achievement-toast-copy";
-  appendTextElement(copyWrap, "small", "", getWordGuessText("achievementToast"));
-  appendTextElement(copyWrap, "strong", "", copy.title);
-  appendTextElement(copyWrap, "em", "", copy.description);
-  appendTextElement(copyWrap, "span", "word-guess-achievement-toast-open", getWordGuessText("achievementToastOpen"));
+  appendTextElement(copyWrap, "small", "", isSummary ? getWordGuessText("achievementBatchEyebrow") : getWordGuessText("achievementToast"));
+  appendTextElement(copyWrap, "strong", "", isSummary ? formatWordGuessText("achievementBatchTitle", summaryCount) : copy.title);
 
+  let summaryPage = null;
+  let summaryPageCounter = null;
+  let summaryPageTitle = null;
+  let summaryPageDescription = null;
+  let summaryPageIndex = 0;
+  let summaryPageIntervalId = null;
+  let summaryPageSwapTimeoutId = null;
+  let summaryPageCleanupTimeoutId = null;
+
+  if (isSummary && summaryFeatured.length) {
+    const featuredWrap = document.createElement("span");
+    featuredWrap.className = "word-guess-achievement-toast-featured is-book";
+    summaryPage = document.createElement("span");
+    summaryPage.className = "word-guess-achievement-toast-page";
+    summaryPageCounter = document.createElement("small");
+    summaryPageCounter.className = "word-guess-achievement-toast-page-counter";
+    summaryPageTitle = document.createElement("b");
+    summaryPageTitle.className = "word-guess-achievement-toast-page-title";
+    summaryPageDescription = document.createElement("span");
+    summaryPageDescription.className = "word-guess-achievement-toast-page-description";
+    summaryPage.appendChild(summaryPageCounter);
+    summaryPage.appendChild(summaryPageTitle);
+    summaryPage.appendChild(summaryPageDescription);
+    featuredWrap.appendChild(summaryPage);
+    copyWrap.appendChild(featuredWrap);
+    if (summaryExtraCount > 0) appendTextElement(copyWrap, "em", "word-guess-achievement-toast-more", formatWordGuessText("achievementBatchMore", summaryExtraCount));
+  } else {
+    appendTextElement(copyWrap, "em", "", isSummary ? getWordGuessText("achievementBatchDescription") : copy.description);
+  }
+  appendTextElement(copyWrap, "span", "word-guess-achievement-toast-open", isSummary ? getWordGuessText("achievementBatchOpen") : getWordGuessText("achievementToastOpen"));
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
   closeBtn.className = "word-guess-achievement-toast-close";
   closeBtn.setAttribute("aria-label", getWordGuessText("achievementDismiss"));
   closeBtn.textContent = "×";
+  toast.appendChild(reward); toast.appendChild(copyWrap); toast.appendChild(closeBtn); document.body.appendChild(toast);
 
-  toast.appendChild(reward);
-  toast.appendChild(copyWrap);
-  toast.appendChild(closeBtn);
-  document.body.appendChild(toast);
-  playGameSound("medal");
-  playHapticFeedback("achievement");
+  function applySummaryPage(index) {
+    if (!summaryPage || summaryFeatured.length === 0) return;
+    const pageData = summaryFeatured[index];
+    reward.textContent = pageData.definition.reward;
+    summaryPageCounter.textContent = `${index + 1}/${summaryFeatured.length}`;
+    summaryPageTitle.textContent = pageData.copy.title;
+    summaryPageDescription.textContent = pageData.copy.description;
+  }
+  function turnSummaryPage(nextIndex) {
+    if (!summaryPage || summaryFeatured.length < 2) return;
+    summaryPage.classList.remove("is-flipping");
+    void summaryPage.offsetWidth;
+    summaryPage.classList.add("is-flipping");
+    if (summaryPageSwapTimeoutId) window.clearTimeout(summaryPageSwapTimeoutId);
+    if (summaryPageCleanupTimeoutId) window.clearTimeout(summaryPageCleanupTimeoutId);
+    summaryPageSwapTimeoutId = window.setTimeout(function () {
+      summaryPageIndex = nextIndex;
+      applySummaryPage(summaryPageIndex);
+      playGameSound("reveal");
+    }, 300);
+    summaryPageCleanupTimeoutId = window.setTimeout(function () {
+      summaryPage.classList.remove("is-flipping");
+    }, 680);
+  }
 
-  let toastClosed = false;
-  let autoCloseTimeoutId = null;
+  if (isSummary && summaryFeatured.length) applySummaryPage(0);
+  playGameSound("medal"); playHapticFeedback("achievement");
+  if (isSummary && summaryFeatured.length > 1) {
+    summaryPageIntervalId = window.setInterval(function () {
+      turnSummaryPage((summaryPageIndex + 1) % summaryFeatured.length);
+    }, 2450);
+  }
+
+  let toastClosed = false; let autoCloseTimeoutId = null;
   function closeAchievementToast(onClosed) {
-    if (toastClosed) return;
-    toastClosed = true;
-    if (autoCloseTimeoutId) {
-      window.clearTimeout(autoCloseTimeoutId);
-      autoCloseTimeoutId = null;
-    }
+    if (toastClosed) return; toastClosed = true;
+    if (autoCloseTimeoutId) { window.clearTimeout(autoCloseTimeoutId); autoCloseTimeoutId = null; }
+    if (summaryPageIntervalId) { window.clearInterval(summaryPageIntervalId); summaryPageIntervalId = null; }
+    if (summaryPageSwapTimeoutId) { window.clearTimeout(summaryPageSwapTimeoutId); summaryPageSwapTimeoutId = null; }
+    if (summaryPageCleanupTimeoutId) { window.clearTimeout(summaryPageCleanupTimeoutId); summaryPageCleanupTimeoutId = null; }
     toast.classList.add("is-leaving");
     window.setTimeout(function () {
-      toast.remove();
-      wordGuessAchievementToastActive = false;
+      toast.remove(); wordGuessAchievementToastActive = false;
       if (typeof onClosed === "function") onClosed();
       playNextWordGuessAchievementToast();
     }, WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS);
   }
-
   function openAchievementFromToast() {
     closeAchievementToast(function () {
-      openWordGuessAchievementsModal({ focusAchievementId: achievementId, source: "toast" });
+      openWordGuessAchievementsModal(isSummary ? { source: "toast-summary" } : { focusAchievementId: achievementId, source: "toast" });
     });
   }
-
-  toast.addEventListener("click", function (event) {
-    if (event.target === closeBtn) return;
-    openAchievementFromToast();
-  });
-  toast.addEventListener("keydown", function (event) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openAchievementFromToast();
-    }
-  });
-  closeBtn.addEventListener("click", function (event) {
-    event.preventDefault();
-    event.stopPropagation();
-    closeAchievementToast();
-  });
-
+  toast.addEventListener("click", function (event) { if (event.target !== closeBtn) openAchievementFromToast(); });
+  toast.addEventListener("keydown", function (event) { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openAchievementFromToast(); } });
+  closeBtn.addEventListener("click", function (event) { event.preventDefault(); event.stopPropagation(); closeAchievementToast(); });
   window.requestAnimationFrame(function () { toast.classList.add("is-visible"); });
-  autoCloseTimeoutId = window.setTimeout(function () { closeAchievementToast(); }, WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS);
+  const summaryHoldMs = isSummary ? Math.min(15000, 6200 + (summaryFeatured.length * 2100)) : WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS;
+  autoCloseTimeoutId = window.setTimeout(function () { closeAchievementToast(); }, summaryHoldMs);
 }
 function unlockWordGuessAchievement(achievementId) {
   if (!achievementId || wordGuessAchievementsState.unlocked[achievementId]) return false;
@@ -3988,7 +4221,7 @@ function countWordGuessCorrectStatuses(guess) {
 }
 
 function hasRepeatedWordGuessLetters(word) {
-  const letters = Array.from(String(word || ""));
+  const letters = Array.from(normalizeWordGuessComparisonWord(String(word || "")));
   return new Set(letters).size < letters.length;
 }
 
@@ -4068,7 +4301,7 @@ function recordWordGuessAchievements(isWon) {
     return Array.isArray(guess.statuses) && guess.statuses.length === wordLength && guess.statuses.every(function (status) { return status === "absent"; });
   });
   const hasHotGuess = validGuesses.some(function (guess) {
-    return guess.word !== wordGuessTarget && Array.isArray(guess.statuses) && guess.statuses.length === wordLength && guess.statuses.every(function (status) { return status !== "absent"; });
+    return normalizeWordGuessComparisonWord(guess.word) !== normalizeWordGuessComparisonWord(wordGuessTarget) && Array.isArray(guess.statuses) && guess.statuses.length === wordLength && guess.statuses.every(function (status) { return status !== "absent"; });
   });
   const hasTrafficGuess = validGuesses.some(function (guess) {
     const statuses = new Set(guess.statuses || []);
@@ -4077,7 +4310,7 @@ function recordWordGuessAchievements(isWon) {
   const firstCorrect = firstGuess ? countWordGuessCorrectStatuses(firstGuess) : 0;
   const firstAllAbsent = Boolean(firstGuess && (firstGuess.statuses || []).length === wordLength && firstGuess.statuses.every(function (status) { return status === "absent"; }));
   const firstAllYellow = Boolean(firstGuess && (firstGuess.statuses || []).length === wordLength && firstGuess.statuses.every(function (status) { return status === "present"; }));
-  const hasOneAway = validGuesses.some(function (guess) { return guess.word !== wordGuessTarget && countWordGuessCorrectStatuses(guess) >= Math.max(1, wordLength - 1); });
+  const hasOneAway = validGuesses.some(function (guess) { return normalizeWordGuessComparisonWord(guess.word) !== normalizeWordGuessComparisonWord(wordGuessTarget) && countWordGuessCorrectStatuses(guess) >= Math.max(1, wordLength - 1); });
   const maxInvalidRow = getWordGuessMaxConsecutiveInvalidAttempts();
   const duplicateInvalid = hasDuplicateInvalidWordGuessAttempt();
   const yellowToGreen = hasWordGuessYellowToGreenTransition(validGuesses);
@@ -4185,7 +4418,7 @@ function recordWordGuessAchievements(isWon) {
   if (hasHotGuess) unlockWordGuessAchievement("hot-hand");
   if (hasTrafficGuess) unlockWordGuessAchievement("traffic-light");
   if (validGuesses.some(function (guess) { return (guess.statuses || []).filter(function (status) { return status === "present"; }).length >= 3; })) unlockWordGuessAchievement("yellow-storm");
-  if (validGuesses.some(function (guess) { return guess.word !== wordGuessTarget && countWordGuessCorrectStatuses(guess) >= 3; })) unlockWordGuessAchievement("green-wave");
+  if (validGuesses.some(function (guess) { return normalizeWordGuessComparisonWord(guess.word) !== normalizeWordGuessComparisonWord(wordGuessTarget) && countWordGuessCorrectStatuses(guess) >= 3; })) unlockWordGuessAchievement("green-wave");
   if (firstGuess && firstCorrect >= 1) unlockWordGuessAchievement("first-green");
   if (firstGuess && firstCorrect >= 2) unlockWordGuessAchievement("first-double-green");
   if (firstAllAbsent) unlockWordGuessAchievement("first-all-gray");
@@ -4270,26 +4503,58 @@ function getKnownWordGuessAchievementUnlockedCount() {
   return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
 }
 
-function renderWordGuessAchievementCards(container, grouped, categoryId) {
+function normalizeWordGuessAchievementSearchText(value) {
+  return String(value || "").toLocaleLowerCase().replace(/ё/g, "е").replace(/\s+/g, " ").trim();
+}
+
+function getWordGuessAchievementCategoryTitle(categoryId) {
+  const category = WORD_GUESS_ACHIEVEMENT_CATEGORIES.find(function (item) { return item.id === categoryId; });
+  return category ? getWordGuessText(category.titleKey) : "";
+}
+
+function getVisibleWordGuessAchievementDefinitions(categoryId, searchQuery) {
+  const normalizedQuery = normalizeWordGuessAchievementSearchText(searchQuery);
+  return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) {
+    if (categoryId && categoryId !== "all" && definition.category !== categoryId) return false;
+    if (!normalizedQuery) return true;
+    const copy = getWordGuessAchievementCopy(definition);
+    const gameCopy = getWordGuessAchievementGameCopy(definition);
+    const haystack = normalizeWordGuessAchievementSearchText([
+      copy.title, copy.description, copy.hint || "", gameCopy.label,
+      getWordGuessAchievementCategoryTitle(definition.category)
+    ].join(" "));
+    return haystack.indexOf(normalizedQuery) >= 0;
+  });
+}
+
+function renderWordGuessAchievementCards(container, grouped, categoryId, searchQuery) {
   if (!container) return;
   container.classList.toggle("is-grouped", Boolean(grouped));
   clearElement(container);
   const unlocked = wordGuessAchievementsState.unlocked || {};
   const revealedHints = wordGuessAchievementsState.revealedHints || {};
-  const visibleDefinitions = categoryId
-    ? WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === categoryId; })
-    : WORD_GUESS_ACHIEVEMENTS;
+  const visibleDefinitions = getVisibleWordGuessAchievementDefinitions(categoryId, searchQuery);
   const appendCard = function (target, definition) {
     const state = unlocked[definition.id] || null;
     const copy = getWordGuessAchievementCopy(definition);
     const isMystery = Boolean(definition.mystery && definition.hintKey);
-    const isHintRevealed = Boolean(revealedHints[definition.id]);
+    const isHintRevealed = Boolean(state || revealedHints[definition.id]);
     const card = document.createElement("article");
     card.className = `app-labs-achievement-card${state ? " is-unlocked" : " is-locked"}${isMystery ? " is-mystery" : ""}${isHintRevealed ? " is-hint-revealed" : ""}`;
     card.dataset.achievementId = definition.id;
     card.setAttribute("tabindex", "-1");
+    const rail = document.createElement("span"); rail.className = "app-labs-achievement-rail";
     const reward = document.createElement("span"); reward.className = "app-labs-achievement-reward"; reward.textContent = definition.reward; reward.setAttribute("aria-hidden", "true");
+    const statusMarker = document.createElement("span");
+    statusMarker.className = `app-labs-achievement-state${state ? " is-unlocked" : " is-locked"}`;
+    statusMarker.textContent = state ? "✓" : "🔒";
+    statusMarker.setAttribute("aria-label", state ? getWordGuessText("achievementUnlocked") : getWordGuessText("achievementLocked"));
+    statusMarker.setAttribute("title", state ? getWordGuessText("achievementUnlocked") : getWordGuessText("achievementLocked"));
+    rail.appendChild(reward);
+    rail.appendChild(statusMarker);
     const body = document.createElement("span"); body.className = "app-labs-achievement-body";
+    const gameCopy = getWordGuessAchievementGameCopy(definition);
+    appendTextElement(body, "span", "achievement-game-badge", `${gameCopy.icon} ${gameCopy.label}`);
     appendTextElement(body, "strong", "", copy.title);
     appendTextElement(body, "small", "", copy.description);
     if (isMystery) {
@@ -4297,30 +4562,43 @@ function renderWordGuessAchievementCards(container, grouped, categoryId) {
       mystery.className = "app-labs-achievement-mystery";
       mystery.textContent = isHintRevealed ? getWordGuessText("achievementHintRevealed") : getWordGuessText("achievementMysteryLabel");
       body.appendChild(mystery);
-      if (isHintRevealed && copy.hint) {
-        const detail = document.createElement("span");
-        detail.className = "app-labs-achievement-hint-detail";
-        const label = document.createElement("b"); label.textContent = `${getWordGuessText("achievementHowTo")}: `;
-        detail.appendChild(label);
-        detail.appendChild(document.createTextNode(copy.hint));
-        body.appendChild(detail);
-      }
-      card.setAttribute("role", "button");
-      card.setAttribute("tabindex", "0");
-      card.setAttribute("aria-label", `${copy.title}. ${copy.description}. ${isHintRevealed ? copy.hint : getWordGuessText("achievementMysteryLabel")}`);
-      card.addEventListener("click", function () { handleWordGuessAchievementCardTap(definition.id); });
-      card.addEventListener("keydown", function (event) {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          handleWordGuessAchievementCardTap(definition.id);
-        }
-      });
     }
-    appendTextElement(body, "em", "", state ? getWordGuessText("achievementUnlocked") : getWordGuessText("achievementLocked"));
-    card.appendChild(reward); card.appendChild(body); target.appendChild(card);
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", `${copy.title}. ${copy.description}. ${isMystery && !isHintRevealed ? getWordGuessText("achievementMysteryLabel") : (copy.hint || "")}`);
+    card.addEventListener("click", function () { handleWordGuessAchievementCardTap(definition.id); });
+    card.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleWordGuessAchievementCardTap(definition.id);
+      }
+    });
+    card.appendChild(rail); card.appendChild(body); target.appendChild(card);
   };
   if (!grouped) {
-    visibleDefinitions.forEach(function (definition) { appendCard(container, definition); });
+    if (visibleDefinitions.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "achievements-search-empty";
+      empty.textContent = getWordGuessText("achievementSearchEmpty");
+      container.appendChild(empty);
+      return;
+    }
+    const shouldLimit = categoryId === "all" && !normalizeWordGuessAchievementSearchText(searchQuery) && visibleDefinitions.length > wordGuessAchievementsModalRenderLimit;
+    const renderedDefinitions = shouldLimit ? visibleDefinitions.slice(0, wordGuessAchievementsModalRenderLimit) : visibleDefinitions;
+    renderedDefinitions.forEach(function (definition) { appendCard(container, definition); });
+    if (shouldLimit) {
+      const remaining = visibleDefinitions.length - renderedDefinitions.length;
+      const more = document.createElement("button");
+      more.type = "button";
+      more.className = "achievements-show-more";
+      more.textContent = `${getWordGuessText("achievementShowMore")} · +${remaining}`;
+      more.addEventListener("click", function () {
+        wordGuessAchievementsModalRenderLimit += 36;
+        wordGuessAchievementsModalDirty = true;
+        renderWordGuessAchievementsModalContent(true);
+      });
+      container.appendChild(more);
+    }
     return;
   }
   WORD_GUESS_ACHIEVEMENT_CATEGORIES.forEach(function (category) {
@@ -4342,7 +4620,9 @@ function renderWordGuessAchievementsModalCategoryNav() {
   clearElement(achievementsModalCategoryNav);
   const unlocked = wordGuessAchievementsState.unlocked || {};
   WORD_GUESS_ACHIEVEMENT_CATEGORIES.forEach(function (category) {
-    const definitions = WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === category.id; });
+    const definitions = category.id === "all"
+      ? WORD_GUESS_ACHIEVEMENTS
+      : WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === category.id; });
     if (definitions.length === 0) return;
     const unlockedInCategory = definitions.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
     const button = document.createElement("button");
@@ -4356,6 +4636,7 @@ function renderWordGuessAchievementsModalCategoryNav() {
     button.addEventListener("click", function () {
       if (wordGuessAchievementsModalCategoryId === category.id) return;
       wordGuessAchievementsModalCategoryId = category.id;
+      wordGuessAchievementsModalRenderLimit = 36;
       wordGuessAchievementsModalDirty = true;
       renderWordGuessAchievementsModalContent(true);
       if (achievementsModalGrid) achievementsModalGrid.scrollTop = 0;
@@ -4366,10 +4647,10 @@ function renderWordGuessAchievementsModalCategoryNav() {
 
 function renderWordGuessAchievementsModalContent(force) {
   if (!achievementsModalGrid) return;
-  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}`;
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
   if (!force && !wordGuessAchievementsModalDirty && wordGuessAchievementsModalLocale === localeKey) return;
   renderWordGuessAchievementsModalCategoryNav();
-  renderWordGuessAchievementCards(achievementsModalGrid, false, wordGuessAchievementsModalCategoryId);
+  renderWordGuessAchievementCards(achievementsModalGrid, false, wordGuessAchievementsModalCategoryId, wordGuessAchievementsModalSearchQuery);
   wordGuessAchievementsModalLocale = localeKey;
   wordGuessAchievementsModalDirty = false;
 }
@@ -4398,8 +4679,14 @@ function renderHiddenWordGuessAchievementsLab() {
   if (achievementsModalCopy) achievementsModalCopy.textContent = getWordGuessText("achievementMenuCopy");
   if (achievementsModalProgress) achievementsModalProgress.textContent = `${unlockedCount}/${total}`;
   if (achievementsModalCloseBtn) achievementsModalCloseBtn.setAttribute("aria-label", getWordGuessText("close"));
+  if (achievementsModalCategoryNav) achievementsModalCategoryNav.setAttribute("aria-label", getWordGuessText("achievementCategoriesAria"));
+  if (achievementsModalSearchLabel) achievementsModalSearchLabel.textContent = getWordGuessText("achievementSearchLabel");
+  if (achievementsModalSearchInput) {
+    achievementsModalSearchInput.placeholder = getWordGuessText("achievementSearchPlaceholder");
+    achievementsModalSearchInput.setAttribute("aria-label", getWordGuessText("achievementSearchLabel"));
+  }
 
-  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}`;
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
   if (wordGuessAchievementsModalLocale !== localeKey) wordGuessAchievementsModalDirty = true;
 }
 
@@ -4407,8 +4694,11 @@ function focusWordGuessAchievementInModal(achievementId) {
   if (!achievementId || !achievementsModalGrid) return false;
   const definition = getWordGuessAchievementDefinition(achievementId);
   if (!definition) return false;
-  if (wordGuessAchievementsModalCategoryId !== definition.category) {
+  if (wordGuessAchievementsModalCategoryId !== definition.category || wordGuessAchievementsModalSearchQuery) {
     wordGuessAchievementsModalCategoryId = definition.category;
+    wordGuessAchievementsModalSearchQuery = "";
+    wordGuessAchievementsModalRenderLimit = 36;
+    if (achievementsModalSearchInput) achievementsModalSearchInput.value = "";
     wordGuessAchievementsModalDirty = true;
   }
   renderWordGuessAchievementsModalContent();
@@ -4444,6 +4734,10 @@ function openWordGuessAchievementsModal(options) {
   if (focusAchievementId) {
     const definition = getWordGuessAchievementDefinition(focusAchievementId);
     if (definition) wordGuessAchievementsModalCategoryId = definition.category;
+    wordGuessAchievementsModalSearchQuery = "";
+    wordGuessAchievementsModalRenderLimit = 36;
+    if (achievementsModalSearchInput) achievementsModalSearchInput.value = "";
+    wordGuessAchievementsModalDirty = true;
   }
   wordGuessAchievementsState.achievementModalOpens = (Number(wordGuessAchievementsState.achievementModalOpens) || 0) + 1;
   persistWordGuessAchievementsState();
@@ -4696,6 +4990,54 @@ function getWordGuessLanguageDescription(wordLength, attempts, allowRepeats) {
 
 function applyWordGuessLanguageUi() {
   const text = WORD_GUESS_TEXT[selectedWordGuessLanguage] || WORD_GUESS_TEXT.uk;
+  if (appSettingsBtn) appSettingsBtn.setAttribute("aria-label", text.settingsOpen);
+  if (appSettingsVersion) appSettingsVersion.setAttribute("aria-label", text.versionLabel);
+  if (appSettingsCloseBtn) appSettingsCloseBtn.setAttribute("aria-label", text.settingsClose);
+  if (appSettingsTitle) appSettingsTitle.textContent = text.settingsTitle;
+  if (appSubtitle) appSubtitle.textContent = text.menuSubtitle;
+  if (menuModeNote) menuModeNote.textContent = text.menuModeNote;
+  if (menuRulesTitle) menuRulesTitle.textContent = text.menuRulesTitle;
+  if (menuRulesText1) menuRulesText1.textContent = text.menuRulesText1;
+  if (menuRulesText2) menuRulesText2.textContent = text.menuRulesText2;
+  if (settingsScreenEyebrow) settingsScreenEyebrow.textContent = text.setupGameSettings;
+  if (backToMenuBtn) backToMenuBtn.textContent = text.backMenu;
+  if (startRoundBtn) startRoundBtn.textContent = text.start;
+  if (settingsRulesBtn) settingsRulesBtn.setAttribute("aria-label", text.showRules);
+  if (charadesFormatTitle) charadesFormatTitle.textContent = text.setupFormat;
+  if (settingsWordsTitle) settingsWordsTitle.textContent = text.setupWords;
+  if (settingsRoundTitle) settingsRoundTitle.textContent = text.setupRound;
+  if (settingsTimeTitle) settingsTimeTitle.textContent = `${text.setupTime}:`;
+  if (settingsAfterTimeTitle) settingsAfterTimeTitle.textContent = `${text.setupAfterTime}:`;
+  if (settingsGameTitle) settingsGameTitle.textContent = text.setupGame;
+  if (settingsTargetTitle) settingsTargetTitle.textContent = `${text.setupTarget}:`;
+  if (settingsTeamsTitle) settingsTeamsTitle.textContent = `${text.setupTeams}:`;
+  charadesFormatButtons.forEach(function (button) { button.textContent = button.dataset.format === "single" ? text.setupSingle : text.setupTimed; });
+  difficultyButtons.forEach(function (button) { const key = `difficulty${String(button.dataset.difficulty || "").charAt(0).toUpperCase()}${String(button.dataset.difficulty || "").slice(1)}`; if (text[key]) button.textContent = text[key]; });
+  if (lastWordBtn) lastWordBtn.textContent = text.setupFinishLast;
+  if (lastWordStopBtn) lastWordStopBtn.textContent = text.setupStop;
+  if (wordCardSettingsEyebrow) wordCardSettingsEyebrow.textContent = text.cardsEyebrow;
+  if (wordCardSettingsTitle) wordCardSettingsTitle.textContent = text.cardsTitle;
+  if (wordCardAllShapesTitle) wordCardAllShapesTitle.textContent = text.cardsAllShapesTitle;
+  if (wordCardAllShapesText) wordCardAllShapesText.textContent = text.cardsAllShapesCopy;
+  if (wordCardRandomColorsTitle) wordCardRandomColorsTitle.textContent = text.cardsRandomColorsTitle;
+  if (wordCardRandomColorsText) wordCardRandomColorsText.textContent = text.cardsRandomColorsCopy;
+  if (wordCardOutlineLightTitle) wordCardOutlineLightTitle.textContent = text.cardsOutlineLight;
+  if (wordCardOutlineDarkTitle) wordCardOutlineDarkTitle.textContent = text.cardsOutlineDark;
+  if (appSettingsNote) appSettingsNote.textContent = text.cardsNote;
+  const shapeTextKeys = { organic: "cardShapeOrganic", splat: "cardShapeSplat", pebble: "cardShapePebble", sticker: "cardShapeSticker", cloud: "cardShapeCloud", splash: "cardShapeSplash", gummy: "cardShapeGummy", paper: "cardShapePaper" };
+  wordCardShapeCheckboxes.forEach(function (input) { const label = input.parentElement && input.parentElement.querySelector("span"); const key = shapeTextKeys[input.dataset.wordCardShape]; if (label && key && text[key]) label.textContent = text[key]; });
+  wordCardOutlineModeButtons.forEach(function (button) { const mode = button.dataset.outlineMode; button.textContent = mode === "off" ? text.choiceNever : (mode === "random" ? text.choiceRandom : text.choiceAlways); });
+  syncPhraseFilterButton();
+  syncTeamNamesVisibility(Boolean(teamNameFieldsWrap && !teamNameFieldsWrap.hidden));
+  renderModes();
+  if (settingsScreen && settingsScreen.classList.contains("active")) {
+    updateModeLabels();
+    renderCategories();
+  }
+  const hintToolbar = wordGuessGameScreen ? wordGuessGameScreen.querySelector(".word-guess-toolbar") : null;
+  const hintCluster = wordGuessGameScreen ? wordGuessGameScreen.querySelector(".word-guess-hints-cluster") : null;
+  if (hintToolbar) hintToolbar.setAttribute("aria-label", text.hintsToolbarAria);
+  if (hintCluster) hintCluster.setAttribute("aria-label", text.hintsClusterAria);
   if (wordGuessSettingsEyebrow) wordGuessSettingsEyebrow.textContent = text.soloMode;
   if (wordGuessSettingsTitle) wordGuessSettingsTitle.textContent = text.title;
   if (wordGuessGameTitle) wordGuessGameTitle.textContent = text.title;
@@ -4751,6 +5093,9 @@ function applyWordGuessLanguageUi() {
     button.textContent = String(button.dataset.wordGuessRepeats) === "true" ? text.repeatOn : text.repeatOff;
   });
   updateWordGuessHintState();
+  applyTheme(document.body.dataset.theme === "dark" ? "dark" : "light");
+  applySoundSetting(isGameSoundEnabled);
+  applyHapticSetting(isHapticFeedbackEnabled);
   renderDeveloperSupportUi();
 }
 
@@ -4810,16 +5155,22 @@ async function loadWordGuessDictionary() {
     const allowRepeats = selectedWordGuessAllowRepeats;
     const rawAnswerWords = Array.isArray(modeData.answers) ? modeData.answers : modeData.words || [];
     const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats)
-      .filter((word) => selectedWordGuessLanguage !== "uk" || !WORD_GUESS_BLOCKED_TARGETS.has(word));
+      .filter(function (word) {
+        if (selectedWordGuessLanguage === "uk") return !WORD_GUESS_BLOCKED_TARGETS.has(word);
+        if (selectedWordGuessLanguage === "ru") return !WORD_GUESS_BLOCKED_RU_TARGETS.has(word);
+        return true;
+      });
     const allowedGuessWords = normalizeWordGuessList(
       Array.isArray(modeData.allowedGuesses) ? modeData.allowedGuesses : answerWords,
       wordLength,
       allowRepeats,
     );
-    const allowedGuessSet = new Set(allowedGuessWords);
+    const allowedGuessSet = new Set(allowedGuessWords.map(function (word) {
+      return normalizeWordGuessComparisonWord(word);
+    }));
 
     answerWords.forEach((word) => {
-      allowedGuessSet.add(word);
+      allowedGuessSet.add(normalizeWordGuessComparisonWord(word));
     });
 
     if (answerWords.length === 0 || allowedGuessSet.size === 0) {
@@ -5154,16 +5505,28 @@ function normalizeWordGuessWord(word) {
   return String(word).trim().toLocaleLowerCase(getWordGuessLocale());
 }
 
+function normalizeWordGuessComparisonWord(word) {
+  const normalized = normalizeWordGuessWord(word);
+  return selectedWordGuessLanguage === "ru" ? normalized.replace(/ё/g, "е") : normalized;
+}
+
+function getWordGuessEquivalentKeyboardLetters(letter) {
+  if (selectedWordGuessLanguage === "ru" && (letter === "е" || letter === "ё")) return ["е", "ё"];
+  return [letter];
+}
+
 function isValidWordGuessWord(word, length = 5, allowRepeats = false) {
   const letters = Array.from(word);
+  const comparisonLetters = Array.from(normalizeWordGuessComparisonWord(word));
   const allowedLetters = getWordGuessLetters();
   return letters.length === length
     && letters.every((letter) => allowedLetters.includes(letter))
-    && (allowRepeats || new Set(letters).size === letters.length);
+    && (allowRepeats || new Set(comparisonLetters).size === comparisonLetters.length);
 }
 
 function getWordGuessValidationMessage(word, length = 5, allowRepeats = false) {
   const letters = Array.from(word);
+  const comparisonLetters = Array.from(normalizeWordGuessComparisonWord(word));
   const allowedLetters = getWordGuessLetters();
 
   if (letters.length !== length) {
@@ -5176,7 +5539,7 @@ function getWordGuessValidationMessage(word, length = 5, allowRepeats = false) {
     return getWordGuessText("onlyLetters");
   }
 
-  if (!allowRepeats && new Set(letters).size !== letters.length) {
+  if (!allowRepeats && new Set(comparisonLetters).size !== comparisonLetters.length) {
     return getWordGuessText("noRepeats");
   }
 
@@ -5821,12 +6184,27 @@ function playWordGuessInvalidReaction() {
   window.setTimeout(() => bubble.remove(), 2100);
 }
 
+function checkWordGuessMemeAchievement(guess) {
+  const word = normalizeWordGuessWord(guess);
+  if (selectedWordGuessLanguage === "ru") {
+    if (word === "кошка") unlockWordGuessAchievement("ru-koshka");
+    if (word === "хочацу") unlockWordGuessAchievement("ru-hochatsu");
+    return;
+  }
+  if (selectedWordGuessLanguage === "uk") {
+    if (word === "кішка") unlockWordGuessAchievement("uk-kishka");
+    if (word === "капібар") unlockWordGuessAchievement("uk-kapibar");
+    if (word === "ховрах") unlockWordGuessAchievement("uk-khovrakh");
+  }
+}
+
 function submitWordGuess() {
   if (wordGuessFinished || wordGuessInputLocked || !isScreenActive(wordGuessGameScreen)) {
     return;
   }
   const wordLength = getWordGuessLength();
   const guess = normalizeWordGuessWord(wordGuessCurrentGuess);
+  checkWordGuessMemeAchievement(guess);
   const guessLettersForOddities = Array.from(guess);
   if (guessLettersForOddities.length === wordLength) {
     const vowelsForOddities = getWordGuessVowelSet();
@@ -5851,7 +6229,7 @@ function submitWordGuess() {
     return;
   }
 
-  if (!wordGuessAllowedGuesses.has(guess)) {
+  if (!wordGuessAllowedGuesses.has(normalizeWordGuessComparisonWord(guess))) {
     playGameSound("wrong");
     addWordGuessAttemptLog(guess, "invalid", [], getWordGuessText("notInDictionary"));
     if (wordGuessAttemptLog.filter(function (attempt) { return attempt.status === "invalid"; }).length >= 10) unlockWordGuessAchievement("invalid-tornado");
@@ -5882,7 +6260,7 @@ function submitWordGuess() {
   acceptedGuess.keyboardRevealLetters = updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
   setWordGuessMessage("");
-  const isWon = guess === wordGuessTarget;
+  const isWon = normalizeWordGuessComparisonWord(guess) === normalizeWordGuessComparisonWord(wordGuessTarget);
   const isLost = !isWon && wordGuessGuesses.length >= getWordGuessAttempts();
   const rowIndex = wordGuessGuesses.length - 1;
   revealWordGuessAcceptedRow(rowIndex, acceptedGuess, function () {
@@ -5894,8 +6272,8 @@ function submitWordGuess() {
 }
 
 function evaluateWordGuess(guess, target) {
-  const guessLetters = Array.from(guess);
-  const targetLetters = Array.from(target);
+  const guessLetters = Array.from(normalizeWordGuessComparisonWord(guess));
+  const targetLetters = Array.from(normalizeWordGuessComparisonWord(target));
   const statuses = Array(guessLetters.length).fill("absent");
   const remainingLetters = {};
 
@@ -5928,18 +6306,17 @@ function evaluateWordGuess(guess, target) {
 function updateWordGuessKeyboardStatuses(guess, statuses) {
   const changedLetters = [];
 
-  Array.from(guess).forEach((letter, index) => {
-    const currentStatus = wordGuessKeyStatuses[letter];
+  Array.from(guess).forEach(function (letter, index) {
     const nextStatus = statuses[index];
-    const currentPriority = WORD_GUESS_STATUS_PRIORITY[currentStatus] || 0;
-    const nextPriority = WORD_GUESS_STATUS_PRIORITY[nextStatus] || 0;
-
-    if (nextPriority > currentPriority) {
-      wordGuessKeyStatuses[letter] = nextStatus;
-      if (!changedLetters.includes(letter)) {
-        changedLetters.push(letter);
+    getWordGuessEquivalentKeyboardLetters(letter).forEach(function (keyboardLetter) {
+      const currentStatus = wordGuessKeyStatuses[keyboardLetter];
+      const currentPriority = WORD_GUESS_STATUS_PRIORITY[currentStatus] || 0;
+      const nextPriority = WORD_GUESS_STATUS_PRIORITY[nextStatus] || 0;
+      if (nextPriority > currentPriority) {
+        wordGuessKeyStatuses[keyboardLetter] = nextStatus;
+        if (!changedLetters.includes(keyboardLetter)) changedLetters.push(keyboardLetter);
       }
-    }
+    });
   });
 
   return changedLetters;
@@ -5971,7 +6348,10 @@ function getWordGuessShareGrid() {
 }
 
 function buildWordGuessShareText() {
-  const isWon = wordGuessGuesses.some((guess) => guess.word === wordGuessTarget || guess === wordGuessTarget);
+  const isWon = wordGuessGuesses.some(function (guess) {
+    const guessedWord = guess && typeof guess === "object" ? guess.word : guess;
+    return normalizeWordGuessComparisonWord(guessedWord || "") === normalizeWordGuessComparisonWord(wordGuessTarget);
+  });
   const wordLength = getWordGuessLength();
   const attemptsLimit = getWordGuessAttempts();
   const validAttempts = wordGuessGuesses.length;
@@ -6122,7 +6502,8 @@ function createWordGuessShareImageBlob() {
       context.fillText(getWordGuessText("title"), width / 2, 220);
 
       const isWon = wordGuessGuesses.some(function (guess) {
-        return guess.word === wordGuessTarget || guess === wordGuessTarget;
+        const guessedWord = guess && typeof guess === "object" ? guess.word : guess;
+        return normalizeWordGuessComparisonWord(guessedWord || "") === normalizeWordGuessComparisonWord(wordGuessTarget);
       });
       const validAttempts = wordGuessGuesses.length;
       const attemptsLimit = getWordGuessAttempts();
@@ -9062,6 +9443,7 @@ function hasOpenAppOverlay() {
     || (whoAmIPlayersModal && !whoAmIPlayersModal.hidden)
     || (setupRulesModal && !setupRulesModal.hidden)
     || (wordGuessInfoModal && !wordGuessInfoModal.hidden)
+    || (achievementDetailModal && !achievementDetailModal.hidden)
     || (achievementsModal && !achievementsModal.hidden)
     || (appSettingsModal && !appSettingsModal.hidden)
     || whoAmIActiveSpoilerButton
@@ -9109,6 +9491,11 @@ function closeTopAppOverlay() {
 
   if (wordGuessInfoModal && !wordGuessInfoModal.hidden) {
     closeWordGuessInfoModal();
+    return true;
+  }
+
+  if (achievementDetailModal && !achievementDetailModal.hidden) {
+    closeWordGuessAchievementDetail();
     return true;
   }
 
@@ -9590,6 +9977,21 @@ function setupEvents() {
   }
   if (achievementsModalCloseBtn) {
     achievementsModalCloseBtn.addEventListener("click", closeWordGuessAchievementsModal);
+  }
+  if (achievementDetailCloseBtn) achievementDetailCloseBtn.addEventListener("click", closeWordGuessAchievementDetail);
+  if (achievementDetailModal) {
+    achievementDetailModal.addEventListener("click", function (event) {
+      if (event.target && event.target.hasAttribute("data-achievement-detail-close")) closeWordGuessAchievementDetail();
+    });
+  }
+  if (achievementsModalSearchInput) {
+    achievementsModalSearchInput.addEventListener("input", function () {
+      wordGuessAchievementsModalSearchQuery = achievementsModalSearchInput.value || "";
+      wordGuessAchievementsModalRenderLimit = 36;
+      wordGuessAchievementsModalDirty = true;
+      renderWordGuessAchievementsModalContent(true);
+      if (achievementsModalGrid) achievementsModalGrid.scrollTop = 0;
+    });
   }
   if (achievementsModal) {
     achievementsModal.addEventListener("click", function (event) {
@@ -10471,8 +10873,15 @@ function renderModes() {
       iconWrap.insertBefore(icon, iconFallback);
     }
     button.appendChild(iconWrap);
-    const renderedTitle = mode.id === "wordguess" ? getWordGuessText("title") : mode.title;
-    const renderedDescription = mode.id === "wordguess" ? getWordGuessText("menuDescription") : mode.description;
+    const modeLocaleKeys = {
+      explain: ["modeAliasTitle", "modeAliasDescription"],
+      charades: ["modeCharadesTitle", "modeCharadesDescription"],
+      wordguess: ["title", "menuDescription"],
+      whoami: ["modeWhoAmITitle", "modeWhoAmIDescription"],
+    };
+    const localeKeys = modeLocaleKeys[mode.id];
+    const renderedTitle = localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
+    const renderedDescription = localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
     appendTextElement(button, "strong", "", renderedTitle);
     appendTextElement(button, "span", "mode-card-description", renderedDescription);
 
@@ -10559,11 +10968,20 @@ function updateModeLabels() {
   const isSingleMode = isSingleCardMode();
   document.body.dataset.mode = mode.id;
   document.body.classList.toggle("single-card-mode", isSingleMode);
-  settingsModeTitle.textContent = mode.title;
+  const modeLocaleKeys = {
+    explain: ["modeAliasTitle", "modeAliasDescription"],
+    charades: ["modeCharadesTitle", "modeCharadesDescription"],
+    wordguess: ["title", "menuDescription"],
+    whoami: ["modeWhoAmITitle", "modeWhoAmIDescription"],
+  };
+  const localeKeys = modeLocaleKeys[mode.id];
+  const localizedModeTitle = localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
+  const localizedModeDescription = localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
+  settingsModeTitle.textContent = localizedModeTitle;
   if (settingsModeDescription) {
-    settingsModeDescription.textContent = mode.description;
+    settingsModeDescription.textContent = localizedModeDescription;
   }
-  gameModeTitle.textContent = mode.title;
+  gameModeTitle.textContent = localizedModeTitle;
   if (lastWordSection) {
     lastWordSection.hidden = isCharadesMode;
   }
@@ -10619,7 +11037,7 @@ function syncTeamNamesVisibility(isExpanded) {
 
   teamNamesToggleBtn.classList.toggle("selected", isExpanded);
   teamNamesToggleBtn.setAttribute("aria-expanded", String(isExpanded));
-  teamNamesToggleBtn.textContent = isExpanded ? "Назви команд ▴" : "Назви команд ▾";
+  teamNamesToggleBtn.textContent = isExpanded ? `${getWordGuessText("setupTeamNames")} ▴` : `${getWordGuessText("setupTeamNames")} ▾`;
   teamNameFieldsWrap.hidden = !isExpanded;
 }
 
@@ -10653,7 +11071,7 @@ function syncPhraseFilterButton() {
   const phrasesEnabled = !excludePhrases;
   phraseFilterBtn.classList.toggle("selected", phrasesEnabled);
   phraseFilterBtn.setAttribute("aria-pressed", String(phrasesEnabled));
-  phraseFilterBtn.textContent = phrasesEnabled ? "Словосполучення: так" : "Словосполучення: ні";
+  phraseFilterBtn.textContent = phrasesEnabled ? getWordGuessText("phrasesYes") : getWordGuessText("phrasesNo");
 }
 
 function renderCategories() {
@@ -10667,7 +11085,7 @@ function renderCategories() {
   const allButton = document.createElement("button");
   allButton.className = "category-btn all-categories-btn";
   allButton.type = "button";
-  allButton.textContent = "Усі теми";
+  allButton.textContent = getWordGuessText("allTopics");
 
   if (selectedCategories.length === 0) {
     allButton.classList.add("selected");
@@ -11733,7 +12151,7 @@ function resetTeamScores() {
 }
 
 function getDefaultTeamName(index) {
-  return `Команда ${index + 1}`;
+  return `${getWordGuessText("teamNameBase")} ${index + 1}`;
 }
 
 function syncTeamNamesForCount() {
@@ -12265,12 +12683,29 @@ function haveActiveTeamsCompletedSameRound() {
   return activeRounds.every((roundCount) => roundCount === activeRounds[0]);
 }
 
+function recordPartyModeAchievements(pointsEarned, skippedCount) {
+  const points = Math.max(0, Number(pointsEarned) || 0);
+  const skips = Math.max(0, Number(skippedCount) || 0);
+  if (selectedMode === "explain") {
+    if (points >= 1) unlockWordGuessAchievement("alias-first-point");
+    if (points >= 10) unlockWordGuessAchievement("alias-ten-round");
+    if (points >= 5 && skips === 0) unlockWordGuessAchievement("alias-clean-five");
+    return;
+  }
+  if (selectedMode === "charades") {
+    if (points >= 1) unlockWordGuessAchievement("charades-first-point");
+    if (points >= 8) unlockWordGuessAchievement("charades-eight-round");
+    if (points >= 5 && skips === 0) unlockWordGuessAchievement("charades-clean-five");
+  }
+}
+
 function confirmRoundResults() {
   recalculateRoundCounters();
   playedRounds += 1;
 
   const teamName = getTeamName(currentTeamIndex);
   const pointsEarned = score;
+  recordPartyModeAchievements(pointsEarned, skipped);
   teamScores[currentTeamIndex] += pointsEarned;
   roundsPlayedByTeam[currentTeamIndex] = (roundsPlayedByTeam[currentTeamIndex] || 0) + 1;
 

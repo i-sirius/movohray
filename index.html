@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4a-20260816" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4b-20260816" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.4a-20260816" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.4b-20260816" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -31,7 +31,7 @@
   </button>
   <button id="menuAchievementsBtn" class="app-achievements-btn" type="button" aria-haspopup="dialog" aria-controls="achievementsModal" aria-label="Досягнення">
     <span class="app-achievements-icon" aria-hidden="true">🏆</span>
-    <span id="menuAchievementsProgress" class="app-achievements-badge">0/160</span>
+    <span id="menuAchievementsProgress" class="app-achievements-badge">0/171</span>
     <span id="menuAchievementsTitle" class="app-achievements-label">Досягнення</span>
     <span id="menuAchievementsProgressBar" hidden></span>
   </button>
@@ -66,39 +66,39 @@
       </div>
 
       <section class="app-settings-section">
-        <p class="app-settings-section-eyebrow">Alias та Крокодил</p>
-        <h3 class="app-settings-section-title">Картки слів</h3>
+        <p id="wordCardSettingsEyebrow" class="app-settings-section-eyebrow">Alias та Крокодил</p>
+        <h3 id="wordCardSettingsTitle" class="app-settings-section-title">Картки слів</h3>
 
         <label class="app-settings-toggle-row" for="wordCardUseAllShapesToggle">
           <span>
-            <strong>Випадково з усіх форм</strong>
-            <small>Коли увімкнено — гра міксує весь набір форм.</small>
+            <strong id="wordCardAllShapesTitle">Випадково з усіх форм</strong>
+            <small id="wordCardAllShapesText">Коли увімкнено — гра міксує весь набір форм.</small>
           </span>
           <input id="wordCardUseAllShapesToggle" type="checkbox" />
         </label>
 
         <div class="app-settings-checkbox-grid">
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="organic" /><span>М’яка шайба</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splat" /><span>Асиметрична клякса</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="pebble" /><span>Камінчик / жетон</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="sticker" /><span>Стікер-клякса</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="cloud" /><span>Хмаринка</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splash" /><span>Крапля-сплеш</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="gummy" /><span>Жуйка / мармелад</span></label>
-          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="paper" /><span>Паперова пляма</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="organic" /><span id="wordCardShapeOrganic">М’яка шайба</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splat" /><span id="wordCardShapeSplat">Асиметрична клякса</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="pebble" /><span id="wordCardShapePebble">Камінчик / жетон</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="sticker" /><span id="wordCardShapeSticker">Стікер-клякса</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="cloud" /><span id="wordCardShapeCloud">Хмаринка</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splash" /><span id="wordCardShapeSplash">Крапля-сплеш</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="gummy" /><span id="wordCardShapeGummy">Жуйка / мармелад</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="paper" /><span id="wordCardShapePaper">Паперова пляма</span></label>
         </div>
 
         <label class="app-settings-toggle-row" for="wordCardRandomColorsToggle">
           <span>
-            <strong>Рандомні кольори картки</strong>
-            <small>Якщо вимкнути — картки повернуться до базового кольору теми.</small>
+            <strong id="wordCardRandomColorsTitle">Рандомні кольори картки</strong>
+            <small id="wordCardRandomColorsText">Якщо вимкнути — картки повернуться до базового кольору теми.</small>
           </span>
           <input id="wordCardRandomColorsToggle" type="checkbox" />
         </label>
 
         <div class="app-settings-outline-grid">
           <div class="app-settings-outline-block">
-            <strong>Окантовка у світлій темі</strong>
+            <strong id="wordCardOutlineLightTitle">Окантовка у світлій темі</strong>
             <div class="app-settings-choice-row" role="group" aria-label="Окантовка у світлій темі">
               <button class="app-settings-choice is-selected" type="button" data-outline-theme="light" data-outline-mode="off">Ніколи</button>
               <button class="app-settings-choice" type="button" data-outline-theme="light" data-outline-mode="random">Випадково</button>
@@ -106,7 +106,7 @@
             </div>
           </div>
           <div class="app-settings-outline-block">
-            <strong>Окантовка у темній темі</strong>
+            <strong id="wordCardOutlineDarkTitle">Окантовка у темній темі</strong>
             <div class="app-settings-choice-row" role="group" aria-label="Окантовка у темній темі">
               <button class="app-settings-choice" type="button" data-outline-theme="dark" data-outline-mode="off">Ніколи</button>
               <button class="app-settings-choice is-selected" type="button" data-outline-theme="dark" data-outline-mode="random">Випадково</button>
@@ -131,7 +131,7 @@
               <p id="appLabsAchievementsEyebrow" class="app-settings-section-eyebrow">Achievements · Labs</p>
               <h4 id="appLabsAchievementsTitle">Нагороди й досягнення</h4>
             </div>
-            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/160</strong>
+            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/171</strong>
           </div>
           <p id="appLabsAchievementsCopy" class="app-labs-achievements-copy">Локальні нагороди зберігаються на цьому пристрої.</p>
           <button id="appLabsAchievementsOpenBtn" class="app-labs-achievements-open" type="button">Відкрити колекцію →</button>
@@ -152,8 +152,8 @@
           </button>
         </div>
       </section>
-      <p class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4a</p>
+      <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4b</p>
     </div>
   </div>
 
@@ -166,12 +166,36 @@
           <p id="achievementsModalEyebrow" class="app-settings-section-eyebrow">Вгадай слово</p>
           <h2 id="achievementsModalTitle">Досягнення</h2>
         </div>
-        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/160</strong>
+        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/171</strong>
       </div>
       <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+      <div class="achievements-modal-tools">
+        <label id="achievementsModalSearchLabel" class="achievements-search-label" for="achievementsModalSearch">Пошук досягнень</label>
+        <div class="achievements-search-field">
+          <span class="achievements-search-icon" aria-hidden="true">⌕</span>
+          <input id="achievementsModalSearch" type="search" inputmode="search" autocomplete="off" spellcheck="false" placeholder="Знайти досягнення…" />
+        </div>
+      </div>
       <div id="achievementsModalCategoryNav" class="achievements-modal-category-nav" role="tablist" aria-label="Категорії досягнень"></div>
       <div id="achievementsModalGrid" class="achievements-modal-sections"></div>
     </div>
+  </div>
+
+  <div id="achievementDetailModal" class="achievement-detail-modal" hidden>
+    <div class="achievement-detail-backdrop" data-achievement-detail-close></div>
+    <article class="achievement-detail-sheet" role="dialog" aria-modal="true" aria-labelledby="achievementDetailTitle">
+      <button id="achievementDetailCloseBtn" class="achievement-detail-close" type="button" aria-label="Закрити">×</button>
+      <div id="achievementDetailReward" class="achievement-detail-reward" aria-hidden="true">🏆</div>
+      <p id="achievementDetailEyebrow" class="achievement-detail-eyebrow">Досягнення</p>
+      <span id="achievementDetailGame" class="achievement-game-badge achievement-detail-game">🧩 Вгадай слово</span>
+      <h2 id="achievementDetailTitle">Досягнення</h2>
+      <p id="achievementDetailDescription" class="achievement-detail-description"></p>
+      <section id="achievementDetailHowTo" class="achievement-detail-howto">
+        <strong id="achievementDetailHowToLabel">Як отримати</strong>
+        <p id="achievementDetailHint"></p>
+      </section>
+      <p id="achievementDetailStatus" class="achievement-detail-status"></p>
+    </article>
   </div>
 
   <div id="developerFeedbackModal" class="word-guess-info-modal developer-feedback-modal" hidden>
@@ -200,24 +224,24 @@
           </div>
           <h1 id="appTitle">Мовограй</h1>
           <p id="appSubtitle" class="subtitle">Українські ігри зі словами для компанії.</p>
-          <p class="menu-mode-note">Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?</p>
+          <p id="menuModeNote" class="menu-mode-note">Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?</p>
 
           <div id="modeList" class="mode-grid"></div>
 
 
           <div class="rules-box">
-            <h2>Правила</h2>
-            <p>
+            <h2 id="menuRulesTitle">Правила</h2>
+            <p id="menuRulesText1">
               Обери режим, налаштуй гру і передай телефон тому, хто грає.
               У кожному режимі є короткі підказки на екрані.
             </p>
-            <p>
+            <p id="menuRulesText2">
               У компанії грайте в Alias або Крокодила, а “Вгадай слово”
               можна пройти самостійно за кілька хвилин.
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.4a</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.4b</p>
         </div>
       </div>
     </section>
@@ -238,7 +262,7 @@
             <div class="settings-header">
               <div class="setup-titlebar">
                 <div>
-                  <p class="settings-eyebrow">Налаштування гри</p>
+                  <p id="settingsScreenEyebrow" class="settings-eyebrow">Налаштування гри</p>
                   <h1 id="settingsModeTitle" class="mode-title">Поясни слово (Alias)</h1>
                 </div>
                 <div class="mode-setup-header-actions">
@@ -250,7 +274,7 @@
 
             <div class="settings-grid">
               <section id="charadesFormatSection" class="charades-only settings-group" hidden>
-                <h2>Формат гри</h2>
+                <h2 id="charadesFormatTitle">Формат гри</h2>
                 <div class="settings-chip-grid compact-chip-grid">
                   <button class="charades-format-btn setting-chip selected" data-format="single" type="button">Одне слово</button>
                   <button class="charades-format-btn setting-chip" data-format="timed" type="button">На час</button>
@@ -258,7 +282,7 @@
               </section>
 
               <section class="settings-group settings-group-wide">
-                <h2>Слова</h2>
+                <h2 id="settingsWordsTitle">Слова</h2>
                 <div class="setting-subsection">
                   <div id="categoryList" class="button-grid"></div>
                 </div>
@@ -281,10 +305,10 @@
               </section>
 
               <section class="settings-group timed-settings">
-                <h2>Раунд</h2>
+                <h2 id="settingsRoundTitle">Раунд</h2>
                 <div class="settings-two-columns">
                   <div class="setting-subsection">
-                    <h3>Час:</h3>
+                    <h3 id="settingsTimeTitle">Час:</h3>
                     <div class="settings-chip-grid compact-chip-grid">
                       <button class="duration-btn setting-chip" data-seconds="30">30</button>
                       <button class="duration-btn setting-chip selected" data-seconds="60">60</button>
@@ -294,7 +318,7 @@
                   </div>
 
                   <div id="lastWordSection" class="setting-subsection">
-                    <h3>Після часу:</h3>
+                    <h3 id="settingsAfterTimeTitle">Після часу:</h3>
                     <div class="settings-chip-grid compact-chip-grid">
                       <button id="lastWordBtn" class="setting-chip selected" type="button" aria-pressed="true">Довгадати</button>
                       <button id="lastWordStopBtn" class="setting-chip" type="button" aria-pressed="false">Стоп</button>
@@ -304,10 +328,10 @@
               </section>
 
               <section class="settings-group timed-settings">
-                <h2>Гра</h2>
+                <h2 id="settingsGameTitle">Гра</h2>
                 <div class="settings-two-columns">
                   <div class="setting-subsection">
-                    <h3>Ціль:</h3>
+                    <h3 id="settingsTargetTitle">Ціль:</h3>
                     <div class="settings-chip-grid compact-chip-grid">
                       <button class="target-btn setting-chip" data-target="20">20</button>
                       <button class="target-btn setting-chip selected" data-target="30">30</button>
@@ -317,7 +341,7 @@
                   </div>
 
                   <div class="setting-subsection">
-                    <h3>Команди:</h3>
+                    <h3 id="settingsTeamsTitle">Команди:</h3>
                     <div class="settings-chip-grid compact-chip-grid">
                       <button class="team-count-btn setting-chip selected" data-count="2">2</button>
                       <button class="team-count-btn setting-chip" data-count="3">3</button>
@@ -988,7 +1012,7 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="wordguess-session.js?rev=0.6.4a-20260816"></script>
-  <script src="app.js?rev=0.6.4a-20260816"></script>
+  <script src="wordguess-session.js?rev=0.6.4b-20260816"></script>
+  <script src="app.js?rev=0.6.4b-20260816"></script>
 </body>
 </html>
