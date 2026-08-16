@@ -16673,3 +16673,100 @@ body[data-theme="dark"] .achievements-modal .app-labs-achievement-card.is-unlock
 body[data-theme="dark"] .achievements-modal .app-labs-achievement-card.is-unlocked .app-labs-achievement-body > small {
   color: #eadfca !important;
 }
+
+/* 0.6.4c — achievement inbox, unread state and earned timestamps. */
+.achievement-card-meta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+}
+.achievement-new-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 18px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(221, 151, 24, .48);
+  background: linear-gradient(135deg, rgba(255, 222, 98, .94), rgba(255, 179, 54, .90));
+  color: #543605;
+  font-size: 8.5px;
+  font-weight: 1000;
+  line-height: 1;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  box-shadow: 0 3px 9px rgba(201, 132, 21, .16);
+}
+.achievement-earned-at {
+  display: block;
+  margin-top: 1px;
+  color: #756a57;
+  font-size: 9px;
+  line-height: 1.2;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.achievements-modal .app-labs-achievement-card.is-new {
+  border-color: rgba(235, 164, 35, .92) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 234, 165, .40),
+    0 0 0 2px rgba(247, 188, 63, .09),
+    0 9px 24px rgba(175, 118, 20, .15) !important;
+}
+body[data-theme="dark"] .achievement-new-badge {
+  border-color: rgba(255, 204, 92, .66);
+  background: linear-gradient(135deg, rgba(247, 195, 70, .96), rgba(209, 137, 28, .94));
+  color: #231b0b;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .22);
+}
+body[data-theme="dark"] .achievement-earned-at {
+  color: #d9c99f;
+}
+body[data-theme="dark"] .achievements-modal .app-labs-achievement-card.is-new {
+  border-color: rgba(255, 207, 96, .94) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 224, 142, .15),
+    0 0 0 2px rgba(247, 190, 70, .08),
+    0 0 18px rgba(238, 177, 55, .14),
+    0 9px 24px rgba(0, 0, 0, .30) !important;
+}
+.achievements-category-tab[data-achievement-category="new"] .achievements-category-tab-count {
+  background: #e4ad38;
+  border-color: rgba(182, 128, 24, .34);
+  color: #3f2d0a;
+}
+body[data-theme="dark"] .achievements-category-tab[data-achievement-category="new"] .achievements-category-tab-count {
+  background: #f0bd50;
+  border-color: rgba(255, 222, 145, .22);
+  color: #251b08;
+}
+.app-achievements-btn.has-new-achievements::after {
+  content: attr(data-new-count);
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 250, 240, .98);
+  background: #d85e49;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 1000;
+  line-height: 1;
+  box-shadow: 0 4px 12px rgba(156, 57, 43, .22);
+}
+body[data-theme="dark"] .app-achievements-btn.has-new-achievements::after {
+  border-color: #1d2639;
+  background: #f07c64;
+  color: #21110e;
+}
+@media (max-width: 540px) {
+  .achievement-new-badge { min-height: 17px; padding: 2px 6px; font-size: 7.5px; }
+  .achievement-earned-at { font-size: 8px; }
+}
