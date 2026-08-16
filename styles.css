@@ -14160,3 +14160,1517 @@ body[data-mode="explain"] #gameScreen .word-card.word-card-text-extra-compact .w
     max-height: 255px;
   }
 }
+
+
+/* 0.6.4 Labs — hidden Word Guess language switcher */
+.app-labs-section[hidden] { display: none !important; }
+.app-labs-copy,
+.app-labs-status {
+  margin: 0 0 12px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.app-labs-language-row { margin-top: 10px; }
+.app-settings-version-unlock { cursor: default; user-select: none; -webkit-user-select: none; }
+.app-settings-version-unlock:focus-visible { outline: 2px solid rgba(116, 105, 189, 0.55); outline-offset: 4px; border-radius: 8px; }
+.word-guess-language-badge {
+  width: fit-content;
+  margin: -4px auto 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(120, 111, 190, 0.10);
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+body[data-theme="dark"] .word-guess-language-badge { background: rgba(140, 150, 255, 0.12); }
+
+/* 0.6.4 — viewport anchoring and touch-target polish. */
+body.word-guess-result-open #wordGuessGameScreen.screen.active {
+  animation: none !important;
+  -webkit-animation: none !important;
+  transform: none !important;
+}
+
+body.word-guess-result-open .word-guess-game-card,
+body.word-guess-result-open .word-guess-inner {
+  transform: none !important;
+}
+
+@keyframes wordGuessDesktopViewportIn {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (min-width: 769px) {
+  .word-guess-result.word-guess-result-screen {
+    top: 24px;
+    right: auto;
+    bottom: 24px;
+    left: 50%;
+    inset: 24px auto 24px 50%;
+    width: min(840px, calc(100vw - 48px));
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    box-sizing: border-box;
+    transform: translateX(-50%);
+    animation: wordGuessDesktopViewportIn 220ms ease-out both;
+  }
+
+  .word-guess-result-content {
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 769px) and (max-height: 720px) {
+  .word-guess-result-header {
+    min-height: 50px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  .word-guess-result-content {
+    padding: 12px 22px 14px;
+  }
+
+  .word-guess-result-summary-block {
+    padding: 10px 14px;
+    border-radius: 18px;
+  }
+
+  .word-guess-result-word {
+    font-size: clamp(34px, 6vw, 54px);
+  }
+
+  .word-guess-result-stats {
+    margin-top: 8px;
+  }
+
+  .word-guess-result-attempts.word-guess-result-board {
+    margin-top: 8px;
+    padding: 9px;
+  }
+
+  .word-guess-result-details {
+    margin-top: 8px;
+  }
+
+  .word-guess-dictionaries {
+    padding: 10px 12px;
+  }
+
+  .word-guess-result-actions {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+
+  .word-guess-result-actions .primary-btn,
+  .word-guess-result-actions .secondary-btn {
+    min-height: 46px;
+  }
+}
+
+/* The close icon and its hit area are now the exact same centered control. */
+.word-guess-info-close {
+  top: 6px;
+  right: 6px;
+  z-index: 4;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.word-guess-info-close::before,
+.word-guess-info-close::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  pointer-events: none;
+}
+
+.word-guess-info-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.word-guess-info-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.word-guess-info-eyebrow,
+.word-guess-info-card h2 {
+  margin-right: 54px;
+}
+
+@media (max-width: 599px) {
+  .app {
+    padding-top: max(58px, calc(env(safe-area-inset-top, 0px) + 50px));
+  }
+
+  .app-settings-btn {
+    top: max(6px, calc(env(safe-area-inset-top, 0px) + 6px));
+    right: max(8px, calc(env(safe-area-inset-right, 0px) + 8px));
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    border-color: rgba(148, 163, 184, 0.24);
+    background: rgba(255, 250, 240, 0.88);
+    color: var(--color-text);
+    opacity: 0.88;
+    box-shadow: 0 5px 16px rgba(54, 49, 94, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  body[data-theme="dark"] .app-settings-btn {
+    border-color: rgba(148, 163, 184, 0.18);
+    background: rgba(25, 32, 51, 0.88);
+    color: var(--color-text);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  }
+
+  body.word-guess-result-open .app-settings-btn,
+  body.app-settings-open .app-settings-btn,
+  body.required-update-open .app-settings-btn {
+    display: none !important;
+  }
+}
+
+.app-settings-icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+
+body { --game-doodle-pattern-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMzIwIDI0MCI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNTk2NThlIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjggMzRoMzRhMTAgMTAgMCAwIDEgMTAgMTB2MTJhMTAgMTAgMCAwIDEtMTAgMTBINDdsLTkgOHYtOEgyOGExMCAxMCAwIDAgMS0xMC0xMFY0NGExMCAxMCAwIDAgMSAxMC0xMFoiLz48cGF0aCBkPSJtMTEwIDIzIDQgOSAxMCAxLTggNyAzIDEwLTktNS05IDUgMy0xMC04LTcgMTAtMVoiLz48Y2lyY2xlIGN4PSIxNzYiIGN5PSI0MyIgcj0iMTYiLz48cGF0aCBkPSJNMTc2IDM1djltMCA3aC4wMSIvPjxwYXRoIGQ9Ik0yNDUgMjdjOSAwIDE2IDcgMTYgMTYgMCA3LTQgMTEtOCAxNS0yIDItMyA0LTMgN2gtMTBjMC0zLTEtNS0zLTctNC00LTgtOC04LTE1IDAtOSA3LTE2IDE2LTE2Wm0tNSA0NGgxMCIvPjxyZWN0IHg9IjI4MSIgeT0iMzYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgcng9IjUiLz48Y2lyY2xlIGN4PSIyODgiIGN5PSI0MyIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iMjk2IiBjeT0iNTEiIHI9IjEuNCIvPjxwYXRoIGQ9Ik00NyAxNDJjMTAtMTIgMjUtMTUgMzYtNyAxMSA4IDEyIDI0IDMgMzYtMTAgMTItMjUgMTUtMzYgNy0xMS04LTEyLTI0LTMtMzZaIi8+PHBhdGggZD0ibTEzOSAxMzMgMTQgMTItMTQgMTItMTQtMTJaIi8+PHBhdGggZD0iTTE5MyAxMzBoMzBsMTAgMTAtMTAgMTBoLTMwbC0xMC0xMFoiLz48cGF0aCBkPSJNMjczIDEyOGMxMiAwIDIyIDEwIDIyIDIycy0xMCAyMi0yMiAyMi0yMi0xMC0yMi0yMiAxMC0yMiAyMi0yMloiLz48cGF0aCBkPSJNMjY1IDE0OGgxNm0tOC04djE2Ii8+PHBhdGggZD0ibTgwIDIwNyA2LTEyIDYgMTIgMTMgMi05IDkgMiAxMy0xMi02LTEyIDYgMi0xMy05LTlaIi8+PHBhdGggZD0iTTE2OCAxOTVjOCAwIDE0IDYgMTQgMTQgMCA1LTMgOS03IDEydjdoLTE0di03Yy00LTMtNy03LTctMTIgMC04IDYtMTQgMTQtMTRaIi8+PHBhdGggZD0iTTIzMiAyMDFjNi04IDE4LTEwIDI3LTQgOSA3IDExIDE5IDQgMjgtNyA5LTE5IDEwLTI4IDQtOS03LTEwLTE5LTMtMjhaIi8+PC9nPjwvc3ZnPg=="); }
+body[data-theme="dark"] { --game-doodle-pattern-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMjQwIiB2aWV3Qm94PSIwIDAgMzIwIDI0MCI+PGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYzdjZWVkIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMjggMzRoMzRhMTAgMTAgMCAwIDEgMTAgMTB2MTJhMTAgMTAgMCAwIDEtMTAgMTBINDdsLTkgOHYtOEgyOGExMCAxMCAwIDAgMS0xMC0xMFY0NGExMCAxMCAwIDAgMSAxMC0xMFoiLz48cGF0aCBkPSJtMTEwIDIzIDQgOSAxMCAxLTggNyAzIDEwLTktNS05IDUgMy0xMC04LTcgMTAtMVoiLz48Y2lyY2xlIGN4PSIxNzYiIGN5PSI0MyIgcj0iMTYiLz48cGF0aCBkPSJNMTc2IDM1djltMCA3aC4wMSIvPjxwYXRoIGQ9Ik0yNDUgMjdjOSAwIDE2IDcgMTYgMTYgMCA3LTQgMTEtOCAxNS0yIDItMyA0LTMgN2gtMTBjMC0zLTEtNS0zLTctNC00LTgtOC04LTE1IDAtOSA3LTE2IDE2LTE2Wm0tNSA0NGgxMCIvPjxyZWN0IHg9IjI4MSIgeT0iMzYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgcng9IjUiLz48Y2lyY2xlIGN4PSIyODgiIGN5PSI0MyIgcj0iMS40Ii8+PGNpcmNsZSBjeD0iMjk2IiBjeT0iNTEiIHI9IjEuNCIvPjxwYXRoIGQ9Ik00NyAxNDJjMTAtMTIgMjUtMTUgMzYtNyAxMSA4IDEyIDI0IDMgMzYtMTAgMTItMjUgMTUtMzYgNy0xMS04LTEyLTI0LTMtMzZaIi8+PHBhdGggZD0ibTEzOSAxMzMgMTQgMTItMTQgMTItMTQtMTJaIi8+PHBhdGggZD0iTTE5MyAxMzBoMzBsMTAgMTAtMTAgMTBoLTMwbC0xMC0xMFoiLz48cGF0aCBkPSJNMjczIDEyOGMxMiAwIDIyIDEwIDIyIDIycy0xMCAyMi0yMiAyMi0yMi0xMC0yMi0yMiAxMC0yMiAyMi0yMloiLz48cGF0aCBkPSJNMjY1IDE0OGgxNm0tOC04djE2Ii8+PHBhdGggZD0ibTgwIDIwNyA2LTEyIDYgMTIgMTMgMi05IDkgMiAxMy0xMi02LTEyIDYgMi0xMy05LTlaIi8+PHBhdGggZD0iTTE2OCAxOTVjOCAwIDE0IDYgMTQgMTQgMCA1LTMgOS03IDEydjdoLTE0di03Yy00LTMtNy03LTctMTIgMC04IDYtMTQgMTQtMTRaIi8+PHBhdGggZD0iTTIzMiAyMDFjNi04IDE4LTEwIDI3LTQgOSA3IDExIDE5IDQgMjgtNyA5LTE5IDEwLTI4IDQtOS03LTEwLTE5LTMtMjhaIi8+PC9nPjwvc3ZnPg=="); }
+/* 0.6.4 — quiet Telegram-like game doodle backdrop */
+.game-ambient-pattern {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: none;
+  opacity: 0.078;
+  background-image: var(--game-doodle-pattern-image);
+  background-size: 320px 240px;
+  background-position: 18px 12px;
+}
+
+body[data-theme="dark"] .game-ambient-pattern {
+  opacity: 0.055;
+}
+
+body:not([data-theme="dark"]) .game-ambient-pattern {
+  mix-blend-mode: multiply;
+}
+
+body:not([data-theme="dark"]) #gameScreen .game-layout::before,
+body:not([data-theme="dark"]) #wordGuessGameScreen .word-guess-game-card::before,
+body:not([data-theme="dark"]) #whoAmIGameScreen .whoami-game-layout::before {
+  mix-blend-mode: multiply;
+}
+
+body[data-screen="game"] .game-ambient-pattern,
+body[data-screen="wordGuessGame"] .game-ambient-pattern,
+body[data-screen="whoAmIGame"] .game-ambient-pattern,
+body[data-screen="whoAmIReveal"] .game-ambient-pattern {
+  display: block;
+}
+
+@media (max-width: 599px) {
+  .game-ambient-pattern {
+    opacity: 0.054;
+    background-size: 280px 210px;
+  }
+  body[data-theme="dark"] .game-ambient-pattern { opacity: 0.045; }
+}
+
+
+/* 0.6.4 — Word Guess setup menus stay inside the setup card. */
+#wordGuessSettingsScreen .word-guess-select-menu {
+  top: auto;
+  bottom: calc(100% + 8px);
+}
+
+/* Compact in-game mode tags: informative without consuming HUD space. */
+.word-guess-mode-tags {
+  width: min(100%, 590px);
+  margin: 2px auto 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 24px;
+  pointer-events: none;
+}
+
+.word-guess-mode-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 106, 168, 0.18);
+  background: rgba(111, 106, 168, 0.075);
+  color: var(--color-muted);
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+
+.word-guess-mode-tag.is-labs {
+  border-color: rgba(125, 214, 212, 0.28);
+  background: rgba(125, 214, 212, 0.11);
+  color: var(--color-primary);
+}
+
+.word-guess-mode-tag.is-count {
+  opacity: 0.76;
+}
+
+body[data-theme="dark"] .word-guess-mode-tag {
+  background: rgba(220, 226, 255, 0.055);
+  border-color: rgba(220, 226, 255, 0.14);
+}
+
+body[data-theme="dark"] .word-guess-mode-tag.is-labs {
+  background: rgba(125, 214, 212, 0.10);
+  border-color: rgba(125, 214, 212, 0.24);
+}
+
+@media (max-width: 420px) {
+  .word-guess-mode-tags {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .word-guess-mode-tag {
+    min-height: 22px;
+    padding: 3px 7px;
+    font-size: 9px;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* 0.6.4 — staged, clearly visible invalid-word disappearance. */
+.word-guess-cell {
+  position: relative;
+}
+
+.word-guess-cell-glyph {
+  display: inline-block;
+  position: relative;
+  z-index: 3;
+  will-change: transform, opacity, filter, clip-path;
+  transform-origin: 50% 55%;
+}
+
+.word-guess-row.is-invalid-dissolving .word-guess-cell.is-filled {
+  animation: wordGuessInvalidCellPulse 620ms ease-out both;
+}
+
+@keyframes wordGuessInvalidCellPulse {
+  0%, 100% { box-shadow: none; }
+  32% { box-shadow: 0 0 0 2px rgba(220, 92, 109, 0.42), 0 0 18px rgba(220, 92, 109, 0.18); }
+}
+
+.word-guess-row.is-invalid-dissolving .word-guess-cell.is-filled .word-guess-cell-glyph {
+  animation-delay: var(--invalid-delay, 520ms);
+  animation-duration: var(--invalid-duration, 1250ms);
+  animation-fill-mode: both;
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-fade {
+  animation-name: wordGuessInvalidFade;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-dust {
+  animation-name: wordGuessInvalidDustCore;
+  animation-timing-function: cubic-bezier(0.18, 0.72, 0.2, 1);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-scatter {
+  animation-name: wordGuessInvalidScatter;
+  animation-timing-function: cubic-bezier(0.16, 0.82, 0.18, 1);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-drop {
+  animation-name: wordGuessInvalidDrop;
+  animation-timing-function: cubic-bezier(0.46, 0.05, 0.76, 0.34);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-twirl {
+  animation-name: wordGuessInvalidTwirl;
+  animation-timing-function: cubic-bezier(0.18, 0.82, 0.18, 1);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-shrink {
+  animation-name: wordGuessInvalidShrink;
+  animation-timing-function: cubic-bezier(0.55, 0, 0.78, 0.28);
+}
+
+.word-guess-row.is-invalid-dissolving .invalid-effect-flip {
+  animation-name: wordGuessInvalidFlipAway;
+  animation-timing-function: cubic-bezier(0.18, 0.78, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+@keyframes wordGuessInvalidFade {
+  0%, 25% { opacity: 1; filter: blur(0); transform: translate3d(0, 0, 0) scale(1); }
+  55% { opacity: 0.82; filter: blur(1px); transform: translate3d(0, -3px, 0) scale(1.04); }
+  100% { opacity: 0; filter: blur(12px); transform: translate3d(0, -18px, 0) scale(0.68); }
+}
+
+@keyframes wordGuessInvalidDustCore {
+  0%, 22% { opacity: 1; filter: blur(0); transform: translate3d(0, 0, 0) scale(1); clip-path: inset(0 0 0 0); }
+  46% { opacity: 1; filter: blur(0); transform: scale(1.035); clip-path: polygon(0 0, 100% 0, 100% 72%, 88% 70%, 83% 92%, 63% 83%, 52% 100%, 34% 82%, 14% 94%, 0 76%); }
+  68% { opacity: 0.72; filter: blur(0.8px); clip-path: polygon(0 0, 87% 0, 78% 19%, 91% 34%, 65% 43%, 78% 60%, 53% 72%, 42% 61%, 23% 83%, 0 64%); }
+  86% { opacity: 0.34; filter: blur(2.2px); transform: translate3d(var(--invalid-mid-x, 14px), var(--invalid-mid-y, -16px), 0) scale(0.84) rotate(var(--invalid-mid-rotation, 18deg)); }
+  100% { opacity: 0; filter: blur(7px); transform: translate3d(var(--invalid-x, 32px), var(--invalid-y, -36px), 0) scale(0.58) rotate(var(--invalid-rotation, 35deg)); clip-path: polygon(2% 2%, 20% 5%, 14% 22%, 36% 29%, 27% 50%, 51% 59%, 40% 78%, 20% 69%, 13% 94%, 0 74%); }
+}
+
+@keyframes wordGuessInvalidScatter {
+  0%, 20% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0) scale(1); filter: blur(0); }
+  42% { opacity: 1; transform: translate3d(-3px, -2px, 0) rotate(-5deg) scale(1.14); }
+  72% { opacity: 0.78; transform: translate3d(var(--invalid-mid-x, 21px), var(--invalid-mid-y, -19px), 0) rotate(var(--invalid-mid-rotation, 30deg)) scale(0.96); }
+  100% { opacity: 0; transform: translate3d(var(--invalid-x, 48px), var(--invalid-y, -44px), 0) rotate(var(--invalid-rotation, 58deg)) scale(0.58); filter: blur(5px); }
+}
+
+@keyframes wordGuessInvalidDrop {
+  0%, 24% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+  48% { opacity: 1; transform: translate3d(0, -5px, 0) scale(1.06, 0.94); }
+  70% { opacity: 0.92; transform: translate3d(2px, 12px, 0) scale(0.94, 1.12); }
+  100% { opacity: 0; transform: translate3d(var(--invalid-x, 10px), 72px, 0) rotate(var(--invalid-rotation, 18deg)) scale(0.68, 1.18); filter: blur(6px); }
+}
+
+@keyframes wordGuessInvalidTwirl {
+  0%, 18% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg) scale(1); filter: blur(0); }
+  48% { opacity: 1; transform: translate3d(0, -7px, 0) rotate(34deg) scale(1.12); }
+  78% { opacity: 0.72; transform: translate3d(var(--invalid-mid-x, 16px), var(--invalid-mid-y, -18px), 0) rotate(var(--invalid-mid-rotation, 44deg)) scale(0.78); }
+  100% { opacity: 0; transform: translate3d(var(--invalid-x, 36px), var(--invalid-y, -42px), 0) rotate(var(--invalid-rotation, 85deg)) scale(0.28); filter: blur(6px); }
+}
+
+@keyframes wordGuessInvalidShrink {
+  0%, 25% { opacity: 1; transform: scale(1); filter: blur(0); }
+  50% { opacity: 1; transform: scale(1.20, 0.82); }
+  70% { opacity: 0.9; transform: scale(0.76, 1.08); }
+  100% { opacity: 0; transform: scale(0.02); filter: blur(3px); }
+}
+
+@keyframes wordGuessInvalidFlipAway {
+  0%, 20% { opacity: 1; transform: perspective(180px) rotateY(0deg) translate3d(0, 0, 0) scale(1); filter: blur(0); }
+  46% { opacity: 1; transform: perspective(180px) rotateY(70deg) translate3d(0, -2px, 8px) scale(1.08); }
+  72% { opacity: 0.76; transform: perspective(180px) rotateY(132deg) translate3d(var(--invalid-mid-x, 18px), -12px, 0) scale(0.88); }
+  100% { opacity: 0; transform: perspective(180px) rotateY(210deg) translate3d(var(--invalid-x, 42px), var(--invalid-y, -38px), 0) scale(0.52); filter: blur(5px); }
+}
+
+.word-guess-invalid-dust {
+  position: absolute;
+  left: var(--dust-origin-x, 50%);
+  top: var(--dust-origin-y, 50%);
+  z-index: 5;
+  width: var(--dust-size, 3px);
+  height: var(--dust-size, 3px);
+  border-radius: 1px 40% 1px 42%;
+  background: currentColor;
+  box-shadow: 0 0 4px currentColor;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.2);
+  will-change: transform, opacity, filter;
+}
+
+.word-guess-row.is-invalid-dissolving .word-guess-invalid-dust {
+  animation: wordGuessInvalidDustParticle var(--dust-duration, 1150ms) cubic-bezier(0.16, 0.75, 0.18, 1) var(--dust-delay, 900ms) both;
+}
+
+@keyframes wordGuessInvalidDustParticle {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.15) rotate(0deg); filter: blur(0); }
+  10% { opacity: 1; transform: translate(-50%, -50%) scale(1.05) rotate(12deg); }
+  36% { opacity: 0.96; transform: translate(calc(-50% + var(--dust-x-1, 5px)), calc(-50% + var(--dust-y-1, -7px))) scale(0.92) rotate(var(--dust-rotation-1, 34deg)); }
+  72% { opacity: 0.72; transform: translate(calc(-50% + var(--dust-x-2, 15px)), calc(-50% + var(--dust-y-2, -20px))) scale(0.62) rotate(var(--dust-rotation-2, 86deg)); filter: blur(0.4px); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dust-x, 22px)), calc(-50% + var(--dust-y, -30px))) scale(0.08) rotate(var(--dust-rotation, 120deg)); filter: blur(1.8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-guess-row.is-invalid-dissolving .word-guess-cell.is-filled,
+  .word-guess-row.is-invalid-dissolving .word-guess-cell.is-filled .word-guess-cell-glyph,
+  .word-guess-row.is-invalid-dissolving .word-guess-invalid-dust {
+    animation: none !important;
+  }
+}
+
+
+/* The pattern also lives inside active game surfaces, below controls/content. */
+#gameScreen .game-layout::before,
+#wordGuessGameScreen .word-guess-game-card::before,
+#whoAmIGameScreen .whoami-game-layout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--game-doodle-pattern-image);
+  background-size: 310px 232px;
+  background-position: 20px 18px;
+  opacity: 0.060;
+}
+
+body[data-theme="dark"] #gameScreen .game-layout::before,
+body[data-theme="dark"] #wordGuessGameScreen .word-guess-game-card::before,
+body[data-theme="dark"] #whoAmIGameScreen .whoami-game-layout::before {
+  opacity: 0.048;
+}
+
+@media (max-width: 599px) {
+  #gameScreen .game-layout::before,
+  #wordGuessGameScreen .word-guess-game-card::before,
+  #whoAmIGameScreen .whoami-game-layout::before {
+    background-size: 270px 203px;
+    opacity: 0.044;
+  }
+  body[data-theme="dark"] #gameScreen .game-layout::before,
+  body[data-theme="dark"] #wordGuessGameScreen .word-guess-game-card::before,
+  body[data-theme="dark"] #whoAmIGameScreen .whoami-game-layout::before { opacity: 0.038; }
+}
+
+
+/* 0.6.4 — wide screens keep Word Guess navigation compact. */
+@media (min-width: 900px) {
+  #wordGuessGameScreen .word-guess-titlebar {
+    width: min(760px, calc(100vw - 96px));
+    margin-inline: auto;
+    grid-template-columns: minmax(132px, auto) minmax(240px, 1fr) minmax(132px, auto);
+    grid-template-areas: "menu tools history";
+    justify-content: center;
+    gap: 14px;
+  }
+
+  #wordGuessGameScreen .word-guess-menu-link,
+  #wordGuessGameScreen .word-guess-history-btn {
+    width: clamp(132px, 11vw, 170px);
+    min-width: 132px;
+    max-width: 170px;
+  }
+
+  #wordGuessGameScreen .word-guess-menu-link { justify-self: start; }
+  #wordGuessGameScreen .word-guess-history-btn { justify-self: end; }
+
+  #wordGuessGameScreen .word-guess-toolbar {
+    width: auto;
+    min-width: 0;
+    justify-self: center;
+  }
+}
+
+
+/* 0.6.4 — clearer hint ladder, visible light doodles, playful feedback and Labs easter egg. */
+#wordGuessSettingsScreen .word-guess-language-badge {
+  display: none !important;
+}
+
+/* The three hint levels read as one intentional control instead of four loose circles. */
+#wordGuessGameScreen .word-guess-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: 0;
+}
+
+.word-guess-hints-cluster {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 4px 7px 4px 10px;
+  border: 1px solid rgba(111, 106, 168, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.44);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50);
+}
+
+body[data-theme="dark"] .word-guess-hints-cluster {
+  background: rgba(255,255,255,0.045);
+  border-color: rgba(220,226,255,0.13);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
+}
+
+.word-guess-hints-cluster-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-muted);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.word-guess-hints-cluster-label > span:first-child {
+  font-size: 17px;
+  filter: drop-shadow(0 2px 6px rgba(219,171,57,0.24));
+}
+
+.word-guess-hints-cluster-label > span:last-child {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+}
+
+.word-guess-hints-cluster-label strong {
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.word-guess-hints-cluster-label small {
+  font-size: 8px;
+  font-weight: 800;
+  opacity: 0.72;
+}
+
+.word-guess-hints-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+#wordGuessGameScreen .word-guess-hint-btn,
+#wordGuessGameScreen .word-guess-hint-step-btn,
+#wordGuessGameScreen .word-guess-hint-btn.is-used,
+#wordGuessGameScreen .word-guess-hint-step-btn.is-used {
+  position: relative;
+  width: 40px !important;
+  min-width: 40px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  padding: 0 5px !important;
+  transform: none;
+}
+
+#wordGuessGameScreen .word-guess-hint-btn .word-guess-hint-icon,
+#wordGuessGameScreen .word-guess-hint-step-btn .word-guess-hint-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+#wordGuessGameScreen .word-guess-hint-step {
+  position: static !important;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 950;
+  box-shadow: none;
+}
+
+#wordGuessGameScreen .word-guess-hint-step-btn:not(.is-available) {
+  transform: none;
+  opacity: 0.42;
+}
+
+#wordGuessGameScreen .word-guess-rules-btn {
+  flex: 0 0 auto;
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  border-radius: 999px !important;
+}
+
+@media (max-width: 430px) {
+  #wordGuessGameScreen .word-guess-toolbar { gap: 6px; }
+  .word-guess-hints-cluster { gap: 5px; padding: 3px 5px 3px 7px; }
+  .word-guess-hints-cluster-label > span:first-child { display: none; }
+  .word-guess-hints-cluster-label strong { font-size: 9px; }
+  .word-guess-hints-cluster-label small { font-size: 7px; }
+  .word-guess-hints-buttons { gap: 4px; }
+  #wordGuessGameScreen .word-guess-hint-btn,
+  #wordGuessGameScreen .word-guess-hint-step-btn,
+  #wordGuessGameScreen .word-guess-hint-btn.is-used,
+  #wordGuessGameScreen .word-guess-hint-step-btn.is-used {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+  }
+  #wordGuessGameScreen .word-guess-rules-btn {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+/* Light theme intentionally has a slightly stronger line-art contrast. */
+body:not([data-theme="dark"]) .game-ambient-pattern {
+  opacity: 0.125;
+  mix-blend-mode: multiply;
+}
+body:not([data-theme="dark"]) #gameScreen .game-layout::before,
+body:not([data-theme="dark"]) #wordGuessGameScreen .word-guess-game-card::before,
+body:not([data-theme="dark"]) #whoAmIGameScreen .whoami-game-layout::before {
+  opacity: 0.085;
+  mix-blend-mode: multiply;
+}
+@media (max-width: 599px) {
+  body:not([data-theme="dark"]) .game-ambient-pattern { opacity: 0.105; }
+  body:not([data-theme="dark"]) #gameScreen .game-layout::before,
+  body:not([data-theme="dark"]) #wordGuessGameScreen .word-guess-game-card::before,
+  body:not([data-theme="dark"]) #whoAmIGameScreen .whoami-game-layout::before { opacity: 0.072; }
+}
+
+/* Small non-blocking comic reaction to an invalid submission. */
+.word-guess-invalid-reaction {
+  position: fixed;
+  left: var(--reaction-x, 50vw);
+  top: var(--reaction-y, 45vh);
+  z-index: 96;
+  pointer-events: none;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(208,101,124,0.28);
+  background: rgba(255,247,248,0.94);
+  color: #7c3f54;
+  font-size: clamp(12px, 2.4vw, 16px);
+  font-weight: 900;
+  box-shadow: 0 12px 28px rgba(99,43,62,0.14);
+  transform: translate(-50%, -50%) rotate(var(--reaction-rot, 0deg));
+  animation: wordGuessInvalidReactionPop 1.75s cubic-bezier(.16,.82,.2,1) both;
+}
+body[data-theme="dark"] .word-guess-invalid-reaction {
+  background: rgba(64,34,50,0.95);
+  color: #ffdce7;
+  border-color: rgba(255,170,196,0.22);
+  box-shadow: 0 14px 32px rgba(0,0,0,0.30);
+}
+.word-guess-invalid-reaction.reaction-2 { animation-name: wordGuessInvalidReactionBounce; }
+.word-guess-invalid-reaction.reaction-3 { animation-name: wordGuessInvalidReactionSpin; }
+.word-guess-invalid-reaction.reaction-4 { animation-name: wordGuessInvalidReactionPeek; }
+@keyframes wordGuessInvalidReactionPop {
+  0% { opacity: 0; transform: translate(-50%,-45%) scale(.55) rotate(var(--reaction-rot)); }
+  18% { opacity: 1; transform: translate(-50%,-58%) scale(1.10) rotate(var(--reaction-rot)); }
+  58% { opacity: 1; transform: translate(-50%,-64%) scale(1) rotate(var(--reaction-rot)); }
+  100% { opacity: 0; transform: translate(-50%,-95%) scale(.86) rotate(var(--reaction-rot)); filter: blur(2px); }
+}
+@keyframes wordGuessInvalidReactionBounce {
+  0% { opacity:0; transform: translate(-50%,-30%) scale(.65) rotate(-8deg); }
+  22% { opacity:1; transform: translate(-50%,-70%) scale(1.1) rotate(7deg); }
+  40% { transform: translate(-50%,-58%) scale(.95) rotate(-4deg); }
+  62% { opacity:1; transform: translate(-50%,-68%) scale(1.02) rotate(2deg); }
+  100% { opacity:0; transform: translate(-50%,-105%) scale(.8) rotate(8deg); }
+}
+@keyframes wordGuessInvalidReactionSpin {
+  0% { opacity:0; transform: translate(-50%,-50%) scale(.45) rotate(-42deg); }
+  24% { opacity:1; transform: translate(-50%,-65%) scale(1.12) rotate(8deg); }
+  64% { opacity:1; transform: translate(-50%,-72%) scale(.98) rotate(-4deg); }
+  100% { opacity:0; transform: translate(-50%,-110%) scale(.72) rotate(26deg); }
+}
+@keyframes wordGuessInvalidReactionPeek {
+  0% { opacity:0; transform: translate(-50%,15%) scale(.6); }
+  20% { opacity:1; transform: translate(-50%,-55%) scale(1.06); }
+  70% { opacity:1; transform: translate(-50%,-60%) scale(1); }
+  100% { opacity:0; transform: translate(-50%,5%) scale(.75); }
+}
+
+/* More celebratory win finale: emoji trophies, sparkles and expanding rings. */
+.word-guess-victory-emoji,
+.word-guess-victory-spark,
+.word-guess-victory-ring {
+  position: fixed;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.word-guess-victory-emoji {
+  left: var(--vx);
+  top: var(--vy);
+  z-index: 2;
+  font-size: clamp(24px, 5vw, 44px);
+  opacity: 0;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.18));
+  animation: wordGuessVictoryEmojiRise var(--vduration) cubic-bezier(.15,.78,.18,1) var(--vdelay) forwards;
+}
+.word-guess-victory-spark {
+  left: var(--sx);
+  top: var(--sy);
+  width: var(--ssize);
+  height: var(--ssize);
+  border-radius: 999px;
+  background: #fff3a6;
+  box-shadow: 0 0 14px rgba(255,235,122,.75);
+  opacity: 0;
+  animation: wordGuessVictorySpark 1.35s ease-out var(--sdelay) forwards;
+}
+.word-guess-victory-ring {
+  left: 50%;
+  top: 42%;
+  width: 90px;
+  height: 90px;
+  margin: -45px 0 0 -45px;
+  border-radius: 50%;
+  border: 3px solid rgba(125,214,212,.58);
+  opacity: 0;
+  animation: wordGuessVictoryRing 1.75s ease-out var(--ring-delay) forwards;
+}
+@keyframes wordGuessVictoryEmojiRise {
+  0% { opacity:0; transform: translate3d(-50%,0,0) scale(.5) rotate(0); }
+  18% { opacity:1; transform: translate3d(-50%,-28px,0) scale(1.08) rotate(8deg); }
+  72% { opacity:1; }
+  100% { opacity:0; transform: translate3d(calc(-50% + var(--vdx)), -48vh, 0) scale(1.18) rotate(var(--vrot)); }
+}
+@keyframes wordGuessVictorySpark {
+  0% { opacity:0; transform: scale(.1) rotate(0); }
+  28% { opacity:1; transform: scale(1.4) rotate(90deg); }
+  100% { opacity:0; transform: scale(.1) rotate(220deg); filter: blur(2px); }
+}
+@keyframes wordGuessVictoryRing {
+  0% { opacity:0; transform: scale(.2); }
+  22% { opacity:.9; }
+  100% { opacity:0; transform: scale(8.5); border-width: 1px; }
+}
+.word-guess-result.is-won .word-guess-result-word {
+  animation: wordGuessVictoryWordGlow 1.45s cubic-bezier(.18,1.2,.3,1) .12s both;
+}
+@keyframes wordGuessVictoryWordGlow {
+  0% { transform: scale(.86); filter: brightness(1); }
+  35% { transform: scale(1.10); filter: brightness(1.16); text-shadow: 0 0 34px rgba(125,214,212,.55); }
+  68% { transform: scale(.98); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Android-style hidden Labs unlock: bright, large, one-time and dismissible. */
+.app-labs-unlock-effect {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 43%, rgba(125,214,212,.33), transparent 34%),
+    radial-gradient(circle at 24% 22%, rgba(170,161,240,.34), transparent 29%),
+    radial-gradient(circle at 80% 76%, rgba(240,177,92,.30), transparent 31%),
+    linear-gradient(145deg, #171d34 0%, #20234b 44%, #113d47 100%);
+  animation: labsUnlockBackdropIn .42s ease-out both;
+  cursor: pointer;
+}
+.app-labs-unlock-effect::before,
+.app-labs-unlock-effect::after {
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(82vw,620px);
+  height:min(82vw,620px);
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow: 0 0 0 42px rgba(255,255,255,.025), 0 0 0 96px rgba(125,214,212,.025);
+  transform:translate(-50%,-50%);
+  animation: labsUnlockOrbitBackdrop 8s linear infinite;
+}
+.app-labs-unlock-effect::after { width:min(58vw,440px); animation-direction:reverse; animation-duration:5.5s; }
+.app-labs-unlock-core {
+  position:relative;
+  z-index:3;
+  width:min(86vw,620px);
+  display:grid;
+  justify-items:center;
+  gap:10px;
+  text-align:center;
+  color:#fff;
+  transform:scale(.72);
+  opacity:0;
+  animation: labsUnlockCoreIn .72s cubic-bezier(.16,1.25,.25,1) .08s forwards;
+}
+.app-labs-unlock-orbit {
+  position:absolute;
+  top:50%; left:50%;
+  width:min(68vw,420px); height:min(68vw,420px);
+  border:2px dashed rgba(255,255,255,.22);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  animation: labsUnlockOrbitCore 9s linear infinite;
+}
+.app-labs-unlock-icon {
+  position:relative;
+  z-index:2;
+  font-size:clamp(72px,18vw,132px);
+  filter:drop-shadow(0 16px 28px rgba(0,0,0,.28));
+  animation: labsUnlockFlask 1.3s ease-in-out .35s both;
+}
+.app-labs-unlock-title {
+  position:relative; z-index:2;
+  font-size:clamp(34px,8vw,72px);
+  line-height:.95;
+  letter-spacing:.08em;
+  background:linear-gradient(90deg,#7dd6d4,#fff3a6,#aaa1f0,#7dd6d4);
+  background-size:240% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation: labsUnlockTextSweep 1.8s linear infinite;
+}
+.app-labs-unlock-subtitle { position:relative; z-index:2; font-size:clamp(16px,3vw,24px); font-weight:850; opacity:.92; }
+.app-labs-unlock-languages { position:relative; z-index:2; margin-top:6px; padding:8px 16px; border:1px solid rgba(255,255,255,.24); border-radius:999px; background:rgba(255,255,255,.08); font-weight:950; letter-spacing:.18em; }
+.app-labs-unlock-spark {
+  position:absolute;
+  left:50%; top:48%;
+  width:var(--labs-size); height:var(--labs-size);
+  margin:-4px;
+  border-radius:50%;
+  background:#fff3a6;
+  box-shadow:0 0 14px rgba(255,243,166,.8);
+  opacity:0;
+  animation:labsUnlockSpark 1.5s cubic-bezier(.16,.78,.18,1) var(--labs-delay) forwards;
+}
+.app-labs-unlock-effect.is-leaving { animation:labsUnlockBackdropOut .34s ease-in forwards; }
+@keyframes labsUnlockBackdropIn { from{opacity:0} to{opacity:1} }
+@keyframes labsUnlockBackdropOut { to{opacity:0; transform:scale(1.04)} }
+@keyframes labsUnlockCoreIn { 0%{opacity:0;transform:scale(.62) rotate(-4deg)} 62%{opacity:1;transform:scale(1.06) rotate(1deg)} 100%{opacity:1;transform:scale(1)} }
+@keyframes labsUnlockOrbitBackdrop { to{transform:translate(-50%,-50%) rotate(360deg)} }
+@keyframes labsUnlockOrbitCore { to{transform:translate(-50%,-50%) rotate(360deg)} }
+@keyframes labsUnlockFlask { 0%{transform:scale(.3) rotate(-26deg);opacity:0} 48%{transform:scale(1.18) rotate(8deg);opacity:1} 72%{transform:scale(.94) rotate(-4deg)} 100%{transform:scale(1) rotate(0)} }
+@keyframes labsUnlockTextSweep { to{background-position:240% center} }
+@keyframes labsUnlockSpark { 0%{opacity:0;transform:rotate(var(--labs-angle)) translateX(0) scale(.2)} 18%{opacity:1} 100%{opacity:0;transform:rotate(var(--labs-angle)) translateX(var(--labs-distance)) scale(1.1)} }
+
+@media (prefers-reduced-motion: reduce) {
+  .word-guess-invalid-reaction,
+  .word-guess-victory-emoji,
+  .word-guess-victory-spark,
+  .word-guess-victory-ring,
+  .word-guess-result.is-won .word-guess-result-word,
+  .app-labs-unlock-effect,
+  .app-labs-unlock-effect * {
+    animation: none !important;
+  }
+}
+
+
+/* 0.6.4 — localized hints, readable reactions, hint nudge and achievements scaffold. */
+.word-guess-info-modal.is-hint-modal .word-guess-info-card h2 {
+  white-space: pre-line;
+  text-wrap: balance;
+}
+
+/* Comic reactions must stay razor-sharp; blur belongs only to dissolving board glyphs. */
+.word-guess-invalid-reaction {
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-rendering: geometricPrecision;
+}
+@keyframes wordGuessInvalidReactionPop {
+  0% { opacity: 0; transform: translate(-50%,-45%) scale(.55) rotate(var(--reaction-rot)); }
+  18% { opacity: 1; transform: translate(-50%,-58%) scale(1.10) rotate(var(--reaction-rot)); }
+  62% { opacity: 1; transform: translate(-50%,-64%) scale(1) rotate(var(--reaction-rot)); }
+  100% { opacity: 0; transform: translate(-50%,-96%) scale(.86) rotate(var(--reaction-rot)); }
+}
+
+#wordGuessGameScreen .word-guess-hint-btn.is-hint-nudged,
+#wordGuessGameScreen .word-guess-hint-step-btn.is-hint-nudged {
+  position: relative;
+  z-index: 4;
+  border-color: rgba(255, 196, 74, .92) !important;
+  box-shadow:
+    0 0 0 3px rgba(255, 202, 79, .18),
+    0 0 16px rgba(255, 194, 64, .72),
+    0 0 34px rgba(255, 209, 100, .34) !important;
+  animation: wordGuessHintNudgeGlow 1.15s ease-in-out infinite alternate;
+}
+#wordGuessGameScreen .word-guess-hint-btn.is-hint-nudged::before,
+#wordGuessGameScreen .word-guess-hint-step-btn.is-hint-nudged::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 2px solid rgba(255, 211, 101, .56);
+  border-radius: inherit;
+  pointer-events: none;
+  animation: wordGuessHintNudgeRing 1.4s ease-out infinite;
+}
+@keyframes wordGuessHintNudgeGlow {
+  from { transform: translateY(0) scale(1); }
+  to { transform: translateY(-1px) scale(1.075); }
+}
+@keyframes wordGuessHintNudgeRing {
+  0% { opacity: .75; transform: scale(.88); }
+  75%,100% { opacity: 0; transform: scale(1.28); }
+}
+body[data-theme="dark"] #wordGuessGameScreen .word-guess-hint-btn.is-hint-nudged,
+body[data-theme="dark"] #wordGuessGameScreen .word-guess-hint-step-btn.is-hint-nudged {
+  border-color: rgba(255, 214, 116, .92) !important;
+  box-shadow: 0 0 0 3px rgba(255, 207, 91, .16), 0 0 19px rgba(255, 199, 67, .72), 0 0 38px rgba(255, 197, 68, .30) !important;
+}
+
+.app-labs-achievements[hidden] { display: none !important; }
+.app-labs-achievements { margin-top:18px; padding:16px; border:1px solid rgba(148,163,184,.20); border-radius:20px; background:rgba(255,255,255,.38); }
+body[data-theme="dark"] .app-labs-achievements { background:rgba(255,255,255,.045); border-color:rgba(148,163,184,.16); }
+.app-labs-achievements-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.app-labs-achievements-heading h4 { margin:3px 0 0; font-size:18px; }
+.app-labs-achievements-progress { flex:0 0 auto; padding:7px 11px; border-radius:999px; background:rgba(94,203,196,.14); border:1px solid rgba(94,203,196,.28); color:inherit; font-size:12px; }
+.app-labs-achievements-copy { margin:8px 0 12px; color:var(--color-muted); font-size:13px; font-weight:700; }
+.app-labs-achievements-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.app-labs-achievement-card { display:flex; align-items:flex-start; gap:10px; min-width:0; padding:11px; border-radius:16px; border:1px solid rgba(148,163,184,.18); background:rgba(255,255,255,.44); }
+body[data-theme="dark"] .app-labs-achievement-card { background:rgba(255,255,255,.05); border-color:rgba(148,163,184,.14); }
+.app-labs-achievement-card.is-locked { opacity:.55; filter:saturate(.55); }
+.app-labs-achievement-card.is-unlocked { border-color:rgba(241,187,75,.42); box-shadow:0 8px 20px rgba(105,82,32,.08); }
+.app-labs-achievement-reward { width:38px; height:38px; flex:0 0 38px; display:grid; place-items:center; border-radius:13px; background:rgba(241,211,142,.18); font-size:23px; }
+.app-labs-achievement-body { display:grid; gap:3px; min-width:0; }
+.app-labs-achievement-body strong { font-size:14px; line-height:1.15; }
+.app-labs-achievement-body small { color:var(--color-muted); font-size:11px; line-height:1.3; font-weight:650; }
+.app-labs-achievement-body em { margin-top:3px; font-size:10px; font-style:normal; font-weight:900; letter-spacing:.04em; text-transform:uppercase; color:var(--color-muted); }
+.app-labs-achievement-card.is-unlocked .app-labs-achievement-body em { color:#9b6f16; }
+body[data-theme="dark"] .app-labs-achievement-card.is-unlocked .app-labs-achievement-body em { color:#f4c65f; }
+.word-guess-achievement-toast { position:fixed; z-index:250; left:50%; top:max(18px,calc(env(safe-area-inset-top,0px) + 14px)); width:min(430px,calc(100vw - 28px)); display:flex; align-items:center; gap:13px; padding:13px 16px; border-radius:20px; border:1px solid rgba(241,198,95,.45); background:rgba(255,250,238,.96); color:#293354; box-shadow:0 20px 50px rgba(43,37,72,.25),0 0 34px rgba(241,193,75,.14); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); opacity:0; transform:translate(-50%,-26px) scale(.92); pointer-events:auto; cursor:pointer; overflow:hidden; transition:opacity .28s ease,transform .42s cubic-bezier(.18,.9,.24,1.18); }
+body[data-theme="dark"] .word-guess-achievement-toast { background:rgba(28,35,57,.96); color:#f5f1e8; border-color:rgba(245,200,92,.46); box-shadow:0 22px 55px rgba(0,0,0,.45),0 0 38px rgba(244,190,64,.17); }
+.word-guess-achievement-toast.is-visible { opacity:1; transform:translate(-50%,0) scale(1); }
+.word-guess-achievement-toast::after { content:""; position:absolute; left:0; bottom:0; height:4px; width:100%; transform-origin:left center; transform:scaleX(0); background:linear-gradient(90deg,#f0bb43,#ffdf7f,#83d8d1); opacity:.85; }
+.word-guess-achievement-toast.is-visible::after { animation:wordGuessAchievementToastProgress 9s linear forwards; }
+@keyframes wordGuessAchievementToastProgress { from{transform:scaleX(1)} to{transform:scaleX(0)} }
+.word-guess-achievement-toast.is-leaving { opacity:0; transform:translate(-50%,-12px) scale(.96); }
+.word-guess-achievement-toast-reward { width:54px; height:54px; flex:0 0 54px; display:grid; place-items:center; border-radius:17px; background:linear-gradient(145deg,rgba(255,230,147,.75),rgba(241,187,70,.24)); font-size:30px; animation:wordGuessAchievementReward 1s cubic-bezier(.2,.9,.2,1.2) both; }
+.word-guess-achievement-toast-copy { display:grid; gap:2px; min-width:0; }
+.word-guess-achievement-toast-copy small { color:#a77716; font-size:10px; font-weight:950; letter-spacing:.08em; text-transform:uppercase; }
+body[data-theme="dark"] .word-guess-achievement-toast-copy small { color:#f1c45d; }
+.word-guess-achievement-toast-copy strong { font-size:17px; line-height:1.12; }
+.word-guess-achievement-toast-copy em { color:var(--color-muted); font-size:12px; line-height:1.25; font-style:normal; font-weight:700; }
+@keyframes wordGuessAchievementReward { 0%{transform:scale(.4) rotate(-22deg)} 55%{transform:scale(1.18) rotate(8deg)} 100%{transform:scale(1) rotate(0)} }
+@media (max-width:520px) { .app-labs-achievements-grid{grid-template-columns:1fr} .word-guess-achievement-toast{top:max(12px,calc(env(safe-area-inset-top,0px) + 10px));} }
+
+@media (prefers-reduced-motion: reduce) {
+  #wordGuessGameScreen .word-guess-hint-btn.is-hint-nudged,
+  #wordGuessGameScreen .word-guess-hint-step-btn.is-hint-nudged { animation: none; }
+  #wordGuessGameScreen .word-guess-hint-btn.is-hint-nudged::before,
+  #wordGuessGameScreen .word-guess-hint-step-btn.is-hint-nudged::before { animation: none; opacity: .4; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .word-guess-achievement-toast, .word-guess-achievement-toast-reward, .word-guess-achievement-toast::after { animation:none !important; transition:none !important; }
+}
+
+
+/* 0.6.4 — make the primary invalid-word message unmistakable.
+   Comic reactions remain secondary decoration; this banner carries the actual reason. */
+.word-guess-message {
+  z-index: 180;
+  min-width: min(84vw, 320px);
+  max-width: min(92vw, 520px);
+  padding: 18px 24px;
+  border-radius: 22px;
+  background: #fff2f5;
+  border: 3px solid rgba(190, 48, 82, 0.72);
+  color: #8f1738;
+  box-shadow:
+    0 22px 54px rgba(116, 31, 55, 0.32),
+    0 0 0 6px rgba(255, 224, 232, 0.92),
+    0 0 30px rgba(207, 76, 106, 0.18);
+  font-size: clamp(19px, 3.2vw, 23px);
+  line-height: 1.18;
+  font-weight: 1000;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.90);
+  transition: opacity 0.24s ease, transform 0.28s ease;
+}
+
+.word-guess-message::before {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 999px;
+  background: #c83e63;
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 0 6px 16px rgba(160, 36, 70, 0.22);
+}
+
+.word-guess-message.is-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: wordGuessPrimaryErrorIn 620ms cubic-bezier(.18,.9,.22,1.14) both;
+}
+
+body[data-theme="dark"] .word-guess-message {
+  background: #5b2035;
+  border-color: rgba(255, 150, 174, 0.92);
+  color: #fff1f5;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.52),
+    0 0 0 6px rgba(255, 124, 157, 0.16),
+    0 0 36px rgba(255, 113, 151, 0.18);
+}
+
+body[data-theme="dark"] .word-guess-message::before {
+  background: #ff7396;
+  color: #421425;
+}
+
+@keyframes wordGuessPrimaryErrorIn {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(.78); }
+  34% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  58% { transform: translate(-50%, -50%) scale(.985); }
+  76% { transform: translate(-50%, -50%) scale(1.025); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@media (max-width: 520px) {
+  .word-guess-message {
+    min-width: min(88vw, 300px);
+    padding: 16px 19px;
+    font-size: clamp(18px, 5.1vw, 21px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-guess-message.is-visible {
+    animation: none;
+  }
+}
+
+
+/* 0.6.4 — visible achievement collection */
+.menu-achievements-card {
+  width:min(100%,640px); margin:12px auto 2px; padding:12px 14px; display:flex; align-items:center; gap:12px;
+  border:1px solid rgba(181,137,43,.24); border-radius:19px; background:linear-gradient(135deg,rgba(255,247,218,.84),rgba(255,255,255,.72));
+  color:inherit; text-align:left; box-shadow:0 8px 24px rgba(79,57,20,.06); cursor:pointer;
+}
+body[data-theme="dark"] .menu-achievements-card { background:linear-gradient(135deg,rgba(245,190,69,.12),rgba(255,255,255,.045)); border-color:rgba(245,190,69,.24); }
+.menu-achievements-card:hover { transform:translateY(-1px); }
+.menu-achievements-card:active { transform:translateY(0) scale(.99); }
+.menu-achievements-icon { width:44px; height:44px; flex:0 0 44px; display:grid; place-items:center; border-radius:15px; font-size:27px; background:rgba(241,187,75,.18); box-shadow:inset 0 0 0 1px rgba(241,187,75,.18); }
+.menu-achievements-copy { min-width:0; flex:1; display:grid; gap:3px; }
+.menu-achievements-copy strong { font-size:15px; }
+.menu-achievements-copy small { color:var(--color-muted); font-size:11px; font-weight:800; }
+.menu-achievements-chevron { flex:0 0 auto; font-size:28px; line-height:1; opacity:.5; }
+.menu-achievements-progress-track { width:100%; height:4px; margin-top:3px; overflow:hidden; border-radius:999px; background:rgba(148,163,184,.18); }
+.menu-achievements-progress-track > span { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,#f1bb4b,#69c9bf); transition:width .35s ease; }
+
+.achievements-modal[hidden] { display:none !important; }
+.achievements-modal { position:fixed; inset:0; z-index:2350; display:grid; place-items:center; padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom)); }
+.achievements-modal-backdrop { position:absolute; inset:0; background:rgba(15,23,42,.52); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
+.achievements-modal-card { position:relative; z-index:1; width:min(920px,100%); max-height:min(88vh,820px); max-height:min(88dvh,820px); overflow:auto; overscroll-behavior:contain; padding:22px; border-radius:27px; border:1px solid rgba(148,163,184,.22); background:rgba(255,252,244,.97); box-shadow:0 28px 80px rgba(15,23,42,.28); }
+body[data-theme="dark"] .achievements-modal-card { background:rgba(20,29,45,.98); border-color:rgba(148,163,184,.18); }
+.achievements-modal-close { position:sticky; top:0; z-index:3; float:right; width:44px; height:44px; margin:-5px -5px 0 12px; border:0; border-radius:15px; background:rgba(148,163,184,.13); color:inherit; font-size:26px; line-height:1; cursor:pointer; }
+.achievements-modal-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; padding-right:2px; }
+.achievements-modal-heading h2 { margin:3px 0 0; font-size:clamp(24px,4vw,34px); }
+.achievements-modal-copy { margin:10px 0 18px; max-width:720px; color:var(--color-muted); font-size:13px; font-weight:700; line-height:1.45; }
+.achievements-modal-sections { display:grid; gap:18px; clear:both; }
+.achievements-category { display:grid; gap:9px; }
+.achievements-category-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.achievements-category-heading h3 { margin:0; font-size:15px; }
+.achievements-category-heading span { padding:4px 8px; border-radius:999px; background:rgba(148,163,184,.12); color:var(--color-muted); font-size:10px; font-weight:900; }
+.achievements-modal .app-labs-achievements-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.achievements-modal .app-labs-achievement-card { min-height:92px; }
+.app-labs-achievements > .achievements-category { margin-top:14px; }
+.app-labs-achievements > .achievements-category + .achievements-category { margin-top:18px; }
+.app-labs-achievements > .achievements-category .app-labs-achievements-grid { margin-top:0; }
+body.achievements-open { overflow:hidden; }
+
+@media (max-width:760px) {
+  .achievements-modal-card { padding:17px 14px 20px; border-radius:23px; max-height:92vh; max-height:92dvh; }
+  .achievements-modal .app-labs-achievements-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .achievements-modal .app-labs-achievement-card { padding:10px; min-height:88px; }
+}
+@media (max-width:500px) {
+  .menu-achievements-card { margin-top:9px; padding:10px 11px; border-radius:17px; }
+  .menu-achievements-icon { width:39px; height:39px; flex-basis:39px; font-size:23px; }
+  .achievements-modal { padding:8px 7px max(8px,env(safe-area-inset-bottom)); }
+  .achievements-modal-card { max-height:96vh; max-height:96dvh; border-radius:20px; padding:14px 10px 18px; }
+  .achievements-modal .app-labs-achievements-grid { grid-template-columns:1fr; }
+  .achievements-modal-heading h2 { font-size:24px; }
+}
+
+.app-labs-achievements-grid.is-grouped { grid-template-columns:1fr; gap:18px; }
+.app-labs-achievements-grid.is-grouped > .achievements-category { min-width:0; }
+
+
+/* 0.6.4 — expanded achievements + triple-tap mystery hints. */
+.app-labs-achievement-card.is-mystery {
+  position: relative;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.app-labs-achievement-card.is-mystery::after {
+  content: "···";
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 1000;
+  letter-spacing: 2px;
+  opacity: .58;
+}
+.app-labs-achievement-card.is-mystery:active {
+  transform: scale(.985);
+}
+.app-labs-achievement-card.is-hint-revealed {
+  opacity: .92;
+  filter: none;
+  border-color: rgba(100, 194, 186, .42);
+  box-shadow: 0 10px 26px rgba(61, 144, 139, .10);
+}
+.app-labs-achievement-card.is-hint-revealed::after {
+  content: "🔎";
+  letter-spacing: 0;
+  opacity: .82;
+}
+.app-labs-achievement-mystery {
+  margin-top: 3px;
+  padding: 5px 7px;
+  border-radius: 9px;
+  background: rgba(126, 113, 210, .09);
+  color: #6657a6;
+  font-size: 9px;
+  line-height: 1.25;
+  font-weight: 900;
+}
+body[data-theme="dark"] .app-labs-achievement-mystery {
+  background: rgba(158, 143, 246, .12);
+  color: #c9c0ff;
+}
+.app-labs-achievement-hint-detail {
+  margin-top: 2px;
+  padding: 8px 9px;
+  border-radius: 11px;
+  background: rgba(92, 193, 184, .11);
+  border: 1px solid rgba(92, 193, 184, .18);
+  color: var(--color-text);
+  font-size: 10.5px;
+  line-height: 1.35;
+  font-weight: 700;
+  animation: achievementHintReveal .36s cubic-bezier(.2,.9,.2,1.12) both;
+}
+.app-labs-achievement-hint-detail b { color: #397f7a; font-weight: 1000; }
+body[data-theme="dark"] .app-labs-achievement-hint-detail b { color: #82d8d1; }
+@keyframes achievementHintReveal {
+  from { opacity: 0; transform: translateY(-5px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.achievements-modal .app-labs-achievement-card.is-hint-revealed { min-height: 112px; }
+@media (prefers-reduced-motion: reduce) {
+  .app-labs-achievement-hint-detail { animation: none; }
+}
+
+
+/* 0.6.4 — achievements discovery semantics + compact prep-screen access. */
+.app-achievements-btn {
+  position: fixed;
+  top: max(12px, calc(env(safe-area-inset-top, 0px) + 10px));
+  right: max(68px, calc(env(safe-area-inset-right, 0px) + 68px));
+  z-index: 40;
+  width: 50px;
+  height: 44px;
+  display: none;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(193, 150, 45, .30);
+  background: rgba(255, 250, 240, .82);
+  color: var(--color-text);
+  box-shadow: 0 10px 24px rgba(54, 49, 94, .13);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+body[data-theme="dark"] .app-achievements-btn {
+  background: rgba(31, 38, 58, .82);
+  border-color: rgba(241, 187, 75, .28);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, .26);
+}
+.app-achievements-btn:hover { transform: translateY(-1px) rotate(-5deg); }
+.app-achievements-btn:active { transform: translateY(0) scale(.96); }
+.app-achievements-icon { font-size: 22px; line-height: 1; }
+.app-achievements-badge {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  min-width: 27px;
+  height: 17px;
+  padding: 0 4px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 250, 240, .96);
+  background: #e5b448;
+  color: #3f3215;
+  font-size: 8px;
+  font-weight: 1000;
+  line-height: 1;
+  box-sizing: border-box;
+}
+body[data-theme="dark"] .app-achievements-badge { border-color: #1d2639; background: #f1c45d; color: #29220f; }
+.app-achievements-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+body[data-screen="menu"] .app-achievements-btn,
+body[data-screen="settings"] .app-achievements-btn,
+body[data-screen="wordGuessSettings"] .app-achievements-btn,
+body[data-screen="whoAmISettings"] .app-achievements-btn { display: inline-grid; }
+body.required-update-open .app-achievements-btn,
+body.word-guess-result-open .app-achievements-btn,
+body.achievements-open .app-achievements-btn { display: none !important; }
+
+/* Keep the settings gear beside Achievements on preparation screens too. */
+body[data-screen="menu"] .app-settings-btn,
+body[data-screen="settings"] .app-settings-btn,
+body[data-screen="wordGuessSettings"] .app-settings-btn,
+body[data-screen="whoAmISettings"] .app-settings-btn { display: inline-grid; }
+body.required-update-open .app-settings-btn,
+body.word-guess-result-open .app-settings-btn { display: none !important; }
+
+/* A revealed condition is still LOCKED until its real gameplay condition is met. */
+.app-labs-achievement-card.is-hint-revealed {
+  border-color: rgba(126, 113, 210, .30);
+  box-shadow: none;
+}
+.app-labs-achievement-card.is-hint-revealed.is-locked {
+  opacity: .55;
+  filter: saturate(.55);
+}
+.app-labs-achievement-card.is-hint-revealed.is-unlocked {
+  opacity: 1;
+  filter: none;
+  border-color: rgba(241,187,75,.42);
+  box-shadow: 0 8px 20px rgba(105,82,32,.08);
+}
+.app-labs-achievement-card.is-hint-revealed::after {
+  content: "🔎";
+  opacity: .62;
+}
+.app-labs-achievement-card.is-hint-revealed.is-unlocked::after { content: "✓"; color: #9b6f16; opacity: .9; }
+body[data-theme="dark"] .app-labs-achievement-card.is-hint-revealed.is-unlocked::after { color: #f4c65f; }
+
+@media (max-width: 520px) {
+  .app-achievements-btn {
+    top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px));
+    right: max(62px, calc(env(safe-area-inset-right, 0px) + 62px));
+    width: 46px;
+    height: 42px;
+  }
+  .app-achievements-icon { font-size: 21px; }
+  .app-achievements-badge { right: -4px; bottom: -4px; }
+}
+
+
+/* 0.6.4 — longer achievement reveal + jump directly to the earned card. */
+.word-guess-achievement-toast {
+  width: min(480px, calc(100vw - 24px));
+  gap: 15px;
+  padding: 16px 46px 16px 17px;
+  border-width: 2px;
+  border-color: rgba(241, 190, 66, .58);
+  box-shadow: 0 24px 62px rgba(43, 37, 72, .31), 0 0 42px rgba(241, 193, 75, .22);
+}
+.word-guess-achievement-toast-reward {
+  width: 64px;
+  height: 64px;
+  flex-basis: 64px;
+  border-radius: 20px;
+  font-size: 36px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.32), 0 9px 24px rgba(160,117,27,.16);
+}
+.word-guess-achievement-toast-copy { gap: 4px; }
+.word-guess-achievement-toast-copy strong { font-size: 19px; line-height: 1.12; }
+.word-guess-achievement-toast-copy em { font-size: 12.5px; line-height: 1.34; }
+.word-guess-achievement-toast-open {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 4px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(99, 184, 176, .13);
+  color: #397f7a;
+  font-size: 10.5px;
+  line-height: 1.15;
+  font-weight: 950;
+}
+.word-guess-achievement-toast-open::after { content: "  →"; }
+body[data-theme="dark"] .word-guess-achievement-toast-open { background: rgba(100, 205, 195, .13); color: #91ddd6; }
+.word-guess-achievement-toast-close {
+  position: absolute;
+  top: 8px;
+  right: 9px;
+  width: 31px;
+  height: 31px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(148,163,184,.13);
+  color: inherit;
+  font: inherit;
+  font-size: 21px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: .76;
+}
+.word-guess-achievement-toast-close:hover { opacity: 1; background: rgba(148,163,184,.22); }
+.word-guess-achievement-toast:focus-visible { outline: 3px solid rgba(98, 193, 184, .68); outline-offset: 3px; }
+
+.achievements-modal .app-labs-achievement-card.is-jump-target {
+  opacity: 1 !important;
+  filter: none !important;
+  position: relative;
+  z-index: 2;
+  border-color: rgba(241, 183, 51, .92) !important;
+  box-shadow: 0 0 0 4px rgba(255, 211, 96, .25), 0 18px 44px rgba(174, 126, 25, .24) !important;
+  animation: achievementJumpTarget 1.05s ease-in-out 2;
+}
+@keyframes achievementJumpTarget {
+  0%,100% { transform: scale(1); }
+  42% { transform: scale(1.035); }
+}
+.achievements-modal .app-labs-achievement-card:focus-visible {
+  outline: 3px solid rgba(97, 191, 183, .65);
+  outline-offset: 3px;
+}
+@media (max-width: 520px) {
+  .word-guess-achievement-toast { padding: 14px 42px 14px 14px; gap: 12px; }
+  .word-guess-achievement-toast-reward { width: 56px; height: 56px; flex-basis: 56px; font-size: 31px; border-radius: 18px; }
+  .word-guess-achievement-toast-copy strong { font-size: 17px; }
+  .word-guess-achievement-toast-copy em { font-size: 11.5px; }
+  .word-guess-achievement-toast-open { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .achievements-modal .app-labs-achievement-card.is-jump-target { animation: none !important; }
+}
+
+
+/* 0.6.4 — compact achievement counter, feedback/reset tools and future-ready session shell. */
+.app-achievements-badge {
+  min-width: 31px;
+  padding-inline: 5px;
+  font-size: 8.5px;
+  letter-spacing: -.02em;
+}
+.app-support-options { margin-top: 10px; }
+.app-settings-option-danger { border-color: rgba(191, 87, 87, .20); }
+.app-settings-option-danger .app-settings-option-icon { background: rgba(207, 92, 92, .10); }
+body[data-theme="dark"] .app-settings-option-danger { border-color: rgba(238, 126, 126, .19); }
+.developer-feedback-card { width: min(560px, calc(100vw - 28px)); }
+.developer-feedback-context {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(95, 190, 181, .10);
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 800;
+}
+.developer-feedback-text {
+  width: 100%;
+  min-height: 132px;
+  margin-top: 12px;
+  padding: 12px 13px;
+  resize: vertical;
+  box-sizing: border-box;
+  border: 1px solid rgba(75, 92, 130, .20);
+  border-radius: 16px;
+  background: rgba(255,255,255,.74);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+  outline: none;
+}
+.developer-feedback-text:focus { border-color: rgba(77, 176, 168, .62); box-shadow: 0 0 0 3px rgba(77,176,168,.12); }
+body[data-theme="dark"] .developer-feedback-text { background: rgba(18,25,43,.82); border-color: rgba(164,181,220,.20); }
+.developer-feedback-save { width: 100%; margin-top: 10px; }
+.developer-feedback-status { min-height: 20px; margin: 8px 0 0; }
+.word-guess-feedback {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(83, 107, 143, .14);
+  border-radius: 16px;
+  background: rgba(255,255,255,.46);
+}
+body[data-theme="dark"] .word-guess-feedback { background: rgba(26,34,54,.62); border-color: rgba(163,181,218,.13); }
+.word-guess-feedback > strong { display:block; margin-bottom:9px; font-size:12px; }
+.word-guess-feedback-actions { display:flex; flex-wrap:wrap; gap:7px; }
+.word-guess-feedback-btn { min-height:38px; width:auto; flex:1 1 130px; padding:8px 10px; font-size:11px; }
+.word-guess-feedback-btn.is-selected { border-color: rgba(75,181,170,.60); box-shadow: 0 0 0 2px rgba(75,181,170,.12); }
+.word-guess-feedback-message { min-height:18px; margin:7px 0 0; font-size:10.5px; opacity:.82; }
+.word-guess-feedback-export { margin-top:2px; padding:0; border:0; background:transparent; color:var(--color-muted); font:inherit; font-size:9.5px; text-decoration:underline; cursor:pointer; }
+@media (max-width: 520px) {
+  .word-guess-feedback-actions { display:grid; grid-template-columns:1fr 1fr; }
+  .word-guess-feedback-btn { width:100%; min-width:0; }
+  .word-guess-feedback-btn:last-child { grid-column:1 / -1; }
+}
+
+/* 0.6.4 — readable compact achievement counter. */
+.app-achievements-btn {
+  width: 56px;
+  height: 48px;
+}
+.app-achievements-btn .app-achievements-icon {
+  transform: translateY(-5px);
+}
+.app-achievements-badge {
+  left: 50%;
+  right: auto;
+  bottom: 3px;
+  min-width: 36px;
+  height: 15px;
+  padding: 0 5px;
+  transform: translateX(-50%);
+  border-width: 1px;
+  font-size: 9px;
+  letter-spacing: 0;
+}
+@media (max-width: 520px) {
+  .app-achievements-btn { width: 54px; height: 46px; }
+  .app-achievements-badge { right: auto; bottom: 3px; }
+}

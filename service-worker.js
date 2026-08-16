@@ -1,11 +1,14 @@
-const MOVOHRAY_REVISION = "0.6.3a-20260815";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.3a-b20260815";
+const MOVOHRAY_REVISION = "0.6.4-20260816";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.4-b20260816";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
   `./styles.css?rev=${MOVOHRAY_REVISION}`,
+  `./wordguess-session.js?rev=${MOVOHRAY_REVISION}`,
   `./app.js?rev=${MOVOHRAY_REVISION}`,
   `./wordguess.json?rev=${MOVOHRAY_REVISION}`,
+  `./wordguess-ru.json?rev=${MOVOHRAY_REVISION}`,
+  `./wordguess-en.json?rev=${MOVOHRAY_REVISION}`,
   `./whoami.json?rev=${MOVOHRAY_REVISION}`,
   `./words.json?rev=${MOVOHRAY_REVISION}`,
   `./crocodile.json?rev=${MOVOHRAY_REVISION}`

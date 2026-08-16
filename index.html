@@ -13,17 +13,27 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.3a-20260815" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4-20260816" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.3a-20260815" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.4-20260816" />
 </head>
 <body data-mode="explain" data-screen="menu">
+  <div class="game-ambient-pattern" aria-hidden="true"></div>
   <button id="appSettingsBtn" class="app-settings-btn" type="button" aria-label="Відкрити налаштування">
-    <span aria-hidden="true">⚙︎</span>
+    <svg class="app-settings-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="3.2"></circle>
+      <path d="M19.4 13.5a7.8 7.8 0 0 0 0-3l2-1.2-2-3.4-2.3 1a8 8 0 0 0-2.6-1.5L14.2 3h-4l-.3 2.4a8 8 0 0 0-2.6 1.5l-2.3-1-2 3.4 2 1.2a7.8 7.8 0 0 0 0 3l-2 1.2 2 3.4 2.3-1a8 8 0 0 0 2.6 1.5l.3 2.4h4l.3-2.4a8 8 0 0 0 2.6-1.5l2.3 1 2-3.4-2-1.2Z"></path>
+    </svg>
+  </button>
+  <button id="menuAchievementsBtn" class="app-achievements-btn" type="button" aria-haspopup="dialog" aria-controls="achievementsModal" aria-label="Досягнення">
+    <span class="app-achievements-icon" aria-hidden="true">🏆</span>
+    <span id="menuAchievementsProgress" class="app-achievements-badge">0/160</span>
+    <span id="menuAchievementsTitle" class="app-achievements-label">Досягнення</span>
+    <span id="menuAchievementsProgressBar" hidden></span>
   </button>
   <div id="appSettingsModal" class="app-settings-modal" hidden>
     <div class="app-settings-backdrop" data-app-settings-close></div>
@@ -105,8 +115,75 @@
           </div>
         </div>
       </section>
+      <section id="appLabsSection" class="app-settings-section app-labs-section" hidden>
+        <p id="appLabsEyebrow" class="app-settings-section-eyebrow">Labs · прихований тест</p>
+        <h3 id="appLabsTitle" class="app-settings-section-title">Експериментальні функції</h3>
+        <p id="appLabsCopy" class="app-labs-copy">Мова змінюється тільки у грі «Вгадай слово». Українська лишається основною; RU та EN — тестові словники.</p>
+        <div id="appLabsLanguageRow" class="app-settings-choice-row app-labs-language-row" role="group" aria-label="Мова гри Вгадай слово">
+          <button class="app-settings-choice" type="button" data-word-guess-language="uk">Українська</button>
+          <button class="app-settings-choice" type="button" data-word-guess-language="ru">Русский · Labs</button>
+          <button class="app-settings-choice" type="button" data-word-guess-language="en">English · Labs</button>
+        </div>
+        <p id="wordGuessLabsStatus" class="app-labs-status"></p>
+        <section id="appLabsAchievementsSection" class="app-labs-achievements" aria-labelledby="appLabsAchievementsTitle">
+          <div class="app-labs-achievements-heading">
+            <div>
+              <p id="appLabsAchievementsEyebrow" class="app-settings-section-eyebrow">Achievements · Labs</p>
+              <h4 id="appLabsAchievementsTitle">Нагороди й досягнення</h4>
+            </div>
+            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/160</strong>
+          </div>
+          <p id="appLabsAchievementsCopy" class="app-labs-achievements-copy">Локальні нагороди зберігаються на цьому пристрої.</p>
+          <div id="appLabsAchievementsGrid" class="app-labs-achievements-grid"></div>
+          <output id="appLabsAchievementsDebug" hidden></output>
+        </section>
+      </section>
+      <section class="app-settings-section app-support-section">
+        <p id="settingsSupportEyebrow" class="app-settings-section-eyebrow">Дані й підтримка</p>
+        <h3 id="settingsSupportTitle" class="app-settings-section-title">Скидання та зв’язок</h3>
+        <div class="app-settings-options app-support-options">
+          <button id="settingsDeveloperReportBtn" class="app-settings-option" type="button">
+            <span class="app-settings-option-icon" aria-hidden="true">📡</span>
+            <span class="app-settings-option-copy"><strong id="settingsDeveloperReportTitle">Повідомити розробнику</strong><small id="settingsDeveloperReportText">Звіт про баг поки зберігається локально.</small></span>
+          </button>
+          <button id="settingsResetAllBtn" class="app-settings-option app-settings-option-danger" type="button">
+            <span class="app-settings-option-icon" aria-hidden="true">♻️</span>
+            <span class="app-settings-option-copy"><strong id="settingsResetAllTitle">Скинути прогрес і налаштування</strong><small id="settingsResetAllText">Досягнення, Labs і персональні налаштування.</small></span>
+          </button>
+        </div>
+      </section>
       <p class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version">v0.6.3a</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4</p>
+    </div>
+  </div>
+
+  <div id="achievementsModal" class="achievements-modal" hidden>
+    <div class="achievements-modal-backdrop" data-achievements-close></div>
+    <div class="achievements-modal-card" role="dialog" aria-modal="true" aria-labelledby="achievementsModalTitle">
+      <button id="achievementsModalCloseBtn" class="achievements-modal-close" type="button" aria-label="Закрити">×</button>
+      <div class="achievements-modal-heading">
+        <div>
+          <p id="achievementsModalEyebrow" class="app-settings-section-eyebrow">Вгадай слово</p>
+          <h2 id="achievementsModalTitle">Досягнення</h2>
+        </div>
+        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/160</strong>
+      </div>
+      <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+      <div id="achievementsModalGrid" class="achievements-modal-sections"></div>
+    </div>
+  </div>
+
+  <div id="developerFeedbackModal" class="word-guess-info-modal developer-feedback-modal" hidden>
+    <div class="word-guess-info-backdrop" data-developer-feedback-close></div>
+    <div class="word-guess-info-card developer-feedback-card" role="dialog" aria-modal="true" aria-labelledby="developerFeedbackTitle">
+      <button id="developerFeedbackCloseBtn" class="word-guess-info-close" type="button" aria-label="Закрити">×</button>
+      <p id="developerFeedbackEyebrow" class="word-guess-info-eyebrow">Зв’язок із розробником</p>
+      <h2 id="developerFeedbackTitle">Повідомити про проблему</h2>
+      <p id="developerFeedbackCopy">Поки що повідомлення зберігається локально.</p>
+      <p id="developerFeedbackContext" class="developer-feedback-context" hidden></p>
+      <textarea id="developerFeedbackText" class="developer-feedback-text" rows="5" maxlength="1200" placeholder="Що сталося?"></textarea>
+      <button id="developerFeedbackSaveBtn" class="primary-btn developer-feedback-save" type="button">Надіслати розробнику</button>
+      <p id="developerFeedbackStatus" class="message developer-feedback-status" role="status" aria-live="polite"></p>
     </div>
   </div>
   <main class="app">
@@ -126,6 +203,7 @@
 
           <div id="modeList" class="mode-grid"></div>
 
+
           <div class="rules-box">
             <h2>Правила</h2>
             <p>
@@ -138,7 +216,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.3a</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.4</p>
         </div>
       </div>
     </section>
@@ -268,14 +346,15 @@
         <div class="card-inner">
           <div class="setup-titlebar">
             <div>
-              <p class="settings-eyebrow">Одиночний режим</p>
-              <h1 class="mode-title">Вгадай слово</h1>
+              <p id="wordGuessSettingsEyebrow" class="settings-eyebrow">Одиночний режим</p>
+              <h1 id="wordGuessSettingsTitle" class="mode-title">Вгадай слово</h1>
             </div>
             <div class="mode-setup-header-actions">
               <button id="wordGuessSettingsRulesBtn" class="setup-rules-btn mode-rules-button" type="button" aria-label="Показати правила">?</button>
             </div>
           </div>
           <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
+          <p id="wordGuessLanguageBadge" class="word-guess-language-badge" hidden></p>
 
           <div class="word-guess-summary word-guess-mode-picker" aria-label="Налаштування режиму Вгадай слово">
             <details class="word-guess-select">
@@ -316,7 +395,7 @@
     </section>
 
     <section id="wordGuessGameScreen" class="screen">
-      <h1 class="word-guess-screen-title">Вгадай слово</h1>
+      <h1 id="wordGuessGameTitle" class="word-guess-screen-title">Вгадай слово</h1>
       <div class="card center bubble-card word-guess-game-card">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
@@ -324,25 +403,32 @@
           <div class="word-guess-titlebar">
             <button id="wordGuessTopMenuBtn" class="secondary-btn word-guess-menu-link" type="button">← У меню</button>
             <div class="word-guess-toolbar" aria-label="Підказки і правила">
-              <button id="wordGuessHintFirstBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-btn word-guess-hint-first-btn" type="button" aria-label="Показати першу підказку" title="Перша підказка">
-                <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
-                <span class="word-guess-hint-step" aria-hidden="true">1</span>
-                <span class="word-guess-hint-label">Підказка 1</span>
-              </button>
-              <button id="wordGuessHintSecondBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-step-btn word-guess-hint-second-btn" type="button" aria-label="Друга підказка відкриється після першої" title="Друга підказка відкриється після першої" disabled>
-                <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
-                <span class="word-guess-hint-step" aria-hidden="true">2</span>
-                <span class="word-guess-hint-label">Підказка 2</span>
-              </button>
-              <button id="wordGuessHintThirdBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-step-btn word-guess-hint-third-btn" type="button" aria-label="Третя підказка відкриється після другої" title="Третя підказка відкриється після другої" disabled>
-                <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
-                <span class="word-guess-hint-step" aria-hidden="true">3</span>
-                <span class="word-guess-hint-label">Підказка 3</span>
-              </button>
+              <div class="word-guess-hints-cluster" aria-label="Три рівні підказок">
+                <span class="word-guess-hints-cluster-label"><span aria-hidden="true">💡</span><span><strong id="wordGuessHintsLabel">Підказки</strong><small id="wordGuessHintsLevels">3 рівні</small></span></span>
+                <div class="word-guess-hints-buttons">
+                  <button id="wordGuessHintFirstBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-btn word-guess-hint-first-btn" type="button" aria-label="Показати першу підказку" title="Перша підказка">
+                    <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
+                    <span class="word-guess-hint-step" aria-hidden="true">1</span>
+                    <span class="word-guess-hint-label">Підказка 1</span>
+                  </button>
+                  <button id="wordGuessHintSecondBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-step-btn word-guess-hint-second-btn" type="button" aria-label="Друга підказка відкриється після першої" title="Друга підказка відкриється після першої" disabled>
+                    <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
+                    <span class="word-guess-hint-step" aria-hidden="true">2</span>
+                    <span class="word-guess-hint-label">Підказка 2</span>
+                  </button>
+                  <button id="wordGuessHintThirdBtn" class="secondary-btn word-guess-icon-btn word-guess-hint-step-btn word-guess-hint-third-btn" type="button" aria-label="Третя підказка відкриється після другої" title="Третя підказка відкриється після другої" disabled>
+                    <span class="word-guess-hint-icon" aria-hidden="true">💡</span>
+                    <span class="word-guess-hint-step" aria-hidden="true">3</span>
+                    <span class="word-guess-hint-label">Підказка 3</span>
+                  </button>
+                </div>
+              </div>
               <button id="wordGuessRulesBtn" class="secondary-btn word-guess-icon-btn word-guess-rules-btn" type="button" aria-label="Показати правила" title="Правила">?</button>
             </div>
             <button id="wordGuessHistoryBtn" class="secondary-btn word-guess-history-btn" type="button" aria-expanded="false">Спроби · 0</button>
           </div>
+
+          <div id="wordGuessModeTags" class="word-guess-mode-tags" aria-label="Параметри поточної гри"></div>
 
           <div id="wordGuessHistoryPanel" class="word-guess-history-panel" hidden></div>
 
@@ -352,10 +438,10 @@
 
           <div id="wordGuessResult" class="word-guess-result word-guess-result-screen" hidden>
             <header class="word-guess-result-header">
-              <span class="word-guess-result-app-title">Вгадай слово</span>
+              <span id="wordGuessResultAppTitle" class="word-guess-result-app-title">Вгадай слово</span>
               <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn word-guess-share-compact" type="button" aria-label="Поділитися результатом">
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span>Поділитися</span>
+                <span id="wordGuessShareLabel">Поділитися</span>
               </button>
             </header>
             <main class="word-guess-result-content">
@@ -368,9 +454,19 @@
               <div id="wordGuessResultHistory" class="word-guess-result-history" hidden></div>
               <section class="word-guess-result-details">
                 <div class="word-guess-dictionaries">
-                  <span>Почитайте тлумачення загаданого слова у словничку</span>
+                  <span id="wordGuessDictionaryPrompt">Почитайте тлумачення загаданого слова у словничку</span>
                   <div id="wordGuessDictionaryLinks" class="word-guess-dictionary-links"></div>
                 </div>
+                <section id="wordGuessFeedback" class="word-guess-feedback" aria-labelledby="wordGuessFeedbackTitle">
+                  <strong id="wordGuessFeedbackTitle">Оцініть загадане слово</strong>
+                  <div class="word-guess-feedback-actions">
+                    <button id="wordGuessLikeBtn" class="secondary-btn word-guess-feedback-btn" type="button" aria-pressed="false">👍 Подобається</button>
+                    <button id="wordGuessDislikeBtn" class="secondary-btn word-guess-feedback-btn" type="button" aria-pressed="false">👎 Не подобається</button>
+                    <button id="wordGuessReportBtn" class="secondary-btn word-guess-feedback-btn" type="button">⚑ Поскаржитися / баг</button>
+                  </div>
+                  <p id="wordGuessFeedbackMessage" class="word-guess-feedback-message" role="status" aria-live="polite"></p>
+                  <button id="wordGuessFeedbackExportBtn" class="word-guess-feedback-export" type="button">Скопіювати локальний звіт</button>
+                </section>
                 <p id="wordGuessResultDebug" class="word-guess-result-debug" aria-label="Службова інформація"></p>
               </section>
             </main>
@@ -891,6 +987,7 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="app.js?rev=0.6.3a-20260815"></script>
+  <script src="wordguess-session.js?rev=0.6.4-20260816"></script>
+  <script src="app.js?rev=0.6.4-20260816"></script>
 </body>
 </html>
