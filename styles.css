@@ -15674,3 +15674,167 @@ body[data-theme="dark"] .word-guess-feedback { background: rgba(26,34,54,.62); b
   .app-achievements-btn { width: 54px; height: 46px; }
   .app-achievements-badge { right: auto; bottom: 3px; }
 }
+
+
+/* 0.6.4a — achievements performance + iPhone safe-area polish. */
+.app-labs-achievements-open {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 4px;
+  border: 1px solid rgba(94, 203, 196, .28);
+  border-radius: 14px;
+  background: rgba(94, 203, 196, .10);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.app-labs-achievements-open:active { transform: scale(.99); }
+
+/* The collection no longer paints 160 cards twice. Only one category (max ~31 cards)
+   exists in the modal DOM at a time; Labs keeps a lightweight summary button. */
+.achievements-modal {
+  box-sizing: border-box;
+  padding:
+    max(12px, calc(env(safe-area-inset-top, 0px) + 10px))
+    max(10px, calc(env(safe-area-inset-right, 0px) + 10px))
+    max(12px, calc(env(safe-area-inset-bottom, 0px) + 10px))
+    max(10px, calc(env(safe-area-inset-left, 0px) + 10px));
+}
+.achievements-modal-backdrop {
+  background: rgba(15, 23, 42, .54);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.achievements-modal-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: min(920px, 100%);
+  max-height: calc(100vh - 36px);
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px);
+  overflow: hidden;
+  padding: 20px 20px 14px;
+}
+.achievements-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 8;
+  float: none;
+  margin: 0;
+  width: 42px;
+  height: 42px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, .10);
+}
+.achievements-modal-heading {
+  flex: 0 0 auto;
+  padding-right: 54px;
+}
+.achievements-modal-copy {
+  flex: 0 0 auto;
+  margin-bottom: 10px;
+}
+.achievements-modal-category-nav {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 7px;
+  width: 100%;
+  padding: 2px 1px 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.achievements-modal-category-nav::-webkit-scrollbar { display: none; }
+.achievements-category-tab {
+  flex: 0 0 auto;
+  min-height: 35px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid rgba(148, 163, 184, .20);
+  border-radius: 999px;
+  background: rgba(148, 163, 184, .07);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.achievements-category-tab.is-selected {
+  border-color: rgba(94, 203, 196, .42);
+  background: rgba(94, 203, 196, .14);
+  box-shadow: inset 0 0 0 1px rgba(94, 203, 196, .08);
+}
+.achievements-category-tab-title { font-size: 11px; font-weight: 900; white-space: nowrap; }
+.achievements-category-tab-count {
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, .12);
+  color: var(--color-muted);
+  font-size: 9px;
+  font-weight: 900;
+}
+.achievements-modal-sections {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-content: start;
+  gap: 9px;
+  clear: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 3px 12px 1px;
+}
+.achievements-modal-sections > .app-labs-achievement-card {
+  min-height: 92px;
+  contain: layout paint style;
+  content-visibility: auto;
+  contain-intrinsic-size: 92px;
+}
+/* CSS filters over dozens of scrolling cards are particularly expensive in iOS Safari. */
+.achievements-modal .app-labs-achievement-card.is-locked,
+.achievements-modal .app-labs-achievement-card.is-hint-revealed.is-locked {
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: .56;
+}
+body[data-theme="dark"] .achievements-category-tab.is-selected {
+  border-color: rgba(111, 216, 207, .38);
+  background: rgba(111, 216, 207, .12);
+}
+
+@media (max-width: 760px) {
+  .achievements-modal-card { padding: 17px 14px 12px; }
+  .achievements-modal-sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 500px) {
+  .achievements-modal {
+    padding:
+      max(8px, calc(env(safe-area-inset-top, 0px) + 8px))
+      max(7px, calc(env(safe-area-inset-right, 0px) + 7px))
+      max(8px, calc(env(safe-area-inset-bottom, 0px) + 8px))
+      max(7px, calc(env(safe-area-inset-left, 0px) + 7px));
+  }
+  .achievements-modal-card {
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px);
+    padding: 14px 10px 10px;
+    border-radius: 20px;
+  }
+  .achievements-modal-close {
+    top: 9px;
+    right: 9px;
+    width: 40px;
+    height: 40px;
+  }
+  .achievements-modal-heading { padding-right: 48px; }
+  .achievements-modal-copy { margin: 7px 0 8px; }
+  .achievements-modal-category-nav { padding-bottom: 8px; }
+  .achievements-modal-sections { grid-template-columns: 1fr; gap: 8px; }
+  .achievements-modal-sections > .app-labs-achievement-card { min-height: 84px; contain-intrinsic-size: 84px; }
+}

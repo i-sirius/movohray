@@ -9,7 +9,7 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.4";
+const DATA_VERSION = "0.6.4a";
 const DATA_BUILD = "2026-08-16";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
 const ASSET_REVISION = DATA_REVISION;
@@ -1922,6 +1922,9 @@ let wordGuessFirstHintUsedGuessCount = -1;
 let wordGuessSecondHintUsedGuessCount = -1;
 let wordGuessThirdHintUsedGuessCount = -1;
 let wordGuessAchievementCardTapCounts = {};
+let wordGuessAchievementsModalCategoryId = WORD_GUESS_ACHIEVEMENT_CATEGORIES[0].id;
+let wordGuessAchievementsModalDirty = true;
+let wordGuessAchievementsModalLocale = "";
 let wordGuessGameTypedLetters = new Set();
 let wordGuessRuntimeSession = null;
 let developerFeedbackContext = "bug";
@@ -2089,6 +2092,7 @@ const achievementsModalEyebrow = document.getElementById("achievementsModalEyebr
 const achievementsModalTitle = document.getElementById("achievementsModalTitle");
 const achievementsModalProgress = document.getElementById("achievementsModalProgress");
 const achievementsModalCopy = document.getElementById("achievementsModalCopy");
+const achievementsModalCategoryNav = document.getElementById("achievementsModalCategoryNav");
 const achievementsModalGrid = document.getElementById("achievementsModalGrid");
 const settingsSupportEyebrow = document.getElementById("settingsSupportEyebrow");
 const settingsSupportTitle = document.getElementById("settingsSupportTitle");
@@ -2252,7 +2256,7 @@ const appLabsAchievementsEyebrow = document.getElementById("appLabsAchievementsE
 const appLabsAchievementsTitle = document.getElementById("appLabsAchievementsTitle");
 const appLabsAchievementsProgress = document.getElementById("appLabsAchievementsProgress");
 const appLabsAchievementsCopy = document.getElementById("appLabsAchievementsCopy");
-const appLabsAchievementsGrid = document.getElementById("appLabsAchievementsGrid");
+const appLabsAchievementsOpenBtn = document.getElementById("appLabsAchievementsOpenBtn");
 const appLabsAchievementsDebug = document.getElementById("appLabsAchievementsDebug");
 const appToast = document.getElementById("appToast");
 const edgeSwipeUnderlay = document.getElementById("edgeSwipeUnderlay");
@@ -3858,7 +3862,9 @@ function revealWordGuessAchievementHint(achievementId) {
   persistWordGuessAchievementsState();
   showAppToastWhenReady(getWordGuessText("achievementHintRevealedToast"));
   evaluateWordGuessMetaAchievements();
+  wordGuessAchievementsModalDirty = true;
   renderHiddenWordGuessAchievementsLab();
+  if (achievementsModal && !achievementsModal.hidden) renderWordGuessAchievementsModalContent(true);
   return true;
 }
 
@@ -3969,6 +3975,7 @@ function unlockWordGuessAchievement(achievementId) {
   if (!definition) return false;
   wordGuessAchievementsState.unlocked[achievementId] = { unlockedAt: new Date().toISOString(), reward: definition.reward };
   persistWordGuessAchievementsState();
+  wordGuessAchievementsModalDirty = true;
   renderHiddenWordGuessAchievementsLab();
   queueWordGuessAchievementToast(achievementId);
   return true;
@@ -4263,12 +4270,15 @@ function getKnownWordGuessAchievementUnlockedCount() {
   return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
 }
 
-function renderWordGuessAchievementCards(container, grouped) {
+function renderWordGuessAchievementCards(container, grouped, categoryId) {
   if (!container) return;
   container.classList.toggle("is-grouped", Boolean(grouped));
   clearElement(container);
   const unlocked = wordGuessAchievementsState.unlocked || {};
   const revealedHints = wordGuessAchievementsState.revealedHints || {};
+  const visibleDefinitions = categoryId
+    ? WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === categoryId; })
+    : WORD_GUESS_ACHIEVEMENTS;
   const appendCard = function (target, definition) {
     const state = unlocked[definition.id] || null;
     const copy = getWordGuessAchievementCopy(definition);
@@ -4310,7 +4320,7 @@ function renderWordGuessAchievementCards(container, grouped) {
     card.appendChild(reward); card.appendChild(body); target.appendChild(card);
   };
   if (!grouped) {
-    WORD_GUESS_ACHIEVEMENTS.forEach(function (definition) { appendCard(container, definition); });
+    visibleDefinitions.forEach(function (definition) { appendCard(container, definition); });
     return;
   }
   WORD_GUESS_ACHIEVEMENT_CATEGORIES.forEach(function (category) {
@@ -4327,6 +4337,43 @@ function renderWordGuessAchievementCards(container, grouped) {
   });
 }
 
+function renderWordGuessAchievementsModalCategoryNav() {
+  if (!achievementsModalCategoryNav) return;
+  clearElement(achievementsModalCategoryNav);
+  const unlocked = wordGuessAchievementsState.unlocked || {};
+  WORD_GUESS_ACHIEVEMENT_CATEGORIES.forEach(function (category) {
+    const definitions = WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === category.id; });
+    if (definitions.length === 0) return;
+    const unlockedInCategory = definitions.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `achievements-category-tab${category.id === wordGuessAchievementsModalCategoryId ? " is-selected" : ""}`;
+    button.dataset.achievementCategory = category.id;
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-selected", category.id === wordGuessAchievementsModalCategoryId ? "true" : "false");
+    appendTextElement(button, "span", "achievements-category-tab-title", getWordGuessText(category.titleKey));
+    appendTextElement(button, "small", "achievements-category-tab-count", `${unlockedInCategory}/${definitions.length}`);
+    button.addEventListener("click", function () {
+      if (wordGuessAchievementsModalCategoryId === category.id) return;
+      wordGuessAchievementsModalCategoryId = category.id;
+      wordGuessAchievementsModalDirty = true;
+      renderWordGuessAchievementsModalContent(true);
+      if (achievementsModalGrid) achievementsModalGrid.scrollTop = 0;
+    });
+    achievementsModalCategoryNav.appendChild(button);
+  });
+}
+
+function renderWordGuessAchievementsModalContent(force) {
+  if (!achievementsModalGrid) return;
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}`;
+  if (!force && !wordGuessAchievementsModalDirty && wordGuessAchievementsModalLocale === localeKey) return;
+  renderWordGuessAchievementsModalCategoryNav();
+  renderWordGuessAchievementCards(achievementsModalGrid, false, wordGuessAchievementsModalCategoryId);
+  wordGuessAchievementsModalLocale = localeKey;
+  wordGuessAchievementsModalDirty = false;
+}
+
 function renderHiddenWordGuessAchievementsLab() {
   const unlockedCount = getKnownWordGuessAchievementUnlockedCount();
   const total = WORD_GUESS_ACHIEVEMENTS.length;
@@ -4340,7 +4387,7 @@ function renderHiddenWordGuessAchievementsLab() {
   if (appLabsAchievementsCopy) appLabsAchievementsCopy.textContent = getWordGuessText("achievementSectionCopy");
   if (appLabsAchievementsProgress) appLabsAchievementsProgress.textContent = `${getWordGuessText("achievementProgress")} ${unlockedCount}/${total}`;
   if (appLabsAchievementsDebug) appLabsAchievementsDebug.textContent = `${unlockedCount}/${total}`;
-  renderWordGuessAchievementCards(appLabsAchievementsGrid, true);
+  if (appLabsAchievementsOpenBtn) appLabsAchievementsOpenBtn.textContent = `${getWordGuessText("achievementMenuOpen")} →`;
 
   if (menuAchievementsTitle) menuAchievementsTitle.textContent = getWordGuessText("achievementMenuTitle");
   if (menuAchievementsProgress) menuAchievementsProgress.textContent = `${unlockedCount}/${total}`;
@@ -4351,11 +4398,20 @@ function renderHiddenWordGuessAchievementsLab() {
   if (achievementsModalCopy) achievementsModalCopy.textContent = getWordGuessText("achievementMenuCopy");
   if (achievementsModalProgress) achievementsModalProgress.textContent = `${unlockedCount}/${total}`;
   if (achievementsModalCloseBtn) achievementsModalCloseBtn.setAttribute("aria-label", getWordGuessText("close"));
-  renderWordGuessAchievementCards(achievementsModalGrid, true);
+
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}`;
+  if (wordGuessAchievementsModalLocale !== localeKey) wordGuessAchievementsModalDirty = true;
 }
 
 function focusWordGuessAchievementInModal(achievementId) {
   if (!achievementId || !achievementsModalGrid) return false;
+  const definition = getWordGuessAchievementDefinition(achievementId);
+  if (!definition) return false;
+  if (wordGuessAchievementsModalCategoryId !== definition.category) {
+    wordGuessAchievementsModalCategoryId = definition.category;
+    wordGuessAchievementsModalDirty = true;
+  }
+  renderWordGuessAchievementsModalContent();
   const cards = achievementsModalGrid.querySelectorAll("[data-achievement-id]");
   let target = null;
   for (let index = 0; index < cards.length; index += 1) {
@@ -4376,8 +4432,8 @@ function focusWordGuessAchievementInModal(achievementId) {
   window.setTimeout(function () {
     try { target.focus({ preventScroll: true }); }
     catch (error) { target.focus(); }
-  }, 380);
-  window.setTimeout(function () { target.classList.remove("is-jump-target"); }, 3200);
+  }, 300);
+  window.setTimeout(function () { target.classList.remove("is-jump-target"); }, 2600);
   return true;
 }
 
@@ -4385,19 +4441,22 @@ function openWordGuessAchievementsModal(options) {
   if (!achievementsModal) return;
   const settings = options && typeof options === "object" && !options.currentTarget ? options : {};
   const focusAchievementId = String(settings.focusAchievementId || "");
+  if (focusAchievementId) {
+    const definition = getWordGuessAchievementDefinition(focusAchievementId);
+    if (definition) wordGuessAchievementsModalCategoryId = definition.category;
+  }
   wordGuessAchievementsState.achievementModalOpens = (Number(wordGuessAchievementsState.achievementModalOpens) || 0) + 1;
   persistWordGuessAchievementsState();
   evaluateWordGuessMetaAchievements();
   renderHiddenWordGuessAchievementsLab();
+  renderWordGuessAchievementsModalContent();
   achievementsModal.hidden = false;
   document.body.classList.add("achievements-open");
   pauseRoundTimer("achievements");
   pauseWhoAmITimer("achievements");
   if (focusAchievementId) {
     window.requestAnimationFrame(function () {
-      window.requestAnimationFrame(function () {
-        if (!focusWordGuessAchievementInModal(focusAchievementId) && achievementsModalCloseBtn) achievementsModalCloseBtn.focus();
-      });
+      if (!focusWordGuessAchievementInModal(focusAchievementId) && achievementsModalCloseBtn) achievementsModalCloseBtn.focus();
     });
   } else if (achievementsModalCloseBtn) {
     achievementsModalCloseBtn.focus();
@@ -9525,6 +9584,9 @@ function setupEvents() {
       evaluateWordGuessMetaAchievements();
       openWordGuessAchievementsModal();
     });
+  }
+  if (appLabsAchievementsOpenBtn) {
+    appLabsAchievementsOpenBtn.addEventListener("click", function () { openWordGuessAchievementsModal(); });
   }
   if (achievementsModalCloseBtn) {
     achievementsModalCloseBtn.addEventListener("click", closeWordGuessAchievementsModal);

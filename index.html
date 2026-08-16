@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4-20260816" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4a-20260816" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.4-20260816" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.4a-20260816" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -134,7 +134,7 @@
             <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/160</strong>
           </div>
           <p id="appLabsAchievementsCopy" class="app-labs-achievements-copy">Локальні нагороди зберігаються на цьому пристрої.</p>
-          <div id="appLabsAchievementsGrid" class="app-labs-achievements-grid"></div>
+          <button id="appLabsAchievementsOpenBtn" class="app-labs-achievements-open" type="button">Відкрити колекцію →</button>
           <output id="appLabsAchievementsDebug" hidden></output>
         </section>
       </section>
@@ -153,7 +153,7 @@
         </div>
       </section>
       <p class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4a</p>
     </div>
   </div>
 
@@ -169,6 +169,7 @@
         <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/160</strong>
       </div>
       <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+      <div id="achievementsModalCategoryNav" class="achievements-modal-category-nav" role="tablist" aria-label="Категорії досягнень"></div>
       <div id="achievementsModalGrid" class="achievements-modal-sections"></div>
     </div>
   </div>
@@ -216,7 +217,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.4</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.4a</p>
         </div>
       </div>
     </section>
@@ -987,7 +988,7 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="wordguess-session.js?rev=0.6.4-20260816"></script>
-  <script src="app.js?rev=0.6.4-20260816"></script>
+  <script src="wordguess-session.js?rev=0.6.4a-20260816"></script>
+  <script src="app.js?rev=0.6.4a-20260816"></script>
 </body>
 </html>

@@ -240,3 +240,12 @@
 ## 0.4.39
 - Оновлено прозорі емблеми режимів: діалоги для Alias, крокодильчик для Крокодила, сітка 5×5 для Вгадай слово.
 - Кнопку поширення результату зроблено компактною поруч із загаданим словом.
+
+
+### 0.6.4a
+
+- Removed `тройка` from the RU 6-letter target/accepted pool.
+- Reworked Achievements collection for iPhone performance: only one category is rendered at a time instead of duplicating all 160 cards in Settings and the modal.
+- Removed expensive modal backdrop blur and card filters on the Achievements scroller.
+- Fixed the Achievements close control so it stays inside a safe-area-aware, non-scrolling modal header.
+- Labs now shows a lightweight achievements summary and opens the same optimized collection.
