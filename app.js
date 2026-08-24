@@ -9,10 +9,10 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.4c";
-const DATA_BUILD = "2026-08-16";
+const DATA_VERSION = "0.6.5";
+const DATA_BUILD = "2026-08-24";
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
-const ASSET_REVISION = DATA_REVISION;
+const ASSET_REVISION = `${DATA_REVISION}-c7`;
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -351,10 +351,258 @@ const WORD_GUESS_ACHIEVEMENTS = [
   { id: "charades-first-point", reward: "🎭", titleKey: "achievementCharadesFirstPointTitle", descriptionKey: "achievementCharadesFirstPointDescription", category: "milestones", game: "charades" },
   { id: "charades-eight-round", reward: "🕺", titleKey: "achievementCharadesEightRoundTitle", descriptionKey: "achievementCharadesEightRoundDescription", category: "skill", game: "charades" },
   { id: "charades-clean-five", reward: "🤐", titleKey: "achievementCharadesCleanFiveTitle", descriptionKey: "achievementCharadesCleanFiveDescription", category: "skill", game: "charades" },
+  { id: "alias-five-round", reward: "🖐️", titleKey: "achievementAliasFiveRoundTitle", descriptionKey: "achievementAliasFiveRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-fifteen-round", reward: "🚀", titleKey: "achievementAliasFifteenRoundTitle", descriptionKey: "achievementAliasFifteenRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-perfect-ten", reward: "💎", titleKey: "achievementAliasPerfectTenTitle", descriptionKey: "achievementAliasPerfectTenDescription", category: "skill", game: "alias", mystery: true, hintKey: "achievementAliasPerfectTenHint" },
+  { id: "alias-five-skips", reward: "🛝", titleKey: "achievementAliasFiveSkipsTitle", descriptionKey: "achievementAliasFiveSkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-balanced-round", reward: "⚖️", titleKey: "achievementAliasBalancedRoundTitle", descriptionKey: "achievementAliasBalancedRoundDescription", category: "chaos", game: "alias", mystery: true, hintKey: "achievementAliasBalancedRoundHint" },
+  { id: "alias-ten-rounds", reward: "🎙️", titleKey: "achievementAliasTenRoundsTitle", descriptionKey: "achievementAliasTenRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-twenty-five-rounds", reward: "📻", titleKey: "achievementAliasTwentyFiveRoundsTitle", descriptionKey: "achievementAliasTwentyFiveRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-fifty-points", reward: "🪙", titleKey: "achievementAliasFiftyPointsTitle", descriptionKey: "achievementAliasFiftyPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-hundred-points", reward: "💰", titleKey: "achievementAliasHundredPointsTitle", descriptionKey: "achievementAliasHundredPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-two-fifty-points", reward: "🏦", titleKey: "achievementAliasTwoFiftyPointsTitle", descriptionKey: "achievementAliasTwoFiftyPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-three-clean-rounds", reward: "🧽", titleKey: "achievementAliasThreeCleanRoundsTitle", descriptionKey: "achievementAliasThreeCleanRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-ten-clean-rounds", reward: "🪽", titleKey: "achievementAliasTenCleanRoundsTitle", descriptionKey: "achievementAliasTenCleanRoundsDescription", category: "streaks", game: "alias" },
+  { id: "charades-five-round", reward: "🖐️", titleKey: "achievementCharadesFiveRoundTitle", descriptionKey: "achievementCharadesFiveRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-twelve-round", reward: "🎬", titleKey: "achievementCharadesTwelveRoundTitle", descriptionKey: "achievementCharadesTwelveRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-perfect-eight", reward: "🤌", titleKey: "achievementCharadesPerfectEightTitle", descriptionKey: "achievementCharadesPerfectEightDescription", category: "skill", game: "charades", mystery: true, hintKey: "achievementCharadesPerfectEightHint" },
+  { id: "charades-five-skips", reward: "🎪", titleKey: "achievementCharadesFiveSkipsTitle", descriptionKey: "achievementCharadesFiveSkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-chaos-round", reward: "🦑", titleKey: "achievementCharadesChaosRoundTitle", descriptionKey: "achievementCharadesChaosRoundDescription", category: "chaos", game: "charades", mystery: true, hintKey: "achievementCharadesChaosRoundHint" },
+  { id: "charades-ten-rounds", reward: "🎟️", titleKey: "achievementCharadesTenRoundsTitle", descriptionKey: "achievementCharadesTenRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-twenty-five-rounds", reward: "🎞️", titleKey: "achievementCharadesTwentyFiveRoundsTitle", descriptionKey: "achievementCharadesTwentyFiveRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-fifty-points", reward: "🥁", titleKey: "achievementCharadesFiftyPointsTitle", descriptionKey: "achievementCharadesFiftyPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-hundred-points", reward: "🎺", titleKey: "achievementCharadesHundredPointsTitle", descriptionKey: "achievementCharadesHundredPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-two-fifty-points", reward: "🏛️", titleKey: "achievementCharadesTwoFiftyPointsTitle", descriptionKey: "achievementCharadesTwoFiftyPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-three-clean-rounds", reward: "🫧", titleKey: "achievementCharadesThreeCleanRoundsTitle", descriptionKey: "achievementCharadesThreeCleanRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-ten-clean-rounds", reward: "🦢", titleKey: "achievementCharadesTenCleanRoundsTitle", descriptionKey: "achievementCharadesTenCleanRoundsDescription", category: "streaks", game: "charades" },
+  { id: "whoami-first-guess", reward: "🕵️", titleKey: "achievementWhoAmIFirstGuessTitle", descriptionKey: "achievementWhoAmIFirstGuessDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-five-guessed", reward: "🖐️", titleKey: "achievementWhoAmIFiveGuessedTitle", descriptionKey: "achievementWhoAmIFiveGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-twenty-guessed", reward: "🧠", titleKey: "achievementWhoAmITwentyGuessedTitle", descriptionKey: "achievementWhoAmITwentyGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-fifty-guessed", reward: "🎓", titleKey: "achievementWhoAmIFiftyGuessedTitle", descriptionKey: "achievementWhoAmIFiftyGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-first-skip", reward: "🙈", titleKey: "achievementWhoAmIFirstSkipTitle", descriptionKey: "achievementWhoAmIFirstSkipDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-ten-skips", reward: "🫥", titleKey: "achievementWhoAmITenSkipsTitle", descriptionKey: "achievementWhoAmITenSkipsDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-ten-yes", reward: "✅", titleKey: "achievementWhoAmITenYesTitle", descriptionKey: "achievementWhoAmITenYesDescription", category: "skill", game: "whoami" },
+  { id: "whoami-ten-no", reward: "❌", titleKey: "achievementWhoAmITenNoTitle", descriptionKey: "achievementWhoAmITenNoDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-question-storm", reward: "🌪️", titleKey: "achievementWhoAmIQuestionStormTitle", descriptionKey: "achievementWhoAmIQuestionStormDescription", category: "skill", game: "whoami", mystery: true, hintKey: "achievementWhoAmIQuestionStormHint" },
+  { id: "whoami-perfect-game", reward: "👁️", titleKey: "achievementWhoAmIPerfectGameTitle", descriptionKey: "achievementWhoAmIPerfectGameDescription", category: "skill", game: "whoami" },
+  { id: "whoami-three-perfect", reward: "🔮", titleKey: "achievementWhoAmIThreePerfectTitle", descriptionKey: "achievementWhoAmIThreePerfectDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-timed-first", reward: "⏱️", titleKey: "achievementWhoAmITimedFirstTitle", descriptionKey: "achievementWhoAmITimedFirstDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-ten-games", reward: "🎭", titleKey: "achievementWhoAmITenGamesTitle", descriptionKey: "achievementWhoAmITenGamesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-five-session", reward: "🧩", titleKey: "achievementWhoAmIFiveSessionTitle", descriptionKey: "achievementWhoAmIFiveSessionDescription", category: "skill", game: "whoami" },
+  { id: "whoami-no-machine", reward: "🚫", titleKey: "achievementWhoAmINoMachineTitle", descriptionKey: "achievementWhoAmINoMachineDescription", category: "chaos", game: "whoami", mystery: true, hintKey: "achievementWhoAmINoMachineHint" },
+  { id: "alias-fifty-rounds", reward: "🎤", titleKey: "achievementAliasFiftyRoundsTitle", descriptionKey: "achievementAliasFiftyRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-hundred-rounds", reward: "🏟️", titleKey: "achievementAliasHundredRoundsTitle", descriptionKey: "achievementAliasHundredRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-five-hundred-points", reward: "💵", titleKey: "achievementAliasFiveHundredPointsTitle", descriptionKey: "achievementAliasFiveHundredPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-thousand-points", reward: "🤑", titleKey: "achievementAliasThousandPointsTitle", descriptionKey: "achievementAliasThousandPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-twenty-five-skips", reward: "🛝", titleKey: "achievementAliasTwentyFiveSkipsTitle", descriptionKey: "achievementAliasTwentyFiveSkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-fifty-skips", reward: "🪂", titleKey: "achievementAliasFiftySkipsTitle", descriptionKey: "achievementAliasFiftySkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-hundred-skips", reward: "🌀", titleKey: "achievementAliasHundredSkipsTitle", descriptionKey: "achievementAliasHundredSkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-twenty-five-clean-rounds", reward: "🧴", titleKey: "achievementAliasTwentyFiveCleanRoundsTitle", descriptionKey: "achievementAliasTwentyFiveCleanRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-fifty-clean-rounds", reward: "🪩", titleKey: "achievementAliasFiftyCleanRoundsTitle", descriptionKey: "achievementAliasFiftyCleanRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-three-ten-plus-rounds", reward: "🔥", titleKey: "achievementAliasThreeTenPlusRoundsTitle", descriptionKey: "achievementAliasThreeTenPlusRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-ten-ten-plus-rounds", reward: "🚂", titleKey: "achievementAliasTenTenPlusRoundsTitle", descriptionKey: "achievementAliasTenTenPlusRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-three-twenty-plus-rounds", reward: "🚀", titleKey: "achievementAliasThreeTwentyPlusRoundsTitle", descriptionKey: "achievementAliasThreeTwentyPlusRoundsDescription", category: "skill", game: "alias" },
+  { id: "alias-five-zero-rounds", reward: "🫠", titleKey: "achievementAliasFiveZeroRoundsTitle", descriptionKey: "achievementAliasFiveZeroRoundsDescription", category: "chaos", game: "alias" },
+  { id: "alias-clean-streak-three", reward: "🧽", titleKey: "achievementAliasCleanStreakThreeTitle", descriptionKey: "achievementAliasCleanStreakThreeDescription", category: "streaks", game: "alias" },
+  { id: "alias-clean-streak-five", reward: "🪽", titleKey: "achievementAliasCleanStreakFiveTitle", descriptionKey: "achievementAliasCleanStreakFiveDescription", category: "streaks", game: "alias" },
+  { id: "alias-twenty-round", reward: "🧨", titleKey: "achievementAliasTwentyRoundTitle", descriptionKey: "achievementAliasTwentyRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-clean-fifteen", reward: "🧼", titleKey: "achievementAliasCleanFifteenTitle", descriptionKey: "achievementAliasCleanFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-one-skip-ten", reward: "🎟️", titleKey: "achievementAliasOneSkipTenTitle", descriptionKey: "achievementAliasOneSkipTenDescription", category: "skill", game: "alias" },
+  { id: "alias-ten-skips", reward: "🛷", titleKey: "achievementAliasTenSkipsTitle", descriptionKey: "achievementAliasTenSkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-zero-five-skips", reward: "🫣", titleKey: "achievementAliasZeroFiveSkipsTitle", descriptionKey: "achievementAliasZeroFiveSkipsDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasZeroFiveSkipsHint" },
+  { id: "alias-equal-five", reward: "⚖️", titleKey: "achievementAliasEqualFiveTitle", descriptionKey: "achievementAliasEqualFiveDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasEqualFiveHint" },
+  { id: "alias-skip-over-score", reward: "🙃", titleKey: "achievementAliasSkipOverScoreTitle", descriptionKey: "achievementAliasSkipOverScoreDescription", category: "chaos", game: "alias" },
+  { id: "alias-twenty-actions", reward: "🧮", titleKey: "achievementAliasTwentyActionsTitle", descriptionKey: "achievementAliasTwentyActionsDescription", category: "skill", game: "alias" },
+  { id: "alias-sprint-five", reward: "⚡", titleKey: "achievementAliasSprintFiveTitle", descriptionKey: "achievementAliasSprintFiveDescription", category: "skill", game: "alias" },
+  { id: "alias-sprint-ten", reward: "🏎️", titleKey: "achievementAliasSprintTenTitle", descriptionKey: "achievementAliasSprintTenDescription", category: "skill", game: "alias" },
+  { id: "alias-marathon-twenty", reward: "🐎", titleKey: "achievementAliasMarathonTwentyTitle", descriptionKey: "achievementAliasMarathonTwentyDescription", category: "skill", game: "alias" },
+  { id: "alias-hard-five", reward: "🧗", titleKey: "achievementAliasHardFiveTitle", descriptionKey: "achievementAliasHardFiveDescription", category: "skill", game: "alias" },
+  { id: "alias-hard-clean-ten", reward: "🗿", titleKey: "achievementAliasHardCleanTenTitle", descriptionKey: "achievementAliasHardCleanTenDescription", category: "skill", game: "alias" },
+  { id: "alias-all-difficulties-ten", reward: "🎛️", titleKey: "achievementAliasAllDifficultiesTenTitle", descriptionKey: "achievementAliasAllDifficultiesTenDescription", category: "skill", game: "alias" },
+  { id: "alias-four-teams-ten", reward: "👥", titleKey: "achievementAliasFourTeamsTenTitle", descriptionKey: "achievementAliasFourTeamsTenDescription", category: "milestones", game: "alias" },
+  { id: "alias-category-tour", reward: "🗺️", titleKey: "achievementAliasCategoryTourTitle", descriptionKey: "achievementAliasCategoryTourDescription", category: "skill", game: "alias" },
+  { id: "charades-fifty-rounds", reward: "🎟️", titleKey: "achievementCharadesFiftyRoundsTitle", descriptionKey: "achievementCharadesFiftyRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-hundred-rounds", reward: "🎪", titleKey: "achievementCharadesHundredRoundsTitle", descriptionKey: "achievementCharadesHundredRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-five-hundred-points", reward: "🎬", titleKey: "achievementCharadesFiveHundredPointsTitle", descriptionKey: "achievementCharadesFiveHundredPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-thousand-points", reward: "🏆", titleKey: "achievementCharadesThousandPointsTitle", descriptionKey: "achievementCharadesThousandPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-twenty-five-skips", reward: "🪂", titleKey: "achievementCharadesTwentyFiveSkipsTitle", descriptionKey: "achievementCharadesTwentyFiveSkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-fifty-skips", reward: "🫥", titleKey: "achievementCharadesFiftySkipsTitle", descriptionKey: "achievementCharadesFiftySkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-hundred-skips", reward: "🕳️", titleKey: "achievementCharadesHundredSkipsTitle", descriptionKey: "achievementCharadesHundredSkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-twenty-five-clean-rounds", reward: "🫧", titleKey: "achievementCharadesTwentyFiveCleanRoundsTitle", descriptionKey: "achievementCharadesTwentyFiveCleanRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-fifty-clean-rounds", reward: "🦢", titleKey: "achievementCharadesFiftyCleanRoundsTitle", descriptionKey: "achievementCharadesFiftyCleanRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-three-eight-plus-rounds", reward: "🔥", titleKey: "achievementCharadesThreeEightPlusRoundsTitle", descriptionKey: "achievementCharadesThreeEightPlusRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-ten-eight-plus-rounds", reward: "🎥", titleKey: "achievementCharadesTenEightPlusRoundsTitle", descriptionKey: "achievementCharadesTenEightPlusRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-three-fifteen-plus-rounds", reward: "🚀", titleKey: "achievementCharadesThreeFifteenPlusRoundsTitle", descriptionKey: "achievementCharadesThreeFifteenPlusRoundsDescription", category: "skill", game: "charades" },
+  { id: "charades-five-zero-rounds", reward: "🫠", titleKey: "achievementCharadesFiveZeroRoundsTitle", descriptionKey: "achievementCharadesFiveZeroRoundsDescription", category: "chaos", game: "charades" },
+  { id: "charades-clean-streak-three", reward: "🫧", titleKey: "achievementCharadesCleanStreakThreeTitle", descriptionKey: "achievementCharadesCleanStreakThreeDescription", category: "streaks", game: "charades" },
+  { id: "charades-clean-streak-five", reward: "🦢", titleKey: "achievementCharadesCleanStreakFiveTitle", descriptionKey: "achievementCharadesCleanStreakFiveDescription", category: "streaks", game: "charades" },
+  { id: "charades-fifteen-round", reward: "💥", titleKey: "achievementCharadesFifteenRoundTitle", descriptionKey: "achievementCharadesFifteenRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-clean-twelve", reward: "🤌", titleKey: "achievementCharadesCleanTwelveTitle", descriptionKey: "achievementCharadesCleanTwelveDescription", category: "skill", game: "charades" },
+  { id: "charades-one-skip-eight", reward: "🎟️", titleKey: "achievementCharadesOneSkipEightTitle", descriptionKey: "achievementCharadesOneSkipEightDescription", category: "skill", game: "charades" },
+  { id: "charades-ten-skips", reward: "🎪", titleKey: "achievementCharadesTenSkipsTitle", descriptionKey: "achievementCharadesTenSkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-zero-five-skips", reward: "🙈", titleKey: "achievementCharadesZeroFiveSkipsTitle", descriptionKey: "achievementCharadesZeroFiveSkipsDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesZeroFiveSkipsHint" },
+  { id: "charades-equal-five", reward: "⚖️", titleKey: "achievementCharadesEqualFiveTitle", descriptionKey: "achievementCharadesEqualFiveDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesEqualFiveHint" },
+  { id: "charades-skip-over-score", reward: "🤹", titleKey: "achievementCharadesSkipOverScoreTitle", descriptionKey: "achievementCharadesSkipOverScoreDescription", category: "chaos", game: "charades" },
+  { id: "charades-twenty-actions", reward: "🧮", titleKey: "achievementCharadesTwentyActionsTitle", descriptionKey: "achievementCharadesTwentyActionsDescription", category: "skill", game: "charades" },
+  { id: "charades-sprint-four", reward: "⚡", titleKey: "achievementCharadesSprintFourTitle", descriptionKey: "achievementCharadesSprintFourDescription", category: "skill", game: "charades" },
+  { id: "charades-sprint-eight", reward: "🏎️", titleKey: "achievementCharadesSprintEightTitle", descriptionKey: "achievementCharadesSprintEightDescription", category: "skill", game: "charades" },
+  { id: "charades-marathon-fifteen", reward: "🐘", titleKey: "achievementCharadesMarathonFifteenTitle", descriptionKey: "achievementCharadesMarathonFifteenDescription", category: "skill", game: "charades" },
+  { id: "charades-hard-four", reward: "🧗", titleKey: "achievementCharadesHardFourTitle", descriptionKey: "achievementCharadesHardFourDescription", category: "skill", game: "charades" },
+  { id: "charades-hard-clean-eight", reward: "🗿", titleKey: "achievementCharadesHardCleanEightTitle", descriptionKey: "achievementCharadesHardCleanEightDescription", category: "skill", game: "charades" },
+  { id: "charades-all-difficulties-eight", reward: "🎛️", titleKey: "achievementCharadesAllDifficultiesEightTitle", descriptionKey: "achievementCharadesAllDifficultiesEightDescription", category: "skill", game: "charades" },
+  { id: "charades-four-teams-eight", reward: "👥", titleKey: "achievementCharadesFourTeamsEightTitle", descriptionKey: "achievementCharadesFourTeamsEightDescription", category: "milestones", game: "charades" },
+  { id: "charades-category-tour", reward: "🗺️", titleKey: "achievementCharadesCategoryTourTitle", descriptionKey: "achievementCharadesCategoryTourDescription", category: "skill", game: "charades" },
+  { id: "whoami-hundred-guessed", reward: "🔍", titleKey: "achievementWhoamiHundredGuessedTitle", descriptionKey: "achievementWhoamiHundredGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-two-fifty-guessed", reward: "🧿", titleKey: "achievementWhoamiTwoFiftyGuessedTitle", descriptionKey: "achievementWhoamiTwoFiftyGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-five-hundred-guessed", reward: "🪬", titleKey: "achievementWhoamiFiveHundredGuessedTitle", descriptionKey: "achievementWhoamiFiveHundredGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-twenty-five-skips", reward: "🙈", titleKey: "achievementWhoamiTwentyFiveSkipsTitle", descriptionKey: "achievementWhoamiTwentyFiveSkipsDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-fifty-skips", reward: "🫥", titleKey: "achievementWhoamiFiftySkipsTitle", descriptionKey: "achievementWhoamiFiftySkipsDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-fifty-yes", reward: "✅", titleKey: "achievementWhoamiFiftyYesTitle", descriptionKey: "achievementWhoamiFiftyYesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-hundred-yes", reward: "💚", titleKey: "achievementWhoamiHundredYesTitle", descriptionKey: "achievementWhoamiHundredYesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-fifty-no", reward: "❌", titleKey: "achievementWhoamiFiftyNoTitle", descriptionKey: "achievementWhoamiFiftyNoDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-hundred-no", reward: "🧱", titleKey: "achievementWhoamiHundredNoTitle", descriptionKey: "achievementWhoamiHundredNoDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-twenty-five-games", reward: "🎭", titleKey: "achievementWhoamiTwentyFiveGamesTitle", descriptionKey: "achievementWhoamiTwentyFiveGamesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-fifty-games", reward: "🎟️", titleKey: "achievementWhoamiFiftyGamesTitle", descriptionKey: "achievementWhoamiFiftyGamesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-five-timed", reward: "⏱️", titleKey: "achievementWhoamiFiveTimedTitle", descriptionKey: "achievementWhoamiFiveTimedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-ten-timed", reward: "⌛", titleKey: "achievementWhoamiTenTimedTitle", descriptionKey: "achievementWhoamiTenTimedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-five-perfect", reward: "👁️", titleKey: "achievementWhoamiFivePerfectTitle", descriptionKey: "achievementWhoamiFivePerfectDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-ten-perfect", reward: "🔮", titleKey: "achievementWhoamiTenPerfectTitle", descriptionKey: "achievementWhoamiTenPerfectDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-ten-session", reward: "🧠", titleKey: "achievementWhoamiTenSessionTitle", descriptionKey: "achievementWhoamiTenSessionDescription", category: "skill", game: "whoami" },
+  { id: "whoami-fifteen-session", reward: "🤯", titleKey: "achievementWhoamiFifteenSessionTitle", descriptionKey: "achievementWhoamiFifteenSessionDescription", category: "skill", game: "whoami" },
+  { id: "whoami-clean-five", reward: "🧼", titleKey: "achievementWhoamiCleanFiveTitle", descriptionKey: "achievementWhoamiCleanFiveDescription", category: "skill", game: "whoami" },
+  { id: "whoami-clean-ten", reward: "💎", titleKey: "achievementWhoamiCleanTenTitle", descriptionKey: "achievementWhoamiCleanTenDescription", category: "skill", game: "whoami" },
+  { id: "whoami-five-skips-session", reward: "🙈", titleKey: "achievementWhoamiFiveSkipsSessionTitle", descriptionKey: "achievementWhoamiFiveSkipsSessionDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-ten-skips-session", reward: "🫣", titleKey: "achievementWhoamiTenSkipsSessionTitle", descriptionKey: "achievementWhoamiTenSkipsSessionDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-thirty-questions", reward: "❓", titleKey: "achievementWhoamiThirtyQuestionsTitle", descriptionKey: "achievementWhoamiThirtyQuestionsDescription", category: "skill", game: "whoami" },
+  { id: "whoami-fifty-questions", reward: "🗂️", titleKey: "achievementWhoamiFiftyQuestionsTitle", descriptionKey: "achievementWhoamiFiftyQuestionsDescription", category: "skill", game: "whoami" },
+  { id: "whoami-yes-only", reward: "💚", titleKey: "achievementWhoamiYesOnlyTitle", descriptionKey: "achievementWhoamiYesOnlyDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiYesOnlyHint" },
+  { id: "whoami-no-only", reward: "🟥", titleKey: "achievementWhoamiNoOnlyTitle", descriptionKey: "achievementWhoamiNoOnlyDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiNoOnlyHint" },
+  { id: "whoami-balanced-questions", reward: "⚖️", titleKey: "achievementWhoamiBalancedQuestionsTitle", descriptionKey: "achievementWhoamiBalancedQuestionsDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiBalancedQuestionsHint" },
+  { id: "whoami-telepathy-three", reward: "🧠", titleKey: "achievementWhoamiTelepathyThreeTitle", descriptionKey: "achievementWhoamiTelepathyThreeDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiTelepathyThreeHint" },
+  { id: "whoami-telepathy-five", reward: "🪄", titleKey: "achievementWhoamiTelepathyFiveTitle", descriptionKey: "achievementWhoamiTelepathyFiveDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiTelepathyFiveHint" },
+  { id: "whoami-thirty-second-three", reward: "⚡", titleKey: "achievementWhoamiThirtySecondThreeTitle", descriptionKey: "achievementWhoamiThirtySecondThreeDescription", category: "skill", game: "whoami" },
+  { id: "whoami-thirty-second-five", reward: "🚀", titleKey: "achievementWhoamiThirtySecondFiveTitle", descriptionKey: "achievementWhoamiThirtySecondFiveDescription", category: "skill", game: "whoami" },
+  { id: "whoami-two-minute-ten", reward: "🕰️", titleKey: "achievementWhoamiTwoMinuteTenTitle", descriptionKey: "achievementWhoamiTwoMinuteTenDescription", category: "skill", game: "whoami" },
+  { id: "whoami-four-teams", reward: "👥", titleKey: "achievementWhoamiFourTeamsTitle", descriptionKey: "achievementWhoamiFourTeamsDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-zero-guessed-five-skips", reward: "🫥", titleKey: "achievementWhoamiZeroGuessedFiveSkipsTitle", descriptionKey: "achievementWhoamiZeroGuessedFiveSkipsDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiZeroGuessedFiveSkipsHint" },
+  { id: "whoami-lucky-seven-yes", reward: "7️⃣", titleKey: "achievementWhoamiLuckySevenYesTitle", descriptionKey: "achievementWhoamiLuckySevenYesDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiLuckySevenYesHint" },
+  { id: "whoami-seven-clean", reward: "🍀", titleKey: "achievementWhoamiSevenCleanTitle", descriptionKey: "achievementWhoamiSevenCleanDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiSevenCleanHint" },
+  { id: "whoami-perfect-streak-three", reward: "🔥", titleKey: "achievementWhoamiPerfectStreakThreeTitle", descriptionKey: "achievementWhoamiPerfectStreakThreeDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-perfect-streak-five", reward: "🌟", titleKey: "achievementWhoamiPerfectStreakFiveTitle", descriptionKey: "achievementWhoamiPerfectStreakFiveDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-team-tie", reward: "🤝", titleKey: "achievementWhoamiTeamTieTitle", descriptionKey: "achievementWhoamiTeamTieDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiTeamTieHint" },
+  { id: "alias-two-hundred-rounds", reward: "🧓", titleKey: "achievementAliasTwoHundredRoundsTitle", descriptionKey: "achievementAliasTwoHundredRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-two-fifty-rounds", reward: "🛋️", titleKey: "achievementAliasTwoFiftyRoundsTitle", descriptionKey: "achievementAliasTwoFiftyRoundsDescription", category: "milestones", game: "alias" },
+  { id: "alias-two-thousand-points", reward: "🏦", titleKey: "achievementAliasTwoThousandPointsTitle", descriptionKey: "achievementAliasTwoThousandPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-five-thousand-points", reward: "💸", titleKey: "achievementAliasFiveThousandPointsTitle", descriptionKey: "achievementAliasFiveThousandPointsDescription", category: "milestones", game: "alias" },
+  { id: "alias-two-fifty-skips", reward: "🌀", titleKey: "achievementAliasTwoFiftySkipsTitle", descriptionKey: "achievementAliasTwoFiftySkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-hundred-clean-rounds", reward: "✨", titleKey: "achievementAliasHundredCleanRoundsTitle", descriptionKey: "achievementAliasHundredCleanRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-twenty-five-ten-plus-rounds", reward: "🚄", titleKey: "achievementAliasTwentyFiveTenPlusRoundsTitle", descriptionKey: "achievementAliasTwentyFiveTenPlusRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-fifty-ten-plus-rounds", reward: "🚅", titleKey: "achievementAliasFiftyTenPlusRoundsTitle", descriptionKey: "achievementAliasFiftyTenPlusRoundsDescription", category: "streaks", game: "alias" },
+  { id: "alias-ten-twenty-plus-rounds", reward: "🌌", titleKey: "achievementAliasTenTwentyPlusRoundsTitle", descriptionKey: "achievementAliasTenTwentyPlusRoundsDescription", category: "skill", game: "alias" },
+  { id: "alias-twenty-five-twenty-plus-rounds", reward: "🛸", titleKey: "achievementAliasTwentyFiveTwentyPlusRoundsTitle", descriptionKey: "achievementAliasTwentyFiveTwentyPlusRoundsDescription", category: "skill", game: "alias" },
+  { id: "alias-ten-zero-rounds", reward: "🕳️", titleKey: "achievementAliasTenZeroRoundsTitle", descriptionKey: "achievementAliasTenZeroRoundsDescription", category: "chaos", game: "alias" },
+  { id: "alias-clean-streak-ten", reward: "👼", titleKey: "achievementAliasCleanStreakTenTitle", descriptionKey: "achievementAliasCleanStreakTenDescription", category: "streaks", game: "alias" },
+  { id: "alias-twenty-five-round", reward: "🌪️", titleKey: "achievementAliasTwentyFiveRoundTitle", descriptionKey: "achievementAliasTwentyFiveRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-clean-twenty", reward: "💎", titleKey: "achievementAliasCleanTwentyTitle", descriptionKey: "achievementAliasCleanTwentyDescription", category: "skill", game: "alias" },
+  { id: "alias-fifteen-skips", reward: "🧯", titleKey: "achievementAliasFifteenSkipsTitle", descriptionKey: "achievementAliasFifteenSkipsDescription", category: "chaos", game: "alias" },
+  { id: "alias-thirty-actions", reward: "🤹", titleKey: "achievementAliasThirtyActionsTitle", descriptionKey: "achievementAliasThirtyActionsDescription", category: "skill", game: "alias" },
+  { id: "alias-sprint-fifteen", reward: "💨", titleKey: "achievementAliasSprintFifteenTitle", descriptionKey: "achievementAliasSprintFifteenDescription", category: "skill", game: "alias" },
+  { id: "charades-two-hundred-rounds", reward: "🧓", titleKey: "achievementCharadesTwoHundredRoundsTitle", descriptionKey: "achievementCharadesTwoHundredRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-two-fifty-rounds", reward: "🎪", titleKey: "achievementCharadesTwoFiftyRoundsTitle", descriptionKey: "achievementCharadesTwoFiftyRoundsDescription", category: "milestones", game: "charades" },
+  { id: "charades-two-thousand-points", reward: "🏛️", titleKey: "achievementCharadesTwoThousandPointsTitle", descriptionKey: "achievementCharadesTwoThousandPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-five-thousand-points", reward: "🎞️", titleKey: "achievementCharadesFiveThousandPointsTitle", descriptionKey: "achievementCharadesFiveThousandPointsDescription", category: "milestones", game: "charades" },
+  { id: "charades-two-fifty-skips", reward: "🎭", titleKey: "achievementCharadesTwoFiftySkipsTitle", descriptionKey: "achievementCharadesTwoFiftySkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-hundred-clean-rounds", reward: "🦢", titleKey: "achievementCharadesHundredCleanRoundsTitle", descriptionKey: "achievementCharadesHundredCleanRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-twenty-five-eight-plus-rounds", reward: "📽️", titleKey: "achievementCharadesTwentyFiveEightPlusRoundsTitle", descriptionKey: "achievementCharadesTwentyFiveEightPlusRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-fifty-eight-plus-rounds", reward: "📺", titleKey: "achievementCharadesFiftyEightPlusRoundsTitle", descriptionKey: "achievementCharadesFiftyEightPlusRoundsDescription", category: "streaks", game: "charades" },
+  { id: "charades-ten-fifteen-plus-rounds", reward: "🌟", titleKey: "achievementCharadesTenFifteenPlusRoundsTitle", descriptionKey: "achievementCharadesTenFifteenPlusRoundsDescription", category: "skill", game: "charades" },
+  { id: "charades-twenty-five-fifteen-plus-rounds", reward: "🌠", titleKey: "achievementCharadesTwentyFiveFifteenPlusRoundsTitle", descriptionKey: "achievementCharadesTwentyFiveFifteenPlusRoundsDescription", category: "skill", game: "charades" },
+  { id: "charades-ten-zero-rounds", reward: "🪦", titleKey: "achievementCharadesTenZeroRoundsTitle", descriptionKey: "achievementCharadesTenZeroRoundsDescription", category: "chaos", game: "charades" },
+  { id: "charades-clean-streak-ten", reward: "🦚", titleKey: "achievementCharadesCleanStreakTenTitle", descriptionKey: "achievementCharadesCleanStreakTenDescription", category: "streaks", game: "charades" },
+  { id: "charades-twenty-round", reward: "🌪️", titleKey: "achievementCharadesTwentyRoundTitle", descriptionKey: "achievementCharadesTwentyRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-clean-fifteen", reward: "💎", titleKey: "achievementCharadesCleanFifteenTitle", descriptionKey: "achievementCharadesCleanFifteenDescription", category: "skill", game: "charades" },
+  { id: "charades-fifteen-skips", reward: "🧯", titleKey: "achievementCharadesFifteenSkipsTitle", descriptionKey: "achievementCharadesFifteenSkipsDescription", category: "chaos", game: "charades" },
+  { id: "charades-thirty-actions", reward: "🕺", titleKey: "achievementCharadesThirtyActionsTitle", descriptionKey: "achievementCharadesThirtyActionsDescription", category: "skill", game: "charades" },
+  { id: "charades-sprint-twelve", reward: "💨", titleKey: "achievementCharadesSprintTwelveTitle", descriptionKey: "achievementCharadesSprintTwelveDescription", category: "skill", game: "charades" },
+  { id: "whoami-thousand-guessed", reward: "👑", titleKey: "achievementWhoamiThousandGuessedTitle", descriptionKey: "achievementWhoamiThousandGuessedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-hundred-skips", reward: "🌫️", titleKey: "achievementWhoamiHundredSkipsTitle", descriptionKey: "achievementWhoamiHundredSkipsDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-two-fifty-yes", reward: "🌱", titleKey: "achievementWhoamiTwoFiftyYesTitle", descriptionKey: "achievementWhoamiTwoFiftyYesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-two-fifty-no", reward: "🚫", titleKey: "achievementWhoamiTwoFiftyNoTitle", descriptionKey: "achievementWhoamiTwoFiftyNoDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-hundred-games", reward: "🏛️", titleKey: "achievementWhoamiHundredGamesTitle", descriptionKey: "achievementWhoamiHundredGamesDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-twenty-five-timed", reward: "🕰️", titleKey: "achievementWhoamiTwentyFiveTimedTitle", descriptionKey: "achievementWhoamiTwentyFiveTimedDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-twenty-five-perfect", reward: "💎", titleKey: "achievementWhoamiTwentyFivePerfectTitle", descriptionKey: "achievementWhoamiTwentyFivePerfectDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-perfect-streak-ten", reward: "☄️", titleKey: "achievementWhoamiPerfectStreakTenTitle", descriptionKey: "achievementWhoamiPerfectStreakTenDescription", category: "streaks", game: "whoami" },
+  { id: "whoami-twenty-session", reward: "🤯", titleKey: "achievementWhoamiTwentySessionTitle", descriptionKey: "achievementWhoamiTwentySessionDescription", category: "skill", game: "whoami" },
+  { id: "whoami-twenty-skips-session", reward: "🌀", titleKey: "achievementWhoamiTwentySkipsSessionTitle", descriptionKey: "achievementWhoamiTwentySkipsSessionDescription", category: "chaos", game: "whoami" },
+  { id: "whoami-seventy-five-questions", reward: "📚", titleKey: "achievementWhoamiSeventyFiveQuestionsTitle", descriptionKey: "achievementWhoamiSeventyFiveQuestionsDescription", category: "skill", game: "whoami" },
+  { id: "whoami-exact-one-session", reward: "☝️", titleKey: "achievementWhoamiExactOneSessionTitle", descriptionKey: "achievementWhoamiExactOneSessionDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiExactOneSessionHint" },
+  { id: "whoami-exact-three-session", reward: "3️⃣", titleKey: "achievementWhoamiExactThreeSessionTitle", descriptionKey: "achievementWhoamiExactThreeSessionDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiExactThreeSessionHint" },
+  { id: "whoami-lucky-seven-no", reward: "🕖", titleKey: "achievementWhoamiLuckySevenNoTitle", descriptionKey: "achievementWhoamiLuckySevenNoDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiLuckySevenNoHint" },
+  { id: "whoami-three-three", reward: "⚖️", titleKey: "achievementWhoamiThreeThreeTitle", descriptionKey: "achievementWhoamiThreeThreeDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiThreeThreeHint" },
+  { id: "whoami-equal-guessed-skipped", reward: "🪞", titleKey: "achievementWhoamiEqualGuessedSkippedTitle", descriptionKey: "achievementWhoamiEqualGuessedSkippedDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiEqualGuessedSkippedHint" },
+  { id: "whoami-sixty-second-ten", reward: "⏱️", titleKey: "achievementWhoamiSixtySecondTenTitle", descriptionKey: "achievementWhoamiSixtySecondTenDescription", category: "skill", game: "whoami" },
+  { id: "whoami-ninety-second-twelve", reward: "⏳", titleKey: "achievementWhoamiNinetySecondTwelveTitle", descriptionKey: "achievementWhoamiNinetySecondTwelveDescription", category: "skill", game: "whoami" },
+  { id: "whoami-two-minute-fifteen", reward: "🕰️", titleKey: "achievementWhoamiTwoMinuteFifteenTitle", descriptionKey: "achievementWhoamiTwoMinuteFifteenDescription", category: "skill", game: "whoami" },
+  { id: "whoami-two-teams-ten", reward: "🤝", titleKey: "achievementWhoamiTwoTeamsTenTitle", descriptionKey: "achievementWhoamiTwoTeamsTenDescription", category: "skill", game: "whoami" },
+  { id: "whoami-three-teams-twelve", reward: "🔺", titleKey: "achievementWhoamiThreeTeamsTwelveTitle", descriptionKey: "achievementWhoamiThreeTeamsTwelveDescription", category: "skill", game: "whoami" },
+  { id: "whoami-no-questions-three", reward: "🤫", titleKey: "achievementWhoamiNoQuestionsThreeTitle", descriptionKey: "achievementWhoamiNoQuestionsThreeDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiNoQuestionsThreeHint" },
+
+  { id: "alias-cat-lightning", reward: "🐾", titleKey: "achievementAliasCatLightningTitle", descriptionKey: "achievementAliasCatLightningDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasCatLightningHint" },
+  { id: "alias-capybara-lightning", reward: "🌊", titleKey: "achievementAliasCapybaraLightningTitle", descriptionKey: "achievementAliasCapybaraLightningDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasCapybaraLightningHint" },
+  { id: "alias-long-word", reward: "📏", titleKey: "achievementAliasLongWordTitle", descriptionKey: "achievementAliasLongWordDescription", category: "skill", game: "alias" },
+  { id: "alias-ultra-long-word", reward: "🦕", titleKey: "achievementAliasUltraLongWordTitle", descriptionKey: "achievementAliasUltraLongWordDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasUltraLongWordHint" },
+  { id: "alias-slow-word", reward: "🐢", titleKey: "achievementAliasSlowWordTitle", descriptionKey: "achievementAliasSlowWordDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasSlowWordHint" },
+  { id: "alias-cat-five", reward: "😺", titleKey: "achievementAliasCatFiveTitle", descriptionKey: "achievementAliasCatFiveDescription", category: "milestones", game: "alias" },
+  { id: "alias-fast-25", reward: "🏎️", titleKey: "achievementAliasFast25Title", descriptionKey: "achievementAliasFast25Description", category: "milestones", game: "alias" },
+  { id: "alias-long-25", reward: "🧾", titleKey: "achievementAliasLong25Title", descriptionKey: "achievementAliasLong25Description", category: "milestones", game: "alias" },
+  { id: "alias-animal-50", reward: "🦁", titleKey: "achievementAliasAnimal50Title", descriptionKey: "achievementAliasAnimal50Description", category: "milestones", game: "alias" },
+  { id: "alias-special-five", reward: "🎁", titleKey: "achievementAliasSpecialFiveTitle", descriptionKey: "achievementAliasSpecialFiveDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasSpecialFiveHint" },
+  { id: "alias-three-long-round", reward: "📚", titleKey: "achievementAliasThreeLongRoundTitle", descriptionKey: "achievementAliasThreeLongRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-five-short-round", reward: "🫘", titleKey: "achievementAliasFiveShortRoundTitle", descriptionKey: "achievementAliasFiveShortRoundDescription", category: "skill", game: "alias" },
+  { id: "alias-animal-trio", reward: "🐾", titleKey: "achievementAliasAnimalTrioTitle", descriptionKey: "achievementAliasAnimalTrioDescription", category: "skill", game: "alias" },
+  { id: "alias-food-trio", reward: "🍲", titleKey: "achievementAliasFoodTrioTitle", descriptionKey: "achievementAliasFoodTrioDescription", category: "skill", game: "alias" },
+  { id: "alias-sport-trio", reward: "⚽", titleKey: "achievementAliasSportTrioTitle", descriptionKey: "achievementAliasSportTrioDescription", category: "skill", game: "alias" },
+  { id: "alias-profession-trio", reward: "🧰", titleKey: "achievementAliasProfessionTrioTitle", descriptionKey: "achievementAliasProfessionTrioDescription", category: "skill", game: "alias" },
+  { id: "alias-same-initial-three", reward: "🔤", titleKey: "achievementAliasSameInitialThreeTitle", descriptionKey: "achievementAliasSameInitialThreeDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasSameInitialThreeHint" },
+  { id: "alias-unique-initial-ten", reward: "🧩", titleKey: "achievementAliasUniqueInitialTenTitle", descriptionKey: "achievementAliasUniqueInitialTenDescription", category: "skill", game: "alias" },
+  { id: "alias-all-long-eight", reward: "🦒", titleKey: "achievementAliasAllLongEightTitle", descriptionKey: "achievementAliasAllLongEightDescription", category: "skill", game: "alias" },
+  { id: "alias-single-category-ten", reward: "🎯", titleKey: "achievementAliasSingleCategoryTenTitle", descriptionKey: "achievementAliasSingleCategoryTenDescription", category: "skill", game: "alias" },
+  { id: "alias-two-categories-twelve", reward: "🪢", titleKey: "achievementAliasTwoCategoriesTwelveTitle", descriptionKey: "achievementAliasTwoCategoriesTwelveDescription", category: "skill", game: "alias" },
+  { id: "alias-easy-fifteen", reward: "🍭", titleKey: "achievementAliasEasyFifteenTitle", descriptionKey: "achievementAliasEasyFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-medium-fifteen", reward: "🎓", titleKey: "achievementAliasMediumFifteenTitle", descriptionKey: "achievementAliasMediumFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-hard-fifteen", reward: "🗿", titleKey: "achievementAliasHardFifteenTitle", descriptionKey: "achievementAliasHardFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-clean-eighteen", reward: "✨", titleKey: "achievementAliasCleanEighteenTitle", descriptionKey: "achievementAliasCleanEighteenDescription", category: "skill", game: "alias" },
+  { id: "alias-one-skip-fifteen", reward: "🎫", titleKey: "achievementAliasOneSkipFifteenTitle", descriptionKey: "achievementAliasOneSkipFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-forty-actions", reward: "🎰", titleKey: "achievementAliasFortyActionsTitle", descriptionKey: "achievementAliasFortyActionsDescription", category: "chaos", game: "alias" },
+  { id: "alias-minute-fifteen", reward: "⏱️", titleKey: "achievementAliasMinuteFifteenTitle", descriptionKey: "achievementAliasMinuteFifteenDescription", category: "skill", game: "alias" },
+  { id: "alias-ninety-twenty", reward: "🚆", titleKey: "achievementAliasNinetyTwentyTitle", descriptionKey: "achievementAliasNinetyTwentyDescription", category: "skill", game: "alias" },
+  { id: "alias-two-minute-twenty-five", reward: "🚀", titleKey: "achievementAliasTwoMinuteTwentyFiveTitle", descriptionKey: "achievementAliasTwoMinuteTwentyFiveDescription", category: "skill", game: "alias" },
+
+  { id: "charades-capybara-fast", reward: "🌊", titleKey: "achievementCharadesCapybaraFastTitle", descriptionKey: "achievementCharadesCapybaraFastDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesCapybaraFastHint" },
+  { id: "charades-long-prompt", reward: "🎞️", titleKey: "achievementCharadesLongPromptTitle", descriptionKey: "achievementCharadesLongPromptDescription", category: "skill", game: "charades" },
+  { id: "charades-ultra-long-prompt", reward: "🎬", titleKey: "achievementCharadesUltraLongPromptTitle", descriptionKey: "achievementCharadesUltraLongPromptDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesUltraLongPromptHint" },
+  { id: "charades-three-long-round", reward: "📽️", titleKey: "achievementCharadesThreeLongRoundTitle", descriptionKey: "achievementCharadesThreeLongRoundDescription", category: "skill", game: "charades" },
+  { id: "charades-animal-trio", reward: "🦓", titleKey: "achievementCharadesAnimalTrioTitle", descriptionKey: "achievementCharadesAnimalTrioDescription", category: "skill", game: "charades" },
+  { id: "charades-same-initial-three", reward: "🔤", titleKey: "achievementCharadesSameInitialThreeTitle", descriptionKey: "achievementCharadesSameInitialThreeDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesSameInitialThreeHint" },
+  { id: "charades-unique-initial-eight", reward: "🎨", titleKey: "achievementCharadesUniqueInitialEightTitle", descriptionKey: "achievementCharadesUniqueInitialEightDescription", category: "skill", game: "charades" },
+  { id: "charades-single-category-eight", reward: "🎯", titleKey: "achievementCharadesSingleCategoryEightTitle", descriptionKey: "achievementCharadesSingleCategoryEightDescription", category: "skill", game: "charades" },
+  { id: "charades-easy-ten", reward: "🍿", titleKey: "achievementCharadesEasyTenTitle", descriptionKey: "achievementCharadesEasyTenDescription", category: "skill", game: "charades" },
+  { id: "charades-medium-ten", reward: "🎟️", titleKey: "achievementCharadesMediumTenTitle", descriptionKey: "achievementCharadesMediumTenDescription", category: "skill", game: "charades" },
+  { id: "charades-hard-ten", reward: "🎭", titleKey: "achievementCharadesHardTenTitle", descriptionKey: "achievementCharadesHardTenDescription", category: "skill", game: "charades" },
+  { id: "charades-clean-twelve-plus", reward: "🦢", titleKey: "achievementCharadesCleanTwelvePlusTitle", descriptionKey: "achievementCharadesCleanTwelvePlusDescription", category: "skill", game: "charades" },
+  { id: "charades-special-three", reward: "🎁", titleKey: "achievementCharadesSpecialThreeTitle", descriptionKey: "achievementCharadesSpecialThreeDescription", category: "secrets", game: "charades", mystery: true, hintKey: "achievementCharadesSpecialThreeHint" },
+
+  { id: "whoami-cat-role", reward: "🐈", titleKey: "achievementWhoamiCatRoleTitle", descriptionKey: "achievementWhoamiCatRoleDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiCatRoleHint" },
+  { id: "whoami-capybara-role", reward: "🦫", titleKey: "achievementWhoamiCapybaraRoleTitle", descriptionKey: "achievementWhoamiCapybaraRoleDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiCapybaraRoleHint" },
+  { id: "whoami-cat-five", reward: "😺", titleKey: "achievementWhoamiCatFiveTitle", descriptionKey: "achievementWhoamiCatFiveDescription", category: "milestones", game: "whoami" },
+  { id: "whoami-exact-nine-yes", reward: "9️⃣", titleKey: "achievementWhoamiExactNineYesTitle", descriptionKey: "achievementWhoamiExactNineYesDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiExactNineYesHint" },
+  { id: "whoami-exact-nine-no", reward: "🙅", titleKey: "achievementWhoamiExactNineNoTitle", descriptionKey: "achievementWhoamiExactNineNoDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiExactNineNoHint" },
+  { id: "whoami-thirteen-questions", reward: "🔮", titleKey: "achievementWhoamiThirteenQuestionsTitle", descriptionKey: "achievementWhoamiThirteenQuestionsDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiThirteenQuestionsHint" },
+  { id: "whoami-no-questions-five", reward: "🤫", titleKey: "achievementWhoamiNoQuestionsFiveTitle", descriptionKey: "achievementWhoamiNoQuestionsFiveDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiNoQuestionsFiveHint" },
+  { id: "whoami-special-five", reward: "🎁", titleKey: "achievementWhoamiSpecialFiveTitle", descriptionKey: "achievementWhoamiSpecialFiveDescription", category: "secrets", game: "whoami", mystery: true, hintKey: "achievementWhoamiSpecialFiveHint" },
 ];
 const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
   { id: "all", titleKey: "achievementCategoryAll" },
-  { id: "new", titleKey: "achievementCategoryNew" },
   { id: "skill", titleKey: "achievementCategorySkill" },
   { id: "patterns", titleKey: "achievementCategoryPatterns" },
   { id: "hints", titleKey: "achievementCategoryHints" },
@@ -363,6 +611,15 @@ const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
   { id: "streaks", titleKey: "achievementCategoryStreaks" },
   { id: "milestones", titleKey: "achievementCategoryMilestones" },
   { id: "secrets", titleKey: "achievementCategorySecrets" },
+];
+const WORD_GUESS_ACHIEVEMENT_GAMES = [
+  { id: "new", titleKey: "achievementCategoryNew", icon: "✨" },
+  { id: "all", titleKey: "achievementGameAll", icon: "🏆" },
+  { id: "wordguess", titleKey: "achievementGameWordGuess", icon: "🧩" },
+  { id: "alias", titleKey: "achievementGameAlias", icon: "💬" },
+  { id: "charades", titleKey: "achievementGameCharades", icon: "🎭" },
+  { id: "whoami", titleKey: "achievementGameWhoAmI", icon: "🕵️" },
+  { id: "movohray", titleKey: "achievementGameMovohray", icon: "✨" },
 ];
 const MOVOHRAY_GLOBAL_ACHIEVEMENT_IDS = new Set([
   "labs-easter", "hint-whisperer", "museum-visitor", "museum-curator", "day-night", "logo-secret",
@@ -376,6 +633,20 @@ const WORD_GUESS_DEFAULT_LANGUAGE = "uk";
 const WORD_GUESS_LABS_UNLOCK_TAPS = 7;
 const GAME_TITLE = "Мовограй";
 const GAME_SUBTITLE = "Українські ігри зі словами для компанії.";
+
+const PARTY_EASTER_EGG_NIXA_ASSETS = [
+  getRevisionedAssetUrl("assets/easter-eggs/nixa-1.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/nixa-2.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/nixa-3.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/nixa-4.png"),
+];
+const PARTY_EASTER_EGG_SHERIK_ASSETS = [
+  getRevisionedAssetUrl("assets/easter-eggs/sherik-1.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/sherik-2.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/sherik-3.png"),
+  getRevisionedAssetUrl("assets/easter-eggs/sherik-4.png"),
+];
+const PARTY_EASTER_EGG_CAPYBARA_ASSET = getRevisionedAssetUrl("assets/easter-eggs/capybara.png");
 const modeCategoryCache = {};
 const modeCategoryPromises = {};
 let modeSelectionRequestId = 0;
@@ -456,6 +727,93 @@ const WORD_GUESS_TEXT = {
     setupGameSettings: "Налаштування гри", setupFormat: "Формат гри", setupSingle: "Одне слово", setupTimed: "На час", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Середньо", difficultyHard: "Складно", phrasesYes: "Словосполучення: так", phrasesNo: "Словосполучення: ні", setupRound: "Раунд", setupTime: "Час", setupAfterTime: "Після часу", setupFinishLast: "Довгадати", setupStop: "Стоп", setupGame: "Гра", setupTarget: "Ціль", setupTeams: "Команди", setupTeamNames: "Назви команд", teamNameBase: "Команда", allTopics: "Усі теми",
     cardsEyebrow: "Alias та Крокодил", cardsTitle: "Картки слів", cardsAllShapesTitle: "Випадково з усіх форм", cardsAllShapesCopy: "Коли увімкнено — гра міксує весь набір форм.", cardsRandomColorsTitle: "Рандомні кольори картки", cardsRandomColorsCopy: "Якщо вимкнути — картки повернуться до базового кольору теми.", cardsOutlineLight: "Окантовка у світлій темі", cardsOutlineDark: "Окантовка у темній темі", choiceNever: "Ніколи", choiceRandom: "Випадково", choiceAlways: "Завжди", cardShapeOrganic: "М’яка шайба", cardShapeSplat: "Асиметрична клякса", cardShapePebble: "Камінчик / жетон", cardShapeSticker: "Стікер-клякса", cardShapeCloud: "Хмаринка", cardShapeSplash: "Крапля-сплеш", cardShapeGummy: "Жуйка / мармелад", cardShapePaper: "Паперова пляма", cardsNote: "Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.",
     achievementCategoriesAria: "Категорії досягнень", achievementCategoryAll: "Всі", achievementCategoryNew: "Нові", achievementNewLabel: "Нове", achievementReceivedAt: (dateText) => `Отримано ${dateText}`, achievementNewCountAria: (count) => `Нових досягнень: ${count}.`, achievementSearchLabel: "Пошук досягнень", achievementSearchPlaceholder: "Знайти досягнення…", achievementSearchEmpty: "Нічого не знайдено. Спробуй інше слово або категорію.", achievementShowMore: "Показати ще", achievementGameWordGuess: "Вгадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
+    achievementGamesAria: "Ігри та нові досягнення",
+    achievementGameAll: "Усі ігри",
+    achievementGameWhoAmI: "Хто я?",
+    achievementAliasFiveRoundTitle: "Розігрілись",
+    achievementAliasFiveRoundDescription: "Зарахуй 5 або більше слів за один раунд Alias.",
+    achievementAliasFifteenRoundTitle: "Словесний реактор",
+    achievementAliasFifteenRoundDescription: "Зарахуй 15 або більше слів за один раунд Alias.",
+    achievementAliasPerfectTenTitle: "Десять без права на помилку",
+    achievementAliasPerfectTenDescription: "Десь існує раунд, у якому паси просто не потрібні.",
+    achievementAliasPerfectTenHint: "Зарахуй щонайменше 10 слів за раунд Alias без жодного пропуску.",
+    achievementAliasFiveSkipsTitle: "Пас-парад",
+    achievementAliasFiveSkipsDescription: "Зроби щонайменше 5 пропусків за один раунд Alias.",
+    achievementAliasBalancedRoundTitle: "Баланс хаосу",
+    achievementAliasBalancedRoundDescription: "І вгадували, і пасували — зате з характером.",
+    achievementAliasBalancedRoundHint: "За один раунд Alias зарахуй щонайменше 7 слів і зроби щонайменше 3 пропуски.",
+    achievementAliasTenRoundsTitle: "Мікрофон прогрівся",
+    achievementAliasTenRoundsDescription: "Заверши 10 раундів Alias.",
+    achievementAliasTwentyFiveRoundsTitle: "Ефірний ветеран",
+    achievementAliasTwentyFiveRoundsDescription: "Заверши 25 раундів Alias.",
+    achievementAliasFiftyPointsTitle: "Півсотні слів",
+    achievementAliasFiftyPointsDescription: "Набери сумарно 50 очок в Alias.",
+    achievementAliasHundredPointsTitle: "Сотня на язиці",
+    achievementAliasHundredPointsDescription: "Набери сумарно 100 очок в Alias.",
+    achievementAliasTwoFiftyPointsTitle: "Словесний банк",
+    achievementAliasTwoFiftyPointsDescription: "Набери сумарно 250 очок в Alias.",
+    achievementAliasThreeCleanRoundsTitle: "Чистий ефір",
+    achievementAliasThreeCleanRoundsDescription: "Заверши 3 результативні раунди Alias без пропусків.",
+    achievementAliasTenCleanRoundsTitle: "Бездоганний диктор",
+    achievementAliasTenCleanRoundsDescription: "Заверши 10 результативних раундів Alias без пропусків.",
+    achievementCharadesFiveRoundTitle: "Руки розім’яли",
+    achievementCharadesFiveRoundDescription: "Зарахуй 5 або більше завдань за один раунд Крокодила.",
+    achievementCharadesTwelveRoundTitle: "Німе кіно",
+    achievementCharadesTwelveRoundDescription: "Зарахуй 12 або більше завдань за один раунд Крокодила.",
+    achievementCharadesPerfectEightTitle: "Пантоміма без монтажу",
+    achievementCharadesPerfectEightDescription: "Жодної вирізаної сцени.",
+    achievementCharadesPerfectEightHint: "Зарахуй щонайменше 8 завдань у Крокодилі без жодного пропуску.",
+    achievementCharadesFiveSkipsTitle: "Фестиваль пропусків",
+    achievementCharadesFiveSkipsDescription: "Зроби щонайменше 5 пропусків за один раунд Крокодила.",
+    achievementCharadesChaosRoundTitle: "Театр абсурду",
+    achievementCharadesChaosRoundDescription: "Сцена бачила різне. Цей раунд — особливо.",
+    achievementCharadesChaosRoundHint: "За один раунд Крокодила зарахуй щонайменше 6 завдань і зроби щонайменше 4 пропуски.",
+    achievementCharadesTenRoundsTitle: "Десять виходів на сцену",
+    achievementCharadesTenRoundsDescription: "Заверши 10 раундів Крокодила.",
+    achievementCharadesTwentyFiveRoundsTitle: "Актор трупи",
+    achievementCharadesTwentyFiveRoundsDescription: "Заверши 25 раундів Крокодила.",
+    achievementCharadesFiftyPointsTitle: "П’ятдесят жестів успіху",
+    achievementCharadesFiftyPointsDescription: "Набери сумарно 50 очок у Крокодилі.",
+    achievementCharadesHundredPointsTitle: "Сто без слів",
+    achievementCharadesHundredPointsDescription: "Набери сумарно 100 очок у Крокодилі.",
+    achievementCharadesTwoFiftyPointsTitle: "Заслужений мім",
+    achievementCharadesTwoFiftyPointsDescription: "Набери сумарно 250 очок у Крокодилі.",
+    achievementCharadesThreeCleanRoundsTitle: "Чиста сцена",
+    achievementCharadesThreeCleanRoundsDescription: "Заверши 3 результативні раунди Крокодила без пропусків.",
+    achievementCharadesTenCleanRoundsTitle: "Лебедина пантоміма",
+    achievementCharadesTenCleanRoundsDescription: "Заверши 10 результативних раундів Крокодила без пропусків.",
+    achievementWhoAmIFirstGuessTitle: "Так ось хто я!",
+    achievementWhoAmIFirstGuessDescription: "Уперше правильно відгадай роль у «Хто я?».",
+    achievementWhoAmIFiveGuessedTitle: "П’ять особистостей",
+    achievementWhoAmIFiveGuessedDescription: "Відгадай сумарно 5 ролей у «Хто я?».",
+    achievementWhoAmITwentyGuessedTitle: "Колекціонер особистостей",
+    achievementWhoAmITwentyGuessedDescription: "Відгадай сумарно 20 ролей у «Хто я?».",
+    achievementWhoAmIFiftyGuessedTitle: "Доктор Хто?",
+    achievementWhoAmIFiftyGuessedDescription: "Відгадай сумарно 50 ролей у «Хто я?».",
+    achievementWhoAmIFirstSkipTitle: "Не сьогодні",
+    achievementWhoAmIFirstSkipDescription: "Уперше пропусти роль у «Хто я?».",
+    achievementWhoAmITenSkipsTitle: "Криза ідентичності",
+    achievementWhoAmITenSkipsDescription: "Накопич 10 пропущених ролей у «Хто я?».",
+    achievementWhoAmITenYesTitle: "Так-так-так",
+    achievementWhoAmITenYesDescription: "Отримай сумарно 10 відповідей «так» у «Хто я?».",
+    achievementWhoAmITenNoTitle: "Ні — теж відповідь",
+    achievementWhoAmITenNoDescription: "Отримай сумарно 10 відповідей «ні» у «Хто я?».",
+    achievementWhoAmIQuestionStormTitle: "Допит із пристрастю",
+    achievementWhoAmIQuestionStormDescription: "Питань стало підозріло багато.",
+    achievementWhoAmIQuestionStormHint: "За одну партію «Хто я?» отримай сумарно 20 відповідей «так» і «ні».",
+    achievementWhoAmIPerfectGameTitle: "Усі маски знято",
+    achievementWhoAmIPerfectGameDescription: "Заверши партію «Хто я?» хоча б з однією відгаданою роллю і без пропусків.",
+    achievementWhoAmIThreePerfectTitle: "Три чисті особистості",
+    achievementWhoAmIThreePerfectDescription: "Заверши 3 партії «Хто я?» без пропущених ролей.",
+    achievementWhoAmITimedFirstTitle: "Хто я? На швидкості",
+    achievementWhoAmITimedFirstDescription: "Заверши першу партію «Хто я?» в режимі на час.",
+    achievementWhoAmITenGamesTitle: "Знайомі незнайомці",
+    achievementWhoAmITenGamesDescription: "Заверши 10 партій «Хто я?».",
+    achievementWhoAmIFiveSessionTitle: "П’ять масок за вечір",
+    achievementWhoAmIFiveSessionDescription: "Відгадай 5 ролей протягом однієї партії «Хто я?».",
+    achievementWhoAmINoMachineTitle: "Машина заперечення",
+    achievementWhoAmINoMachineDescription: "Всесвіт наполегливо каже «ні».",
+    achievementWhoAmINoMachineHint: "За одну партію «Хто я?» отримай 10 відповідей «ні».",
     achievementRuKoshkaTitle: "Кішка з сусідньої локалі", achievementRuKoshkaDescription: "Десь поруч дуже знайомо нявкнуло російською.", achievementRuKoshkaHint: "У RU-режимі введи слово «КОШКА».",
     achievementRuHochatsuTitle: "Хочацу — значить хочацу", achievementRuHochatsuDescription: "Словника це не переконало. Мовограй — трохи переконало.", achievementRuHochatsuHint: "У RU-режимі набери «ХОЧАЦУ» та натисни введення. Такого слова в словнику немає — це частина жарту.",
     achievementUkKishkaTitle: "Кішка прийшла", achievementUkKishkaDescription: "Вона нічого не пояснюватиме. Вона просто тут.", achievementUkKishkaHint: "В українському режимі введи «КІШКА».",
@@ -869,6 +1227,405 @@ const WORD_GUESS_TEXT = {
     achievementLogoSecretTitle: "Не тицяй логотип",
     achievementLogoSecretDescription: "Серйозно. Логотип просто стоїть собі.",
     achievementLogoSecretHint: "У головному меню натисни на логотип Мовограю 7 разів.",
+    achievementAliasFiftyRoundsTitle: "Розговорився",
+    achievementAliasFiftyRoundsDescription: "Зіграй 50 раундів Alias.",
+    achievementAliasHundredRoundsTitle: "Словесний марафонець",
+    achievementAliasHundredRoundsDescription: "Зіграй 100 раундів Alias.",
+    achievementAliasFiveHundredPointsTitle: "Пів тисячі слів",
+    achievementAliasFiveHundredPointsDescription: "Набери 500 очок в Alias загалом.",
+    achievementAliasThousandPointsTitle: "Тисяча на язиці",
+    achievementAliasThousandPointsDescription: "Набери 1000 очок в Alias загалом.",
+    achievementAliasTwentyFiveSkipsTitle: "Пас-пас-пас",
+    achievementAliasTwentyFiveSkipsDescription: "Назбирай 25 пропусків в Alias.",
+    achievementAliasFiftySkipsTitle: "Катапульта слів",
+    achievementAliasFiftySkipsDescription: "Назбирай 50 пропусків в Alias.",
+    achievementAliasHundredSkipsTitle: "Пасова сингулярність",
+    achievementAliasHundredSkipsDescription: "Назбирай 100 пропусків в Alias.",
+    achievementAliasTwentyFiveCleanRoundsTitle: "Чиста мова",
+    achievementAliasTwentyFiveCleanRoundsDescription: "Заверши 25 раундів Alias без жодного пропуску.",
+    achievementAliasFiftyCleanRoundsTitle: "Блискуча дикція",
+    achievementAliasFiftyCleanRoundsDescription: "Заверши 50 чистих раундів Alias без пропусків.",
+    achievementAliasThreeTenPlusRoundsTitle: "Розігрів",
+    achievementAliasThreeTenPlusRoundsDescription: "Тричі набери щонайменше 10 очок за раунд Alias.",
+    achievementAliasTenTenPlusRoundsTitle: "Словесний локомотив",
+    achievementAliasTenTenPlusRoundsDescription: "У 10 раундах Alias набери щонайменше 10 очок.",
+    achievementAliasThreeTwentyPlusRoundsTitle: "Турборежим",
+    achievementAliasThreeTwentyPlusRoundsDescription: "Тричі набери щонайменше 20 очок за раунд Alias.",
+    achievementAliasFiveZeroRoundsTitle: "Слова скінчилися",
+    achievementAliasFiveZeroRoundsDescription: "П’ять разів заверши раунд Alias із нулем очок.",
+    achievementAliasCleanStreakThreeTitle: "Три чистих поспіль",
+    achievementAliasCleanStreakThreeDescription: "Заверши 3 раунди Alias поспіль без пропусків і з очками.",
+    achievementAliasCleanStreakFiveTitle: "Біла смуга",
+    achievementAliasCleanStreakFiveDescription: "Заверши 5 раундів Alias поспіль без пропусків і з очками.",
+    achievementAliasExactOneTitle: "Одне, але горде",
+    achievementAliasExactOneDescription: "Заверши раунд Alias рівно з 1 очком.",
+    achievementAliasExactThreeTitle: "Рівно три",
+    achievementAliasExactThreeDescription: "Заверши раунд Alias рівно з 3 очками.",
+    achievementAliasExactSevenTitle: "Щаслива сімка",
+    achievementAliasExactSevenDescription: "Іноді число саме проситься в колекцію.",
+    achievementAliasExactSevenHint: "Заверши раунд Alias рівно з 7 очками.",
+    achievementAliasExactThirteenTitle: "Чортова дюжина",
+    achievementAliasExactThirteenDescription: "Не забобон, а дуже конкретний рахунок.",
+    achievementAliasExactThirteenHint: "Заверши раунд Alias рівно з 13 очками.",
+    achievementAliasTwentyRoundTitle: "Двадцятка!",
+    achievementAliasTwentyRoundDescription: "Набери щонайменше 20 очок за один раунд Alias.",
+    achievementAliasCleanFifteenTitle: "Без жодної осічки",
+    achievementAliasCleanFifteenDescription: "Набери 15+ очок за раунд Alias без пропусків.",
+    achievementAliasOneSkipTenTitle: "Один квиток на вихід",
+    achievementAliasOneSkipTenDescription: "Набери 10+ очок за раунд Alias лише з одним пропуском.",
+    achievementAliasTenSkipsTitle: "Пасопад",
+    achievementAliasTenSkipsDescription: "Зроби щонайменше 10 пропусків за один раунд Alias.",
+    achievementAliasZeroFiveSkipsTitle: "Ні слова, зате рух",
+    achievementAliasZeroFiveSkipsDescription: "Цей раунд дуже старався… в іншому напрямку.",
+    achievementAliasZeroFiveSkipsHint: "Заверши раунд Alias з 0 очок і щонайменше 5 пропусками.",
+    achievementAliasEqualFiveTitle: "П’ять на п’ять",
+    achievementAliasEqualFiveDescription: "Баланс буває підозріло красивим.",
+    achievementAliasEqualFiveHint: "Заверши раунд Alias з 5 очками і 5 пропусками.",
+    achievementAliasSkipOverScoreTitle: "Паси перемогли",
+    achievementAliasSkipOverScoreDescription: "Заверши раунд, де пропусків більше, ніж очок, але є хоча б 3 очки.",
+    achievementAliasTwentyActionsTitle: "Двадцять рішень",
+    achievementAliasTwentyActionsDescription: "За один раунд набери сумарно 20+ очок і пропусків.",
+    achievementAliasSprintFiveTitle: "30 секунд — політ нормальний",
+    achievementAliasSprintFiveDescription: "За 30-секундний раунд Alias набери щонайменше 5 очок.",
+    achievementAliasSprintTenTitle: "Турбоязик",
+    achievementAliasSprintTenDescription: "За 30-секундний раунд Alias набери щонайменше 10 очок.",
+    achievementAliasMarathonTwentyTitle: "Довгий забіг",
+    achievementAliasMarathonTwentyDescription: "За 120-секундний раунд Alias набери щонайменше 20 очок.",
+    achievementAliasHardFiveTitle: "Без простих слів",
+    achievementAliasHardFiveDescription: "Грай лише на складному рівні й набери 5+ очок за раунд Alias.",
+    achievementAliasHardCleanTenTitle: "Кам’яне обличчя",
+    achievementAliasHardCleanTenDescription: "На складному рівні набери 10+ очок за Alias без пропусків.",
+    achievementAliasAllDifficultiesTenTitle: "Усе меню",
+    achievementAliasAllDifficultiesTenDescription: "Увімкни всі три складності й набери 10+ очок за раунд Alias.",
+    achievementAliasFourTeamsTenTitle: "Повний стіл",
+    achievementAliasFourTeamsTenDescription: "Грай у Alias чотирма командами й набери 10+ очок за раунд.",
+    achievementAliasCategoryTourTitle: "Тематичний турист",
+    achievementAliasCategoryTourDescription: "Обери щонайменше 5 тем і набери 10+ очок за раунд Alias.",
+    achievementCharadesFiftyRoundsTitle: "Гастролер",
+    achievementCharadesFiftyRoundsDescription: "Зіграй 50 раундів Крокодила.",
+    achievementCharadesHundredRoundsTitle: "Вічний мім",
+    achievementCharadesHundredRoundsDescription: "Зіграй 100 раундів Крокодила.",
+    achievementCharadesFiveHundredPointsTitle: "Пів тисячі сцен",
+    achievementCharadesFiveHundredPointsDescription: "Набери 500 очок у Крокодилі загалом.",
+    achievementCharadesThousandPointsTitle: "Домашній Оскар",
+    achievementCharadesThousandPointsDescription: "Набери 1000 очок у Крокодилі загалом.",
+    achievementCharadesTwentyFiveSkipsTitle: "Знято з репертуару",
+    achievementCharadesTwentyFiveSkipsDescription: "Назбирай 25 пропусків у Крокодилі.",
+    achievementCharadesFiftySkipsTitle: "Невидимий актор",
+    achievementCharadesFiftySkipsDescription: "Назбирай 50 пропусків у Крокодилі.",
+    achievementCharadesHundredSkipsTitle: "Чорна сцена",
+    achievementCharadesHundredSkipsDescription: "Назбирай 100 пропусків у Крокодилі.",
+    achievementCharadesTwentyFiveCleanRoundsTitle: "Чиста сцена",
+    achievementCharadesTwentyFiveCleanRoundsDescription: "Заверши 25 раундів Крокодила без пропусків.",
+    achievementCharadesFiftyCleanRoundsTitle: "Лебедина пластика",
+    achievementCharadesFiftyCleanRoundsDescription: "Заверши 50 чистих раундів Крокодила без пропусків.",
+    achievementCharadesThreeEightPlusRoundsTitle: "Розігріли сцену",
+    achievementCharadesThreeEightPlusRoundsDescription: "Тричі набери щонайменше 8 очок за раунд Крокодила.",
+    achievementCharadesTenEightPlusRoundsTitle: "Серіал продовжено",
+    achievementCharadesTenEightPlusRoundsDescription: "У 10 раундах Крокодила набери щонайменше 8 очок.",
+    achievementCharadesThreeFifteenPlusRoundsTitle: "Блокбастер",
+    achievementCharadesThreeFifteenPlusRoundsDescription: "Тричі набери щонайменше 15 очок за раунд Крокодила.",
+    achievementCharadesFiveZeroRoundsTitle: "Німа сцена",
+    achievementCharadesFiveZeroRoundsDescription: "П’ять разів заверши раунд Крокодила з нулем очок.",
+    achievementCharadesCleanStreakThreeTitle: "Три дублі без монтажу",
+    achievementCharadesCleanStreakThreeDescription: "Заверши 3 раунди Крокодила поспіль без пропусків і з очками.",
+    achievementCharadesCleanStreakFiveTitle: "П’ять чистих сцен",
+    achievementCharadesCleanStreakFiveDescription: "Заверши 5 раундів Крокодила поспіль без пропусків і з очками.",
+    achievementCharadesExactOneTitle: "Один жест",
+    achievementCharadesExactOneDescription: "Заверши раунд Крокодила рівно з 1 очком.",
+    achievementCharadesExactThreeTitle: "Три акти",
+    achievementCharadesExactThreeDescription: "Заверши раунд Крокодила рівно з 3 очками.",
+    achievementCharadesExactSevenTitle: "Сім кадрів",
+    achievementCharadesExactSevenDescription: "Сцена інколи любить красиві числа.",
+    achievementCharadesExactSevenHint: "Заверши раунд Крокодила рівно з 7 очками.",
+    achievementCharadesExactThirteenTitle: "Тринадцятий акт",
+    achievementCharadesExactThirteenDescription: "Ніхто не казав, що сцена не забобонна.",
+    achievementCharadesExactThirteenHint: "Заверши раунд Крокодила рівно з 13 очками.",
+    achievementCharadesFifteenRoundTitle: "П’ятнадцять овацій",
+    achievementCharadesFifteenRoundDescription: "Набери щонайменше 15 очок за один раунд Крокодила.",
+    achievementCharadesCleanTwelveTitle: "Без монтажу",
+    achievementCharadesCleanTwelveDescription: "Набери 12+ очок за раунд Крокодила без пропусків.",
+    achievementCharadesOneSkipEightTitle: "Один вирізаний кадр",
+    achievementCharadesOneSkipEightDescription: "Набери 8+ очок за раунд Крокодила лише з одним пропуском.",
+    achievementCharadesTenSkipsTitle: "Цирк без номерів",
+    achievementCharadesTenSkipsDescription: "Зроби щонайменше 10 пропусків за один раунд Крокодила.",
+    achievementCharadesZeroFiveSkipsTitle: "Пантоміма невидимки",
+    achievementCharadesZeroFiveSkipsDescription: "Було багато руху. Результат — загадка.",
+    achievementCharadesZeroFiveSkipsHint: "Заверши раунд Крокодила з 0 очок і щонайменше 5 пропусками.",
+    achievementCharadesEqualFiveTitle: "П’ять сцен — п’ять провалів",
+    achievementCharadesEqualFiveDescription: "Дивна симетрія теж мистецтво.",
+    achievementCharadesEqualFiveHint: "Заверши раунд Крокодила з 5 очками і 5 пропусками.",
+    achievementCharadesSkipOverScoreTitle: "Більше жестів, ніж сенсу",
+    achievementCharadesSkipOverScoreDescription: "Заверши раунд, де пропусків більше, ніж очок, але є хоча б 3 очки.",
+    achievementCharadesTwentyActionsTitle: "Двадцять сцен",
+    achievementCharadesTwentyActionsDescription: "За один раунд набери сумарно 20+ очок і пропусків.",
+    achievementCharadesSprintFourTitle: "Швидка пантоміма",
+    achievementCharadesSprintFourDescription: "За 30-секундний раунд Крокодила набери щонайменше 4 очки.",
+    achievementCharadesSprintEightTitle: "Руки швидше думок",
+    achievementCharadesSprintEightDescription: "За 30-секундний раунд Крокодила набери щонайменше 8 очок.",
+    achievementCharadesMarathonFifteenTitle: "Повний спектакль",
+    achievementCharadesMarathonFifteenDescription: "За 120-секундний раунд Крокодила набери щонайменше 15 очок.",
+    achievementCharadesHardFourTitle: "Покажи неможливе",
+    achievementCharadesHardFourDescription: "Грай лише на складному рівні й набери 4+ очки за раунд Крокодила.",
+    achievementCharadesHardCleanEightTitle: "Мім із граніту",
+    achievementCharadesHardCleanEightDescription: "На складному рівні набери 8+ очок у Крокодилі без пропусків.",
+    achievementCharadesAllDifficultiesEightTitle: "Весь реквізит",
+    achievementCharadesAllDifficultiesEightDescription: "Увімкни всі три складності й набери 8+ очок за раунд Крокодила.",
+    achievementCharadesFourTeamsEightTitle: "Повна сцена",
+    achievementCharadesFourTeamsEightDescription: "Грай у Крокодила чотирма командами й набери 8+ очок за раунд.",
+    achievementCharadesCategoryTourTitle: "Гастролі жанрами",
+    achievementCharadesCategoryTourDescription: "Обери щонайменше 5 тем і набери 8+ очок за раунд Крокодила.",
+    achievementWhoamiHundredGuessedTitle: "Шерлок у відпустці",
+    achievementWhoamiHundredGuessedDescription: "Відгадай 100 ролей у «Хто я?».",
+    achievementWhoamiTwoFiftyGuessedTitle: "Рентген",
+    achievementWhoamiTwoFiftyGuessedDescription: "Відгадай 250 ролей у «Хто я?».",
+    achievementWhoamiFiveHundredGuessedTitle: "Читаю думки",
+    achievementWhoamiFiveHundredGuessedDescription: "Відгадай 500 ролей у «Хто я?».",
+    achievementWhoamiTwentyFiveSkipsTitle: "Не моє обличчя",
+    achievementWhoamiTwentyFiveSkipsDescription: "Назбирай 25 пропущених ролей у «Хто я?».",
+    achievementWhoamiFiftySkipsTitle: "Хто завгодно, тільки не я",
+    achievementWhoamiFiftySkipsDescription: "Назбирай 50 пропущених ролей у «Хто я?».",
+    achievementWhoamiFiftyYesTitle: "Так-так-так",
+    achievementWhoamiFiftyYesDescription: "Отримай 50 відповідей «Так» у «Хто я?».",
+    achievementWhoamiHundredYesTitle: "Оптиміст",
+    achievementWhoamiHundredYesDescription: "Отримай 100 відповідей «Так» у «Хто я?».",
+    achievementWhoamiFiftyNoTitle: "Ні означає ні",
+    achievementWhoamiFiftyNoDescription: "Отримай 50 відповідей «Ні» у «Хто я?».",
+    achievementWhoamiHundredNoTitle: "Стіна заперечення",
+    achievementWhoamiHundredNoDescription: "Отримай 100 відповідей «Ні» у «Хто я?».",
+    achievementWhoamiTwentyFiveGamesTitle: "Зміна облич",
+    achievementWhoamiTwentyFiveGamesDescription: "Зіграй 25 партій у «Хто я?».",
+    achievementWhoamiFiftyGamesTitle: "Постійний гість",
+    achievementWhoamiFiftyGamesDescription: "Зіграй 50 партій у «Хто я?».",
+    achievementWhoamiFiveTimedTitle: "Годинник цокає",
+    achievementWhoamiFiveTimedDescription: "Зіграй 5 партій «Хто я?» у режимі на час.",
+    achievementWhoamiTenTimedTitle: "Живу за таймером",
+    achievementWhoamiTenTimedDescription: "Зіграй 10 партій «Хто я?» у режимі на час.",
+    achievementWhoamiFivePerfectTitle: "П’ять чистих справ",
+    achievementWhoamiFivePerfectDescription: "Заверши 5 партій «Хто я?» з відгаданими ролями й без пропусків.",
+    achievementWhoamiTenPerfectTitle: "Десять без промаху",
+    achievementWhoamiTenPerfectDescription: "Заверши 10 чистих партій «Хто я?» без пропусків.",
+    achievementWhoamiTenSessionTitle: "Десять масок",
+    achievementWhoamiTenSessionDescription: "Відгадай щонайменше 10 ролей за одну партію «Хто я?».",
+    achievementWhoamiFifteenSessionTitle: "Обличчя миготять",
+    achievementWhoamiFifteenSessionDescription: "Відгадай щонайменше 15 ролей за одну партію «Хто я?».",
+    achievementWhoamiCleanFiveTitle: "Чисте досьє",
+    achievementWhoamiCleanFiveDescription: "Відгадай 5+ ролей за партію без жодного пропуску.",
+    achievementWhoamiCleanTenTitle: "Безпомилковий профайлер",
+    achievementWhoamiCleanTenDescription: "Відгадай 10+ ролей за партію без пропусків.",
+    achievementWhoamiFiveSkipsSessionTitle: "Не впізнаю нікого",
+    achievementWhoamiFiveSkipsSessionDescription: "Пропусти щонайменше 5 ролей за одну партію.",
+    achievementWhoamiTenSkipsSessionTitle: "А можна інше обличчя?",
+    achievementWhoamiTenSkipsSessionDescription: "Пропусти щонайменше 10 ролей за одну партію.",
+    achievementWhoamiThirtyQuestionsTitle: "Допит із пристрастю",
+    achievementWhoamiThirtyQuestionsDescription: "За одну партію отримай сумарно 30 відповідей «Так» і «Ні».",
+    achievementWhoamiFiftyQuestionsTitle: "Справа на 50 питань",
+    achievementWhoamiFiftyQuestionsDescription: "За одну партію отримай сумарно 50 відповідей «Так» і «Ні».",
+    achievementWhoamiYesOnlyTitle: "Всесвіт каже «Так»",
+    achievementWhoamiYesOnlyDescription: "Підозріло позитивний допит.",
+    achievementWhoamiYesOnlyHint: "Відгадай хоча б одну роль, отримай 5+ «Так» і жодного «Ні».",
+    achievementWhoamiNoOnlyTitle: "Всесвіт проти",
+    achievementWhoamiNoOnlyDescription: "Питання були хороші. Мабуть.",
+    achievementWhoamiNoOnlyHint: "Відгадай хоча б одну роль, отримай 5+ «Ні» і жодного «Так».",
+    achievementWhoamiBalancedQuestionsTitle: "Так = Ні",
+    achievementWhoamiBalancedQuestionsDescription: "Навіть сумніви можуть бути ідеально збалансовані.",
+    achievementWhoamiBalancedQuestionsHint: "Отримай однакову кількість «Так» і «Ні», щонайменше по 5.",
+    achievementWhoamiTelepathyThreeTitle: "Майже телепат",
+    achievementWhoamiTelepathyThreeDescription: "Питань підозріло мало, відповідей — достатньо.",
+    achievementWhoamiTelepathyThreeHint: "Відгадай 3+ ролі, використавши не більше 5 відповідей «Так/Ні».",
+    achievementWhoamiTelepathyFiveTitle: "Телепат на пів ставки",
+    achievementWhoamiTelepathyFiveDescription: "Це вже або талант, або дуже знайома компанія.",
+    achievementWhoamiTelepathyFiveHint: "Відгадай 5+ ролей, використавши не більше 10 відповідей «Так/Ні».",
+    achievementWhoamiThirtySecondThreeTitle: "Тридцять секунд слави",
+    achievementWhoamiThirtySecondThreeDescription: "У 30-секундному режимі на час відгадай 3+ ролі за партію.",
+    achievementWhoamiThirtySecondFiveTitle: "Мислення на турбіні",
+    achievementWhoamiThirtySecondFiveDescription: "У 30-секундному режимі на час відгадай 5+ ролей за партію.",
+    achievementWhoamiTwoMinuteTenTitle: "Дві хвилини детектива",
+    achievementWhoamiTwoMinuteTenDescription: "У 120-секундному режимі на час відгадай 10+ ролей за партію.",
+    achievementWhoamiFourTeamsTitle: "Повний штаб",
+    achievementWhoamiFourTeamsDescription: "У режимі на час з 4 командами відгадай сумарно 8+ ролей.",
+    achievementWhoamiZeroGuessedFiveSkipsTitle: "Хто я? Не знаю.",
+    achievementWhoamiZeroGuessedFiveSkipsDescription: "Іноді назва гри стає відповіддю.",
+    achievementWhoamiZeroGuessedFiveSkipsHint: "Заверши партію без відгаданих ролей і з 5+ пропусками.",
+    achievementWhoamiLuckySevenYesTitle: "Сім разів «Так»",
+    achievementWhoamiLuckySevenYesDescription: "Сім — число підозрілої впевненості.",
+    achievementWhoamiLuckySevenYesHint: "Заверши партію рівно з 7 відповідями «Так».",
+    achievementWhoamiSevenCleanTitle: "Сім облич без помилки",
+    achievementWhoamiSevenCleanDescription: "Наче хтось підглядав у картки.",
+    achievementWhoamiSevenCleanHint: "Відгадай рівно 7 ролей за партію без пропусків.",
+    achievementWhoamiPerfectStreakThreeTitle: "Три чисті справи поспіль",
+    achievementWhoamiPerfectStreakThreeDescription: "Заверши 3 партії поспіль з відгаданими ролями й без пропусків.",
+    achievementWhoamiPerfectStreakFiveTitle: "Профайлер на серії",
+    achievementWhoamiPerfectStreakFiveDescription: "Заверши 5 чистих партій «Хто я?» поспіль.",
+    achievementWhoamiTeamTieTitle: "Ніхто не кращий",
+    achievementWhoamiTeamTieDescription: "Іноді переможець — це дружба. Буквально.",
+    achievementWhoamiTeamTieHint: "Заверши командну партію на час нічиєю за перше місце.",
+    achievementAliasExact2Title: "Парочка",
+    achievementAliasExact2Description: "Дивно точний рахунок.",
+    achievementAliasExact2Hint: "Заверши раунд Alias рівно з 2 очками.",
+    achievementAliasExact4Title: "Чотири кути",
+    achievementAliasExact4Description: "Дивно точний рахунок.",
+    achievementAliasExact4Hint: "Заверши раунд Alias рівно з 4 очками.",
+    achievementAliasExact5Title: "Дай п’ять",
+    achievementAliasExact5Description: "Дивно точний рахунок.",
+    achievementAliasExact5Hint: "Заверши раунд Alias рівно з 5 очками.",
+    achievementAliasExact6Title: "Шістка",
+    achievementAliasExact6Description: "Дивно точний рахунок.",
+    achievementAliasExact6Hint: "Заверши раунд Alias рівно з 6 очками.",
+    achievementAliasExact8Title: "Вісім щупалець",
+    achievementAliasExact8Description: "Дивно точний рахунок.",
+    achievementAliasExact8Hint: "Заверши раунд Alias рівно з 8 очками.",
+    achievementAliasExact9Title: "Дев’ять життів",
+    achievementAliasExact9Description: "Дивно точний рахунок.",
+    achievementAliasExact9Hint: "Заверши раунд Alias рівно з 9 очками.",
+    achievementAliasExact11Title: "Одинадцятка",
+    achievementAliasExact11Description: "Дивно точний рахунок.",
+    achievementAliasExact11Hint: "Заверши раунд Alias рівно з 11 очками.",
+    achievementAliasExact12Title: "Повний циферблат",
+    achievementAliasExact12Description: "Дивно точний рахунок.",
+    achievementAliasExact12Hint: "Заверши раунд Alias рівно з 12 очками.",
+    achievementAliasTwoHundredRoundsTitle: "Я тут давно",
+    achievementAliasTwoHundredRoundsDescription: "Зіграй 200 раундів Alias.",
+    achievementAliasTwoFiftyRoundsTitle: "Меблі вже свої",
+    achievementAliasTwoFiftyRoundsDescription: "Зіграй 250 раундів Alias.",
+    achievementAliasTwoThousandPointsTitle: "Словесний банк",
+    achievementAliasTwoThousandPointsDescription: "Набери 2000 очок в Alias загалом.",
+    achievementAliasFiveThousandPointsTitle: "Інфляція слів",
+    achievementAliasFiveThousandPointsDescription: "Набери 5000 очок в Alias загалом.",
+    achievementAliasTwoFiftySkipsTitle: "Великий пас",
+    achievementAliasTwoFiftySkipsDescription: "Назбирай 250 пропусків в Alias.",
+    achievementAliasHundredCleanRoundsTitle: "Стерильно",
+    achievementAliasHundredCleanRoundsDescription: "Заверши 100 раундів Alias без пропусків.",
+    achievementAliasTwentyFiveTenPlusRoundsTitle: "Швидкісний словник",
+    achievementAliasTwentyFiveTenPlusRoundsDescription: "У 25 раундах Alias набери 10+ очок.",
+    achievementAliasFiftyTenPlusRoundsTitle: "Експрес без зупинок",
+    achievementAliasFiftyTenPlusRoundsDescription: "У 50 раундах Alias набери 10+ очок.",
+    achievementAliasTenTwentyPlusRoundsTitle: "Гіперпростір",
+    achievementAliasTenTwentyPlusRoundsDescription: "У 10 раундах Alias набери 20+ очок.",
+    achievementAliasTwentyFiveTwentyPlusRoundsTitle: "Поза орбітою",
+    achievementAliasTwentyFiveTwentyPlusRoundsDescription: "У 25 раундах Alias набери 20+ очок.",
+    achievementAliasTenZeroRoundsTitle: "Чорна діра словника",
+    achievementAliasTenZeroRoundsDescription: "Десять разів заверши Alias із нулем очок.",
+    achievementAliasCleanStreakTenTitle: "Десять безгрішних",
+    achievementAliasCleanStreakTenDescription: "Заверши 10 раундів Alias поспіль без пропусків.",
+    achievementAliasTwentyFiveRoundTitle: "Словесний торнадо",
+    achievementAliasTwentyFiveRoundDescription: "Набери 25+ очок за один раунд Alias.",
+    achievementAliasCleanTwentyTitle: "Кришталевий раунд",
+    achievementAliasCleanTwentyDescription: "Набери 20+ очок за раунд Alias без пропусків.",
+    achievementAliasFifteenSkipsTitle: "Гасимо раунд",
+    achievementAliasFifteenSkipsDescription: "Зроби 15+ пропусків за один раунд Alias.",
+    achievementAliasThirtyActionsTitle: "Руки, язик, паніка",
+    achievementAliasThirtyActionsDescription: "За один раунд набери сумарно 30+ очок і пропусків.",
+    achievementAliasSprintFifteenTitle: "Мовний болід",
+    achievementAliasSprintFifteenDescription: "За 30 секунд Alias набери 15+ очок.",
+    achievementCharadesExact2Title: "Два жести",
+    achievementCharadesExact2Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact2Hint: "Заверши раунд Крокодила рівно з 2 очками.",
+    achievementCharadesExact4Title: "Чотири сцени",
+    achievementCharadesExact4Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact4Hint: "Заверши раунд Крокодила рівно з 4 очками.",
+    achievementCharadesExact5Title: "П’ять актів",
+    achievementCharadesExact5Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact5Hint: "Заверши раунд Крокодила рівно з 5 очками.",
+    achievementCharadesExact6Title: "Шість рухів",
+    achievementCharadesExact6Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact6Hint: "Заверши раунд Крокодила рівно з 6 очками.",
+    achievementCharadesExact8Title: "Вісім рук",
+    achievementCharadesExact8Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact8Hint: "Заверши раунд Крокодила рівно з 8 очками.",
+    achievementCharadesExact9Title: "Дев’ятий дубль",
+    achievementCharadesExact9Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact9Hint: "Заверши раунд Крокодила рівно з 9 очками.",
+    achievementCharadesExact11Title: "Одинадцять поз",
+    achievementCharadesExact11Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact11Hint: "Заверши раунд Крокодила рівно з 11 очками.",
+    achievementCharadesExact12Title: "Опівнічна сцена",
+    achievementCharadesExact12Description: "Дивно точний сценічний рахунок.",
+    achievementCharadesExact12Hint: "Заверши раунд Крокодила рівно з 12 очками.",
+    achievementCharadesTwoHundredRoundsTitle: "Актор на ставці",
+    achievementCharadesTwoHundredRoundsDescription: "Зіграй 200 раундів Крокодила.",
+    achievementCharadesTwoFiftyRoundsTitle: "Трупа вже сім’я",
+    achievementCharadesTwoFiftyRoundsDescription: "Зіграй 250 раундів Крокодила.",
+    achievementCharadesTwoThousandPointsTitle: "Театр твого імені",
+    achievementCharadesTwoThousandPointsDescription: "Набери 2000 очок у Крокодилі.",
+    achievementCharadesFiveThousandPointsTitle: "Безкінечний серіал",
+    achievementCharadesFiveThousandPointsDescription: "Набери 5000 очок у Крокодилі.",
+    achievementCharadesTwoFiftySkipsTitle: "Сценарій не зайшов",
+    achievementCharadesTwoFiftySkipsDescription: "Назбирай 250 пропусків у Крокодилі.",
+    achievementCharadesHundredCleanRoundsTitle: "Сто чистих дублів",
+    achievementCharadesHundredCleanRoundsDescription: "Заверши 100 раундів Крокодила без пропусків.",
+    achievementCharadesTwentyFiveEightPlusRoundsTitle: "Довгий метр",
+    achievementCharadesTwentyFiveEightPlusRoundsDescription: "У 25 раундах Крокодила набери 8+ очок.",
+    achievementCharadesFiftyEightPlusRoundsTitle: "П’ятдесят серій",
+    achievementCharadesFiftyEightPlusRoundsDescription: "У 50 раундах Крокодила набери 8+ очок.",
+    achievementCharadesTenFifteenPlusRoundsTitle: "Зірка сцени",
+    achievementCharadesTenFifteenPlusRoundsDescription: "У 10 раундах Крокодила набери 15+ очок.",
+    achievementCharadesTwentyFiveFifteenPlusRoundsTitle: "Головна роль",
+    achievementCharadesTwentyFiveFifteenPlusRoundsDescription: "У 25 раундах Крокодила набери 15+ очок.",
+    achievementCharadesTenZeroRoundsTitle: "Антракт затягнувся",
+    achievementCharadesTenZeroRoundsDescription: "Десять разів заверши Крокодила з нулем очок.",
+    achievementCharadesCleanStreakTenTitle: "Десять ідеальних дублів",
+    achievementCharadesCleanStreakTenDescription: "Заверши 10 раундів Крокодила поспіль без пропусків.",
+    achievementCharadesTwentyRoundTitle: "Театральний ураган",
+    achievementCharadesTwentyRoundDescription: "Набери 20+ очок за один раунд Крокодила.",
+    achievementCharadesCleanFifteenTitle: "Ідеальний дубль",
+    achievementCharadesCleanFifteenDescription: "Набери 15+ очок за раунд Крокодила без пропусків.",
+    achievementCharadesFifteenSkipsTitle: "Завісу!",
+    achievementCharadesFifteenSkipsDescription: "Зроби 15+ пропусків за один раунд Крокодила.",
+    achievementCharadesThirtyActionsTitle: "Танець без пауз",
+    achievementCharadesThirtyActionsDescription: "За один раунд набери сумарно 30+ очок і пропусків.",
+    achievementCharadesSprintTwelveTitle: "Пантоміма на форсажі",
+    achievementCharadesSprintTwelveDescription: "За 30 секунд Крокодила набери 12+ очок.",
+    achievementWhoamiThousandGuessedTitle: "Ти знаєш усіх",
+    achievementWhoamiThousandGuessedDescription: "Відгадай 1000 ролей у «Хто я?».",
+    achievementWhoamiHundredSkipsTitle: "Криза ідентичності",
+    achievementWhoamiHundredSkipsDescription: "Назбирай 100 пропущених ролей.",
+    achievementWhoamiTwoFiftyYesTitle: "Всесвіт погоджується",
+    achievementWhoamiTwoFiftyYesDescription: "Отримай 250 відповідей «Так».",
+    achievementWhoamiTwoFiftyNoTitle: "Абсолютне ні",
+    achievementWhoamiTwoFiftyNoDescription: "Отримай 250 відповідей «Ні».",
+    achievementWhoamiHundredGamesTitle: "Зал слави облич",
+    achievementWhoamiHundredGamesDescription: "Зіграй 100 партій у «Хто я?».",
+    achievementWhoamiTwentyFiveTimedTitle: "Хронометр",
+    achievementWhoamiTwentyFiveTimedDescription: "Зіграй 25 партій у режимі на час.",
+    achievementWhoamiTwentyFivePerfectTitle: "Без плям у досьє",
+    achievementWhoamiTwentyFivePerfectDescription: "Заверши 25 чистих партій без пропусків.",
+    achievementWhoamiPerfectStreakTenTitle: "Детективна серія",
+    achievementWhoamiPerfectStreakTenDescription: "Заверши 10 чистих партій поспіль.",
+    achievementWhoamiTwentySessionTitle: "Двадцять облич",
+    achievementWhoamiTwentySessionDescription: "Відгадай 20+ ролей за одну партію.",
+    achievementWhoamiTwentySkipsSessionTitle: "Не впізнав нікого з району",
+    achievementWhoamiTwentySkipsSessionDescription: "Пропусти 20+ ролей за одну партію.",
+    achievementWhoamiSeventyFiveQuestionsTitle: "Анкета на 75 пунктів",
+    achievementWhoamiSeventyFiveQuestionsDescription: "Отримай 75+ відповідей «Так/Ні» за одну партію.",
+    achievementWhoamiExactOneSessionTitle: "Це був він",
+    achievementWhoamiExactOneSessionDescription: "Іноді достатньо одного обличчя.",
+    achievementWhoamiExactOneSessionHint: "Заверши партію рівно з 1 відгаданою роллю.",
+    achievementWhoamiExactThreeSessionTitle: "Трійця облич",
+    achievementWhoamiExactThreeSessionDescription: "Три — теж компанія.",
+    achievementWhoamiExactThreeSessionHint: "Заверши партію рівно з 3 відгаданими ролями.",
+    achievementWhoamiLuckySevenNoTitle: "Сім разів «Ні»",
+    achievementWhoamiLuckySevenNoDescription: "Сім — число підозрілої відмови.",
+    achievementWhoamiLuckySevenNoHint: "Заверши партію рівно з 7 відповідями «Ні».",
+    achievementWhoamiThreeThreeTitle: "Три на три",
+    achievementWhoamiThreeThreeDescription: "Симетрія дісталася й до облич.",
+    achievementWhoamiThreeThreeHint: "Заверши партію з 3 відгаданими й 3 пропущеними ролями.",
+    achievementWhoamiEqualGuessedSkippedTitle: "Дзеркало ролей",
+    achievementWhoamiEqualGuessedSkippedDescription: "Відгадування і пропуски дивно синхронізувались.",
+    achievementWhoamiEqualGuessedSkippedHint: "Заверши партію з однаковою кількістю відгаданих і пропущених ролей, щонайменше по 5.",
+    achievementWhoamiSixtySecondTenTitle: "Хвилина ясності",
+    achievementWhoamiSixtySecondTenDescription: "У 60-секундному режимі відгадай 10+ ролей.",
+    achievementWhoamiNinetySecondTwelveTitle: "Півтори хвилини генія",
+    achievementWhoamiNinetySecondTwelveDescription: "У 90-секундному режимі відгадай 12+ ролей.",
+    achievementWhoamiTwoMinuteFifteenTitle: "Дві хвилини прозріння",
+    achievementWhoamiTwoMinuteFifteenDescription: "У 120-секундному режимі відгадай 15+ ролей.",
+    achievementWhoamiTwoTeamsTenTitle: "Дуель детективів",
+    achievementWhoamiTwoTeamsTenDescription: "З двома командами відгадай сумарно 10+ ролей.",
+    achievementWhoamiThreeTeamsTwelveTitle: "Трикутник підозри",
+    achievementWhoamiThreeTeamsTwelveDescription: "З трьома командами відгадай сумарно 12+ ролей.",
+    achievementWhoamiNoQuestionsThreeTitle: "Без зайвих питань",
+    achievementWhoamiNoQuestionsThreeDescription: "Мовчання інколи дивно ефективне.",
+    achievementWhoamiNoQuestionsThreeHint: "Відгадай 3+ ролі за партію, не натиснувши жодного «Так» або «Ні».",
     gameDescription: (length, attempts, letterWord, attemptWord, repeatText) => `Відгадай українське слово з ${length} ${letterWord} за ${attempts} ${attemptWord}. ${repeatText}.`,
     dictionaryStats: (targets, allowed) => `Словник гри: ${targets} для загадування · ${allowed} для спроб.`,
     shareModeCompact: (length, result, repeats) => `${length} літер · ${result} · ${repeats ? "з повторами" : "без повторів"}`,
@@ -908,6 +1665,93 @@ const WORD_GUESS_TEXT = {
     setupGameSettings: "Настройки игры", setupFormat: "Формат игры", setupSingle: "Одно слово", setupTimed: "На время", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Средне", difficultyHard: "Сложно", phrasesYes: "Словосочетания: да", phrasesNo: "Словосочетания: нет", setupRound: "Раунд", setupTime: "Время", setupAfterTime: "После времени", setupFinishLast: "Доиграть слово", setupStop: "Стоп", setupGame: "Игра", setupTarget: "Цель", setupTeams: "Команды", setupTeamNames: "Названия команд", teamNameBase: "Команда", allTopics: "Все темы",
     cardsEyebrow: "Alias и Крокодил", cardsTitle: "Карточки слов", cardsAllShapesTitle: "Случайно из всех форм", cardsAllShapesCopy: "Когда включено — игра смешивает весь набор форм.", cardsRandomColorsTitle: "Случайные цвета карточки", cardsRandomColorsCopy: "Если выключить — карточки вернутся к базовому цвету темы.", cardsOutlineLight: "Обводка в светлой теме", cardsOutlineDark: "Обводка в тёмной теме", choiceNever: "Никогда", choiceRandom: "Случайно", choiceAlways: "Всегда", cardShapeOrganic: "Мягкая шайба", cardShapeSplat: "Асимметричная клякса", cardShapePebble: "Камешек / жетон", cardShapeSticker: "Стикер-клякса", cardShapeCloud: "Облачко", cardShapeSplash: "Капля-сплэш", cardShapeGummy: "Жвачка / мармелад", cardShapePaper: "Бумажное пятно", cardsNote: "Новые формы, случайные цвета и обводка работают для больших карточек слов в Alias и Крокодиле.",
     achievementCategoriesAria: "Категории достижений", achievementCategoryAll: "Все", achievementCategoryNew: "Новые", achievementNewLabel: "Новое", achievementReceivedAt: (dateText) => `Получено ${dateText}`, achievementNewCountAria: (count) => `Новых достижений: ${count}.`, achievementSearchLabel: "Поиск достижений", achievementSearchPlaceholder: "Найти достижение…", achievementSearchEmpty: "Ничего не найдено. Попробуй другое слово или категорию.", achievementShowMore: "Показать ещё", achievementGameWordGuess: "Угадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
+    achievementGamesAria: "Игры и новые достижения",
+    achievementGameAll: "Все игры",
+    achievementGameWhoAmI: "Кто я?",
+    achievementAliasFiveRoundTitle: "Разогрелись",
+    achievementAliasFiveRoundDescription: "Засчитай 5 или больше слов за один раунд Alias.",
+    achievementAliasFifteenRoundTitle: "Словесный реактор",
+    achievementAliasFifteenRoundDescription: "Засчитай 15 или больше слов за один раунд Alias.",
+    achievementAliasPerfectTenTitle: "Десять без права на ошибку",
+    achievementAliasPerfectTenDescription: "Где-то существует раунд, в котором пасы просто не нужны.",
+    achievementAliasPerfectTenHint: "Засчитай не менее 10 слов за раунд Alias без единого пропуска.",
+    achievementAliasFiveSkipsTitle: "Пас-парад",
+    achievementAliasFiveSkipsDescription: "Сделай не менее 5 пропусков за один раунд Alias.",
+    achievementAliasBalancedRoundTitle: "Баланс хаоса",
+    achievementAliasBalancedRoundDescription: "И угадывали, и пасовали — зато с характером.",
+    achievementAliasBalancedRoundHint: "За один раунд Alias засчитай не менее 7 слов и сделай не менее 3 пропусков.",
+    achievementAliasTenRoundsTitle: "Микрофон прогрелся",
+    achievementAliasTenRoundsDescription: "Заверши 10 раундов Alias.",
+    achievementAliasTwentyFiveRoundsTitle: "Эфирный ветеран",
+    achievementAliasTwentyFiveRoundsDescription: "Заверши 25 раундов Alias.",
+    achievementAliasFiftyPointsTitle: "Полсотни слов",
+    achievementAliasFiftyPointsDescription: "Набери суммарно 50 очков в Alias.",
+    achievementAliasHundredPointsTitle: "Сотня на языке",
+    achievementAliasHundredPointsDescription: "Набери суммарно 100 очков в Alias.",
+    achievementAliasTwoFiftyPointsTitle: "Словесный банк",
+    achievementAliasTwoFiftyPointsDescription: "Набери суммарно 250 очков в Alias.",
+    achievementAliasThreeCleanRoundsTitle: "Чистый эфир",
+    achievementAliasThreeCleanRoundsDescription: "Заверши 3 результативных раунда Alias без пропусков.",
+    achievementAliasTenCleanRoundsTitle: "Безупречный диктор",
+    achievementAliasTenCleanRoundsDescription: "Заверши 10 результативных раундов Alias без пропусков.",
+    achievementCharadesFiveRoundTitle: "Руки размяли",
+    achievementCharadesFiveRoundDescription: "Засчитай 5 или больше заданий за один раунд Крокодила.",
+    achievementCharadesTwelveRoundTitle: "Немое кино",
+    achievementCharadesTwelveRoundDescription: "Засчитай 12 или больше заданий за один раунд Крокодила.",
+    achievementCharadesPerfectEightTitle: "Пантомима без монтажа",
+    achievementCharadesPerfectEightDescription: "Ни одной вырезанной сцены.",
+    achievementCharadesPerfectEightHint: "Засчитай не менее 8 заданий в Крокодиле без единого пропуска.",
+    achievementCharadesFiveSkipsTitle: "Фестиваль пропусков",
+    achievementCharadesFiveSkipsDescription: "Сделай не менее 5 пропусков за один раунд Крокодила.",
+    achievementCharadesChaosRoundTitle: "Театр абсурда",
+    achievementCharadesChaosRoundDescription: "Сцена видела разное. Этот раунд — особенно.",
+    achievementCharadesChaosRoundHint: "За один раунд Крокодила засчитай не менее 6 заданий и сделай не менее 4 пропусков.",
+    achievementCharadesTenRoundsTitle: "Десять выходов на сцену",
+    achievementCharadesTenRoundsDescription: "Заверши 10 раундов Крокодила.",
+    achievementCharadesTwentyFiveRoundsTitle: "Актёр труппы",
+    achievementCharadesTwentyFiveRoundsDescription: "Заверши 25 раундов Крокодила.",
+    achievementCharadesFiftyPointsTitle: "Пятьдесят жестов успеха",
+    achievementCharadesFiftyPointsDescription: "Набери суммарно 50 очков в Крокодиле.",
+    achievementCharadesHundredPointsTitle: "Сто без слов",
+    achievementCharadesHundredPointsDescription: "Набери суммарно 100 очков в Крокодиле.",
+    achievementCharadesTwoFiftyPointsTitle: "Заслуженный мим",
+    achievementCharadesTwoFiftyPointsDescription: "Набери суммарно 250 очков в Крокодиле.",
+    achievementCharadesThreeCleanRoundsTitle: "Чистая сцена",
+    achievementCharadesThreeCleanRoundsDescription: "Заверши 3 результативных раунда Крокодила без пропусков.",
+    achievementCharadesTenCleanRoundsTitle: "Лебединая пантомима",
+    achievementCharadesTenCleanRoundsDescription: "Заверши 10 результативных раундов Крокодила без пропусков.",
+    achievementWhoAmIFirstGuessTitle: "Так вот кто я!",
+    achievementWhoAmIFirstGuessDescription: "Впервые правильно угадай роль в «Кто я?».",
+    achievementWhoAmIFiveGuessedTitle: "Пять личностей",
+    achievementWhoAmIFiveGuessedDescription: "Угадай суммарно 5 ролей в «Кто я?».",
+    achievementWhoAmITwentyGuessedTitle: "Коллекционер личностей",
+    achievementWhoAmITwentyGuessedDescription: "Угадай суммарно 20 ролей в «Кто я?».",
+    achievementWhoAmIFiftyGuessedTitle: "Доктор Кто?",
+    achievementWhoAmIFiftyGuessedDescription: "Угадай суммарно 50 ролей в «Кто я?».",
+    achievementWhoAmIFirstSkipTitle: "Не сегодня",
+    achievementWhoAmIFirstSkipDescription: "Впервые пропусти роль в «Кто я?».",
+    achievementWhoAmITenSkipsTitle: "Кризис идентичности",
+    achievementWhoAmITenSkipsDescription: "Накопи 10 пропущенных ролей в «Кто я?».",
+    achievementWhoAmITenYesTitle: "Да-да-да",
+    achievementWhoAmITenYesDescription: "Получи суммарно 10 ответов «да» в «Кто я?».",
+    achievementWhoAmITenNoTitle: "Нет — тоже ответ",
+    achievementWhoAmITenNoDescription: "Получи суммарно 10 ответов «нет» в «Кто я?».",
+    achievementWhoAmIQuestionStormTitle: "Допрос с пристрастием",
+    achievementWhoAmIQuestionStormDescription: "Вопросов стало подозрительно много.",
+    achievementWhoAmIQuestionStormHint: "За одну партию «Кто я?» получи суммарно 20 ответов «да» и «нет».",
+    achievementWhoAmIPerfectGameTitle: "Все маски сняты",
+    achievementWhoAmIPerfectGameDescription: "Заверши партию «Кто я?» хотя бы с одной угаданной ролью и без пропусков.",
+    achievementWhoAmIThreePerfectTitle: "Три чистые личности",
+    achievementWhoAmIThreePerfectDescription: "Заверши 3 партии «Кто я?» без пропущенных ролей.",
+    achievementWhoAmITimedFirstTitle: "Кто я? На скорости",
+    achievementWhoAmITimedFirstDescription: "Заверши первую партию «Кто я?» в режиме на время.",
+    achievementWhoAmITenGamesTitle: "Знакомые незнакомцы",
+    achievementWhoAmITenGamesDescription: "Заверши 10 партий «Кто я?».",
+    achievementWhoAmIFiveSessionTitle: "Пять масок за вечер",
+    achievementWhoAmIFiveSessionDescription: "Угадай 5 ролей в течение одной партии «Кто я?».",
+    achievementWhoAmINoMachineTitle: "Машина отрицания",
+    achievementWhoAmINoMachineDescription: "Вселенная настойчиво говорит «нет».",
+    achievementWhoAmINoMachineHint: "За одну партию «Кто я?» получи 10 ответов «нет».",
     achievementRuKoshkaTitle: "Кошка пришла", achievementRuKoshkaDescription: "Она ничего не объяснит. Она просто здесь.", achievementRuKoshkaHint: "В режиме RU введи «КОШКА».",
     achievementRuHochatsuTitle: "Хочацу — значит Хотяцу", achievementRuHochatsuDescription: "Словарь не согласился. Мовограй немного согласился.", achievementRuHochatsuHint: "В режиме RU набери «ХОЧАЦУ» и нажми ввод. Такого слова в словаре нет — в этом и шутка.",
     achievementUkKishkaTitle: "Кішка из соседней локали", achievementUkKishkaDescription: "Где-то рядом очень знакомо мяукнули по-украински.", achievementUkKishkaHint: "В украинском режиме введи «КІШКА».",
@@ -1319,6 +2163,405 @@ const WORD_GUESS_TEXT = {
     achievementLogoSecretTitle: "Не тыкайте логотип",
     achievementLogoSecretDescription: "Серьёзно. Логотип просто стоит себе.",
     achievementLogoSecretHint: "В главном меню нажмите на логотип Мовограя 7 раз.",
+    achievementAliasFiftyRoundsTitle: "Разговорился",
+    achievementAliasFiftyRoundsDescription: "Сыграй 50 раундов Alias.",
+    achievementAliasHundredRoundsTitle: "Словесный марафонец",
+    achievementAliasHundredRoundsDescription: "Сыграй 100 раундов Alias.",
+    achievementAliasFiveHundredPointsTitle: "Полтысячи слов",
+    achievementAliasFiveHundredPointsDescription: "Набери 500 очков в Alias суммарно.",
+    achievementAliasThousandPointsTitle: "Тысяча на языке",
+    achievementAliasThousandPointsDescription: "Набери 1000 очков в Alias суммарно.",
+    achievementAliasTwentyFiveSkipsTitle: "Пас-пас-пас",
+    achievementAliasTwentyFiveSkipsDescription: "Накопи 25 пропусков в Alias.",
+    achievementAliasFiftySkipsTitle: "Катапульта слов",
+    achievementAliasFiftySkipsDescription: "Накопи 50 пропусков в Alias.",
+    achievementAliasHundredSkipsTitle: "Пасовая сингулярность",
+    achievementAliasHundredSkipsDescription: "Накопи 100 пропусков в Alias.",
+    achievementAliasTwentyFiveCleanRoundsTitle: "Чистая речь",
+    achievementAliasTwentyFiveCleanRoundsDescription: "Заверши 25 раундов Alias без единого пропуска.",
+    achievementAliasFiftyCleanRoundsTitle: "Блестящая дикция",
+    achievementAliasFiftyCleanRoundsDescription: "Заверши 50 чистых раундов Alias без пропусков.",
+    achievementAliasThreeTenPlusRoundsTitle: "Разогрев",
+    achievementAliasThreeTenPlusRoundsDescription: "Трижды набери минимум 10 очков за раунд Alias.",
+    achievementAliasTenTenPlusRoundsTitle: "Словесный локомотив",
+    achievementAliasTenTenPlusRoundsDescription: "В 10 раундах Alias набери минимум 10 очков.",
+    achievementAliasThreeTwentyPlusRoundsTitle: "Турборежим",
+    achievementAliasThreeTwentyPlusRoundsDescription: "Трижды набери минимум 20 очков за раунд Alias.",
+    achievementAliasFiveZeroRoundsTitle: "Слова закончились",
+    achievementAliasFiveZeroRoundsDescription: "Пять раз заверши раунд Alias с нулём очков.",
+    achievementAliasCleanStreakThreeTitle: "Три чистых подряд",
+    achievementAliasCleanStreakThreeDescription: "Заверши 3 раунда Alias подряд без пропусков и с очками.",
+    achievementAliasCleanStreakFiveTitle: "Белая полоса",
+    achievementAliasCleanStreakFiveDescription: "Заверши 5 раундов Alias подряд без пропусков и с очками.",
+    achievementAliasExactOneTitle: "Одно, но гордое",
+    achievementAliasExactOneDescription: "Заверши раунд Alias ровно с 1 очком.",
+    achievementAliasExactThreeTitle: "Ровно три",
+    achievementAliasExactThreeDescription: "Заверши раунд Alias ровно с 3 очками.",
+    achievementAliasExactSevenTitle: "Счастливая семёрка",
+    achievementAliasExactSevenDescription: "Иногда число само просится в коллекцию.",
+    achievementAliasExactSevenHint: "Заверши раунд Alias ровно с 7 очками.",
+    achievementAliasExactThirteenTitle: "Чёртова дюжина",
+    achievementAliasExactThirteenDescription: "Не суеверие, а очень конкретный счёт.",
+    achievementAliasExactThirteenHint: "Заверши раунд Alias ровно с 13 очками.",
+    achievementAliasTwentyRoundTitle: "Двадцатка!",
+    achievementAliasTwentyRoundDescription: "Набери минимум 20 очков за один раунд Alias.",
+    achievementAliasCleanFifteenTitle: "Без единой осечки",
+    achievementAliasCleanFifteenDescription: "Набери 15+ очков за раунд Alias без пропусков.",
+    achievementAliasOneSkipTenTitle: "Один билет на выход",
+    achievementAliasOneSkipTenDescription: "Набери 10+ очков за раунд Alias только с одним пропуском.",
+    achievementAliasTenSkipsTitle: "Пасопад",
+    achievementAliasTenSkipsDescription: "Сделай минимум 10 пропусков за один раунд Alias.",
+    achievementAliasZeroFiveSkipsTitle: "Ни слова, зато движение",
+    achievementAliasZeroFiveSkipsDescription: "Этот раунд очень старался… в другом направлении.",
+    achievementAliasZeroFiveSkipsHint: "Заверши раунд Alias с 0 очков и минимум 5 пропусками.",
+    achievementAliasEqualFiveTitle: "Пять на пять",
+    achievementAliasEqualFiveDescription: "Баланс бывает подозрительно красивым.",
+    achievementAliasEqualFiveHint: "Заверши раунд Alias с 5 очками и 5 пропусками.",
+    achievementAliasSkipOverScoreTitle: "Пасы победили",
+    achievementAliasSkipOverScoreDescription: "Заверши раунд, где пропусков больше, чем очков, но есть хотя бы 3 очка.",
+    achievementAliasTwentyActionsTitle: "Двадцать решений",
+    achievementAliasTwentyActionsDescription: "За один раунд набери суммарно 20+ очков и пропусков.",
+    achievementAliasSprintFiveTitle: "30 секунд — полёт нормальный",
+    achievementAliasSprintFiveDescription: "За 30-секундный раунд Alias набери минимум 5 очков.",
+    achievementAliasSprintTenTitle: "Турбоязык",
+    achievementAliasSprintTenDescription: "За 30-секундный раунд Alias набери минимум 10 очков.",
+    achievementAliasMarathonTwentyTitle: "Длинный забег",
+    achievementAliasMarathonTwentyDescription: "За 120-секундный раунд Alias набери минимум 20 очков.",
+    achievementAliasHardFiveTitle: "Без простых слов",
+    achievementAliasHardFiveDescription: "Играй только на сложном уровне и набери 5+ очков за раунд Alias.",
+    achievementAliasHardCleanTenTitle: "Каменное лицо",
+    achievementAliasHardCleanTenDescription: "На сложном уровне набери 10+ очков в Alias без пропусков.",
+    achievementAliasAllDifficultiesTenTitle: "Всё меню",
+    achievementAliasAllDifficultiesTenDescription: "Включи все три сложности и набери 10+ очков за раунд Alias.",
+    achievementAliasFourTeamsTenTitle: "Полный стол",
+    achievementAliasFourTeamsTenDescription: "Играй в Alias четырьмя командами и набери 10+ очков за раунд.",
+    achievementAliasCategoryTourTitle: "Тематический турист",
+    achievementAliasCategoryTourDescription: "Выбери минимум 5 тем и набери 10+ очков за раунд Alias.",
+    achievementCharadesFiftyRoundsTitle: "Гастролёр",
+    achievementCharadesFiftyRoundsDescription: "Сыграй 50 раундов Крокодила.",
+    achievementCharadesHundredRoundsTitle: "Вечный мим",
+    achievementCharadesHundredRoundsDescription: "Сыграй 100 раундов Крокодила.",
+    achievementCharadesFiveHundredPointsTitle: "Полтысячи сцен",
+    achievementCharadesFiveHundredPointsDescription: "Набери 500 очков в Крокодиле суммарно.",
+    achievementCharadesThousandPointsTitle: "Домашний Оскар",
+    achievementCharadesThousandPointsDescription: "Набери 1000 очков в Крокодиле суммарно.",
+    achievementCharadesTwentyFiveSkipsTitle: "Снято с репертуара",
+    achievementCharadesTwentyFiveSkipsDescription: "Накопи 25 пропусков в Крокодиле.",
+    achievementCharadesFiftySkipsTitle: "Невидимый актёр",
+    achievementCharadesFiftySkipsDescription: "Накопи 50 пропусков в Крокодиле.",
+    achievementCharadesHundredSkipsTitle: "Чёрная сцена",
+    achievementCharadesHundredSkipsDescription: "Накопи 100 пропусков в Крокодиле.",
+    achievementCharadesTwentyFiveCleanRoundsTitle: "Чистая сцена",
+    achievementCharadesTwentyFiveCleanRoundsDescription: "Заверши 25 раундов Крокодила без пропусков.",
+    achievementCharadesFiftyCleanRoundsTitle: "Лебединая пластика",
+    achievementCharadesFiftyCleanRoundsDescription: "Заверши 50 чистых раундов Крокодила без пропусков.",
+    achievementCharadesThreeEightPlusRoundsTitle: "Разогрели сцену",
+    achievementCharadesThreeEightPlusRoundsDescription: "Трижды набери минимум 8 очков за раунд Крокодила.",
+    achievementCharadesTenEightPlusRoundsTitle: "Сериал продлён",
+    achievementCharadesTenEightPlusRoundsDescription: "В 10 раундах Крокодила набери минимум 8 очков.",
+    achievementCharadesThreeFifteenPlusRoundsTitle: "Блокбастер",
+    achievementCharadesThreeFifteenPlusRoundsDescription: "Трижды набери минимум 15 очков за раунд Крокодила.",
+    achievementCharadesFiveZeroRoundsTitle: "Немая сцена",
+    achievementCharadesFiveZeroRoundsDescription: "Пять раз заверши раунд Крокодила с нулём очков.",
+    achievementCharadesCleanStreakThreeTitle: "Три дубля без монтажа",
+    achievementCharadesCleanStreakThreeDescription: "Заверши 3 раунда Крокодила подряд без пропусков и с очками.",
+    achievementCharadesCleanStreakFiveTitle: "Пять чистых сцен",
+    achievementCharadesCleanStreakFiveDescription: "Заверши 5 раундов Крокодила подряд без пропусков и с очками.",
+    achievementCharadesExactOneTitle: "Один жест",
+    achievementCharadesExactOneDescription: "Заверши раунд Крокодила ровно с 1 очком.",
+    achievementCharadesExactThreeTitle: "Три акта",
+    achievementCharadesExactThreeDescription: "Заверши раунд Крокодила ровно с 3 очками.",
+    achievementCharadesExactSevenTitle: "Семь кадров",
+    achievementCharadesExactSevenDescription: "Сцена иногда любит красивые числа.",
+    achievementCharadesExactSevenHint: "Заверши раунд Крокодила ровно с 7 очками.",
+    achievementCharadesExactThirteenTitle: "Тринадцатый акт",
+    achievementCharadesExactThirteenDescription: "Никто не говорил, что сцена не суеверна.",
+    achievementCharadesExactThirteenHint: "Заверши раунд Крокодила ровно с 13 очками.",
+    achievementCharadesFifteenRoundTitle: "Пятнадцать оваций",
+    achievementCharadesFifteenRoundDescription: "Набери минимум 15 очков за один раунд Крокодила.",
+    achievementCharadesCleanTwelveTitle: "Без монтажа",
+    achievementCharadesCleanTwelveDescription: "Набери 12+ очков за раунд Крокодила без пропусков.",
+    achievementCharadesOneSkipEightTitle: "Один вырезанный кадр",
+    achievementCharadesOneSkipEightDescription: "Набери 8+ очков за раунд Крокодила только с одним пропуском.",
+    achievementCharadesTenSkipsTitle: "Цирк без номеров",
+    achievementCharadesTenSkipsDescription: "Сделай минимум 10 пропусков за один раунд Крокодила.",
+    achievementCharadesZeroFiveSkipsTitle: "Пантомима невидимки",
+    achievementCharadesZeroFiveSkipsDescription: "Движения было много. Результат — загадка.",
+    achievementCharadesZeroFiveSkipsHint: "Заверши раунд Крокодила с 0 очков и минимум 5 пропусками.",
+    achievementCharadesEqualFiveTitle: "Пять сцен — пять провалов",
+    achievementCharadesEqualFiveDescription: "Странная симметрия тоже искусство.",
+    achievementCharadesEqualFiveHint: "Заверши раунд Крокодила с 5 очками и 5 пропусками.",
+    achievementCharadesSkipOverScoreTitle: "Больше жестов, чем смысла",
+    achievementCharadesSkipOverScoreDescription: "Заверши раунд, где пропусков больше, чем очков, но есть хотя бы 3 очка.",
+    achievementCharadesTwentyActionsTitle: "Двадцать сцен",
+    achievementCharadesTwentyActionsDescription: "За один раунд набери суммарно 20+ очков и пропусков.",
+    achievementCharadesSprintFourTitle: "Быстрая пантомима",
+    achievementCharadesSprintFourDescription: "За 30-секундный раунд Крокодила набери минимум 4 очка.",
+    achievementCharadesSprintEightTitle: "Руки быстрее мыслей",
+    achievementCharadesSprintEightDescription: "За 30-секундный раунд Крокодила набери минимум 8 очков.",
+    achievementCharadesMarathonFifteenTitle: "Полный спектакль",
+    achievementCharadesMarathonFifteenDescription: "За 120-секундный раунд Крокодила набери минимум 15 очков.",
+    achievementCharadesHardFourTitle: "Покажи невозможное",
+    achievementCharadesHardFourDescription: "Играй только на сложном уровне и набери 4+ очка за раунд Крокодила.",
+    achievementCharadesHardCleanEightTitle: "Мим из гранита",
+    achievementCharadesHardCleanEightDescription: "На сложном уровне набери 8+ очков в Крокодиле без пропусков.",
+    achievementCharadesAllDifficultiesEightTitle: "Весь реквизит",
+    achievementCharadesAllDifficultiesEightDescription: "Включи все три сложности и набери 8+ очков за раунд Крокодила.",
+    achievementCharadesFourTeamsEightTitle: "Полная сцена",
+    achievementCharadesFourTeamsEightDescription: "Играй в Крокодила четырьмя командами и набери 8+ очков за раунд.",
+    achievementCharadesCategoryTourTitle: "Гастроли по жанрам",
+    achievementCharadesCategoryTourDescription: "Выбери минимум 5 тем и набери 8+ очков за раунд Крокодила.",
+    achievementWhoamiHundredGuessedTitle: "Шерлок в отпуске",
+    achievementWhoamiHundredGuessedDescription: "Угадай 100 ролей в «Кто я?».",
+    achievementWhoamiTwoFiftyGuessedTitle: "Рентген",
+    achievementWhoamiTwoFiftyGuessedDescription: "Угадай 250 ролей в «Кто я?».",
+    achievementWhoamiFiveHundredGuessedTitle: "Читаю мысли",
+    achievementWhoamiFiveHundredGuessedDescription: "Угадай 500 ролей в «Кто я?».",
+    achievementWhoamiTwentyFiveSkipsTitle: "Не моё лицо",
+    achievementWhoamiTwentyFiveSkipsDescription: "Накопи 25 пропущенных ролей в «Кто я?».",
+    achievementWhoamiFiftySkipsTitle: "Кто угодно, только не я",
+    achievementWhoamiFiftySkipsDescription: "Накопи 50 пропущенных ролей в «Кто я?».",
+    achievementWhoamiFiftyYesTitle: "Да-да-да",
+    achievementWhoamiFiftyYesDescription: "Получи 50 ответов «Да» в «Кто я?».",
+    achievementWhoamiHundredYesTitle: "Оптимист",
+    achievementWhoamiHundredYesDescription: "Получи 100 ответов «Да» в «Кто я?».",
+    achievementWhoamiFiftyNoTitle: "Нет значит нет",
+    achievementWhoamiFiftyNoDescription: "Получи 50 ответов «Нет» в «Кто я?».",
+    achievementWhoamiHundredNoTitle: "Стена отрицания",
+    achievementWhoamiHundredNoDescription: "Получи 100 ответов «Нет» в «Кто я?».",
+    achievementWhoamiTwentyFiveGamesTitle: "Смена лиц",
+    achievementWhoamiTwentyFiveGamesDescription: "Сыграй 25 партий в «Кто я?».",
+    achievementWhoamiFiftyGamesTitle: "Постоянный гость",
+    achievementWhoamiFiftyGamesDescription: "Сыграй 50 партий в «Кто я?».",
+    achievementWhoamiFiveTimedTitle: "Часы тикают",
+    achievementWhoamiFiveTimedDescription: "Сыграй 5 партий «Кто я?» в режиме на время.",
+    achievementWhoamiTenTimedTitle: "Живу по таймеру",
+    achievementWhoamiTenTimedDescription: "Сыграй 10 партий «Кто я?» в режиме на время.",
+    achievementWhoamiFivePerfectTitle: "Пять чистых дел",
+    achievementWhoamiFivePerfectDescription: "Заверши 5 партий «Кто я?» с угаданными ролями и без пропусков.",
+    achievementWhoamiTenPerfectTitle: "Десять без промаха",
+    achievementWhoamiTenPerfectDescription: "Заверши 10 чистых партий «Кто я?» без пропусков.",
+    achievementWhoamiTenSessionTitle: "Десять масок",
+    achievementWhoamiTenSessionDescription: "Угадай минимум 10 ролей за одну партию «Кто я?».",
+    achievementWhoamiFifteenSessionTitle: "Лица мелькают",
+    achievementWhoamiFifteenSessionDescription: "Угадай минимум 15 ролей за одну партию «Кто я?».",
+    achievementWhoamiCleanFiveTitle: "Чистое досье",
+    achievementWhoamiCleanFiveDescription: "Угадай 5+ ролей за партию без единого пропуска.",
+    achievementWhoamiCleanTenTitle: "Безошибочный профайлер",
+    achievementWhoamiCleanTenDescription: "Угадай 10+ ролей за партию без пропусков.",
+    achievementWhoamiFiveSkipsSessionTitle: "Никого не узнаю",
+    achievementWhoamiFiveSkipsSessionDescription: "Пропусти минимум 5 ролей за одну партию.",
+    achievementWhoamiTenSkipsSessionTitle: "А можно другое лицо?",
+    achievementWhoamiTenSkipsSessionDescription: "Пропусти минимум 10 ролей за одну партию.",
+    achievementWhoamiThirtyQuestionsTitle: "Допрос с пристрастием",
+    achievementWhoamiThirtyQuestionsDescription: "За одну партию получи суммарно 30 ответов «Да» и «Нет».",
+    achievementWhoamiFiftyQuestionsTitle: "Дело на 50 вопросов",
+    achievementWhoamiFiftyQuestionsDescription: "За одну партию получи суммарно 50 ответов «Да» и «Нет».",
+    achievementWhoamiYesOnlyTitle: "Вселенная говорит «Да»",
+    achievementWhoamiYesOnlyDescription: "Подозрительно позитивный допрос.",
+    achievementWhoamiYesOnlyHint: "Угадай хотя бы одну роль, получи 5+ «Да» и ни одного «Нет».",
+    achievementWhoamiNoOnlyTitle: "Вселенная против",
+    achievementWhoamiNoOnlyDescription: "Вопросы были хорошие. Наверное.",
+    achievementWhoamiNoOnlyHint: "Угадай хотя бы одну роль, получи 5+ «Нет» и ни одного «Да».",
+    achievementWhoamiBalancedQuestionsTitle: "Да = Нет",
+    achievementWhoamiBalancedQuestionsDescription: "Даже сомнения могут быть идеально сбалансированы.",
+    achievementWhoamiBalancedQuestionsHint: "Получи одинаковое количество «Да» и «Нет», минимум по 5.",
+    achievementWhoamiTelepathyThreeTitle: "Почти телепат",
+    achievementWhoamiTelepathyThreeDescription: "Вопросов подозрительно мало, ответов — достаточно.",
+    achievementWhoamiTelepathyThreeHint: "Угадай 3+ роли, использовав не больше 5 ответов «Да/Нет».",
+    achievementWhoamiTelepathyFiveTitle: "Телепат на полставки",
+    achievementWhoamiTelepathyFiveDescription: "Это уже или талант, или очень знакомая компания.",
+    achievementWhoamiTelepathyFiveHint: "Угадай 5+ ролей, использовав не больше 10 ответов «Да/Нет».",
+    achievementWhoamiThirtySecondThreeTitle: "Тридцать секунд славы",
+    achievementWhoamiThirtySecondThreeDescription: "В 30-секундном режиме на время угадай 3+ роли за партию.",
+    achievementWhoamiThirtySecondFiveTitle: "Мышление на турбине",
+    achievementWhoamiThirtySecondFiveDescription: "В 30-секундном режиме на время угадай 5+ ролей за партию.",
+    achievementWhoamiTwoMinuteTenTitle: "Две минуты детектива",
+    achievementWhoamiTwoMinuteTenDescription: "В 120-секундном режиме на время угадай 10+ ролей за партию.",
+    achievementWhoamiFourTeamsTitle: "Полный штаб",
+    achievementWhoamiFourTeamsDescription: "В режиме на время с 4 командами угадай суммарно 8+ ролей.",
+    achievementWhoamiZeroGuessedFiveSkipsTitle: "Кто я? Не знаю.",
+    achievementWhoamiZeroGuessedFiveSkipsDescription: "Иногда название игры становится ответом.",
+    achievementWhoamiZeroGuessedFiveSkipsHint: "Заверши партию без угаданных ролей и с 5+ пропусками.",
+    achievementWhoamiLuckySevenYesTitle: "Семь раз «Да»",
+    achievementWhoamiLuckySevenYesDescription: "Семь — число подозрительной уверенности.",
+    achievementWhoamiLuckySevenYesHint: "Заверши партию ровно с 7 ответами «Да».",
+    achievementWhoamiSevenCleanTitle: "Семь лиц без ошибки",
+    achievementWhoamiSevenCleanDescription: "Будто кто-то подглядывал в карточки.",
+    achievementWhoamiSevenCleanHint: "Угадай ровно 7 ролей за партию без пропусков.",
+    achievementWhoamiPerfectStreakThreeTitle: "Три чистых дела подряд",
+    achievementWhoamiPerfectStreakThreeDescription: "Заверши 3 партии подряд с угаданными ролями и без пропусков.",
+    achievementWhoamiPerfectStreakFiveTitle: "Профайлер на серии",
+    achievementWhoamiPerfectStreakFiveDescription: "Заверши 5 чистых партий «Кто я?» подряд.",
+    achievementWhoamiTeamTieTitle: "Никто не лучше",
+    achievementWhoamiTeamTieDescription: "Иногда победитель — это дружба. Буквально.",
+    achievementWhoamiTeamTieHint: "Заверши командную партию на время ничьей за первое место.",
+    achievementAliasExact2Title: "Парочка",
+    achievementAliasExact2Description: "Подозрительно точный счёт.",
+    achievementAliasExact2Hint: "Заверши раунд Alias ровно с 2 очками.",
+    achievementAliasExact4Title: "Четыре угла",
+    achievementAliasExact4Description: "Подозрительно точный счёт.",
+    achievementAliasExact4Hint: "Заверши раунд Alias ровно с 4 очками.",
+    achievementAliasExact5Title: "Дай пять",
+    achievementAliasExact5Description: "Подозрительно точный счёт.",
+    achievementAliasExact5Hint: "Заверши раунд Alias ровно с 5 очками.",
+    achievementAliasExact6Title: "Шестёрка",
+    achievementAliasExact6Description: "Подозрительно точный счёт.",
+    achievementAliasExact6Hint: "Заверши раунд Alias ровно с 6 очками.",
+    achievementAliasExact8Title: "Восемь щупалец",
+    achievementAliasExact8Description: "Подозрительно точный счёт.",
+    achievementAliasExact8Hint: "Заверши раунд Alias ровно с 8 очками.",
+    achievementAliasExact9Title: "Девять жизней",
+    achievementAliasExact9Description: "Подозрительно точный счёт.",
+    achievementAliasExact9Hint: "Заверши раунд Alias ровно с 9 очками.",
+    achievementAliasExact11Title: "Одиннадцать",
+    achievementAliasExact11Description: "Подозрительно точный счёт.",
+    achievementAliasExact11Hint: "Заверши раунд Alias ровно с 11 очками.",
+    achievementAliasExact12Title: "Полный циферблат",
+    achievementAliasExact12Description: "Подозрительно точный счёт.",
+    achievementAliasExact12Hint: "Заверши раунд Alias ровно с 12 очками.",
+    achievementAliasTwoHundredRoundsTitle: "Я тут давно",
+    achievementAliasTwoHundredRoundsDescription: "Сыграй 200 раундов Alias.",
+    achievementAliasTwoFiftyRoundsTitle: "Мебель уже своя",
+    achievementAliasTwoFiftyRoundsDescription: "Сыграй 250 раундов Alias.",
+    achievementAliasTwoThousandPointsTitle: "Словесный банк",
+    achievementAliasTwoThousandPointsDescription: "Набери 2000 очков в Alias суммарно.",
+    achievementAliasFiveThousandPointsTitle: "Инфляция слов",
+    achievementAliasFiveThousandPointsDescription: "Набери 5000 очков в Alias суммарно.",
+    achievementAliasTwoFiftySkipsTitle: "Большой пас",
+    achievementAliasTwoFiftySkipsDescription: "Накопи 250 пропусков в Alias.",
+    achievementAliasHundredCleanRoundsTitle: "Стерильно",
+    achievementAliasHundredCleanRoundsDescription: "Заверши 100 раундов Alias без пропусков.",
+    achievementAliasTwentyFiveTenPlusRoundsTitle: "Скоростной словарь",
+    achievementAliasTwentyFiveTenPlusRoundsDescription: "В 25 раундах Alias набери 10+ очков.",
+    achievementAliasFiftyTenPlusRoundsTitle: "Экспресс без остановок",
+    achievementAliasFiftyTenPlusRoundsDescription: "В 50 раундах Alias набери 10+ очков.",
+    achievementAliasTenTwentyPlusRoundsTitle: "Гиперпространство",
+    achievementAliasTenTwentyPlusRoundsDescription: "В 10 раундах Alias набери 20+ очков.",
+    achievementAliasTwentyFiveTwentyPlusRoundsTitle: "Вне орбиты",
+    achievementAliasTwentyFiveTwentyPlusRoundsDescription: "В 25 раундах Alias набери 20+ очков.",
+    achievementAliasTenZeroRoundsTitle: "Чёрная дыра словаря",
+    achievementAliasTenZeroRoundsDescription: "Десять раз заверши Alias с нулём очков.",
+    achievementAliasCleanStreakTenTitle: "Десять безгрешных",
+    achievementAliasCleanStreakTenDescription: "Заверши 10 раундов Alias подряд без пропусков.",
+    achievementAliasTwentyFiveRoundTitle: "Словесный торнадо",
+    achievementAliasTwentyFiveRoundDescription: "Набери 25+ очков за один раунд Alias.",
+    achievementAliasCleanTwentyTitle: "Хрустальный раунд",
+    achievementAliasCleanTwentyDescription: "Набери 20+ очков за раунд Alias без пропусков.",
+    achievementAliasFifteenSkipsTitle: "Тушим раунд",
+    achievementAliasFifteenSkipsDescription: "Сделай 15+ пропусков за один раунд Alias.",
+    achievementAliasThirtyActionsTitle: "Руки, язык, паника",
+    achievementAliasThirtyActionsDescription: "За один раунд набери суммарно 30+ очков и пропусков.",
+    achievementAliasSprintFifteenTitle: "Языковой болид",
+    achievementAliasSprintFifteenDescription: "За 30 секунд Alias набери 15+ очков.",
+    achievementCharadesExact2Title: "Два жеста",
+    achievementCharadesExact2Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact2Hint: "Заверши раунд Крокодила ровно с 2 очками.",
+    achievementCharadesExact4Title: "Четыре сцены",
+    achievementCharadesExact4Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact4Hint: "Заверши раунд Крокодила ровно с 4 очками.",
+    achievementCharadesExact5Title: "Пять актов",
+    achievementCharadesExact5Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact5Hint: "Заверши раунд Крокодила ровно с 5 очками.",
+    achievementCharadesExact6Title: "Шесть движений",
+    achievementCharadesExact6Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact6Hint: "Заверши раунд Крокодила ровно с 6 очками.",
+    achievementCharadesExact8Title: "Восемь рук",
+    achievementCharadesExact8Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact8Hint: "Заверши раунд Крокодила ровно с 8 очками.",
+    achievementCharadesExact9Title: "Девятый дубль",
+    achievementCharadesExact9Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact9Hint: "Заверши раунд Крокодила ровно с 9 очками.",
+    achievementCharadesExact11Title: "Одиннадцать поз",
+    achievementCharadesExact11Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact11Hint: "Заверши раунд Крокодила ровно с 11 очками.",
+    achievementCharadesExact12Title: "Полуночная сцена",
+    achievementCharadesExact12Description: "Подозрительно точный сценический счёт.",
+    achievementCharadesExact12Hint: "Заверши раунд Крокодила ровно с 12 очками.",
+    achievementCharadesTwoHundredRoundsTitle: "Актёр на ставке",
+    achievementCharadesTwoHundredRoundsDescription: "Сыграй 200 раундов Крокодила.",
+    achievementCharadesTwoFiftyRoundsTitle: "Труппа уже семья",
+    achievementCharadesTwoFiftyRoundsDescription: "Сыграй 250 раундов Крокодила.",
+    achievementCharadesTwoThousandPointsTitle: "Театр твоего имени",
+    achievementCharadesTwoThousandPointsDescription: "Набери 2000 очков в Крокодиле.",
+    achievementCharadesFiveThousandPointsTitle: "Бесконечный сериал",
+    achievementCharadesFiveThousandPointsDescription: "Набери 5000 очков в Крокодиле.",
+    achievementCharadesTwoFiftySkipsTitle: "Сценарий не зашёл",
+    achievementCharadesTwoFiftySkipsDescription: "Накопи 250 пропусков в Крокодиле.",
+    achievementCharadesHundredCleanRoundsTitle: "Сто чистых дублей",
+    achievementCharadesHundredCleanRoundsDescription: "Заверши 100 раундов Крокодила без пропусков.",
+    achievementCharadesTwentyFiveEightPlusRoundsTitle: "Полный метр",
+    achievementCharadesTwentyFiveEightPlusRoundsDescription: "В 25 раундах Крокодила набери 8+ очков.",
+    achievementCharadesFiftyEightPlusRoundsTitle: "Пятьдесят серий",
+    achievementCharadesFiftyEightPlusRoundsDescription: "В 50 раундах Крокодила набери 8+ очков.",
+    achievementCharadesTenFifteenPlusRoundsTitle: "Звезда сцены",
+    achievementCharadesTenFifteenPlusRoundsDescription: "В 10 раундах Крокодила набери 15+ очков.",
+    achievementCharadesTwentyFiveFifteenPlusRoundsTitle: "Главная роль",
+    achievementCharadesTwentyFiveFifteenPlusRoundsDescription: "В 25 раундах Крокодила набери 15+ очков.",
+    achievementCharadesTenZeroRoundsTitle: "Антракт затянулся",
+    achievementCharadesTenZeroRoundsDescription: "Десять раз заверши Крокодила с нулём очков.",
+    achievementCharadesCleanStreakTenTitle: "Десять идеальных дублей",
+    achievementCharadesCleanStreakTenDescription: "Заверши 10 раундов Крокодила подряд без пропусков.",
+    achievementCharadesTwentyRoundTitle: "Театральный ураган",
+    achievementCharadesTwentyRoundDescription: "Набери 20+ очков за один раунд Крокодила.",
+    achievementCharadesCleanFifteenTitle: "Идеальный дубль",
+    achievementCharadesCleanFifteenDescription: "Набери 15+ очков за раунд Крокодила без пропусков.",
+    achievementCharadesFifteenSkipsTitle: "Занавес!",
+    achievementCharadesFifteenSkipsDescription: "Сделай 15+ пропусков за один раунд Крокодила.",
+    achievementCharadesThirtyActionsTitle: "Танец без пауз",
+    achievementCharadesThirtyActionsDescription: "За один раунд набери суммарно 30+ очков и пропусков.",
+    achievementCharadesSprintTwelveTitle: "Пантомима на форсаже",
+    achievementCharadesSprintTwelveDescription: "За 30 секунд Крокодила набери 12+ очков.",
+    achievementWhoamiThousandGuessedTitle: "Ты знаешь всех",
+    achievementWhoamiThousandGuessedDescription: "Угадай 1000 ролей в «Кто я?».",
+    achievementWhoamiHundredSkipsTitle: "Кризис идентичности",
+    achievementWhoamiHundredSkipsDescription: "Накопи 100 пропущенных ролей.",
+    achievementWhoamiTwoFiftyYesTitle: "Вселенная соглашается",
+    achievementWhoamiTwoFiftyYesDescription: "Получи 250 ответов «Да».",
+    achievementWhoamiTwoFiftyNoTitle: "Абсолютное нет",
+    achievementWhoamiTwoFiftyNoDescription: "Получи 250 ответов «Нет».",
+    achievementWhoamiHundredGamesTitle: "Зал славы лиц",
+    achievementWhoamiHundredGamesDescription: "Сыграй 100 партий в «Кто я?».",
+    achievementWhoamiTwentyFiveTimedTitle: "Хронометр",
+    achievementWhoamiTwentyFiveTimedDescription: "Сыграй 25 партий в режиме на время.",
+    achievementWhoamiTwentyFivePerfectTitle: "Без пятен в досье",
+    achievementWhoamiTwentyFivePerfectDescription: "Заверши 25 чистых партий без пропусков.",
+    achievementWhoamiPerfectStreakTenTitle: "Детективная серия",
+    achievementWhoamiPerfectStreakTenDescription: "Заверши 10 чистых партий подряд.",
+    achievementWhoamiTwentySessionTitle: "Двадцать лиц",
+    achievementWhoamiTwentySessionDescription: "Угадай 20+ ролей за одну партию.",
+    achievementWhoamiTwentySkipsSessionTitle: "Не узнал никого из района",
+    achievementWhoamiTwentySkipsSessionDescription: "Пропусти 20+ ролей за одну партию.",
+    achievementWhoamiSeventyFiveQuestionsTitle: "Анкета на 75 пунктов",
+    achievementWhoamiSeventyFiveQuestionsDescription: "Получи 75+ ответов «Да/Нет» за одну партию.",
+    achievementWhoamiExactOneSessionTitle: "Это был он",
+    achievementWhoamiExactOneSessionDescription: "Иногда достаточно одного лица.",
+    achievementWhoamiExactOneSessionHint: "Заверши партию ровно с 1 угаданной ролью.",
+    achievementWhoamiExactThreeSessionTitle: "Троица лиц",
+    achievementWhoamiExactThreeSessionDescription: "Три — тоже компания.",
+    achievementWhoamiExactThreeSessionHint: "Заверши партию ровно с 3 угаданными ролями.",
+    achievementWhoamiLuckySevenNoTitle: "Семь раз «Нет»",
+    achievementWhoamiLuckySevenNoDescription: "Семь — число подозрительного отказа.",
+    achievementWhoamiLuckySevenNoHint: "Заверши партию ровно с 7 ответами «Нет».",
+    achievementWhoamiThreeThreeTitle: "Три на три",
+    achievementWhoamiThreeThreeDescription: "Симметрия добралась и до лиц.",
+    achievementWhoamiThreeThreeHint: "Заверши партию с 3 угаданными и 3 пропущенными ролями.",
+    achievementWhoamiEqualGuessedSkippedTitle: "Зеркало ролей",
+    achievementWhoamiEqualGuessedSkippedDescription: "Угадывания и пропуски странно синхронизировались.",
+    achievementWhoamiEqualGuessedSkippedHint: "Заверши партию с одинаковым количеством угаданных и пропущенных ролей, минимум по 5.",
+    achievementWhoamiSixtySecondTenTitle: "Минута ясности",
+    achievementWhoamiSixtySecondTenDescription: "В 60-секундном режиме угадай 10+ ролей.",
+    achievementWhoamiNinetySecondTwelveTitle: "Полторы минуты гения",
+    achievementWhoamiNinetySecondTwelveDescription: "В 90-секундном режиме угадай 12+ ролей.",
+    achievementWhoamiTwoMinuteFifteenTitle: "Две минуты прозрения",
+    achievementWhoamiTwoMinuteFifteenDescription: "В 120-секундном режиме угадай 15+ ролей.",
+    achievementWhoamiTwoTeamsTenTitle: "Дуэль детективов",
+    achievementWhoamiTwoTeamsTenDescription: "С двумя командами угадай суммарно 10+ ролей.",
+    achievementWhoamiThreeTeamsTwelveTitle: "Треугольник подозрения",
+    achievementWhoamiThreeTeamsTwelveDescription: "С тремя командами угадай суммарно 12+ ролей.",
+    achievementWhoamiNoQuestionsThreeTitle: "Без лишних вопросов",
+    achievementWhoamiNoQuestionsThreeDescription: "Молчание иногда странно эффективно.",
+    achievementWhoamiNoQuestionsThreeHint: "Угадай 3+ роли за партию, не нажав ни одного «Да» или «Нет».",
     gameDescription: (length, attempts, letterWord, attemptWord, repeatText) => `Угадай русское слово из ${length} ${letterWord} за ${attempts} ${attemptWord}. ${repeatText}.`,
     dictionaryStats: (targets, allowed) => `Словарь игры: ${targets} для загадки · ${allowed} для попыток.`,
     shareModeCompact: (length, result, repeats) => `${length} букв · ${result} · ${repeats ? "с повторами" : "без повторов"}`,
@@ -1358,6 +2601,93 @@ const WORD_GUESS_TEXT = {
     setupGameSettings: "Game setup", setupFormat: "Game format", setupSingle: "One prompt", setupTimed: "Timed", setupWords: "Words", difficultyEasy: "Easy", difficultyMedium: "Medium", difficultyHard: "Hard", phrasesYes: "Phrases: on", phrasesNo: "Phrases: off", setupRound: "Round", setupTime: "Time", setupAfterTime: "When time is up", setupFinishLast: "Finish the prompt", setupStop: "Stop", setupGame: "Game", setupTarget: "Target", setupTeams: "Teams", setupTeamNames: "Team names", teamNameBase: "Team", allTopics: "All topics",
     cardsEyebrow: "Alias & Charades", cardsTitle: "Word cards", cardsAllShapesTitle: "Random from all shapes", cardsAllShapesCopy: "When enabled, the game mixes the full set of card shapes.", cardsRandomColorsTitle: "Random card colors", cardsRandomColorsCopy: "Turn this off to use the theme's base card color.", cardsOutlineLight: "Outline in light theme", cardsOutlineDark: "Outline in dark theme", choiceNever: "Never", choiceRandom: "Random", choiceAlways: "Always", cardShapeOrganic: "Soft puck", cardShapeSplat: "Asymmetric blob", cardShapePebble: "Pebble / token", cardShapeSticker: "Blob sticker", cardShapeCloud: "Cloud", cardShapeSplash: "Splash drop", cardShapeGummy: "Gummy", cardShapePaper: "Paper blot", cardsNote: "New shapes, random colors, and outlines apply to the large word cards in Alias and Charades.",
     achievementCategoriesAria: "Achievement categories", achievementCategoryAll: "All", achievementCategoryNew: "New", achievementNewLabel: "New", achievementReceivedAt: (dateText) => `Unlocked ${dateText}`, achievementNewCountAria: (count) => `New achievements: ${count}.`, achievementSearchLabel: "Search achievements", achievementSearchPlaceholder: "Find an achievement…", achievementSearchEmpty: "Nothing found. Try another word or category.", achievementShowMore: "Show more", achievementGameWordGuess: "Guess the word", achievementGameAlias: "Alias", achievementGameCharades: "Charades", achievementGameMovohray: "Movohray",
+    achievementGamesAria: "Games and new achievements",
+    achievementGameAll: "All games",
+    achievementGameWhoAmI: "Who am I?",
+    achievementAliasFiveRoundTitle: "Warmed up",
+    achievementAliasFiveRoundDescription: "Score 5 or more words in one Alias round.",
+    achievementAliasFifteenRoundTitle: "Word reactor",
+    achievementAliasFifteenRoundDescription: "Score 15 or more words in one Alias round.",
+    achievementAliasPerfectTenTitle: "Ten without a miss",
+    achievementAliasPerfectTenDescription: "Somewhere there is a round where passes are simply unnecessary.",
+    achievementAliasPerfectTenHint: "Score at least 10 words in one Alias round with zero skips.",
+    achievementAliasFiveSkipsTitle: "Pass parade",
+    achievementAliasFiveSkipsDescription: "Make at least 5 skips in one Alias round.",
+    achievementAliasBalancedRoundTitle: "Balanced chaos",
+    achievementAliasBalancedRoundDescription: "You guessed, you passed, you made it a whole mood.",
+    achievementAliasBalancedRoundHint: "In one Alias round, score at least 7 words and make at least 3 skips.",
+    achievementAliasTenRoundsTitle: "Mic warmed up",
+    achievementAliasTenRoundsDescription: "Finish 10 Alias rounds.",
+    achievementAliasTwentyFiveRoundsTitle: "On-air veteran",
+    achievementAliasTwentyFiveRoundsDescription: "Finish 25 Alias rounds.",
+    achievementAliasFiftyPointsTitle: "Fifty words deep",
+    achievementAliasFiftyPointsDescription: "Earn 50 total Alias points.",
+    achievementAliasHundredPointsTitle: "Hundred on the tongue",
+    achievementAliasHundredPointsDescription: "Earn 100 total Alias points.",
+    achievementAliasTwoFiftyPointsTitle: "Word bank",
+    achievementAliasTwoFiftyPointsDescription: "Earn 250 total Alias points.",
+    achievementAliasThreeCleanRoundsTitle: "Clean broadcast",
+    achievementAliasThreeCleanRoundsDescription: "Finish 3 scoring Alias rounds with zero skips.",
+    achievementAliasTenCleanRoundsTitle: "Flawless announcer",
+    achievementAliasTenCleanRoundsDescription: "Finish 10 scoring Alias rounds with zero skips.",
+    achievementCharadesFiveRoundTitle: "Hands warmed up",
+    achievementCharadesFiveRoundDescription: "Score 5 or more prompts in one Charades round.",
+    achievementCharadesTwelveRoundTitle: "Silent cinema",
+    achievementCharadesTwelveRoundDescription: "Score 12 or more prompts in one Charades round.",
+    achievementCharadesPerfectEightTitle: "Pantomime, no cuts",
+    achievementCharadesPerfectEightDescription: "Not a single deleted scene.",
+    achievementCharadesPerfectEightHint: "Score at least 8 prompts in one Charades round with zero skips.",
+    achievementCharadesFiveSkipsTitle: "Skip festival",
+    achievementCharadesFiveSkipsDescription: "Make at least 5 skips in one Charades round.",
+    achievementCharadesChaosRoundTitle: "Theatre of absurd",
+    achievementCharadesChaosRoundDescription: "The stage has seen things. This round especially.",
+    achievementCharadesChaosRoundHint: "In one Charades round, score at least 6 prompts and make at least 4 skips.",
+    achievementCharadesTenRoundsTitle: "Ten times on stage",
+    achievementCharadesTenRoundsDescription: "Finish 10 Charades rounds.",
+    achievementCharadesTwentyFiveRoundsTitle: "Company actor",
+    achievementCharadesTwentyFiveRoundsDescription: "Finish 25 Charades rounds.",
+    achievementCharadesFiftyPointsTitle: "Fifty gestures of glory",
+    achievementCharadesFiftyPointsDescription: "Earn 50 total Charades points.",
+    achievementCharadesHundredPointsTitle: "A hundred without words",
+    achievementCharadesHundredPointsDescription: "Earn 100 total Charades points.",
+    achievementCharadesTwoFiftyPointsTitle: "Distinguished mime",
+    achievementCharadesTwoFiftyPointsDescription: "Earn 250 total Charades points.",
+    achievementCharadesThreeCleanRoundsTitle: "Clean stage",
+    achievementCharadesThreeCleanRoundsDescription: "Finish 3 scoring Charades rounds with zero skips.",
+    achievementCharadesTenCleanRoundsTitle: "Swan pantomime",
+    achievementCharadesTenCleanRoundsDescription: "Finish 10 scoring Charades rounds with zero skips.",
+    achievementWhoAmIFirstGuessTitle: "So THAT is me!",
+    achievementWhoAmIFirstGuessDescription: "Correctly guess your first role in Who am I?",
+    achievementWhoAmIFiveGuessedTitle: "Five identities",
+    achievementWhoAmIFiveGuessedDescription: "Guess 5 total roles in Who am I?",
+    achievementWhoAmITwentyGuessedTitle: "Identity collector",
+    achievementWhoAmITwentyGuessedDescription: "Guess 20 total roles in Who am I?",
+    achievementWhoAmIFiftyGuessedTitle: "Doctor Who?",
+    achievementWhoAmIFiftyGuessedDescription: "Guess 50 total roles in Who am I?",
+    achievementWhoAmIFirstSkipTitle: "Not today",
+    achievementWhoAmIFirstSkipDescription: "Skip your first role in Who am I?",
+    achievementWhoAmITenSkipsTitle: "Identity crisis",
+    achievementWhoAmITenSkipsDescription: "Accumulate 10 skipped roles in Who am I?",
+    achievementWhoAmITenYesTitle: "Yes yes yes",
+    achievementWhoAmITenYesDescription: "Receive 10 total “yes” answers in Who am I?",
+    achievementWhoAmITenNoTitle: "No is an answer too",
+    achievementWhoAmITenNoDescription: "Receive 10 total “no” answers in Who am I?",
+    achievementWhoAmIQuestionStormTitle: "Intense interrogation",
+    achievementWhoAmIQuestionStormDescription: "There are suspiciously many questions now.",
+    achievementWhoAmIQuestionStormHint: "During one Who am I? game, receive 20 combined “yes” and “no” answers.",
+    achievementWhoAmIPerfectGameTitle: "All masks off",
+    achievementWhoAmIPerfectGameDescription: "Finish a Who am I? game with at least one guessed role and zero skips.",
+    achievementWhoAmIThreePerfectTitle: "Three clean identities",
+    achievementWhoAmIThreePerfectDescription: "Finish 3 Who am I? games without a skipped role.",
+    achievementWhoAmITimedFirstTitle: "Who am I? At speed",
+    achievementWhoAmITimedFirstDescription: "Finish your first timed Who am I? game.",
+    achievementWhoAmITenGamesTitle: "Familiar strangers",
+    achievementWhoAmITenGamesDescription: "Finish 10 Who am I? games.",
+    achievementWhoAmIFiveSessionTitle: "Five masks tonight",
+    achievementWhoAmIFiveSessionDescription: "Guess 5 roles during one Who am I? game.",
+    achievementWhoAmINoMachineTitle: "No machine",
+    achievementWhoAmINoMachineDescription: "The universe keeps saying no.",
+    achievementWhoAmINoMachineHint: "Receive 10 “no” answers during one Who am I? game.",
     achievementRuKoshkaTitle: "The cat arrived", achievementRuKoshkaDescription: "It will explain nothing. It is simply here.", achievementRuKoshkaHint: "In RU mode, enter «КОШКА».",
     achievementRuHochatsuTitle: "Hochatsu means Hochatsu", achievementRuHochatsuDescription: "The dictionary disagreed. Movohray disagreed a little less.", achievementRuHochatsuHint: "In RU mode, type «ХОЧАЦУ» and submit it. The word does not exist in the dictionary — that is the joke.",
     achievementUkKishkaTitle: "A kitty from the next locale", achievementUkKishkaDescription: "Something nearby meowed very familiarly in Ukrainian.", achievementUkKishkaHint: "In Ukrainian mode, enter «КІШКА».",
@@ -1769,6 +3099,405 @@ const WORD_GUESS_TEXT = {
     achievementLogoSecretTitle: "Do not tap the logo",
     achievementLogoSecretDescription: "Seriously. The logo is just sitting there.",
     achievementLogoSecretHint: "On the main menu, tap the Movohray logo 7 times.",
+    achievementAliasFiftyRoundsTitle: "Now we’re talking",
+    achievementAliasFiftyRoundsDescription: "Play 50 Alias rounds.",
+    achievementAliasHundredRoundsTitle: "Word marathoner",
+    achievementAliasHundredRoundsDescription: "Play 100 Alias rounds.",
+    achievementAliasFiveHundredPointsTitle: "Five hundred words later",
+    achievementAliasFiveHundredPointsDescription: "Score 500 Alias points in total.",
+    achievementAliasThousandPointsTitle: "A thousand on the tongue",
+    achievementAliasThousandPointsDescription: "Score 1,000 Alias points in total.",
+    achievementAliasTwentyFiveSkipsTitle: "Pass, pass, pass",
+    achievementAliasTwentyFiveSkipsDescription: "Accumulate 25 skips in Alias.",
+    achievementAliasFiftySkipsTitle: "Word ejector",
+    achievementAliasFiftySkipsDescription: "Accumulate 50 skips in Alias.",
+    achievementAliasHundredSkipsTitle: "Skip singularity",
+    achievementAliasHundredSkipsDescription: "Accumulate 100 skips in Alias.",
+    achievementAliasTwentyFiveCleanRoundsTitle: "Clean speech",
+    achievementAliasTwentyFiveCleanRoundsDescription: "Finish 25 Alias rounds without a skip.",
+    achievementAliasFiftyCleanRoundsTitle: "Sparkling diction",
+    achievementAliasFiftyCleanRoundsDescription: "Finish 50 clean Alias rounds without skips.",
+    achievementAliasThreeTenPlusRoundsTitle: "Warming up",
+    achievementAliasThreeTenPlusRoundsDescription: "Score at least 10 points in three Alias rounds.",
+    achievementAliasTenTenPlusRoundsTitle: "Word locomotive",
+    achievementAliasTenTenPlusRoundsDescription: "Score at least 10 points in 10 Alias rounds.",
+    achievementAliasThreeTwentyPlusRoundsTitle: "Turbo mode",
+    achievementAliasThreeTwentyPlusRoundsDescription: "Score at least 20 points in three Alias rounds.",
+    achievementAliasFiveZeroRoundsTitle: "Out of words",
+    achievementAliasFiveZeroRoundsDescription: "Finish five Alias rounds with zero points.",
+    achievementAliasCleanStreakThreeTitle: "Three clean in a row",
+    achievementAliasCleanStreakThreeDescription: "Finish 3 Alias rounds in a row with points and no skips.",
+    achievementAliasCleanStreakFiveTitle: "Clean streak",
+    achievementAliasCleanStreakFiveDescription: "Finish 5 Alias rounds in a row with points and no skips.",
+    achievementAliasExactOneTitle: "One proud point",
+    achievementAliasExactOneDescription: "Finish an Alias round with exactly 1 point.",
+    achievementAliasExactThreeTitle: "Exactly three",
+    achievementAliasExactThreeDescription: "Finish an Alias round with exactly 3 points.",
+    achievementAliasExactSevenTitle: "Lucky seven",
+    achievementAliasExactSevenDescription: "Sometimes the number itself wants a badge.",
+    achievementAliasExactSevenHint: "Finish an Alias round with exactly 7 points.",
+    achievementAliasExactThirteenTitle: "Unlucky thirteen",
+    achievementAliasExactThirteenDescription: "Not superstition — a very specific score.",
+    achievementAliasExactThirteenHint: "Finish an Alias round with exactly 13 points.",
+    achievementAliasTwentyRoundTitle: "Twenty!",
+    achievementAliasTwentyRoundDescription: "Score at least 20 points in one Alias round.",
+    achievementAliasCleanFifteenTitle: "No misfires",
+    achievementAliasCleanFifteenDescription: "Score 15+ points in an Alias round with no skips.",
+    achievementAliasOneSkipTenTitle: "One exit ticket",
+    achievementAliasOneSkipTenDescription: "Score 10+ points in an Alias round with exactly one skip.",
+    achievementAliasTenSkipsTitle: "Skipstorm",
+    achievementAliasTenSkipsDescription: "Make at least 10 skips in one Alias round.",
+    achievementAliasZeroFiveSkipsTitle: "No words, lots of motion",
+    achievementAliasZeroFiveSkipsDescription: "This round tried very hard… in another direction.",
+    achievementAliasZeroFiveSkipsHint: "Finish an Alias round with 0 points and at least 5 skips.",
+    achievementAliasEqualFiveTitle: "Five by five",
+    achievementAliasEqualFiveDescription: "Balance can look suspiciously neat.",
+    achievementAliasEqualFiveHint: "Finish an Alias round with 5 points and 5 skips.",
+    achievementAliasSkipOverScoreTitle: "Skips win",
+    achievementAliasSkipOverScoreDescription: "Finish a round with more skips than points, but at least 3 points.",
+    achievementAliasTwentyActionsTitle: "Twenty decisions",
+    achievementAliasTwentyActionsDescription: "Have 20+ total points and skips in one round.",
+    achievementAliasSprintFiveTitle: "Thirty-second sprint",
+    achievementAliasSprintFiveDescription: "Score at least 5 points in a 30-second Alias round.",
+    achievementAliasSprintTenTitle: "Turbo tongue",
+    achievementAliasSprintTenDescription: "Score at least 10 points in a 30-second Alias round.",
+    achievementAliasMarathonTwentyTitle: "Long run",
+    achievementAliasMarathonTwentyDescription: "Score at least 20 points in a 120-second Alias round.",
+    achievementAliasHardFiveTitle: "No easy words",
+    achievementAliasHardFiveDescription: "Play hard-only and score 5+ points in an Alias round.",
+    achievementAliasHardCleanTenTitle: "Stone face",
+    achievementAliasHardCleanTenDescription: "On hard-only, score 10+ Alias points with no skips.",
+    achievementAliasAllDifficultiesTenTitle: "Full menu",
+    achievementAliasAllDifficultiesTenDescription: "Enable all three difficulties and score 10+ points in an Alias round.",
+    achievementAliasFourTeamsTenTitle: "Full table",
+    achievementAliasFourTeamsTenDescription: "Play Alias with four teams and score 10+ points in a round.",
+    achievementAliasCategoryTourTitle: "Theme tourist",
+    achievementAliasCategoryTourDescription: "Select at least 5 themes and score 10+ points in an Alias round.",
+    achievementCharadesFiftyRoundsTitle: "On tour",
+    achievementCharadesFiftyRoundsDescription: "Play 50 Charades rounds.",
+    achievementCharadesHundredRoundsTitle: "Eternal mime",
+    achievementCharadesHundredRoundsDescription: "Play 100 Charades rounds.",
+    achievementCharadesFiveHundredPointsTitle: "Five hundred scenes",
+    achievementCharadesFiveHundredPointsDescription: "Score 500 Charades points in total.",
+    achievementCharadesThousandPointsTitle: "Living-room Oscar",
+    achievementCharadesThousandPointsDescription: "Score 1,000 Charades points in total.",
+    achievementCharadesTwentyFiveSkipsTitle: "Off the bill",
+    achievementCharadesTwentyFiveSkipsDescription: "Accumulate 25 Charades skips.",
+    achievementCharadesFiftySkipsTitle: "Invisible actor",
+    achievementCharadesFiftySkipsDescription: "Accumulate 50 Charades skips.",
+    achievementCharadesHundredSkipsTitle: "Black stage",
+    achievementCharadesHundredSkipsDescription: "Accumulate 100 Charades skips.",
+    achievementCharadesTwentyFiveCleanRoundsTitle: "Clean stage",
+    achievementCharadesTwentyFiveCleanRoundsDescription: "Finish 25 Charades rounds without a skip.",
+    achievementCharadesFiftyCleanRoundsTitle: "Swan-level mime",
+    achievementCharadesFiftyCleanRoundsDescription: "Finish 50 clean Charades rounds without skips.",
+    achievementCharadesThreeEightPlusRoundsTitle: "Stage warmed up",
+    achievementCharadesThreeEightPlusRoundsDescription: "Score at least 8 points in three Charades rounds.",
+    achievementCharadesTenEightPlusRoundsTitle: "Renewed for another season",
+    achievementCharadesTenEightPlusRoundsDescription: "Score at least 8 points in 10 Charades rounds.",
+    achievementCharadesThreeFifteenPlusRoundsTitle: "Blockbuster",
+    achievementCharadesThreeFifteenPlusRoundsDescription: "Score at least 15 points in three Charades rounds.",
+    achievementCharadesFiveZeroRoundsTitle: "Silent scene",
+    achievementCharadesFiveZeroRoundsDescription: "Finish five Charades rounds with zero points.",
+    achievementCharadesCleanStreakThreeTitle: "Three one-takes",
+    achievementCharadesCleanStreakThreeDescription: "Finish 3 Charades rounds in a row with points and no skips.",
+    achievementCharadesCleanStreakFiveTitle: "Five clean scenes",
+    achievementCharadesCleanStreakFiveDescription: "Finish 5 Charades rounds in a row with points and no skips.",
+    achievementCharadesExactOneTitle: "One gesture",
+    achievementCharadesExactOneDescription: "Finish a Charades round with exactly 1 point.",
+    achievementCharadesExactThreeTitle: "Three acts",
+    achievementCharadesExactThreeDescription: "Finish a Charades round with exactly 3 points.",
+    achievementCharadesExactSevenTitle: "Seven frames",
+    achievementCharadesExactSevenDescription: "The stage sometimes likes pretty numbers.",
+    achievementCharadesExactSevenHint: "Finish a Charades round with exactly 7 points.",
+    achievementCharadesExactThirteenTitle: "Act thirteen",
+    achievementCharadesExactThirteenDescription: "Nobody said the stage was not superstitious.",
+    achievementCharadesExactThirteenHint: "Finish a Charades round with exactly 13 points.",
+    achievementCharadesFifteenRoundTitle: "Fifteen ovations",
+    achievementCharadesFifteenRoundDescription: "Score at least 15 points in one Charades round.",
+    achievementCharadesCleanTwelveTitle: "One take",
+    achievementCharadesCleanTwelveDescription: "Score 12+ points in a Charades round with no skips.",
+    achievementCharadesOneSkipEightTitle: "One cut scene",
+    achievementCharadesOneSkipEightDescription: "Score 8+ points in a Charades round with exactly one skip.",
+    achievementCharadesTenSkipsTitle: "Circus without acts",
+    achievementCharadesTenSkipsDescription: "Make at least 10 skips in one Charades round.",
+    achievementCharadesZeroFiveSkipsTitle: "Invisible mime",
+    achievementCharadesZeroFiveSkipsDescription: "Lots of movement. The result is a mystery.",
+    achievementCharadesZeroFiveSkipsHint: "Finish a Charades round with 0 points and at least 5 skips.",
+    achievementCharadesEqualFiveTitle: "Five and five",
+    achievementCharadesEqualFiveDescription: "Odd symmetry is still art.",
+    achievementCharadesEqualFiveHint: "Finish a Charades round with 5 points and 5 skips.",
+    achievementCharadesSkipOverScoreTitle: "More gestures than meaning",
+    achievementCharadesSkipOverScoreDescription: "Finish a round with more skips than points, but at least 3 points.",
+    achievementCharadesTwentyActionsTitle: "Twenty scenes",
+    achievementCharadesTwentyActionsDescription: "Have 20+ total points and skips in one round.",
+    achievementCharadesSprintFourTitle: "Quick mime",
+    achievementCharadesSprintFourDescription: "Score at least 4 points in a 30-second Charades round.",
+    achievementCharadesSprintEightTitle: "Hands faster than thought",
+    achievementCharadesSprintEightDescription: "Score at least 8 points in a 30-second Charades round.",
+    achievementCharadesMarathonFifteenTitle: "Full performance",
+    achievementCharadesMarathonFifteenDescription: "Score at least 15 points in a 120-second Charades round.",
+    achievementCharadesHardFourTitle: "Act the impossible",
+    achievementCharadesHardFourDescription: "Play hard-only and score 4+ points in a Charades round.",
+    achievementCharadesHardCleanEightTitle: "Granite mime",
+    achievementCharadesHardCleanEightDescription: "On hard-only, score 8+ Charades points with no skips.",
+    achievementCharadesAllDifficultiesEightTitle: "All props included",
+    achievementCharadesAllDifficultiesEightDescription: "Enable all three difficulties and score 8+ points in a Charades round.",
+    achievementCharadesFourTeamsEightTitle: "Full stage",
+    achievementCharadesFourTeamsEightDescription: "Play Charades with four teams and score 8+ points in a round.",
+    achievementCharadesCategoryTourTitle: "Genre tour",
+    achievementCharadesCategoryTourDescription: "Select at least 5 themes and score 8+ points in a Charades round.",
+    achievementWhoamiHundredGuessedTitle: "Sherlock on vacation",
+    achievementWhoamiHundredGuessedDescription: "Guess 100 roles in Who Am I.",
+    achievementWhoamiTwoFiftyGuessedTitle: "X-ray vision",
+    achievementWhoamiTwoFiftyGuessedDescription: "Guess 250 roles in Who Am I.",
+    achievementWhoamiFiveHundredGuessedTitle: "Mind reader",
+    achievementWhoamiFiveHundredGuessedDescription: "Guess 500 roles in Who Am I.",
+    achievementWhoamiTwentyFiveSkipsTitle: "Not my face",
+    achievementWhoamiTwentyFiveSkipsDescription: "Accumulate 25 skipped roles in Who Am I.",
+    achievementWhoamiFiftySkipsTitle: "Anyone but me",
+    achievementWhoamiFiftySkipsDescription: "Accumulate 50 skipped roles in Who Am I.",
+    achievementWhoamiFiftyYesTitle: "Yes, yes, yes",
+    achievementWhoamiFiftyYesDescription: "Get 50 Yes answers in Who Am I.",
+    achievementWhoamiHundredYesTitle: "Optimist",
+    achievementWhoamiHundredYesDescription: "Get 100 Yes answers in Who Am I.",
+    achievementWhoamiFiftyNoTitle: "No means no",
+    achievementWhoamiFiftyNoDescription: "Get 50 No answers in Who Am I.",
+    achievementWhoamiHundredNoTitle: "Wall of no",
+    achievementWhoamiHundredNoDescription: "Get 100 No answers in Who Am I.",
+    achievementWhoamiTwentyFiveGamesTitle: "Face changer",
+    achievementWhoamiTwentyFiveGamesDescription: "Play 25 Who Am I games.",
+    achievementWhoamiFiftyGamesTitle: "Regular guest",
+    achievementWhoamiFiftyGamesDescription: "Play 50 Who Am I games.",
+    achievementWhoamiFiveTimedTitle: "Clock is ticking",
+    achievementWhoamiFiveTimedDescription: "Play 5 timed Who Am I games.",
+    achievementWhoamiTenTimedTitle: "Living by the timer",
+    achievementWhoamiTenTimedDescription: "Play 10 timed Who Am I games.",
+    achievementWhoamiFivePerfectTitle: "Five clean cases",
+    achievementWhoamiFivePerfectDescription: "Finish 5 Who Am I games with guesses and no skips.",
+    achievementWhoamiTenPerfectTitle: "Ten flawless cases",
+    achievementWhoamiTenPerfectDescription: "Finish 10 clean Who Am I games without skips.",
+    achievementWhoamiTenSessionTitle: "Ten masks",
+    achievementWhoamiTenSessionDescription: "Guess at least 10 roles in one Who Am I game.",
+    achievementWhoamiFifteenSessionTitle: "Faces everywhere",
+    achievementWhoamiFifteenSessionDescription: "Guess at least 15 roles in one Who Am I game.",
+    achievementWhoamiCleanFiveTitle: "Clean dossier",
+    achievementWhoamiCleanFiveDescription: "Guess 5+ roles in one game with no skips.",
+    achievementWhoamiCleanTenTitle: "Flawless profiler",
+    achievementWhoamiCleanTenDescription: "Guess 10+ roles in one game with no skips.",
+    achievementWhoamiFiveSkipsSessionTitle: "I know nobody",
+    achievementWhoamiFiveSkipsSessionDescription: "Skip at least 5 roles in one game.",
+    achievementWhoamiTenSkipsSessionTitle: "Can I get another face?",
+    achievementWhoamiTenSkipsSessionDescription: "Skip at least 10 roles in one game.",
+    achievementWhoamiThirtyQuestionsTitle: "Serious interrogation",
+    achievementWhoamiThirtyQuestionsDescription: "Get 30 total Yes/No answers in one game.",
+    achievementWhoamiFiftyQuestionsTitle: "Fifty-question case",
+    achievementWhoamiFiftyQuestionsDescription: "Get 50 total Yes/No answers in one game.",
+    achievementWhoamiYesOnlyTitle: "The universe says yes",
+    achievementWhoamiYesOnlyDescription: "A suspiciously positive interrogation.",
+    achievementWhoamiYesOnlyHint: "Guess at least one role, get 5+ Yes answers and no No answers.",
+    achievementWhoamiNoOnlyTitle: "The universe says no",
+    achievementWhoamiNoOnlyDescription: "The questions were good. Probably.",
+    achievementWhoamiNoOnlyHint: "Guess at least one role, get 5+ No answers and no Yes answers.",
+    achievementWhoamiBalancedQuestionsTitle: "Yes equals no",
+    achievementWhoamiBalancedQuestionsDescription: "Even uncertainty can be perfectly balanced.",
+    achievementWhoamiBalancedQuestionsHint: "Get equal Yes and No answers, at least 5 each.",
+    achievementWhoamiTelepathyThreeTitle: "Almost telepathic",
+    achievementWhoamiTelepathyThreeDescription: "Suspiciously few questions, enough answers.",
+    achievementWhoamiTelepathyThreeHint: "Guess 3+ roles using no more than 5 Yes/No answers.",
+    achievementWhoamiTelepathyFiveTitle: "Part-time telepath",
+    achievementWhoamiTelepathyFiveDescription: "Either talent, or a very familiar group.",
+    achievementWhoamiTelepathyFiveHint: "Guess 5+ roles using no more than 10 Yes/No answers.",
+    achievementWhoamiThirtySecondThreeTitle: "Thirty seconds of fame",
+    achievementWhoamiThirtySecondThreeDescription: "In 30-second timed mode, guess 3+ roles in one game.",
+    achievementWhoamiThirtySecondFiveTitle: "Turbo thinking",
+    achievementWhoamiThirtySecondFiveDescription: "In 30-second timed mode, guess 5+ roles in one game.",
+    achievementWhoamiTwoMinuteTenTitle: "Two-minute detective",
+    achievementWhoamiTwoMinuteTenDescription: "In 120-second timed mode, guess 10+ roles in one game.",
+    achievementWhoamiFourTeamsTitle: "Full squad",
+    achievementWhoamiFourTeamsDescription: "In timed mode with 4 teams, guess 8+ roles.",
+    achievementWhoamiZeroGuessedFiveSkipsTitle: "Who am I? No idea.",
+    achievementWhoamiZeroGuessedFiveSkipsDescription: "Sometimes the game title becomes the answer.",
+    achievementWhoamiZeroGuessedFiveSkipsHint: "Finish a game with no guessed roles and 5+ skips.",
+    achievementWhoamiLuckySevenYesTitle: "Seven yeses",
+    achievementWhoamiLuckySevenYesDescription: "Seven is a suspiciously confident number.",
+    achievementWhoamiLuckySevenYesHint: "Finish a game with exactly 7 Yes answers.",
+    achievementWhoamiSevenCleanTitle: "Seven clean faces",
+    achievementWhoamiSevenCleanDescription: "Almost like someone peeked at the cards.",
+    achievementWhoamiSevenCleanHint: "Guess exactly 7 roles in one game with no skips.",
+    achievementWhoamiPerfectStreakThreeTitle: "Three clean cases in a row",
+    achievementWhoamiPerfectStreakThreeDescription: "Finish 3 games in a row with guesses and no skips.",
+    achievementWhoamiPerfectStreakFiveTitle: "Profiler streak",
+    achievementWhoamiPerfectStreakFiveDescription: "Finish 5 clean Who Am I games in a row.",
+    achievementWhoamiTeamTieTitle: "Nobody wins alone",
+    achievementWhoamiTeamTieDescription: "Sometimes friendship literally wins.",
+    achievementWhoamiTeamTieHint: "Finish a timed team game tied for first place.",
+    achievementAliasExact2Title: "A pair",
+    achievementAliasExact2Description: "A suspiciously precise score.",
+    achievementAliasExact2Hint: "Finish an Alias round with exactly 2 points.",
+    achievementAliasExact4Title: "Four corners",
+    achievementAliasExact4Description: "A suspiciously precise score.",
+    achievementAliasExact4Hint: "Finish an Alias round with exactly 4 points.",
+    achievementAliasExact5Title: "High five",
+    achievementAliasExact5Description: "A suspiciously precise score.",
+    achievementAliasExact5Hint: "Finish an Alias round with exactly 5 points.",
+    achievementAliasExact6Title: "Six pack",
+    achievementAliasExact6Description: "A suspiciously precise score.",
+    achievementAliasExact6Hint: "Finish an Alias round with exactly 6 points.",
+    achievementAliasExact8Title: "Eight tentacles",
+    achievementAliasExact8Description: "A suspiciously precise score.",
+    achievementAliasExact8Hint: "Finish an Alias round with exactly 8 points.",
+    achievementAliasExact9Title: "Nine lives",
+    achievementAliasExact9Description: "A suspiciously precise score.",
+    achievementAliasExact9Hint: "Finish an Alias round with exactly 9 points.",
+    achievementAliasExact11Title: "Starting eleven",
+    achievementAliasExact11Description: "A suspiciously precise score.",
+    achievementAliasExact11Hint: "Finish an Alias round with exactly 11 points.",
+    achievementAliasExact12Title: "Full clock",
+    achievementAliasExact12Description: "A suspiciously precise score.",
+    achievementAliasExact12Hint: "Finish an Alias round with exactly 12 points.",
+    achievementAliasTwoHundredRoundsTitle: "I live here now",
+    achievementAliasTwoHundredRoundsDescription: "Play 200 Alias rounds.",
+    achievementAliasTwoFiftyRoundsTitle: "Basically furniture",
+    achievementAliasTwoFiftyRoundsDescription: "Play 250 Alias rounds.",
+    achievementAliasTwoThousandPointsTitle: "Word bank",
+    achievementAliasTwoThousandPointsDescription: "Score 2,000 Alias points in total.",
+    achievementAliasFiveThousandPointsTitle: "Word inflation",
+    achievementAliasFiveThousandPointsDescription: "Score 5,000 Alias points in total.",
+    achievementAliasTwoFiftySkipsTitle: "The great pass",
+    achievementAliasTwoFiftySkipsDescription: "Accumulate 250 skips in Alias.",
+    achievementAliasHundredCleanRoundsTitle: "Sterile",
+    achievementAliasHundredCleanRoundsDescription: "Finish 100 Alias rounds without skips.",
+    achievementAliasTwentyFiveTenPlusRoundsTitle: "High-speed dictionary",
+    achievementAliasTwentyFiveTenPlusRoundsDescription: "Score 10+ points in 25 Alias rounds.",
+    achievementAliasFiftyTenPlusRoundsTitle: "Non-stop express",
+    achievementAliasFiftyTenPlusRoundsDescription: "Score 10+ points in 50 Alias rounds.",
+    achievementAliasTenTwentyPlusRoundsTitle: "Hyperspace",
+    achievementAliasTenTwentyPlusRoundsDescription: "Score 20+ points in 10 Alias rounds.",
+    achievementAliasTwentyFiveTwentyPlusRoundsTitle: "Off orbit",
+    achievementAliasTwentyFiveTwentyPlusRoundsDescription: "Score 20+ points in 25 Alias rounds.",
+    achievementAliasTenZeroRoundsTitle: "Dictionary black hole",
+    achievementAliasTenZeroRoundsDescription: "Finish ten Alias rounds with zero points.",
+    achievementAliasCleanStreakTenTitle: "Ten spotless rounds",
+    achievementAliasCleanStreakTenDescription: "Finish 10 Alias rounds in a row without skips.",
+    achievementAliasTwentyFiveRoundTitle: "Word tornado",
+    achievementAliasTwentyFiveRoundDescription: "Score 25+ points in one Alias round.",
+    achievementAliasCleanTwentyTitle: "Crystal round",
+    achievementAliasCleanTwentyDescription: "Score 20+ points in an Alias round with no skips.",
+    achievementAliasFifteenSkipsTitle: "Putting out the round",
+    achievementAliasFifteenSkipsDescription: "Make 15+ skips in one Alias round.",
+    achievementAliasThirtyActionsTitle: "Hands, tongue, panic",
+    achievementAliasThirtyActionsDescription: "Have 30+ total points and skips in one round.",
+    achievementAliasSprintFifteenTitle: "Word rocket",
+    achievementAliasSprintFifteenDescription: "Score 15+ points in a 30-second Alias round.",
+    achievementCharadesExact2Title: "Two gestures",
+    achievementCharadesExact2Description: "A suspiciously precise stage score.",
+    achievementCharadesExact2Hint: "Finish a Charades round with exactly 2 points.",
+    achievementCharadesExact4Title: "Four scenes",
+    achievementCharadesExact4Description: "A suspiciously precise stage score.",
+    achievementCharadesExact4Hint: "Finish a Charades round with exactly 4 points.",
+    achievementCharadesExact5Title: "Five acts",
+    achievementCharadesExact5Description: "A suspiciously precise stage score.",
+    achievementCharadesExact5Hint: "Finish a Charades round with exactly 5 points.",
+    achievementCharadesExact6Title: "Six moves",
+    achievementCharadesExact6Description: "A suspiciously precise stage score.",
+    achievementCharadesExact6Hint: "Finish a Charades round with exactly 6 points.",
+    achievementCharadesExact8Title: "Eight arms",
+    achievementCharadesExact8Description: "A suspiciously precise stage score.",
+    achievementCharadesExact8Hint: "Finish a Charades round with exactly 8 points.",
+    achievementCharadesExact9Title: "Take nine",
+    achievementCharadesExact9Description: "A suspiciously precise stage score.",
+    achievementCharadesExact9Hint: "Finish a Charades round with exactly 9 points.",
+    achievementCharadesExact11Title: "Eleven poses",
+    achievementCharadesExact11Description: "A suspiciously precise stage score.",
+    achievementCharadesExact11Hint: "Finish a Charades round with exactly 11 points.",
+    achievementCharadesExact12Title: "Midnight scene",
+    achievementCharadesExact12Description: "A suspiciously precise stage score.",
+    achievementCharadesExact12Hint: "Finish a Charades round with exactly 12 points.",
+    achievementCharadesTwoHundredRoundsTitle: "Full-time actor",
+    achievementCharadesTwoHundredRoundsDescription: "Play 200 Charades rounds.",
+    achievementCharadesTwoFiftyRoundsTitle: "The troupe is family",
+    achievementCharadesTwoFiftyRoundsDescription: "Play 250 Charades rounds.",
+    achievementCharadesTwoThousandPointsTitle: "Your own theatre",
+    achievementCharadesTwoThousandPointsDescription: "Score 2,000 Charades points.",
+    achievementCharadesFiveThousandPointsTitle: "Endless series",
+    achievementCharadesFiveThousandPointsDescription: "Score 5,000 Charades points.",
+    achievementCharadesTwoFiftySkipsTitle: "Script rejected",
+    achievementCharadesTwoFiftySkipsDescription: "Accumulate 250 Charades skips.",
+    achievementCharadesHundredCleanRoundsTitle: "One hundred clean takes",
+    achievementCharadesHundredCleanRoundsDescription: "Finish 100 Charades rounds without skips.",
+    achievementCharadesTwentyFiveEightPlusRoundsTitle: "Feature length",
+    achievementCharadesTwentyFiveEightPlusRoundsDescription: "Score 8+ points in 25 Charades rounds.",
+    achievementCharadesFiftyEightPlusRoundsTitle: "Fifty episodes",
+    achievementCharadesFiftyEightPlusRoundsDescription: "Score 8+ points in 50 Charades rounds.",
+    achievementCharadesTenFifteenPlusRoundsTitle: "Stage star",
+    achievementCharadesTenFifteenPlusRoundsDescription: "Score 15+ points in 10 Charades rounds.",
+    achievementCharadesTwentyFiveFifteenPlusRoundsTitle: "Leading role",
+    achievementCharadesTwentyFiveFifteenPlusRoundsDescription: "Score 15+ points in 25 Charades rounds.",
+    achievementCharadesTenZeroRoundsTitle: "Endless intermission",
+    achievementCharadesTenZeroRoundsDescription: "Finish ten Charades rounds with zero points.",
+    achievementCharadesCleanStreakTenTitle: "Ten perfect takes",
+    achievementCharadesCleanStreakTenDescription: "Finish 10 Charades rounds in a row without skips.",
+    achievementCharadesTwentyRoundTitle: "Theatrical hurricane",
+    achievementCharadesTwentyRoundDescription: "Score 20+ points in one Charades round.",
+    achievementCharadesCleanFifteenTitle: "Perfect take",
+    achievementCharadesCleanFifteenDescription: "Score 15+ points in a Charades round with no skips.",
+    achievementCharadesFifteenSkipsTitle: "Curtain!",
+    achievementCharadesFifteenSkipsDescription: "Make 15+ skips in one Charades round.",
+    achievementCharadesThirtyActionsTitle: "Non-stop dance",
+    achievementCharadesThirtyActionsDescription: "Have 30+ total points and skips in one round.",
+    achievementCharadesSprintTwelveTitle: "Mime at full throttle",
+    achievementCharadesSprintTwelveDescription: "Score 12+ points in a 30-second Charades round.",
+    achievementWhoamiThousandGuessedTitle: "You know everyone",
+    achievementWhoamiThousandGuessedDescription: "Guess 1,000 roles in Who Am I.",
+    achievementWhoamiHundredSkipsTitle: "Identity crisis",
+    achievementWhoamiHundredSkipsDescription: "Accumulate 100 skipped roles.",
+    achievementWhoamiTwoFiftyYesTitle: "The universe agrees",
+    achievementWhoamiTwoFiftyYesDescription: "Get 250 Yes answers.",
+    achievementWhoamiTwoFiftyNoTitle: "Absolute no",
+    achievementWhoamiTwoFiftyNoDescription: "Get 250 No answers.",
+    achievementWhoamiHundredGamesTitle: "Hall of faces",
+    achievementWhoamiHundredGamesDescription: "Play 100 Who Am I games.",
+    achievementWhoamiTwentyFiveTimedTitle: "Chronometer",
+    achievementWhoamiTwentyFiveTimedDescription: "Play 25 timed games.",
+    achievementWhoamiTwentyFivePerfectTitle: "Spotless file",
+    achievementWhoamiTwentyFivePerfectDescription: "Finish 25 clean games without skips.",
+    achievementWhoamiPerfectStreakTenTitle: "Detective streak",
+    achievementWhoamiPerfectStreakTenDescription: "Finish 10 clean games in a row.",
+    achievementWhoamiTwentySessionTitle: "Twenty faces",
+    achievementWhoamiTwentySessionDescription: "Guess 20+ roles in one game.",
+    achievementWhoamiTwentySkipsSessionTitle: "Nobody looks familiar",
+    achievementWhoamiTwentySkipsSessionDescription: "Skip 20+ roles in one game.",
+    achievementWhoamiSeventyFiveQuestionsTitle: "Seventy-five questions",
+    achievementWhoamiSeventyFiveQuestionsDescription: "Get 75+ Yes/No answers in one game.",
+    achievementWhoamiExactOneSessionTitle: "That was the one",
+    achievementWhoamiExactOneSessionDescription: "Sometimes one face is enough.",
+    achievementWhoamiExactOneSessionHint: "Finish a game with exactly 1 guessed role.",
+    achievementWhoamiExactThreeSessionTitle: "Three faces",
+    achievementWhoamiExactThreeSessionDescription: "Three is a crowd too.",
+    achievementWhoamiExactThreeSessionHint: "Finish a game with exactly 3 guessed roles.",
+    achievementWhoamiLuckySevenNoTitle: "Seven noes",
+    achievementWhoamiLuckySevenNoDescription: "Seven is a suspiciously negative number.",
+    achievementWhoamiLuckySevenNoHint: "Finish a game with exactly 7 No answers.",
+    achievementWhoamiThreeThreeTitle: "Three by three",
+    achievementWhoamiThreeThreeDescription: "Symmetry found the faces too.",
+    achievementWhoamiThreeThreeHint: "Finish a game with 3 guessed and 3 skipped roles.",
+    achievementWhoamiEqualGuessedSkippedTitle: "Role mirror",
+    achievementWhoamiEqualGuessedSkippedDescription: "Guesses and skips synced up oddly.",
+    achievementWhoamiEqualGuessedSkippedHint: "Finish with equal guessed and skipped roles, at least 5 each.",
+    achievementWhoamiSixtySecondTenTitle: "Minute of clarity",
+    achievementWhoamiSixtySecondTenDescription: "In 60-second timed mode, guess 10+ roles.",
+    achievementWhoamiNinetySecondTwelveTitle: "Ninety seconds of genius",
+    achievementWhoamiNinetySecondTwelveDescription: "In 90-second timed mode, guess 12+ roles.",
+    achievementWhoamiTwoMinuteFifteenTitle: "Two-minute revelation",
+    achievementWhoamiTwoMinuteFifteenDescription: "In 120-second timed mode, guess 15+ roles.",
+    achievementWhoamiTwoTeamsTenTitle: "Detective duel",
+    achievementWhoamiTwoTeamsTenDescription: "With two teams, guess 10+ roles in total.",
+    achievementWhoamiThreeTeamsTwelveTitle: "Triangle of suspicion",
+    achievementWhoamiThreeTeamsTwelveDescription: "With three teams, guess 12+ roles in total.",
+    achievementWhoamiNoQuestionsThreeTitle: "No questions asked",
+    achievementWhoamiNoQuestionsThreeDescription: "Silence can be oddly effective.",
+    achievementWhoamiNoQuestionsThreeHint: "Guess 3+ roles in a game without using any Yes or No answers.",
     gameDescription: (length, attempts, letterWord, attemptWord, repeatText) => `Guess an English ${length}-letter word in ${attempts} ${attemptWord}. ${repeatText}.`,
     dictionaryStats: (targets, allowed) => `Game dictionary: ${targets} targets · ${allowed} accepted guesses.`,
     shareModeCompact: (length, result, repeats) => `${length} letters · ${result} · ${repeats ? "repeats allowed" : "no repeats"}`,
@@ -1779,6 +3508,372 @@ const WORD_GUESS_TEXT = {
     invalidReactions: ["Oops!", "Nope 😄", "Try again!", "Sneaky 🤨", "Dictionary says hmm"],
   },
 };
+
+// 0.6.5 candidate-3: expanded party achievements and local easter eggs.
+Object.assign(WORD_GUESS_TEXT.uk, {
+  "achievementAliasCatLightningTitle": "Одним «мяу»!",
+  "achievementAliasCatLightningDescription": "Котячі слова інколи пояснюються швидше, ніж встигаєш нявкнути.",
+  "achievementAliasCatLightningHint": "У Alias зарахуй котяче слово «кіт», «кішка», «кот» або «кошка» менш ніж за 5 секунд.",
+  "achievementAliasCapybaraLightningTitle": "Капібара на швидкості",
+  "achievementAliasCapybaraLightningDescription": "Навіть найспокійніша тварина інколи поспішає.",
+  "achievementAliasCapybaraLightningHint": "Зарахуй «капібара» в Alias менш ніж за 6 секунд.",
+  "achievementAliasLongWordTitle": "Довге пояснення коротко",
+  "achievementAliasLongWordDescription": "Зарахуй слово щонайменше з 12 літер.",
+  "achievementAliasUltraLongWordTitle": "Словесний динозавр",
+  "achievementAliasUltraLongWordDescription": "Десь у словнику живе щось дуже довге.",
+  "achievementAliasUltraLongWordHint": "Зарахуй слово щонайменше з 18 літер.",
+  "achievementAliasSlowWordTitle": "Черепашаче осяяння",
+  "achievementAliasSlowWordDescription": "Іноді правильна відповідь любить драматичну паузу.",
+  "achievementAliasSlowWordHint": "Зарахуй одне слово після щонайменше 20 секунд пояснення.",
+  "achievementAliasCatFiveTitle": "Котяча рада",
+  "achievementAliasCatFiveDescription": "Зарахуй сумарно 5 котячих слів у Alias.",
+  "achievementAliasFast25Title": "Словесний болід",
+  "achievementAliasFast25Description": "Зарахуй сумарно 25 слів не довше ніж за 6 секунд кожне.",
+  "achievementAliasLong25Title": "Любитель довгих слів",
+  "achievementAliasLong25Description": "Зарахуй сумарно 25 слів довжиною від 12 літер.",
+  "achievementAliasAnimal50Title": "Зоопарк пояснень",
+  "achievementAliasAnimal50Description": "Зарахуй сумарно 50 слів із теми «Тварини».",
+  "achievementAliasSpecialFiveTitle": "Локальна легенда",
+  "achievementAliasSpecialFiveDescription": "Котики й капібари щось явно задумали.",
+  "achievementAliasSpecialFiveHint": "Зарахуй сумарно 5 спеціальних котячих/капібарних слів.",
+  "achievementAliasThreeLongRoundTitle": "Три словесні потяги",
+  "achievementAliasThreeLongRoundDescription": "За один раунд зарахуй 3 слова довжиною від 12 літер.",
+  "achievementAliasFiveShortRoundTitle": "Горошини",
+  "achievementAliasFiveShortRoundDescription": "За один раунд зарахуй 5 коротких слів до 5 літер.",
+  "achievementAliasAnimalTrioTitle": "Звіряча трійця",
+  "achievementAliasAnimalTrioDescription": "За один раунд зарахуй 3 слова з теми «Тварини».",
+  "achievementAliasFoodTrioTitle": "Три страви на словах",
+  "achievementAliasFoodTrioDescription": "За один раунд зарахуй 3 слова з теми «Їжа».",
+  "achievementAliasSportTrioTitle": "Словесний хет-трик",
+  "achievementAliasSportTrioDescription": "За один раунд зарахуй 3 слова з теми «Спорт».",
+  "achievementAliasProfessionTrioTitle": "Робоча зміна",
+  "achievementAliasProfessionTrioDescription": "За один раунд зарахуй 3 слова з теми «Професії».",
+  "achievementAliasSameInitialThreeTitle": "Три на одну літеру",
+  "achievementAliasSameInitialThreeDescription": "Алфавіт іноді заїдає.",
+  "achievementAliasSameInitialThreeHint": "Зарахуй 3 слова поспіль, що починаються з однакової літери.",
+  "achievementAliasUniqueInitialTenTitle": "Десять стартів",
+  "achievementAliasUniqueInitialTenDescription": "За один раунд зарахуй 10 слів із 10 різними першими літерами.",
+  "achievementAliasAllLongEightTitle": "Без коротких шляхів",
+  "achievementAliasAllLongEightDescription": "Зарахуй 8+ слів за раунд, і кожне має бути не коротше 7 літер.",
+  "achievementAliasSingleCategoryTenTitle": "Тематичний моноліт",
+  "achievementAliasSingleCategoryTenDescription": "Зарахуй 10+ слів за раунд, усі з однієї теми.",
+  "achievementAliasTwoCategoriesTwelveTitle": "Дві теми — дванадцять слів",
+  "achievementAliasTwoCategoriesTwelveDescription": "Зарахуй 12+ слів, використавши не більше двох тем.",
+  "achievementAliasEasyFifteenTitle": "Легко сказати",
+  "achievementAliasEasyFifteenDescription": "На складності «Легко» зарахуй 15+ слів за раунд.",
+  "achievementAliasMediumFifteenTitle": "Середня швидкість",
+  "achievementAliasMediumFifteenDescription": "На складності «Середньо» зарахуй 15+ слів за раунд.",
+  "achievementAliasHardFifteenTitle": "Кам’яний язик",
+  "achievementAliasHardFifteenDescription": "На складності «Складно» зарахуй 15+ слів за раунд.",
+  "achievementAliasCleanEighteenTitle": "Вісімнадцять без пасу",
+  "achievementAliasCleanEighteenDescription": "Зарахуй 18+ слів за один раунд без пропусків.",
+  "achievementAliasOneSkipFifteenTitle": "Один квиток на вихід",
+  "achievementAliasOneSkipFifteenDescription": "Зарахуй 15+ слів за раунд рівно з одним пропуском.",
+  "achievementAliasFortyActionsTitle": "Словесний конвеєр",
+  "achievementAliasFortyActionsDescription": "Зроби 40+ зарахувань і пропусків сумарно за один раунд.",
+  "achievementAliasMinuteFifteenTitle": "П’ятнадцять за хвилину",
+  "achievementAliasMinuteFifteenDescription": "У 60-секундному раунді зарахуй 15+ слів.",
+  "achievementAliasNinetyTwentyTitle": "Двадцятка за півтори",
+  "achievementAliasNinetyTwentyDescription": "У 90-секундному раунді зарахуй 20+ слів.",
+  "achievementAliasTwoMinuteTwentyFiveTitle": "Двадцять п’ять за дві",
+  "achievementAliasTwoMinuteTwentyFiveDescription": "У 120-секундному раунді зарахуй 25+ слів.",
+  "achievementCharadesCapybaraFastTitle": "Швидка капібара",
+  "achievementCharadesCapybaraFastDescription": "Вона просто пропливла через сцену.",
+  "achievementCharadesCapybaraFastHint": "Зарахуй «капібара» у Крокодилі менш ніж за 8 секунд.",
+  "achievementCharadesLongPromptTitle": "Повнометражна пантоміма",
+  "achievementCharadesLongPromptDescription": "Зарахуй завдання довжиною від 18 літер без пробілів.",
+  "achievementCharadesUltraLongPromptTitle": "Режисерська версія",
+  "achievementCharadesUltraLongPromptDescription": "Це вже майже сценарій.",
+  "achievementCharadesUltraLongPromptHint": "Зарахуй завдання довжиною від 28 літер без пробілів.",
+  "achievementCharadesThreeLongRoundTitle": "Три довгі сцени",
+  "achievementCharadesThreeLongRoundDescription": "За раунд зарахуй 3 завдання довжиною від 18 літер.",
+  "achievementCharadesAnimalTrioTitle": "Зоопарк на сцені",
+  "achievementCharadesAnimalTrioDescription": "За один раунд зарахуй 3 завдання з теми «Тварини».",
+  "achievementCharadesSameInitialThreeTitle": "Три сцени на одну літеру",
+  "achievementCharadesSameInitialThreeDescription": "Навіть алфавіт став режисером.",
+  "achievementCharadesSameInitialThreeHint": "Зарахуй 3 завдання поспіль з однаковою першою літерою.",
+  "achievementCharadesUniqueInitialEightTitle": "Вісім різних виходів",
+  "achievementCharadesUniqueInitialEightDescription": "За один раунд зарахуй 8 завдань із різними першими літерами.",
+  "achievementCharadesSingleCategoryEightTitle": "Одна сцена — одна тема",
+  "achievementCharadesSingleCategoryEightDescription": "Зарахуй 8+ завдань за раунд з однієї теми.",
+  "achievementCharadesEasyTenTitle": "Легка сцена",
+  "achievementCharadesEasyTenDescription": "На складності «Легко» зарахуй 10+ завдань.",
+  "achievementCharadesMediumTenTitle": "Середній план",
+  "achievementCharadesMediumTenDescription": "На складності «Середньо» зарахуй 10+ завдань.",
+  "achievementCharadesHardTenTitle": "Театр високої складності",
+  "achievementCharadesHardTenDescription": "На складності «Складно» зарахуй 10+ завдань.",
+  "achievementCharadesCleanTwelvePlusTitle": "Дванадцять без монтажу",
+  "achievementCharadesCleanTwelvePlusDescription": "Зарахуй 12+ завдань без жодного пропуску.",
+  "achievementCharadesSpecialThreeTitle": "Гастролі пасхалок",
+  "achievementCharadesSpecialThreeDescription": "Деякі персонажі повертаються на сцену.",
+  "achievementCharadesSpecialThreeHint": "Зарахуй сумарно 3 особливі тваринні завдання: котячі слова або «капібара».",
+  "achievementWhoamiCatRoleTitle": "Мяу, це я?",
+  "achievementWhoamiCatRoleDescription": "Підозріло пухнаста особистість.",
+  "achievementWhoamiCatRoleHint": "Правильно відгадай роль «кіт», «кішка», «кот» або «кошка» у «Хто я?».",
+  "achievementWhoamiCapybaraRoleTitle": "Абсолютний спокій",
+  "achievementWhoamiCapybaraRoleDescription": "Нарешті роль, яка не нервує через питання.",
+  "achievementWhoamiCapybaraRoleHint": "Правильно відгадай роль «капібара» у «Хто я?».",
+  "achievementWhoamiCatFiveTitle": "П’ять життів",
+  "achievementWhoamiCatFiveDescription": "Правильно відгадай 5 котячих ролей сумарно.",
+  "achievementWhoamiExactNineYesTitle": "Дев’ять «так»",
+  "achievementWhoamiExactNineYesDescription": "Рівно дев’ять. Не вісім і не десять.",
+  "achievementWhoamiExactNineYesHint": "Заверши партію з рівно 9 відповідями «так».",
+  "achievementWhoamiExactNineNoTitle": "Дев’ять «ні»",
+  "achievementWhoamiExactNineNoDescription": "Відмова теж може бути мистецтвом.",
+  "achievementWhoamiExactNineNoHint": "Заверши партію з рівно 9 відповідями «ні».",
+  "achievementWhoamiThirteenQuestionsTitle": "Тринадцяте питання",
+  "achievementWhoamiThirteenQuestionsDescription": "Хтось усе-таки ризикнув.",
+  "achievementWhoamiThirteenQuestionsHint": "Заверши партію з рівно 13 відповідями «так» + «ні».",
+  "achievementWhoamiNoQuestionsFiveTitle": "Телепатія x5",
+  "achievementWhoamiNoQuestionsFiveDescription": "Питання? Які питання?",
+  "achievementWhoamiNoQuestionsFiveHint": "Відгадай 5+ ролей у партії без жодної відповіді «так» або «ні».",
+  "achievementWhoamiSpecialFiveTitle": "Звірине досьє",
+  "achievementWhoamiSpecialFiveDescription": "Котики й капібари вже мають окрему папку.",
+  "achievementWhoamiSpecialFiveHint": "Сумарно відгадай 5 особливих ролей: котячих або «капібара».",
+});
+Object.assign(WORD_GUESS_TEXT.ru, {
+  "achievementAliasCatLightningTitle": "Одним «мяу»!",
+  "achievementAliasCatLightningDescription": "Кошачьи слова иногда объясняются быстрее, чем успеваешь мяукнуть.",
+  "achievementAliasCatLightningHint": "В Alias зачти кошачье слово «кіт», «кішка», «кот» или «кошка» быстрее чем за 5 секунд.",
+  "achievementAliasCapybaraLightningTitle": "Капибара на скорости",
+  "achievementAliasCapybaraLightningDescription": "Даже самое спокойное животное иногда спешит.",
+  "achievementAliasCapybaraLightningHint": "Зачти «капібара» в Alias быстрее чем за 6 секунд.",
+  "achievementAliasLongWordTitle": "Длинное слово — короткое объяснение",
+  "achievementAliasLongWordDescription": "Зачти слово длиной не менее 12 букв.",
+  "achievementAliasUltraLongWordTitle": "Словесный динозавр",
+  "achievementAliasUltraLongWordDescription": "Где-то в словаре живёт что-то очень длинное.",
+  "achievementAliasUltraLongWordHint": "Зачти слово длиной не менее 18 букв.",
+  "achievementAliasSlowWordTitle": "Черепашье озарение",
+  "achievementAliasSlowWordDescription": "Иногда правильному ответу нужна драматическая пауза.",
+  "achievementAliasSlowWordHint": "Зачти слово после как минимум 20 секунд объяснения.",
+  "achievementAliasCatFiveTitle": "Кошачий совет",
+  "achievementAliasCatFiveDescription": "Зачти суммарно 5 кошачьих слов в Alias.",
+  "achievementAliasFast25Title": "Словесный болид",
+  "achievementAliasFast25Description": "Зачти суммарно 25 слов, каждое не дольше чем за 6 секунд.",
+  "achievementAliasLong25Title": "Любитель длинных слов",
+  "achievementAliasLong25Description": "Зачти суммарно 25 слов длиной от 12 букв.",
+  "achievementAliasAnimal50Title": "Зоопарк объяснений",
+  "achievementAliasAnimal50Description": "Зачти суммарно 50 слов из темы «Животные».",
+  "achievementAliasSpecialFiveTitle": "Локальная легенда",
+  "achievementAliasSpecialFiveDescription": "Котики и капибары явно что-то задумали.",
+  "achievementAliasSpecialFiveHint": "Зачти суммарно 5 специальных кошачьих/капибарных слов.",
+  "achievementAliasThreeLongRoundTitle": "Три словесных поезда",
+  "achievementAliasThreeLongRoundDescription": "За один раунд зачти 3 слова длиной от 12 букв.",
+  "achievementAliasFiveShortRoundTitle": "Горошины",
+  "achievementAliasFiveShortRoundDescription": "За один раунд зачти 5 коротких слов до 5 букв.",
+  "achievementAliasAnimalTrioTitle": "Звериная троица",
+  "achievementAliasAnimalTrioDescription": "За один раунд зачти 3 слова из темы «Животные».",
+  "achievementAliasFoodTrioTitle": "Три блюда на словах",
+  "achievementAliasFoodTrioDescription": "За один раунд зачти 3 слова из темы «Еда».",
+  "achievementAliasSportTrioTitle": "Словесный хет-трик",
+  "achievementAliasSportTrioDescription": "За один раунд зачти 3 слова из темы «Спорт».",
+  "achievementAliasProfessionTrioTitle": "Рабочая смена",
+  "achievementAliasProfessionTrioDescription": "За один раунд зачти 3 слова из темы «Профессии».",
+  "achievementAliasSameInitialThreeTitle": "Три на одну букву",
+  "achievementAliasSameInitialThreeDescription": "Алфавит иногда заедает.",
+  "achievementAliasSameInitialThreeHint": "Зачти 3 слова подряд, начинающихся с одной буквы.",
+  "achievementAliasUniqueInitialTenTitle": "Десять стартов",
+  "achievementAliasUniqueInitialTenDescription": "За один раунд зачти 10 слов с 10 разными первыми буквами.",
+  "achievementAliasAllLongEightTitle": "Без коротких путей",
+  "achievementAliasAllLongEightDescription": "Зачти 8+ слов за раунд, каждое не короче 7 букв.",
+  "achievementAliasSingleCategoryTenTitle": "Тематический монолит",
+  "achievementAliasSingleCategoryTenDescription": "Зачти 10+ слов за раунд, все из одной темы.",
+  "achievementAliasTwoCategoriesTwelveTitle": "Две темы — двенадцать слов",
+  "achievementAliasTwoCategoriesTwelveDescription": "Зачти 12+ слов, используя не больше двух тем.",
+  "achievementAliasEasyFifteenTitle": "Легко сказать",
+  "achievementAliasEasyFifteenDescription": "На сложности «Легко» зачти 15+ слов за раунд.",
+  "achievementAliasMediumFifteenTitle": "Средняя скорость",
+  "achievementAliasMediumFifteenDescription": "На сложности «Средне» зачти 15+ слов за раунд.",
+  "achievementAliasHardFifteenTitle": "Каменный язык",
+  "achievementAliasHardFifteenDescription": "На сложности «Сложно» зачти 15+ слов за раунд.",
+  "achievementAliasCleanEighteenTitle": "Восемнадцать без паса",
+  "achievementAliasCleanEighteenDescription": "Зачти 18+ слов за один раунд без пропусков.",
+  "achievementAliasOneSkipFifteenTitle": "Один билет на выход",
+  "achievementAliasOneSkipFifteenDescription": "Зачти 15+ слов за раунд ровно с одним пропуском.",
+  "achievementAliasFortyActionsTitle": "Словесный конвейер",
+  "achievementAliasFortyActionsDescription": "Сделай 40+ зачётов и пропусков суммарно за один раунд.",
+  "achievementAliasMinuteFifteenTitle": "Пятнадцать за минуту",
+  "achievementAliasMinuteFifteenDescription": "В 60-секундном раунде зачти 15+ слов.",
+  "achievementAliasNinetyTwentyTitle": "Двадцатка за полторы",
+  "achievementAliasNinetyTwentyDescription": "В 90-секундном раунде зачти 20+ слов.",
+  "achievementAliasTwoMinuteTwentyFiveTitle": "Двадцать пять за две",
+  "achievementAliasTwoMinuteTwentyFiveDescription": "В 120-секундном раунде зачти 25+ слов.",
+  "achievementCharadesCapybaraFastTitle": "Быстрая капибара",
+  "achievementCharadesCapybaraFastDescription": "Она просто проплыла через сцену.",
+  "achievementCharadesCapybaraFastHint": "Зачти «капібара» в Крокодиле быстрее чем за 8 секунд.",
+  "achievementCharadesLongPromptTitle": "Полнометражная пантомима",
+  "achievementCharadesLongPromptDescription": "Зачти задание длиной от 18 букв без пробелов.",
+  "achievementCharadesUltraLongPromptTitle": "Режиссёрская версия",
+  "achievementCharadesUltraLongPromptDescription": "Это уже почти сценарий.",
+  "achievementCharadesUltraLongPromptHint": "Зачти задание длиной от 28 букв без пробелов.",
+  "achievementCharadesThreeLongRoundTitle": "Три длинные сцены",
+  "achievementCharadesThreeLongRoundDescription": "За раунд зачти 3 задания длиной от 18 букв.",
+  "achievementCharadesAnimalTrioTitle": "Зоопарк на сцене",
+  "achievementCharadesAnimalTrioDescription": "За один раунд зачти 3 задания из темы «Животные».",
+  "achievementCharadesSameInitialThreeTitle": "Три сцены на одну букву",
+  "achievementCharadesSameInitialThreeDescription": "Даже алфавит стал режиссёром.",
+  "achievementCharadesSameInitialThreeHint": "Зачти 3 задания подряд с одинаковой первой буквой.",
+  "achievementCharadesUniqueInitialEightTitle": "Восемь разных выходов",
+  "achievementCharadesUniqueInitialEightDescription": "За один раунд зачти 8 заданий с разными первыми буквами.",
+  "achievementCharadesSingleCategoryEightTitle": "Одна сцена — одна тема",
+  "achievementCharadesSingleCategoryEightDescription": "Зачти 8+ заданий за раунд из одной темы.",
+  "achievementCharadesEasyTenTitle": "Лёгкая сцена",
+  "achievementCharadesEasyTenDescription": "На сложности «Легко» зачти 10+ заданий.",
+  "achievementCharadesMediumTenTitle": "Средний план",
+  "achievementCharadesMediumTenDescription": "На сложности «Средне» зачти 10+ заданий.",
+  "achievementCharadesHardTenTitle": "Театр высокой сложности",
+  "achievementCharadesHardTenDescription": "На сложности «Сложно» зачти 10+ заданий.",
+  "achievementCharadesCleanTwelvePlusTitle": "Двенадцать без монтажа",
+  "achievementCharadesCleanTwelvePlusDescription": "Зачти 12+ заданий без единого пропуска.",
+  "achievementCharadesSpecialThreeTitle": "Гастроли пасхалок",
+  "achievementCharadesSpecialThreeDescription": "Некоторые персонажи возвращаются на сцену.",
+  "achievementCharadesSpecialThreeHint": "Зачти суммарно 3 особых задания с животными: кошачьи слова или «капібара».",
+  "achievementWhoamiCatRoleTitle": "Мяу, это я?",
+  "achievementWhoamiCatRoleDescription": "Подозрительно пушистая личность.",
+  "achievementWhoamiCatRoleHint": "Правильно угадай роль «кіт», «кішка», «кот» или «кошка» в «Кто я?».",
+  "achievementWhoamiCapybaraRoleTitle": "Абсолютное спокойствие",
+  "achievementWhoamiCapybaraRoleDescription": "Наконец роль, которая не нервничает из-за вопросов.",
+  "achievementWhoamiCapybaraRoleHint": "Правильно угадай роль «капібара» в «Кто я?».",
+  "achievementWhoamiCatFiveTitle": "Пять жизней",
+  "achievementWhoamiCatFiveDescription": "Правильно угадай 5 кошачьих ролей суммарно.",
+  "achievementWhoamiExactNineYesTitle": "Девять «да»",
+  "achievementWhoamiExactNineYesDescription": "Ровно девять. Не восемь и не десять.",
+  "achievementWhoamiExactNineYesHint": "Заверши игру ровно с 9 ответами «да».",
+  "achievementWhoamiExactNineNoTitle": "Девять «нет»",
+  "achievementWhoamiExactNineNoDescription": "Отказ тоже может быть искусством.",
+  "achievementWhoamiExactNineNoHint": "Заверши игру ровно с 9 ответами «нет».",
+  "achievementWhoamiThirteenQuestionsTitle": "Тринадцатый вопрос",
+  "achievementWhoamiThirteenQuestionsDescription": "Кто-то всё-таки рискнул.",
+  "achievementWhoamiThirteenQuestionsHint": "Заверши игру ровно с 13 ответами «да» + «нет».",
+  "achievementWhoamiNoQuestionsFiveTitle": "Телепатия x5",
+  "achievementWhoamiNoQuestionsFiveDescription": "Вопросы? Какие вопросы?",
+  "achievementWhoamiNoQuestionsFiveHint": "Угадай 5+ ролей в игре без единого ответа «да» или «нет».",
+  "achievementWhoamiSpecialFiveTitle": "Звериное досье",
+  "achievementWhoamiSpecialFiveDescription": "Котики и капибары уже получили отдельную папку.",
+  "achievementWhoamiSpecialFiveHint": "Суммарно угадай 5 особых ролей: кошачьих или «капібара».",
+});
+Object.assign(WORD_GUESS_TEXT.en, {
+  "achievementAliasCatLightningTitle": "One meow!",
+  "achievementAliasCatLightningDescription": "Cat words can be explained before you even finish a meow.",
+  "achievementAliasCatLightningHint": "In Alias, score a regular cat word in under 5 seconds.",
+  "achievementAliasCapybaraLightningTitle": "Speedy capybara",
+  "achievementAliasCapybaraLightningDescription": "Even the calmest animal can hurry sometimes.",
+  "achievementAliasCapybaraLightningHint": "Score “capybara” in Alias in under 6 seconds.",
+  "achievementAliasLongWordTitle": "Long word, short explanation",
+  "achievementAliasLongWordDescription": "Score a word with at least 12 letters.",
+  "achievementAliasUltraLongWordTitle": "Word dinosaur",
+  "achievementAliasUltraLongWordDescription": "Something very long is hiding in the dictionary.",
+  "achievementAliasUltraLongWordHint": "Score a word with at least 18 letters.",
+  "achievementAliasSlowWordTitle": "Turtle revelation",
+  "achievementAliasSlowWordDescription": "Sometimes the right answer needs a dramatic pause.",
+  "achievementAliasSlowWordHint": "Score a word after at least 20 seconds of explaining.",
+  "achievementAliasCatFiveTitle": "Cat council",
+  "achievementAliasCatFiveDescription": "Score 5 cat-related words in Alias in total.",
+  "achievementAliasFast25Title": "Word racer",
+  "achievementAliasFast25Description": "Score 25 words in total, each within 6 seconds.",
+  "achievementAliasLong25Title": "Long-word lover",
+  "achievementAliasLong25Description": "Score 25 words of at least 12 letters in total.",
+  "achievementAliasAnimal50Title": "Explanation zoo",
+  "achievementAliasAnimal50Description": "Score 50 words from the Animals topic in total.",
+  "achievementAliasSpecialFiveTitle": "Local legend",
+  "achievementAliasSpecialFiveDescription": "Cats and capybaras are clearly plotting something.",
+  "achievementAliasSpecialFiveHint": "Score 5 special cat/capybara words in total.",
+  "achievementAliasThreeLongRoundTitle": "Three word trains",
+  "achievementAliasThreeLongRoundDescription": "In one round, score 3 words of at least 12 letters.",
+  "achievementAliasFiveShortRoundTitle": "Word beans",
+  "achievementAliasFiveShortRoundDescription": "In one round, score 5 short words of up to 5 letters.",
+  "achievementAliasAnimalTrioTitle": "Animal trio",
+  "achievementAliasAnimalTrioDescription": "In one round, score 3 words from Animals.",
+  "achievementAliasFoodTrioTitle": "Three dishes in words",
+  "achievementAliasFoodTrioDescription": "In one round, score 3 words from Food.",
+  "achievementAliasSportTrioTitle": "Verbal hat trick",
+  "achievementAliasSportTrioDescription": "In one round, score 3 words from Sport.",
+  "achievementAliasProfessionTrioTitle": "Work shift",
+  "achievementAliasProfessionTrioDescription": "In one round, score 3 words from Professions.",
+  "achievementAliasSameInitialThreeTitle": "Three with one initial",
+  "achievementAliasSameInitialThreeDescription": "Sometimes the alphabet gets stuck.",
+  "achievementAliasSameInitialThreeHint": "Score 3 consecutive words starting with the same letter.",
+  "achievementAliasUniqueInitialTenTitle": "Ten starts",
+  "achievementAliasUniqueInitialTenDescription": "In one round, score 10 words with 10 different first letters.",
+  "achievementAliasAllLongEightTitle": "No shortcuts",
+  "achievementAliasAllLongEightDescription": "Score 8+ words in a round and make every word at least 7 letters long.",
+  "achievementAliasSingleCategoryTenTitle": "Topic monolith",
+  "achievementAliasSingleCategoryTenDescription": "Score 10+ words in a round, all from one topic.",
+  "achievementAliasTwoCategoriesTwelveTitle": "Two topics, twelve words",
+  "achievementAliasTwoCategoriesTwelveDescription": "Score 12+ words while using no more than two topics.",
+  "achievementAliasEasyFifteenTitle": "Easy to say",
+  "achievementAliasEasyFifteenDescription": "On Easy difficulty, score 15+ words in one round.",
+  "achievementAliasMediumFifteenTitle": "Medium velocity",
+  "achievementAliasMediumFifteenDescription": "On Medium difficulty, score 15+ words in one round.",
+  "achievementAliasHardFifteenTitle": "Stone tongue",
+  "achievementAliasHardFifteenDescription": "On Hard difficulty, score 15+ words in one round.",
+  "achievementAliasCleanEighteenTitle": "Eighteen, no passes",
+  "achievementAliasCleanEighteenDescription": "Score 18+ words in one round without a skip.",
+  "achievementAliasOneSkipFifteenTitle": "One ticket out",
+  "achievementAliasOneSkipFifteenDescription": "Score 15+ words in one round with exactly one skip.",
+  "achievementAliasFortyActionsTitle": "Word conveyor",
+  "achievementAliasFortyActionsDescription": "Make 40+ scored words and skips combined in one round.",
+  "achievementAliasMinuteFifteenTitle": "Fifteen in a minute",
+  "achievementAliasMinuteFifteenDescription": "In a 60-second round, score 15+ words.",
+  "achievementAliasNinetyTwentyTitle": "Twenty in ninety",
+  "achievementAliasNinetyTwentyDescription": "In a 90-second round, score 20+ words.",
+  "achievementAliasTwoMinuteTwentyFiveTitle": "Twenty-five in two",
+  "achievementAliasTwoMinuteTwentyFiveDescription": "In a 120-second round, score 25+ words.",
+  "achievementCharadesCapybaraFastTitle": "Fast capybara",
+  "achievementCharadesCapybaraFastDescription": "It simply swam through the scene.",
+  "achievementCharadesCapybaraFastHint": "Score “capybara” in Charades in under 8 seconds.",
+  "achievementCharadesLongPromptTitle": "Feature-length pantomime",
+  "achievementCharadesLongPromptDescription": "Score a prompt with at least 18 letters excluding spaces.",
+  "achievementCharadesUltraLongPromptTitle": "Director cut",
+  "achievementCharadesUltraLongPromptDescription": "This is almost a screenplay.",
+  "achievementCharadesUltraLongPromptHint": "Score a prompt with at least 28 letters excluding spaces.",
+  "achievementCharadesThreeLongRoundTitle": "Three long scenes",
+  "achievementCharadesThreeLongRoundDescription": "In one round, score 3 prompts with at least 18 letters.",
+  "achievementCharadesAnimalTrioTitle": "Zoo on stage",
+  "achievementCharadesAnimalTrioDescription": "In one round, score 3 prompts from Animals.",
+  "achievementCharadesSameInitialThreeTitle": "Three scenes, one initial",
+  "achievementCharadesSameInitialThreeDescription": "Even the alphabet became a director.",
+  "achievementCharadesSameInitialThreeHint": "Score 3 consecutive prompts starting with the same letter.",
+  "achievementCharadesUniqueInitialEightTitle": "Eight different entrances",
+  "achievementCharadesUniqueInitialEightDescription": "In one round, score 8 prompts with different first letters.",
+  "achievementCharadesSingleCategoryEightTitle": "One stage, one topic",
+  "achievementCharadesSingleCategoryEightDescription": "Score 8+ prompts in a round from a single topic.",
+  "achievementCharadesEasyTenTitle": "Easy scene",
+  "achievementCharadesEasyTenDescription": "On Easy difficulty, score 10+ prompts.",
+  "achievementCharadesMediumTenTitle": "Medium shot",
+  "achievementCharadesMediumTenDescription": "On Medium difficulty, score 10+ prompts.",
+  "achievementCharadesHardTenTitle": "High-difficulty theatre",
+  "achievementCharadesHardTenDescription": "On Hard difficulty, score 10+ prompts.",
+  "achievementCharadesCleanTwelvePlusTitle": "Twelve without cuts",
+  "achievementCharadesCleanTwelvePlusDescription": "Score 12+ prompts without a single skip.",
+  "achievementCharadesSpecialThreeTitle": "Easter-egg tour",
+  "achievementCharadesSpecialThreeDescription": "Some characters keep returning to the stage.",
+  "achievementCharadesSpecialThreeHint": "Score 3 special animal prompts in total: cat words or “capybara”.",
+  "achievementWhoamiCatRoleTitle": "Meow, is that me?",
+  "achievementWhoamiCatRoleDescription": "A suspiciously fluffy identity.",
+  "achievementWhoamiCatRoleHint": "Correctly guess a cat role in Who Am I?",
+  "achievementWhoamiCapybaraRoleTitle": "Absolute calm",
+  "achievementWhoamiCapybaraRoleDescription": "Finally, a role that does not panic over questions.",
+  "achievementWhoamiCapybaraRoleHint": "Correctly guess “capybara” in Who Am I?",
+  "achievementWhoamiCatFiveTitle": "Five lives",
+  "achievementWhoamiCatFiveDescription": "Correctly guess 5 cat roles in total.",
+  "achievementWhoamiExactNineYesTitle": "Nine yeses",
+  "achievementWhoamiExactNineYesDescription": "Exactly nine. Not eight, not ten.",
+  "achievementWhoamiExactNineYesHint": "Finish a game with exactly 9 Yes answers.",
+  "achievementWhoamiExactNineNoTitle": "Nine noes",
+  "achievementWhoamiExactNineNoDescription": "Refusal can be an art form too.",
+  "achievementWhoamiExactNineNoHint": "Finish a game with exactly 9 No answers.",
+  "achievementWhoamiThirteenQuestionsTitle": "The thirteenth question",
+  "achievementWhoamiThirteenQuestionsDescription": "Someone took the risk.",
+  "achievementWhoamiThirteenQuestionsHint": "Finish a game with exactly 13 Yes + No answers.",
+  "achievementWhoamiNoQuestionsFiveTitle": "Telepathy x5",
+  "achievementWhoamiNoQuestionsFiveDescription": "Questions? What questions?",
+  "achievementWhoamiNoQuestionsFiveHint": "Guess 5+ roles in a game without any Yes or No answers.",
+  "achievementWhoamiSpecialFiveTitle": "Animal dossier",
+  "achievementWhoamiSpecialFiveDescription": "Cats and capybaras already have their own file.",
+  "achievementWhoamiSpecialFiveHint": "Guess 5 special roles in total: cats or capybara.",
+});
+
 const WORD_GUESS_STATUS_PRIORITY = {
   absent: 1,
   present: 2,
@@ -1887,7 +3982,11 @@ let playedRounds = 0;
 let isRoundReviewWordsExpanded = false;
 
 let deck = [];
+let sessionContentExposureCounts = Object.create(null);
+let sessionContentExposureLastSeen = Object.create(null);
+let sessionContentExposureSequence = 0;
 let currentWord = "";
+let currentWordShownAtMs = 0;
 let currentEntry = null;
 let roundWords = [];
 let isAwaitingLastWordResult = false;
@@ -1899,6 +3998,7 @@ let timerId = null;
 let roundTimerDeadlineMs = 0;
 let roundTimerRemainingMs = 60000;
 let roundTimerLastCountdownSecond = null;
+let aliasTimerUrgencyLastVisualSecond = null;
 let roundTimerIsActive = false;
 let roundTimerPauseReasons = {};
 let roundTimerFinishStarted = false;
@@ -1979,6 +4079,7 @@ let wordGuessFirstHintUsedGuessCount = -1;
 let wordGuessSecondHintUsedGuessCount = -1;
 let wordGuessThirdHintUsedGuessCount = -1;
 let wordGuessAchievementCardTapCounts = {};
+let wordGuessAchievementsModalGameId = "all";
 let wordGuessAchievementsModalCategoryId = WORD_GUESS_ACHIEVEMENT_CATEGORIES[0].id;
 let wordGuessAchievementsModalSearchQuery = "";
 let wordGuessAchievementsModalRenderLimit = 36;
@@ -2021,6 +4122,11 @@ let whoAmITimerPauseReasons = {};
 let whoAmITimedRoles = [];
 let whoAmITimedTeamIndex = 0;
 let whoAmIResultMode = "continue";
+let whoAmIAchievementSessionGuessed = 0;
+let whoAmIAchievementSessionSkipped = 0;
+let whoAmIAchievementSessionYes = 0;
+let whoAmIAchievementSessionNo = 0;
+let whoAmIAchievementGameRecorded = false;
 let whoAmIFlowStage = "";
 let whoAmISpoilerTimeoutId = null;
 let whoAmIActiveSpoilerButton = null;
@@ -2176,6 +4282,7 @@ const achievementsModalProgress = document.getElementById("achievementsModalProg
 const achievementsModalCopy = document.getElementById("achievementsModalCopy");
 const achievementsModalSearchLabel = document.getElementById("achievementsModalSearchLabel");
 const achievementsModalSearchInput = document.getElementById("achievementsModalSearch");
+const achievementsModalGameNav = document.getElementById("achievementsModalGameNav");
 const achievementsModalCategoryNav = document.getElementById("achievementsModalCategoryNav");
 const achievementsModalGrid = document.getElementById("achievementsModalGrid");
 const achievementDetailModal = document.getElementById("achievementDetailModal");
@@ -3803,7 +5910,7 @@ function readWordGuessAchievementsState() {
     en: { "5": 0, "6": 0, "7": 0 },
   };
   const emptyState = {
-    schemaVersion: 5,
+    schemaVersion: 7,
     unlocked: {},
     revealedHints: {},
     viewedAchievements: {},
@@ -3841,6 +5948,46 @@ function readWordGuessAchievementsState() {
     wordLikes: 0,
     wordDislikes: 0,
     shareCount: 0,
+    aliasRounds: 0,
+    aliasPoints: 0,
+    aliasSkips: 0,
+    aliasCleanRounds: 0,
+    aliasTenPlusRounds: 0,
+    aliasTwentyPlusRounds: 0,
+    aliasZeroRounds: 0,
+    aliasCurrentCleanStreak: 0,
+    aliasBestCleanStreak: 0,
+    aliasFastWords: 0,
+    aliasLongWords: 0,
+    aliasAnimalWords: 0,
+    aliasCatWords: 0,
+    aliasCapybaraWords: 0,
+    aliasSpecialWords: 0,
+    charadesRounds: 0,
+    charadesPoints: 0,
+    charadesSkips: 0,
+    charadesCleanRounds: 0,
+    charadesEightPlusRounds: 0,
+    charadesFifteenPlusRounds: 0,
+    charadesZeroRounds: 0,
+    charadesCurrentCleanStreak: 0,
+    charadesBestCleanStreak: 0,
+    charadesLongWords: 0,
+    charadesAnimalWords: 0,
+    charadesCapybaraWords: 0,
+    charadesSpecialWords: 0,
+    whoAmIGames: 0,
+    whoAmIGuessed: 0,
+    whoAmISkipped: 0,
+    whoAmIYes: 0,
+    whoAmINo: 0,
+    whoAmIPerfectGames: 0,
+    whoAmITimedGames: 0,
+    whoAmICurrentPerfectStreak: 0,
+    whoAmIBestPerfectStreak: 0,
+    whoAmICatRoles: 0,
+    whoAmICapybaraRoles: 0,
+    whoAmISpecialRoles: 0,
   };
   try {
     const raw = localStorage.getItem(WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY);
@@ -3875,7 +6022,7 @@ function readWordGuessAchievementsState() {
     }
     return {
       ...parsed,
-      schemaVersion: Math.max(5, Number(parsed.schemaVersion) || 1),
+      schemaVersion: Math.max(8, Number(parsed.schemaVersion) || 1),
       unlocked: parsedUnlocked,
       revealedHints: parsed.revealedHints && typeof parsed.revealedHints === "object" ? parsed.revealedHints : {},
       viewedAchievements,
@@ -3913,6 +6060,46 @@ function readWordGuessAchievementsState() {
       wordLikes: Number(parsed.wordLikes) || 0,
       wordDislikes: Number(parsed.wordDislikes) || 0,
       shareCount: Number(parsed.shareCount) || 0,
+      aliasRounds: Number(parsed.aliasRounds) || 0,
+      aliasPoints: Number(parsed.aliasPoints) || 0,
+      aliasSkips: Number(parsed.aliasSkips) || 0,
+      aliasCleanRounds: Number(parsed.aliasCleanRounds) || 0,
+      aliasTenPlusRounds: Number(parsed.aliasTenPlusRounds) || 0,
+      aliasTwentyPlusRounds: Number(parsed.aliasTwentyPlusRounds) || 0,
+      aliasZeroRounds: Number(parsed.aliasZeroRounds) || 0,
+      aliasCurrentCleanStreak: Number(parsed.aliasCurrentCleanStreak) || 0,
+      aliasBestCleanStreak: Number(parsed.aliasBestCleanStreak) || 0,
+      aliasFastWords: Number(parsed.aliasFastWords) || 0,
+      aliasLongWords: Number(parsed.aliasLongWords) || 0,
+      aliasAnimalWords: Number(parsed.aliasAnimalWords) || 0,
+      aliasCatWords: Number(parsed.aliasCatWords) || 0,
+      aliasCapybaraWords: Number(parsed.aliasCapybaraWords) || 0,
+      aliasSpecialWords: Number(parsed.aliasSpecialWords) || 0,
+      charadesRounds: Number(parsed.charadesRounds) || 0,
+      charadesPoints: Number(parsed.charadesPoints) || 0,
+      charadesSkips: Number(parsed.charadesSkips) || 0,
+      charadesCleanRounds: Number(parsed.charadesCleanRounds) || 0,
+      charadesEightPlusRounds: Number(parsed.charadesEightPlusRounds) || 0,
+      charadesFifteenPlusRounds: Number(parsed.charadesFifteenPlusRounds) || 0,
+      charadesZeroRounds: Number(parsed.charadesZeroRounds) || 0,
+      charadesCurrentCleanStreak: Number(parsed.charadesCurrentCleanStreak) || 0,
+      charadesBestCleanStreak: Number(parsed.charadesBestCleanStreak) || 0,
+      charadesLongWords: Number(parsed.charadesLongWords) || 0,
+      charadesAnimalWords: Number(parsed.charadesAnimalWords) || 0,
+      charadesCapybaraWords: Number(parsed.charadesCapybaraWords) || 0,
+      charadesSpecialWords: Number(parsed.charadesSpecialWords) || 0,
+      whoAmIGames: Number(parsed.whoAmIGames) || 0,
+      whoAmIGuessed: Number(parsed.whoAmIGuessed) || 0,
+      whoAmISkipped: Number(parsed.whoAmISkipped) || 0,
+      whoAmIYes: Number(parsed.whoAmIYes) || 0,
+      whoAmINo: Number(parsed.whoAmINo) || 0,
+      whoAmIPerfectGames: Number(parsed.whoAmIPerfectGames) || 0,
+      whoAmITimedGames: Number(parsed.whoAmITimedGames) || 0,
+      whoAmICurrentPerfectStreak: Number(parsed.whoAmICurrentPerfectStreak) || 0,
+      whoAmIBestPerfectStreak: Number(parsed.whoAmIBestPerfectStreak) || 0,
+      whoAmICatRoles: Number(parsed.whoAmICatRoles) || 0,
+      whoAmICapybaraRoles: Number(parsed.whoAmICapybaraRoles) || 0,
+      whoAmISpecialRoles: Number(parsed.whoAmISpecialRoles) || 0,
     };
   } catch (error) {
     return emptyState;
@@ -3944,6 +6131,7 @@ function getWordGuessAchievementGameCopy(definition) {
     wordguess: { icon: "🧩", label: getWordGuessText("achievementGameWordGuess") },
     alias: { icon: "💬", label: getWordGuessText("achievementGameAlias") },
     charades: { icon: "🎭", label: getWordGuessText("achievementGameCharades") },
+    whoami: { icon: "🕵️", label: getWordGuessText("achievementGameWhoAmI") },
     movohray: { icon: "✨", label: getWordGuessText("achievementGameMovohray") },
   };
   return games[gameId] || games.wordguess;
@@ -3964,9 +6152,12 @@ function isWordGuessAchievementNew(achievementId) {
   return !viewed[achievementId];
 }
 
-function getNewWordGuessAchievementCount() {
+function getNewWordGuessAchievementCount(gameId, categoryId) {
   return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) {
-    return isWordGuessAchievementNew(definition.id);
+    if (!isWordGuessAchievementNew(definition.id)) return false;
+    if (gameId && gameId !== "all" && getWordGuessAchievementGameId(definition) !== gameId) return false;
+    if (categoryId && categoryId !== "all" && definition.category !== categoryId) return false;
+    return true;
   }).length;
 }
 
@@ -3990,15 +6181,16 @@ function markWordGuessAchievementViewed(achievementId) {
   wordGuessAchievementsModalDirty = true;
   renderHiddenWordGuessAchievementsLab();
   if (achievementsModal && !achievementsModal.hidden) {
-    renderWordGuessAchievementsModalCategoryNav();
-    const visibleCard = achievementsModalGrid
-      ? achievementsModalGrid.querySelector(`[data-achievement-id="${achievementId}"]`)
-      : null;
-    if (visibleCard) {
-      visibleCard.classList.remove("is-new");
-      const newBadge = visibleCard.querySelector(".achievement-new-badge");
-      if (newBadge) newBadge.remove();
+    if (wordGuessAchievementsModalGameId === "new") {
+      if (getNewWordGuessAchievementCount() === 0) {
+        wordGuessAchievementsModalGameId = "all";
+        wordGuessAchievementsModalCategoryId = "all";
+      } else if (wordGuessAchievementsModalCategoryId !== "all" && getNewWordGuessAchievementCount("all", wordGuessAchievementsModalCategoryId) === 0) {
+        wordGuessAchievementsModalCategoryId = "all";
+      }
     }
+    wordGuessAchievementsModalDirty = true;
+    renderWordGuessAchievementsModalContent(true);
   }
   return true;
 }
@@ -4261,7 +6453,7 @@ function playNextWordGuessAchievementToast() {
   }
   function openAchievementFromToast() {
     closeAchievementToast(function () {
-      openWordGuessAchievementsModal(isSummary ? { categoryId: "new", source: "toast-summary" } : { focusAchievementId: achievementId, source: "toast" });
+      openWordGuessAchievementsModal(isSummary ? { gameId: "new", source: "toast-summary" } : { focusAchievementId: achievementId, source: "toast" });
     });
   }
   toast.addEventListener("click", function (event) { if (event.target !== closeBtn) openAchievementFromToast(); });
@@ -4581,11 +6773,16 @@ function getWordGuessAchievementCategoryTitle(categoryId) {
   return category ? getWordGuessText(category.titleKey) : "";
 }
 
-function getVisibleWordGuessAchievementDefinitions(categoryId, searchQuery) {
+function getVisibleWordGuessAchievementDefinitions(gameId, categoryId, searchQuery) {
   const normalizedQuery = normalizeWordGuessAchievementSearchText(searchQuery);
   const visible = WORD_GUESS_ACHIEVEMENTS.filter(function (definition) {
-    if (categoryId === "new" && !isWordGuessAchievementNew(definition.id)) return false;
-    if (categoryId && categoryId !== "all" && categoryId !== "new" && definition.category !== categoryId) return false;
+    const definitionGameId = getWordGuessAchievementGameId(definition);
+    if (gameId === "new") {
+      if (!isWordGuessAchievementNew(definition.id)) return false;
+    } else if (gameId && gameId !== "all" && definitionGameId !== gameId) {
+      return false;
+    }
+    if (categoryId && categoryId !== "all" && definition.category !== categoryId) return false;
     if (!normalizedQuery) return true;
     const copy = getWordGuessAchievementCopy(definition);
     const gameCopy = getWordGuessAchievementGameCopy(definition);
@@ -4617,7 +6814,7 @@ function renderWordGuessAchievementCards(container, grouped, categoryId, searchQ
   clearElement(container);
   const unlocked = wordGuessAchievementsState.unlocked || {};
   const revealedHints = wordGuessAchievementsState.revealedHints || {};
-  const visibleDefinitions = getVisibleWordGuessAchievementDefinitions(categoryId, searchQuery);
+  const visibleDefinitions = getVisibleWordGuessAchievementDefinitions(wordGuessAchievementsModalGameId, categoryId, searchQuery);
   const appendCard = function (target, definition) {
     const state = unlocked[definition.id] || null;
     const copy = getWordGuessAchievementCopy(definition);
@@ -4679,7 +6876,7 @@ function renderWordGuessAchievementCards(container, grouped, categoryId, searchQ
       container.appendChild(empty);
       return;
     }
-    const shouldLimit = categoryId === "all" && !normalizeWordGuessAchievementSearchText(searchQuery) && visibleDefinitions.length > wordGuessAchievementsModalRenderLimit;
+    const shouldLimit = wordGuessAchievementsModalGameId === "all" && categoryId === "all" && !normalizeWordGuessAchievementSearchText(searchQuery) && visibleDefinitions.length > wordGuessAchievementsModalRenderLimit;
     const renderedDefinitions = shouldLimit ? visibleDefinitions.slice(0, wordGuessAchievementsModalRenderLimit) : visibleDefinitions;
     renderedDefinitions.forEach(function (definition) { appendCard(container, definition); });
     if (shouldLimit) {
@@ -4711,18 +6908,59 @@ function renderWordGuessAchievementCards(container, grouped, categoryId, searchQ
   });
 }
 
+function getAchievementDefinitionsForGameFilter(gameId) {
+  if (gameId === "new") {
+    return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return isWordGuessAchievementNew(definition.id); });
+  }
+  if (!gameId || gameId === "all") return WORD_GUESS_ACHIEVEMENTS.slice();
+  return WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return getWordGuessAchievementGameId(definition) === gameId; });
+}
+
+function renderWordGuessAchievementsModalGameNav() {
+  if (!achievementsModalGameNav) return;
+  clearElement(achievementsModalGameNav);
+  const unlocked = wordGuessAchievementsState.unlocked || {};
+  WORD_GUESS_ACHIEVEMENT_GAMES.forEach(function (game) {
+    const definitions = getAchievementDefinitionsForGameFilter(game.id);
+    if (game.id === "new" && definitions.length === 0) return;
+    if (definitions.length === 0) return;
+    const unreadCount = game.id === "new" ? definitions.length : getNewWordGuessAchievementCount(game.id);
+    const unlockedCount = definitions.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `achievements-game-tab${game.id === wordGuessAchievementsModalGameId ? " is-selected" : ""}${game.id === "new" ? " is-new-filter" : ""}`;
+    button.dataset.achievementGame = game.id;
+    button.setAttribute("role", "tab");
+    button.setAttribute("aria-selected", game.id === wordGuessAchievementsModalGameId ? "true" : "false");
+    appendTextElement(button, "span", "achievements-game-tab-icon", game.icon);
+    appendTextElement(button, "span", "achievements-game-tab-title", getWordGuessText(game.titleKey));
+    if (game.id !== "new") appendTextElement(button, "small", "achievements-game-tab-progress", `${unlockedCount}/${definitions.length}`);
+    if (unreadCount > 0) appendTextElement(button, "small", "achievement-unread-count", String(unreadCount));
+    button.addEventListener("click", function () {
+      if (wordGuessAchievementsModalGameId === game.id) return;
+      wordGuessAchievementsModalGameId = game.id;
+      wordGuessAchievementsModalCategoryId = "all";
+      wordGuessAchievementsModalRenderLimit = 36;
+      wordGuessAchievementsModalDirty = true;
+      renderWordGuessAchievementsModalContent(true);
+      if (achievementsModalGrid) achievementsModalGrid.scrollTop = 0;
+    });
+    achievementsModalGameNav.appendChild(button);
+  });
+}
+
 function renderWordGuessAchievementsModalCategoryNav() {
   if (!achievementsModalCategoryNav) return;
   clearElement(achievementsModalCategoryNav);
   const unlocked = wordGuessAchievementsState.unlocked || {};
+  const gameDefinitions = getAchievementDefinitionsForGameFilter(wordGuessAchievementsModalGameId);
   WORD_GUESS_ACHIEVEMENT_CATEGORIES.forEach(function (category) {
     const definitions = category.id === "all"
-      ? WORD_GUESS_ACHIEVEMENTS
-      : category.id === "new"
-        ? WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return isWordGuessAchievementNew(definition.id); })
-        : WORD_GUESS_ACHIEVEMENTS.filter(function (definition) { return definition.category === category.id; });
-    if (definitions.length === 0 && category.id !== "new") return;
+      ? gameDefinitions
+      : gameDefinitions.filter(function (definition) { return definition.category === category.id; });
+    if (definitions.length === 0) return;
     const unlockedInCategory = definitions.filter(function (definition) { return Boolean(unlocked[definition.id]); }).length;
+    const unreadInCategory = definitions.filter(function (definition) { return isWordGuessAchievementNew(definition.id); }).length;
     const button = document.createElement("button");
     button.type = "button";
     button.className = `achievements-category-tab${category.id === wordGuessAchievementsModalCategoryId ? " is-selected" : ""}`;
@@ -4730,12 +6968,8 @@ function renderWordGuessAchievementsModalCategoryNav() {
     button.setAttribute("role", "tab");
     button.setAttribute("aria-selected", category.id === wordGuessAchievementsModalCategoryId ? "true" : "false");
     appendTextElement(button, "span", "achievements-category-tab-title", getWordGuessText(category.titleKey));
-    appendTextElement(
-      button,
-      "small",
-      "achievements-category-tab-count",
-      category.id === "new" ? String(definitions.length) : `${unlockedInCategory}/${definitions.length}`
-    );
+    appendTextElement(button, "small", "achievements-category-tab-count", wordGuessAchievementsModalGameId === "new" ? String(definitions.length) : `${unlockedInCategory}/${definitions.length}`);
+    if (unreadInCategory > 0 && wordGuessAchievementsModalGameId !== "new") appendTextElement(button, "small", "achievement-unread-count", String(unreadInCategory));
     button.addEventListener("click", function () {
       if (wordGuessAchievementsModalCategoryId === category.id) return;
       wordGuessAchievementsModalCategoryId = category.id;
@@ -4750,8 +6984,9 @@ function renderWordGuessAchievementsModalCategoryNav() {
 
 function renderWordGuessAchievementsModalContent(force) {
   if (!achievementsModalGrid) return;
-  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalGameId}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
   if (!force && !wordGuessAchievementsModalDirty && wordGuessAchievementsModalLocale === localeKey) return;
+  renderWordGuessAchievementsModalGameNav();
   renderWordGuessAchievementsModalCategoryNav();
   renderWordGuessAchievementCards(achievementsModalGrid, false, wordGuessAchievementsModalCategoryId, wordGuessAchievementsModalSearchQuery);
   wordGuessAchievementsModalLocale = localeKey;
@@ -4789,6 +7024,7 @@ function renderHiddenWordGuessAchievementsLab() {
   if (achievementsModalCopy) achievementsModalCopy.textContent = getWordGuessText("achievementMenuCopy");
   if (achievementsModalProgress) achievementsModalProgress.textContent = `${unlockedCount}/${total}`;
   if (achievementsModalCloseBtn) achievementsModalCloseBtn.setAttribute("aria-label", getWordGuessText("close"));
+  if (achievementsModalGameNav) achievementsModalGameNav.setAttribute("aria-label", getWordGuessText("achievementGamesAria"));
   if (achievementsModalCategoryNav) achievementsModalCategoryNav.setAttribute("aria-label", getWordGuessText("achievementCategoriesAria"));
   if (achievementsModalSearchLabel) achievementsModalSearchLabel.textContent = getWordGuessText("achievementSearchLabel");
   if (achievementsModalSearchInput) {
@@ -4796,7 +7032,7 @@ function renderHiddenWordGuessAchievementsLab() {
     achievementsModalSearchInput.setAttribute("aria-label", getWordGuessText("achievementSearchLabel"));
   }
 
-  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
+  const localeKey = `${selectedWordGuessLanguage}:${wordGuessAchievementsModalGameId}:${wordGuessAchievementsModalCategoryId}:${wordGuessAchievementsModalSearchQuery}`;
   if (wordGuessAchievementsModalLocale !== localeKey) wordGuessAchievementsModalDirty = true;
 }
 
@@ -4805,7 +7041,9 @@ function focusWordGuessAchievementInModal(achievementId) {
   const definition = getWordGuessAchievementDefinition(achievementId);
   if (!definition) return false;
   if (wordGuessAchievementsState.unlocked[achievementId]) markWordGuessAchievementViewed(achievementId);
-  if (wordGuessAchievementsModalCategoryId !== definition.category || wordGuessAchievementsModalSearchQuery) {
+  const definitionGameId = getWordGuessAchievementGameId(definition);
+  if (wordGuessAchievementsModalGameId !== definitionGameId || wordGuessAchievementsModalCategoryId !== definition.category || wordGuessAchievementsModalSearchQuery) {
+    wordGuessAchievementsModalGameId = definitionGameId;
     wordGuessAchievementsModalCategoryId = definition.category;
     wordGuessAchievementsModalSearchQuery = "";
     wordGuessAchievementsModalRenderLimit = 36;
@@ -4843,7 +7081,15 @@ function openWordGuessAchievementsModal(options) {
   const settings = options && typeof options === "object" && !options.currentTarget ? options : {};
   const focusAchievementId = String(settings.focusAchievementId || "");
   const requestedCategoryId = String(settings.categoryId || "");
-  if (!focusAchievementId && requestedCategoryId && WORD_GUESS_ACHIEVEMENT_CATEGORIES.some(function (category) { return category.id === requestedCategoryId; })) {
+  const requestedGameId = String(settings.gameId || "");
+  if (!focusAchievementId && requestedGameId && WORD_GUESS_ACHIEVEMENT_GAMES.some(function (game) { return game.id === requestedGameId; })) {
+    wordGuessAchievementsModalGameId = requestedGameId;
+    wordGuessAchievementsModalCategoryId = "all";
+    wordGuessAchievementsModalSearchQuery = "";
+    wordGuessAchievementsModalRenderLimit = 36;
+    if (achievementsModalSearchInput) achievementsModalSearchInput.value = "";
+    wordGuessAchievementsModalDirty = true;
+  } else if (!focusAchievementId && requestedCategoryId && WORD_GUESS_ACHIEVEMENT_CATEGORIES.some(function (category) { return category.id === requestedCategoryId; })) {
     wordGuessAchievementsModalCategoryId = requestedCategoryId;
     wordGuessAchievementsModalSearchQuery = "";
     wordGuessAchievementsModalRenderLimit = 36;
@@ -4852,7 +7098,10 @@ function openWordGuessAchievementsModal(options) {
   }
   if (focusAchievementId) {
     const definition = getWordGuessAchievementDefinition(focusAchievementId);
-    if (definition) wordGuessAchievementsModalCategoryId = definition.category;
+    if (definition) {
+      wordGuessAchievementsModalGameId = getWordGuessAchievementGameId(definition);
+      wordGuessAchievementsModalCategoryId = definition.category;
+    }
     wordGuessAchievementsModalSearchQuery = "";
     wordGuessAchievementsModalRenderLimit = 36;
     if (achievementsModalSearchInput) achievementsModalSearchInput.value = "";
@@ -5724,7 +7973,10 @@ async function startWordGuessGame() {
 
   cancelWordGuessReveal();
   clearWordGuessInvalidClearTimer();
-  wordGuessTarget = wordGuessAnswerWords[Math.floor(Math.random() * wordGuessAnswerWords.length)];
+  wordGuessTarget = pickWeightedSessionValue(
+    wordGuessAnswerWords,
+    `wordguess:${selectedWordGuessLanguage}:${getSelectedWordGuessModeKey()}`
+  );
   wordGuessGuesses = [];
   wordGuessAttemptLog = [];
   wordGuessCurrentGuess = "";
@@ -6360,6 +8612,10 @@ function submitWordGuess() {
     clearInvalidWordGuessAfterShake();
     renderWordGuessHistory();
     return;
+  }
+
+  if (isPartyNixaWord(guess) || (selectedWordGuessLanguage === "ru" && isPartySherikWord(guess))) {
+    showPartyWordEasterEggSticker(guess, wordGuessGameScreen);
   }
 
   const statuses = evaluateWordGuess(guess, wordGuessTarget);
@@ -8185,6 +10441,7 @@ function closeWhoAmICategoriesModal() {
 function getWhoAmIRolePool() {
   const selectedNames = whoAmISelectedCategoryNames;
   const roles = [];
+  const seenRoles = new Set();
 
   whoAmICategories.forEach((category) => {
     if (selectedNames.indexOf(category.name) < 0) {
@@ -8193,6 +10450,9 @@ function getWhoAmIRolePool() {
 
     whoAmISelectedDifficulties.forEach((difficulty) => {
       category.levels[difficulty].forEach((role) => {
+        const key = normalizePartyEasterWord(role);
+        if (!key || seenRoles.has(key)) return;
+        seenRoles.add(key);
         roles.push({
           role,
           category: category.name,
@@ -8268,10 +10528,16 @@ function startWhoAmIGame() {
   }
 
   clearWhoAmITimer();
-  whoAmIDeck = shuffleArray(getWhoAmIRolePool());
+  resetSessionContentExposure();
+  whoAmIDeck = buildWeightedSessionDeck(getWhoAmIRolePool(), "whoami", function (entry) { return entry && entry.role ? entry.role : ""; });
   whoAmIRound = 1;
   whoAmIRoundLog = [];
   whoAmIResultMode = "continue";
+  whoAmIAchievementSessionGuessed = 0;
+  whoAmIAchievementSessionSkipped = 0;
+  whoAmIAchievementSessionYes = 0;
+  whoAmIAchievementSessionNo = 0;
+  whoAmIAchievementGameRecorded = false;
 
   if (whoAmIPartyMode === "turns") {
     startWhoAmITurnsGame();
@@ -8288,9 +10554,11 @@ function startWhoAmIGame() {
 
 function takeWhoAmIRole() {
   if (whoAmIDeck.length === 0) {
-    whoAmIDeck = shuffleArray(getWhoAmIRolePool());
+    whoAmIDeck = buildWeightedSessionDeck(getWhoAmIRolePool(), "whoami", function (entry) { return entry && entry.role ? entry.role : ""; });
   }
-  return whoAmIDeck.pop();
+  const role = whoAmIDeck.pop();
+  if (role && role.role) markSessionContentExposure("whoami", role.role);
+  return role;
 }
 
 function replaceWhoAmIAssignmentRole(assignment) {
@@ -8418,6 +10686,7 @@ function handleWhoAmIRevealPrimary() {
     }
     whoAmIRevealCategory.textContent = assignment.category;
     whoAmIRevealRole.textContent = assignment.role;
+    if (isPartyNixaWord(assignment.role)) showPartyWordEasterEggSticker(assignment.role, whoAmIRevealScreen);
     whoAmIRevealTitle.textContent = assignment.player;
     whoAmIRevealInstruction.textContent = "Усі запам'ятали? Натисніть кнопку, щоб сховати роль.";
     whoAmIRevealPrimaryBtn.textContent = "Усі запам'ятали";
@@ -8764,6 +11033,19 @@ function handleWhoAmIAnswer(type) {
   }
 
   assignment[type] += 1;
+  if (type === "yes") {
+    whoAmIAchievementSessionYes += 1;
+    wordGuessAchievementsState.whoAmIYes = (Number(wordGuessAchievementsState.whoAmIYes) || 0) + 1;
+    if ((Number(wordGuessAchievementsState.whoAmIYes) || 0) >= 10) unlockWordGuessAchievement("whoami-ten-yes");
+  } else {
+    whoAmIAchievementSessionNo += 1;
+    wordGuessAchievementsState.whoAmINo = (Number(wordGuessAchievementsState.whoAmINo) || 0) + 1;
+    if ((Number(wordGuessAchievementsState.whoAmINo) || 0) >= 10) unlockWordGuessAchievement("whoami-ten-no");
+    if (whoAmIAchievementSessionNo >= 10) unlockWordGuessAchievement("whoami-no-machine");
+  }
+  if (whoAmIAchievementSessionYes + whoAmIAchievementSessionNo >= 20) unlockWordGuessAchievement("whoami-question-storm");
+  persistWordGuessAchievementsState();
+  renderHiddenWordGuessAchievementsLab();
 
   if (type === "yes") {
     playGameSound("positiveTick");
@@ -8828,6 +11110,27 @@ function confirmWhoAmIGuessed() {
 
   assignment.guessed = true;
   assignment.guessedRound = whoAmIRound;
+  whoAmIAchievementSessionGuessed += 1;
+  wordGuessAchievementsState.whoAmIGuessed = (Number(wordGuessAchievementsState.whoAmIGuessed) || 0) + 1;
+  const normalizedRole = normalizePartyEasterWord(assignment.role);
+  const isCatRole = normalizedRole === "кіт" || normalizedRole === "кішка" || normalizedRole === "кот" || normalizedRole === "кошка";
+  const isCapybaraRole = normalizedRole === "капібара" || normalizedRole === "капибара" || normalizedRole === "capybara";
+  if (isCatRole) wordGuessAchievementsState.whoAmICatRoles = (Number(wordGuessAchievementsState.whoAmICatRoles) || 0) + 1;
+  if (isCapybaraRole) wordGuessAchievementsState.whoAmICapybaraRoles = (Number(wordGuessAchievementsState.whoAmICapybaraRoles) || 0) + 1;
+    if (isCatRole || isCapybaraRole) wordGuessAchievementsState.whoAmISpecialRoles = (Number(wordGuessAchievementsState.whoAmISpecialRoles) || 0) + 1;
+  unlockAchievementConditions([
+    [isCatRole, "whoami-cat-role"],
+    [isCapybaraRole, "whoami-capybara-role"],
+    [wordGuessAchievementsState.whoAmICatRoles >= 5, "whoami-cat-five"],
+    [wordGuessAchievementsState.whoAmISpecialRoles >= 5, "whoami-special-five"],
+  ]);
+  unlockWordGuessAchievement("whoami-first-guess");
+  if ((Number(wordGuessAchievementsState.whoAmIGuessed) || 0) >= 5) unlockWordGuessAchievement("whoami-five-guessed");
+  if ((Number(wordGuessAchievementsState.whoAmIGuessed) || 0) >= 20) unlockWordGuessAchievement("whoami-twenty-guessed");
+  if ((Number(wordGuessAchievementsState.whoAmIGuessed) || 0) >= 50) unlockWordGuessAchievement("whoami-fifty-guessed");
+  if (whoAmIAchievementSessionGuessed >= 5) unlockWordGuessAchievement("whoami-five-session");
+  persistWordGuessAchievementsState();
+  renderHiddenWordGuessAchievementsLab();
   playCorrectSound();
 
   if (whoAmIPartyMode === "timed") {
@@ -8896,6 +11199,12 @@ function skipWhoAmIRole() {
   }
 
   assignment.skipped = true;
+  whoAmIAchievementSessionSkipped += 1;
+  wordGuessAchievementsState.whoAmISkipped = (Number(wordGuessAchievementsState.whoAmISkipped) || 0) + 1;
+  unlockWordGuessAchievement("whoami-first-skip");
+  if ((Number(wordGuessAchievementsState.whoAmISkipped) || 0) >= 10) unlockWordGuessAchievement("whoami-ten-skips");
+  persistWordGuessAchievementsState();
+  renderHiddenWordGuessAchievementsLab();
   playSkipSound();
 
   if (whoAmIPartyMode === "timed") {
@@ -9280,8 +11589,98 @@ function getRankedTeamResultEntries(scores, nameGetter, scoreLabel, roundsGetter
   });
 }
 
+function recordWhoAmIFinalAchievements() {
+  if (whoAmIAchievementGameRecorded) return;
+  whoAmIAchievementGameRecorded = true;
+  wordGuessAchievementsState.whoAmIGames = (Number(wordGuessAchievementsState.whoAmIGames) || 0) + 1;
+  if (whoAmIPartyMode === "timed") {
+    wordGuessAchievementsState.whoAmITimedGames = (Number(wordGuessAchievementsState.whoAmITimedGames) || 0) + 1;
+    unlockWordGuessAchievement("whoami-timed-first");
+  }
+  if (whoAmIAchievementSessionGuessed > 0 && whoAmIAchievementSessionSkipped === 0) {
+    wordGuessAchievementsState.whoAmIPerfectGames = (Number(wordGuessAchievementsState.whoAmIPerfectGames) || 0) + 1;
+    wordGuessAchievementsState.whoAmICurrentPerfectStreak = (Number(wordGuessAchievementsState.whoAmICurrentPerfectStreak) || 0) + 1;
+    wordGuessAchievementsState.whoAmIBestPerfectStreak = Math.max(Number(wordGuessAchievementsState.whoAmIBestPerfectStreak) || 0, wordGuessAchievementsState.whoAmICurrentPerfectStreak);
+    unlockWordGuessAchievement("whoami-perfect-game");
+    if ((Number(wordGuessAchievementsState.whoAmIPerfectGames) || 0) >= 3) unlockWordGuessAchievement("whoami-three-perfect");
+  } else {
+    wordGuessAchievementsState.whoAmICurrentPerfectStreak = 0;
+  }
+  if ((Number(wordGuessAchievementsState.whoAmIGames) || 0) >= 10) unlockWordGuessAchievement("whoami-ten-games");
+  const state = wordGuessAchievementsState;
+  unlockAchievementConditions([
+    [state.whoAmIGuessed >= 100, "whoami-hundred-guessed"],
+    [state.whoAmIGuessed >= 250, "whoami-two-fifty-guessed"],
+    [state.whoAmIGuessed >= 500, "whoami-five-hundred-guessed"],
+    [state.whoAmISkipped >= 25, "whoami-twenty-five-skips"],
+    [state.whoAmISkipped >= 50, "whoami-fifty-skips"],
+    [state.whoAmIYes >= 50, "whoami-fifty-yes"],
+    [state.whoAmIYes >= 100, "whoami-hundred-yes"],
+    [state.whoAmINo >= 50, "whoami-fifty-no"],
+    [state.whoAmINo >= 100, "whoami-hundred-no"],
+    [state.whoAmIGames >= 25, "whoami-twenty-five-games"],
+    [state.whoAmIGames >= 50, "whoami-fifty-games"],
+    [state.whoAmITimedGames >= 5, "whoami-five-timed"],
+    [state.whoAmITimedGames >= 10, "whoami-ten-timed"],
+    [state.whoAmIPerfectGames >= 5, "whoami-five-perfect"],
+    [state.whoAmIPerfectGames >= 10, "whoami-ten-perfect"],
+    [whoAmIAchievementSessionGuessed >= 10, "whoami-ten-session"],
+    [whoAmIAchievementSessionGuessed >= 15, "whoami-fifteen-session"],
+    [whoAmIAchievementSessionGuessed >= 5 && whoAmIAchievementSessionSkipped === 0, "whoami-clean-five"],
+    [whoAmIAchievementSessionGuessed >= 10 && whoAmIAchievementSessionSkipped === 0, "whoami-clean-ten"],
+    [whoAmIAchievementSessionSkipped >= 5, "whoami-five-skips-session"],
+    [whoAmIAchievementSessionSkipped >= 10, "whoami-ten-skips-session"],
+    [whoAmIAchievementSessionYes + whoAmIAchievementSessionNo >= 30, "whoami-thirty-questions"],
+    [whoAmIAchievementSessionYes + whoAmIAchievementSessionNo >= 50, "whoami-fifty-questions"],
+    [whoAmIAchievementSessionGuessed > 0 && whoAmIAchievementSessionYes >= 5 && whoAmIAchievementSessionNo === 0, "whoami-yes-only"],
+    [whoAmIAchievementSessionGuessed > 0 && whoAmIAchievementSessionNo >= 5 && whoAmIAchievementSessionYes === 0, "whoami-no-only"],
+    [whoAmIAchievementSessionYes >= 5 && whoAmIAchievementSessionYes === whoAmIAchievementSessionNo, "whoami-balanced-questions"],
+    [whoAmIAchievementSessionGuessed >= 3 && whoAmIAchievementSessionYes + whoAmIAchievementSessionNo <= 5, "whoami-telepathy-three"],
+    [whoAmIAchievementSessionGuessed >= 5 && whoAmIAchievementSessionYes + whoAmIAchievementSessionNo <= 10, "whoami-telepathy-five"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 30 && whoAmIAchievementSessionGuessed >= 3, "whoami-thirty-second-three"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 30 && whoAmIAchievementSessionGuessed >= 5, "whoami-thirty-second-five"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 120 && whoAmIAchievementSessionGuessed >= 10, "whoami-two-minute-ten"],
+    [whoAmIPartyMode === "timed" && whoAmITeamCount === 4 && whoAmIAchievementSessionGuessed >= 8, "whoami-four-teams"],
+    [whoAmIAchievementSessionGuessed === 0 && whoAmIAchievementSessionSkipped >= 5, "whoami-zero-guessed-five-skips"],
+    [whoAmIAchievementSessionYes === 7, "whoami-lucky-seven-yes"],
+    [whoAmIAchievementSessionGuessed === 7 && whoAmIAchievementSessionSkipped === 0, "whoami-seven-clean"],
+    [state.whoAmICurrentPerfectStreak >= 3, "whoami-perfect-streak-three"],
+    [state.whoAmICurrentPerfectStreak >= 5, "whoami-perfect-streak-five"],
+    [whoAmIPartyMode === "timed" && whoAmITeamCount >= 2 && whoAmITeamScores.length >= 2 && whoAmITeamScores.filter(function (score) { return score === Math.max.apply(null, whoAmITeamScores); }).length >= 2, "whoami-team-tie"],
+    [state.whoAmIGuessed >= 1000, "whoami-thousand-guessed"],
+    [state.whoAmISkipped >= 100, "whoami-hundred-skips"],
+    [state.whoAmIYes >= 250, "whoami-two-fifty-yes"],
+    [state.whoAmINo >= 250, "whoami-two-fifty-no"],
+    [state.whoAmIGames >= 100, "whoami-hundred-games"],
+    [state.whoAmITimedGames >= 25, "whoami-twenty-five-timed"],
+    [state.whoAmIPerfectGames >= 25, "whoami-twenty-five-perfect"],
+    [state.whoAmICurrentPerfectStreak >= 10, "whoami-perfect-streak-ten"],
+    [whoAmIAchievementSessionGuessed >= 20, "whoami-twenty-session"],
+    [whoAmIAchievementSessionSkipped >= 20, "whoami-twenty-skips-session"],
+    [whoAmIAchievementSessionYes + whoAmIAchievementSessionNo >= 75, "whoami-seventy-five-questions"],
+    [whoAmIAchievementSessionGuessed === 1, "whoami-exact-one-session"],
+    [whoAmIAchievementSessionGuessed === 3, "whoami-exact-three-session"],
+    [whoAmIAchievementSessionNo === 7, "whoami-lucky-seven-no"],
+    [whoAmIAchievementSessionGuessed === 3 && whoAmIAchievementSessionSkipped === 3, "whoami-three-three"],
+    [whoAmIAchievementSessionGuessed >= 5 && whoAmIAchievementSessionGuessed === whoAmIAchievementSessionSkipped, "whoami-equal-guessed-skipped"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 60 && whoAmIAchievementSessionGuessed >= 10, "whoami-sixty-second-ten"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 90 && whoAmIAchievementSessionGuessed >= 12, "whoami-ninety-second-twelve"],
+    [whoAmIPartyMode === "timed" && whoAmIDuration === 120 && whoAmIAchievementSessionGuessed >= 15, "whoami-two-minute-fifteen"],
+    [whoAmIPartyMode === "timed" && whoAmITeamCount === 2 && whoAmIAchievementSessionGuessed >= 10, "whoami-two-teams-ten"],
+    [whoAmIPartyMode === "timed" && whoAmITeamCount === 3 && whoAmIAchievementSessionGuessed >= 12, "whoami-three-teams-twelve"],
+    [whoAmIAchievementSessionGuessed >= 3 && whoAmIAchievementSessionYes === 0 && whoAmIAchievementSessionNo === 0, "whoami-no-questions-three"],
+    [whoAmIAchievementSessionYes === 9, "whoami-exact-nine-yes"],
+    [whoAmIAchievementSessionNo === 9, "whoami-exact-nine-no"],
+    [whoAmIAchievementSessionYes + whoAmIAchievementSessionNo === 13, "whoami-thirteen-questions"],
+    [whoAmIAchievementSessionGuessed >= 5 && whoAmIAchievementSessionYes === 0 && whoAmIAchievementSessionNo === 0, "whoami-no-questions-five"],
+  ]);
+  persistWordGuessAchievementsState();
+  renderHiddenWordGuessAchievementsLab();
+}
+
 function showWhoAmIFinal() {
   clearWhoAmITimer();
+  recordWhoAmIFinalAchievements();
   const isTimed = whoAmIPartyMode === "timed";
   clearElement(whoAmIFinalHero);
   if (whoAmIFinalHero) {
@@ -11807,6 +14206,7 @@ function hasActiveGameProgress() {
 }
 
 function resetActiveGameState() {
+  resetSessionContentExposure();
   destroyRoundTimer();
   setRoundPaused(false, { resumeTimer: false });
   wasTimerRunningBeforeExitModal = false;
@@ -11920,6 +14320,8 @@ function startRound() {
   timeLeft = selectedDuration;
   roundTimerRemainingMs = selectedDuration * 1000;
   roundTimerLastCountdownSecond = null;
+  aliasTimerUrgencyLastVisualSecond = null;
+  resetAliasTimerUrgencyVisual();
   roundTimerPauseReasons = {};
   roundTimerIsActive = false;
   roundTimerFinishStarted = false;
@@ -11940,7 +14342,7 @@ function startRound() {
     return;
   }
 
-  deck = shuffleArray([...wordPool]);
+  deck = buildWeightedSessionDeck([...wordPool], selectedMode, function (entry) { return entry && entry.word ? entry.word : ""; });
 
   renderGameSummary();
 
@@ -11989,6 +14391,91 @@ function clearRoundTimerHandle() {
   }
 }
 
+function getAliasTimerUrgencyProgress(secondsRemaining) {
+  if (selectedMode !== "explain" || secondsRemaining > 15) {
+    return 0;
+  }
+  return Math.max(0, Math.min(1, (15 - Math.max(1, secondsRemaining)) / 14));
+}
+
+function resetAliasTimerUrgencyVisual() {
+  aliasTimerUrgencyLastVisualSecond = null;
+  if (!timerText) return;
+  const timerShell = timerText.closest(".game-hud-timer");
+  if (!timerShell) return;
+  timerShell.classList.remove("is-alias-urgent", "is-alias-warning", "is-alias-critical", "is-alias-tick");
+  timerShell.style.removeProperty("--alias-timer-scale");
+  timerShell.style.removeProperty("--alias-timer-glow");
+  timerShell.style.removeProperty("--alias-timer-ring-width");
+}
+
+function updateAliasTimerUrgencyVisual(secondsRemaining, shouldPulse) {
+  if (!timerText) return;
+  const timerShell = timerText.closest(".game-hud-timer");
+  if (!timerShell) return;
+
+  if (selectedMode !== "explain" || secondsRemaining > 15 || secondsRemaining < 0 || isSingleCardMode()) {
+    resetAliasTimerUrgencyVisual();
+    return;
+  }
+
+  const urgency = secondsRemaining <= 0 ? 1 : getAliasTimerUrgencyProgress(secondsRemaining);
+  timerShell.classList.add("is-alias-urgent");
+  timerShell.classList.toggle("is-alias-warning", secondsRemaining <= 8 && secondsRemaining > 4);
+  timerShell.classList.toggle("is-alias-critical", secondsRemaining <= 4);
+  timerShell.style.setProperty("--alias-timer-scale", (1.025 + urgency * 0.09).toFixed(3));
+  timerShell.style.setProperty("--alias-timer-glow", `${Math.round(10 + urgency * 22)}px`);
+  timerShell.style.setProperty("--alias-timer-ring-width", (5 + urgency * 2.4).toFixed(2));
+
+  if (shouldPulse && aliasTimerUrgencyLastVisualSecond !== secondsRemaining) {
+    aliasTimerUrgencyLastVisualSecond = secondsRemaining;
+    timerShell.classList.remove("is-alias-tick");
+    void timerShell.offsetWidth;
+    timerShell.classList.add("is-alias-tick");
+  }
+}
+
+function playAliasTimerUrgencyTick(secondsRemaining) {
+  if (!isGameSoundEnabled || selectedMode !== "explain" || secondsRemaining <= 0 || secondsRemaining > 15) {
+    return;
+  }
+  const urgency = getAliasTimerUrgencyProgress(secondsRemaining);
+  const frequency = 470 + urgency * 500;
+  const volume = 0.07 + urgency * 0.09;
+  const duration = 0.055 + urgency * 0.035;
+  const sequence = [{
+    frequency,
+    start: 0,
+    duration,
+    volume,
+    type: secondsRemaining <= 5 ? "square" : "triangle",
+    level: "ui",
+    attack: 0.004,
+    release: Math.max(0.04, duration * 0.72),
+  }];
+  if (secondsRemaining <= 5) {
+    sequence.push({
+      frequency: frequency * 1.22,
+      start: 0.07,
+      duration: 0.045 + urgency * 0.025,
+      volume: volume * 0.48,
+      type: "sine",
+      level: "ui",
+      attack: 0.003,
+      release: 0.045,
+    });
+  }
+  playToneSequence(sequence);
+}
+
+function playAliasTimerUrgencyEnd() {
+  if (!isGameSoundEnabled || selectedMode !== "explain") return;
+  playToneSequence([
+    { frequency: 980, start: 0, duration: 0.085, volume: 0.15, type: "square", level: "ui", attack: 0.004, release: 0.06 },
+    { frequency: 740, start: 0.095, duration: 0.12, volume: 0.11, type: "triangle", level: "ui", attack: 0.004, release: 0.09 },
+  ]);
+}
+
 function updateRoundTimerFromDeadline(now) {
   if (!roundTimerIsActive || !roundTimerDeadlineMs || roundTimerFinishStarted) {
     return;
@@ -11997,10 +14484,26 @@ function updateRoundTimerFromDeadline(now) {
   const nextSeconds = Math.max(0, Math.ceil(roundTimerRemainingMs / 1000));
   timeLeft = nextSeconds;
   updateGameInfo();
-  if (nextSeconds > 0 && nextSeconds <= 3 && nextSeconds !== roundTimerLastCountdownSecond) {
-    roundTimerLastCountdownSecond = nextSeconds;
-    playGameSound("countdown");
+
+  if (selectedMode === "explain" && nextSeconds <= 15) {
+    const isNewSecond = nextSeconds !== roundTimerLastCountdownSecond;
+    updateAliasTimerUrgencyVisual(nextSeconds, isNewSecond);
+    if (isNewSecond) {
+      roundTimerLastCountdownSecond = nextSeconds;
+      if (nextSeconds > 0) {
+        playAliasTimerUrgencyTick(nextSeconds);
+      } else {
+        playAliasTimerUrgencyEnd();
+      }
+    }
+  } else {
+    updateAliasTimerUrgencyVisual(nextSeconds, false);
+    if (nextSeconds > 0 && nextSeconds <= 3 && nextSeconds !== roundTimerLastCountdownSecond) {
+      roundTimerLastCountdownSecond = nextSeconds;
+      playGameSound("countdown");
+    }
   }
+
   if (roundTimerRemainingMs <= 0) {
     roundTimerFinishStarted = true;
     finishRound("time");
@@ -12058,17 +14561,267 @@ function destroyRoundTimer() {
   roundTimerIsActive = false;
   roundTimerPauseReasons = {};
   roundTimerFinishStarted = false;
+  resetAliasTimerUrgencyVisual();
 }
 
 function getCurrentWordPool() {
   const wordPool = [];
+  const seenWords = new Set();
   getEffectiveSelectedCategories().forEach((category) => {
-    getCategoryWordsByDifficulty(category).forEach((entry) => wordPool.push(entry));
+    getCategoryWordsByDifficulty(category).forEach((entry) => {
+      const key = normalizePartyEasterWord(entry && entry.word ? entry.word : "");
+      if (!key || seenWords.has(key)) return;
+      seenWords.add(key);
+      wordPool.push(entry);
+    });
   });
   return wordPool;
 }
 
+
+function normalizePartyEasterWord(value) {
+  return String(value || "")
+    .toLocaleLowerCase("uk-UA")
+    .replace(/[’'`]/g, "")
+    .replace(/[^а-яіїєґёa-z0-9]+/gi, "")
+    .trim();
+}
+
+function resetSessionContentExposure() {
+  sessionContentExposureCounts = Object.create(null);
+  sessionContentExposureLastSeen = Object.create(null);
+  sessionContentExposureSequence = 0;
+}
+
+function getSessionContentExposureKey(namespace, value) {
+  return `${String(namespace || "game")}:${normalizePartyEasterWord(value)}`;
+}
+
+function getSessionContentExposureCount(namespace, value) {
+  const key = getSessionContentExposureKey(namespace, value);
+  return Number(sessionContentExposureCounts[key]) || 0;
+}
+
+function getSessionContentExposureAge(namespace, value) {
+  const key = getSessionContentExposureKey(namespace, value);
+  const lastSeen = Number(sessionContentExposureLastSeen[key]) || 0;
+  if (!lastSeen) return Number.POSITIVE_INFINITY;
+  return Math.max(0, sessionContentExposureSequence - lastSeen);
+}
+
+function markSessionContentExposure(namespace, value) {
+  const key = getSessionContentExposureKey(namespace, value);
+  sessionContentExposureSequence += 1;
+  sessionContentExposureCounts[key] = getSessionContentExposureCount(namespace, value) + 1;
+  sessionContentExposureLastSeen[key] = sessionContentExposureSequence;
+}
+
+function buildWeightedSessionDeck(entries, namespace, valueGetter) {
+  const getter = typeof valueGetter === "function" ? valueGetter : function (entry) { return entry && entry.word ? entry.word : entry; };
+  return entries.map(function (entry) {
+    const value = getter(entry);
+    const seen = getSessionContentExposureCount(namespace, value);
+    const age = getSessionContentExposureAge(namespace, value);
+
+    // pop() takes the smallest rank first. Exposure count is the strongest penalty:
+    // an unseen item always beats a previously shown one. Among equally exposed items,
+    // recently shown content is pushed farther back so a deck rebuild cannot immediately
+    // repeat the word that was just on screen.
+    const exposurePenalty = seen * 4;
+    const recencyPenalty = Number.isFinite(age) ? Math.max(0, 1.8 - Math.min(age, 18) * 0.1) : 0;
+    const randomJitter = Math.random() * 0.9;
+    return { entry, rank: exposurePenalty + recencyPenalty + randomJitter };
+  }).sort(function (a, b) {
+    return b.rank - a.rank;
+  }).map(function (item) {
+    return item.entry;
+  });
+}
+
+function pickWeightedSessionValue(values, namespace) {
+  if (!Array.isArray(values) || values.length === 0) return "";
+  const deckValues = buildWeightedSessionDeck(values, namespace, function (value) { return value; });
+  const picked = deckValues.pop() || values[Math.floor(Math.random() * values.length)] || "";
+  if (picked) markSessionContentExposure(namespace, picked);
+  return picked;
+}
+
+function isPartyRegularCatWord(value) {
+  const word = normalizePartyEasterWord(value);
+  return word === "кіт" || word === "кішка" || word === "кот" || word === "кошка";
+}
+
+function isPartyCatWord(value) {
+  return isPartyRegularCatWord(value) || isPartyNixaWord(value);
+}
+
+function isPartyNixaWord(value) {
+  const word = normalizePartyEasterWord(value);
+  return word === "нікса" || word === "nixa";
+}
+
+function isPartyCapybaraWord(value) {
+  const word = normalizePartyEasterWord(value);
+  return word === "капібара" || word === "капибара" || word === "capybara";
+}
+
+function isPartySherikWord(value) {
+  const word = normalizePartyEasterWord(value);
+  return word === "шерик" || word === "шерлок";
+}
+
+function getPartyWordStickerAsset(value) {
+  if (isPartyCapybaraWord(value)) return PARTY_EASTER_EGG_CAPYBARA_ASSET;
+  if (isPartySherikWord(value)) {
+    const sherikIndex = Math.floor(Math.random() * PARTY_EASTER_EGG_SHERIK_ASSETS.length);
+    return PARTY_EASTER_EGG_SHERIK_ASSETS[sherikIndex] || PARTY_EASTER_EGG_SHERIK_ASSETS[0] || "";
+  }
+  if (!isPartyCatWord(value)) return "";
+  const index = Math.floor(Math.random() * PARTY_EASTER_EGG_NIXA_ASSETS.length);
+  return PARTY_EASTER_EGG_NIXA_ASSETS[index] || PARTY_EASTER_EGG_NIXA_ASSETS[0] || "";
+}
+
+function showPartyWordEasterEggSticker(value, hostElement) {
+  const host = hostElement || gameScreen;
+  if (!host || (!isPartyCatWord(value) && !isPartyCapybaraWord(value) && !isPartySherikWord(value))) return;
+  const asset = getPartyWordStickerAsset(value);
+  if (!asset) return;
+  const oldSticker = document.querySelector(".party-easter-sticker");
+  if (oldSticker && oldSticker.parentNode) oldSticker.parentNode.removeChild(oldSticker);
+  const sticker = document.createElement("div");
+  const isMemorial = isPartyNixaWord(value);
+  sticker.className = "party-easter-sticker" + (isPartyCapybaraWord(value) ? " is-capybara" : (isPartySherikWord(value) ? " is-sherik" : " is-nixa")) + (isMemorial ? " is-memorial" : "");
+  const image = document.createElement("img");
+  image.src = asset;
+  image.alt = "";
+  image.setAttribute("aria-hidden", "true");
+  sticker.appendChild(image);
+  if (isMemorial) {
+    const caption = document.createElement("span");
+    caption.className = "party-easter-sticker-memorial";
+    caption.textContent = "Нікса · 2010–2025";
+    sticker.appendChild(caption);
+  }
+  host.appendChild(sticker);
+  window.setTimeout(function () {
+    sticker.classList.add("is-leaving");
+  }, isMemorial ? 3600 : 2300);
+  window.setTimeout(function () {
+    if (sticker.parentNode) sticker.parentNode.removeChild(sticker);
+  }, isMemorial ? 4300 : 2900);
+}
+
+function countPartyWordLength(value) {
+  return Array.from(String(value || "").replace(/\s+/g, "").trim()).length;
+}
+
+function getGuessedRoundWords() {
+  return roundWords.filter(function (item) { return item.result === "guessed"; });
+}
+
+function countRoundWordsByCategory(categoryName) {
+  return getGuessedRoundWords().filter(function (item) { return item.categoryName === categoryName; }).length;
+}
+
+function hasThreeConsecutiveSameInitial(items) {
+  let streak = 0;
+  let previous = "";
+  for (let index = 0; index < items.length; index += 1) {
+    const initial = normalizePartyEasterWord(items[index].word).charAt(0);
+    if (initial && initial === previous) streak += 1; else streak = initial ? 1 : 0;
+    previous = initial;
+    if (streak >= 3) return true;
+  }
+  return false;
+}
+
+function evaluatePartyWordSpecificAchievements(result) {
+  if (result !== "guessed" || !currentEntry) return;
+  const elapsedMs = Math.max(0, Date.now() - (currentWordShownAtMs || Date.now()));
+  const word = currentEntry.word || "";
+  const length = countPartyWordLength(word);
+  const isAnimal = currentEntry.categoryName === "Тварини";
+  const state = wordGuessAchievementsState;
+  if (selectedMode === "explain") {
+    if (elapsedMs <= 6000) state.aliasFastWords = (Number(state.aliasFastWords) || 0) + 1;
+    if (length >= 12) state.aliasLongWords = (Number(state.aliasLongWords) || 0) + 1;
+    if (isAnimal) state.aliasAnimalWords = (Number(state.aliasAnimalWords) || 0) + 1;
+    if (isPartyRegularCatWord(word)) state.aliasCatWords = (Number(state.aliasCatWords) || 0) + 1;
+    if (isPartyCapybaraWord(word)) state.aliasCapybaraWords = (Number(state.aliasCapybaraWords) || 0) + 1;
+    if (isPartyRegularCatWord(word) || isPartyCapybaraWord(word)) state.aliasSpecialWords = (Number(state.aliasSpecialWords) || 0) + 1;
+    unlockAchievementConditions([
+      [isPartyRegularCatWord(word) && elapsedMs <= 5000, "alias-cat-lightning"],
+      [isPartyCapybaraWord(word) && elapsedMs <= 6000, "alias-capybara-lightning"],
+      [length >= 12, "alias-long-word"],
+      [length >= 18, "alias-ultra-long-word"],
+      [elapsedMs >= 20000, "alias-slow-word"],
+      [state.aliasCatWords >= 5, "alias-cat-five"],
+      [state.aliasFastWords >= 25, "alias-fast-25"],
+      [state.aliasLongWords >= 25, "alias-long-25"],
+      [state.aliasAnimalWords >= 50, "alias-animal-50"],
+      [state.aliasSpecialWords >= 5, "alias-special-five"],
+    ]);
+  } else if (selectedMode === "charades") {
+    if (length >= 18) state.charadesLongWords = (Number(state.charadesLongWords) || 0) + 1;
+    if (isAnimal) state.charadesAnimalWords = (Number(state.charadesAnimalWords) || 0) + 1;
+    if (isPartyCapybaraWord(word)) state.charadesCapybaraWords = (Number(state.charadesCapybaraWords) || 0) + 1;
+    if (isPartyRegularCatWord(word) || isPartyCapybaraWord(word)) state.charadesSpecialWords = (Number(state.charadesSpecialWords) || 0) + 1;
+    unlockAchievementConditions([
+      [isPartyCapybaraWord(word) && elapsedMs <= 8000, "charades-capybara-fast"],
+      [length >= 18, "charades-long-prompt"],
+      [length >= 28, "charades-ultra-long-prompt"],
+      [state.charadesSpecialWords >= 3, "charades-special-three"],
+    ]);
+  }
+  persistWordGuessAchievementsState();
+}
+
+function evaluatePartyRoundPatternAchievements() {
+  const guessedWords = getGuessedRoundWords();
+  if (!guessedWords.length) return;
+  const lengths = guessedWords.map(function (item) { return countPartyWordLength(item.word); });
+  const categoriesUsed = new Set(guessedWords.map(function (item) { return item.categoryName; }).filter(Boolean));
+  const initials = new Set(guessedWords.map(function (item) { return normalizePartyEasterWord(item.word).charAt(0); }).filter(Boolean));
+  if (selectedMode === "explain") {
+    unlockAchievementConditions([
+      [lengths.filter(function (length) { return length >= 12; }).length >= 3, "alias-three-long-round"],
+      [lengths.filter(function (length) { return length <= 5; }).length >= 5, "alias-five-short-round"],
+      [countRoundWordsByCategory("Тварини") >= 3, "alias-animal-trio"],
+      [countRoundWordsByCategory("Їжа") >= 3, "alias-food-trio"],
+      [countRoundWordsByCategory("Спорт") >= 3, "alias-sport-trio"],
+      [countRoundWordsByCategory("Професії") >= 3, "alias-profession-trio"],
+      [hasThreeConsecutiveSameInitial(guessedWords), "alias-same-initial-three"],
+      [guessedWords.length >= 10 && initials.size >= 10, "alias-unique-initial-ten"],
+      [guessedWords.length >= 8 && lengths.every(function (length) { return length >= 7; }), "alias-all-long-eight"],
+      [guessedWords.length >= 10 && categoriesUsed.size === 1, "alias-single-category-ten"],
+      [guessedWords.length >= 12 && categoriesUsed.size <= 2, "alias-two-categories-twelve"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 15, "alias-easy-fifteen"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 15, "alias-medium-fifteen"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 15, "alias-hard-fifteen"],
+      [score >= 18 && skipped === 0, "alias-clean-eighteen"],
+      [score >= 15 && skipped === 1, "alias-one-skip-fifteen"],
+      [score + skipped >= 40, "alias-forty-actions"],
+      [selectedDuration === 60 && score >= 15, "alias-minute-fifteen"],
+      [selectedDuration === 90 && score >= 20, "alias-ninety-twenty"],
+      [selectedDuration === 120 && score >= 25, "alias-two-minute-twenty-five"],
+    ]);
+  } else if (selectedMode === "charades") {
+    unlockAchievementConditions([
+      [lengths.filter(function (length) { return length >= 18; }).length >= 3, "charades-three-long-round"],
+      [countRoundWordsByCategory("Тварини") >= 3, "charades-animal-trio"],
+      [hasThreeConsecutiveSameInitial(guessedWords), "charades-same-initial-three"],
+      [guessedWords.length >= 8 && initials.size >= 8, "charades-unique-initial-eight"],
+      [guessedWords.length >= 8 && categoriesUsed.size === 1, "charades-single-category-eight"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 10, "charades-easy-ten"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 10, "charades-medium-ten"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 10, "charades-hard-ten"],
+      [score >= 12 && skipped === 0, "charades-clean-twelve-plus"],
+    ]);
+  }
+}
+
 function startSingleCardGame() {
+  resetSessionContentExposure();
   destroyRoundTimer();
   setRoundPaused(false, { resumeTimer: false });
   resetSwipeState();
@@ -12083,7 +14836,7 @@ function startSingleCardGame() {
     return;
   }
 
-  deck = shuffleArray([...wordPool]);
+  deck = buildWeightedSessionDeck([...wordPool], selectedMode, function (entry) { return entry && entry.word ? entry.word : ""; });
   renderGameSummary();
   updateModeLabels();
   settingsMessage.textContent = "";
@@ -12098,14 +14851,17 @@ function applyRandomWordCardShape() {
 
 function showNextWord() {
   if (deck.length === 0) {
-    deck = shuffleArray([...getCurrentWordPool()]);
+    deck = buildWeightedSessionDeck([...getCurrentWordPool()], selectedMode, function (entry) { return entry && entry.word ? entry.word : ""; });
   }
 
   const nextEntry = deck.pop();
   currentEntry = nextEntry;
   const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
+  markSessionContentExposure(selectedMode, currentWord);
+  currentWordShownAtMs = Date.now();
   wordText.textContent = currentWord;
+  showPartyWordEasterEggSticker(currentWord);
   applyRandomWordCardShape();
   updateWordCardMotionWidth();
   window.requestAnimationFrame(updateWordCardMotionWidth);
@@ -12490,6 +15246,7 @@ function startExtraRound() {
 }
 
 function startNewGame() {
+  resetSessionContentExposure();
   resetTeamScores();
   finalRoundActive = false;
   playedRounds = 0;
@@ -12523,6 +15280,7 @@ function recordRoundWord(result) {
     categoryName: currentEntry.categoryName,
     difficulty: currentEntry.difficulty,
     difficultyName: currentEntry.difficultyName,
+    elapsedMs: Math.max(0, Date.now() - (currentWordShownAtMs || Date.now())),
     result,
   });
 }
@@ -12802,19 +15560,192 @@ function haveActiveTeamsCompletedSameRound() {
   return activeRounds.every((roundCount) => roundCount === activeRounds[0]);
 }
 
+function unlockAchievementConditions(entries) {
+  entries.forEach(function (entry) {
+    if (entry[0]) {
+      unlockWordGuessAchievement(entry[1]);
+    }
+  });
+}
+
+function evaluatePartyModeCumulativeAchievements(gameId) {
+  const state = wordGuessAchievementsState;
+  if (gameId === "alias") {
+    if ((Number(state.aliasRounds) || 0) >= 10) unlockWordGuessAchievement("alias-ten-rounds");
+    if ((Number(state.aliasRounds) || 0) >= 25) unlockWordGuessAchievement("alias-twenty-five-rounds");
+    if ((Number(state.aliasPoints) || 0) >= 50) unlockWordGuessAchievement("alias-fifty-points");
+    if ((Number(state.aliasPoints) || 0) >= 100) unlockWordGuessAchievement("alias-hundred-points");
+    if ((Number(state.aliasPoints) || 0) >= 250) unlockWordGuessAchievement("alias-two-fifty-points");
+    if ((Number(state.aliasCleanRounds) || 0) >= 3) unlockWordGuessAchievement("alias-three-clean-rounds");
+    if ((Number(state.aliasCleanRounds) || 0) >= 10) unlockWordGuessAchievement("alias-ten-clean-rounds");
+  } else if (gameId === "charades") {
+    if ((Number(state.charadesRounds) || 0) >= 10) unlockWordGuessAchievement("charades-ten-rounds");
+    if ((Number(state.charadesRounds) || 0) >= 25) unlockWordGuessAchievement("charades-twenty-five-rounds");
+    if ((Number(state.charadesPoints) || 0) >= 50) unlockWordGuessAchievement("charades-fifty-points");
+    if ((Number(state.charadesPoints) || 0) >= 100) unlockWordGuessAchievement("charades-hundred-points");
+    if ((Number(state.charadesPoints) || 0) >= 250) unlockWordGuessAchievement("charades-two-fifty-points");
+    if ((Number(state.charadesCleanRounds) || 0) >= 3) unlockWordGuessAchievement("charades-three-clean-rounds");
+    if ((Number(state.charadesCleanRounds) || 0) >= 10) unlockWordGuessAchievement("charades-ten-clean-rounds");
+  }
+}
+
 function recordPartyModeAchievements(pointsEarned, skippedCount) {
   const points = Math.max(0, Number(pointsEarned) || 0);
   const skips = Math.max(0, Number(skippedCount) || 0);
   if (selectedMode === "explain") {
+    wordGuessAchievementsState.aliasRounds = (Number(wordGuessAchievementsState.aliasRounds) || 0) + 1;
+    wordGuessAchievementsState.aliasPoints = (Number(wordGuessAchievementsState.aliasPoints) || 0) + points;
+    wordGuessAchievementsState.aliasSkips = (Number(wordGuessAchievementsState.aliasSkips) || 0) + skips;
+    if (skips === 0 && points > 0) wordGuessAchievementsState.aliasCleanRounds = (Number(wordGuessAchievementsState.aliasCleanRounds) || 0) + 1;
+    if (points >= 10) wordGuessAchievementsState.aliasTenPlusRounds = (Number(wordGuessAchievementsState.aliasTenPlusRounds) || 0) + 1;
+    if (points >= 20) wordGuessAchievementsState.aliasTwentyPlusRounds = (Number(wordGuessAchievementsState.aliasTwentyPlusRounds) || 0) + 1;
+    if (points === 0) wordGuessAchievementsState.aliasZeroRounds = (Number(wordGuessAchievementsState.aliasZeroRounds) || 0) + 1;
+    if (skips === 0 && points > 0) {
+      wordGuessAchievementsState.aliasCurrentCleanStreak = (Number(wordGuessAchievementsState.aliasCurrentCleanStreak) || 0) + 1;
+      wordGuessAchievementsState.aliasBestCleanStreak = Math.max(Number(wordGuessAchievementsState.aliasBestCleanStreak) || 0, wordGuessAchievementsState.aliasCurrentCleanStreak);
+    } else {
+      wordGuessAchievementsState.aliasCurrentCleanStreak = 0;
+    }
+    const state = wordGuessAchievementsState;
     if (points >= 1) unlockWordGuessAchievement("alias-first-point");
+    if (points >= 5) unlockWordGuessAchievement("alias-five-round");
     if (points >= 10) unlockWordGuessAchievement("alias-ten-round");
+    if (points >= 15) unlockWordGuessAchievement("alias-fifteen-round");
     if (points >= 5 && skips === 0) unlockWordGuessAchievement("alias-clean-five");
+    if (points >= 10 && skips === 0) unlockWordGuessAchievement("alias-perfect-ten");
+    if (skips >= 5) unlockWordGuessAchievement("alias-five-skips");
+    if (points >= 7 && skips >= 3) unlockWordGuessAchievement("alias-balanced-round");
+    unlockAchievementConditions([
+      [state.aliasRounds >= 50, "alias-fifty-rounds"],
+      [state.aliasRounds >= 100, "alias-hundred-rounds"],
+      [state.aliasPoints >= 500, "alias-five-hundred-points"],
+      [state.aliasPoints >= 1000, "alias-thousand-points"],
+      [state.aliasSkips >= 25, "alias-twenty-five-skips"],
+      [state.aliasSkips >= 50, "alias-fifty-skips"],
+      [state.aliasSkips >= 100, "alias-hundred-skips"],
+      [state.aliasCleanRounds >= 25, "alias-twenty-five-clean-rounds"],
+      [state.aliasCleanRounds >= 50, "alias-fifty-clean-rounds"],
+      [state.aliasTenPlusRounds >= 3, "alias-three-ten-plus-rounds"],
+      [state.aliasTenPlusRounds >= 10, "alias-ten-ten-plus-rounds"],
+      [state.aliasTwentyPlusRounds >= 3, "alias-three-twenty-plus-rounds"],
+      [state.aliasZeroRounds >= 5, "alias-five-zero-rounds"],
+      [state.aliasCurrentCleanStreak >= 3, "alias-clean-streak-three"],
+      [state.aliasCurrentCleanStreak >= 5, "alias-clean-streak-five"],
+      [points >= 20, "alias-twenty-round"],
+      [points >= 15 && skips === 0, "alias-clean-fifteen"],
+      [points >= 10 && skips === 1, "alias-one-skip-ten"],
+      [skips >= 10, "alias-ten-skips"],
+      [points === 0 && skips >= 5, "alias-zero-five-skips"],
+      [points === 5 && skips === 5, "alias-equal-five"],
+      [points >= 3 && skips > points, "alias-skip-over-score"],
+      [points + skips >= 20, "alias-twenty-actions"],
+      [selectedDuration === 30 && points >= 5, "alias-sprint-five"],
+      [selectedDuration === 30 && points >= 10, "alias-sprint-ten"],
+      [selectedDuration === 120 && points >= 20, "alias-marathon-twenty"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 5, "alias-hard-five"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 10 && skips === 0, "alias-hard-clean-ten"],
+      [selectedDifficulties.length >= 3 && points >= 10, "alias-all-difficulties-ten"],
+      [selectedTeamCount === 4 && points >= 10, "alias-four-teams-ten"],
+      [selectedCategories.length >= 5 && points >= 10, "alias-category-tour"],
+      [state.aliasRounds >= 200, "alias-two-hundred-rounds"],
+      [state.aliasRounds >= 250, "alias-two-fifty-rounds"],
+      [state.aliasPoints >= 2000, "alias-two-thousand-points"],
+      [state.aliasPoints >= 5000, "alias-five-thousand-points"],
+      [state.aliasSkips >= 250, "alias-two-fifty-skips"],
+      [state.aliasCleanRounds >= 100, "alias-hundred-clean-rounds"],
+      [state.aliasTenPlusRounds >= 25, "alias-twenty-five-ten-plus-rounds"],
+      [state.aliasTenPlusRounds >= 50, "alias-fifty-ten-plus-rounds"],
+      [state.aliasTwentyPlusRounds >= 10, "alias-ten-twenty-plus-rounds"],
+      [state.aliasTwentyPlusRounds >= 25, "alias-twenty-five-twenty-plus-rounds"],
+      [state.aliasZeroRounds >= 10, "alias-ten-zero-rounds"],
+      [state.aliasCurrentCleanStreak >= 10, "alias-clean-streak-ten"],
+      [points >= 25, "alias-twenty-five-round"],
+      [points >= 20 && skips === 0, "alias-clean-twenty"],
+      [skips >= 15, "alias-fifteen-skips"],
+      [points + skips >= 30, "alias-thirty-actions"],
+      [selectedDuration === 30 && points >= 15, "alias-sprint-fifteen"],
+    ]);
+    evaluatePartyModeCumulativeAchievements("alias");
+    persistWordGuessAchievementsState();
+    renderHiddenWordGuessAchievementsLab();
     return;
   }
   if (selectedMode === "charades") {
+    wordGuessAchievementsState.charadesRounds = (Number(wordGuessAchievementsState.charadesRounds) || 0) + 1;
+    wordGuessAchievementsState.charadesPoints = (Number(wordGuessAchievementsState.charadesPoints) || 0) + points;
+    wordGuessAchievementsState.charadesSkips = (Number(wordGuessAchievementsState.charadesSkips) || 0) + skips;
+    if (skips === 0 && points > 0) wordGuessAchievementsState.charadesCleanRounds = (Number(wordGuessAchievementsState.charadesCleanRounds) || 0) + 1;
+    if (points >= 8) wordGuessAchievementsState.charadesEightPlusRounds = (Number(wordGuessAchievementsState.charadesEightPlusRounds) || 0) + 1;
+    if (points >= 15) wordGuessAchievementsState.charadesFifteenPlusRounds = (Number(wordGuessAchievementsState.charadesFifteenPlusRounds) || 0) + 1;
+    if (points === 0) wordGuessAchievementsState.charadesZeroRounds = (Number(wordGuessAchievementsState.charadesZeroRounds) || 0) + 1;
+    if (skips === 0 && points > 0) {
+      wordGuessAchievementsState.charadesCurrentCleanStreak = (Number(wordGuessAchievementsState.charadesCurrentCleanStreak) || 0) + 1;
+      wordGuessAchievementsState.charadesBestCleanStreak = Math.max(Number(wordGuessAchievementsState.charadesBestCleanStreak) || 0, wordGuessAchievementsState.charadesCurrentCleanStreak);
+    } else {
+      wordGuessAchievementsState.charadesCurrentCleanStreak = 0;
+    }
+    const state = wordGuessAchievementsState;
     if (points >= 1) unlockWordGuessAchievement("charades-first-point");
+    if (points >= 5) unlockWordGuessAchievement("charades-five-round");
     if (points >= 8) unlockWordGuessAchievement("charades-eight-round");
+    if (points >= 12) unlockWordGuessAchievement("charades-twelve-round");
     if (points >= 5 && skips === 0) unlockWordGuessAchievement("charades-clean-five");
+    if (points >= 8 && skips === 0) unlockWordGuessAchievement("charades-perfect-eight");
+    if (skips >= 5) unlockWordGuessAchievement("charades-five-skips");
+    if (points >= 6 && skips >= 4) unlockWordGuessAchievement("charades-chaos-round");
+    unlockAchievementConditions([
+      [state.charadesRounds >= 50, "charades-fifty-rounds"],
+      [state.charadesRounds >= 100, "charades-hundred-rounds"],
+      [state.charadesPoints >= 500, "charades-five-hundred-points"],
+      [state.charadesPoints >= 1000, "charades-thousand-points"],
+      [state.charadesSkips >= 25, "charades-twenty-five-skips"],
+      [state.charadesSkips >= 50, "charades-fifty-skips"],
+      [state.charadesSkips >= 100, "charades-hundred-skips"],
+      [state.charadesCleanRounds >= 25, "charades-twenty-five-clean-rounds"],
+      [state.charadesCleanRounds >= 50, "charades-fifty-clean-rounds"],
+      [state.charadesEightPlusRounds >= 3, "charades-three-eight-plus-rounds"],
+      [state.charadesEightPlusRounds >= 10, "charades-ten-eight-plus-rounds"],
+      [state.charadesFifteenPlusRounds >= 3, "charades-three-fifteen-plus-rounds"],
+      [state.charadesZeroRounds >= 5, "charades-five-zero-rounds"],
+      [state.charadesCurrentCleanStreak >= 3, "charades-clean-streak-three"],
+      [state.charadesCurrentCleanStreak >= 5, "charades-clean-streak-five"],
+      [points >= 15, "charades-fifteen-round"],
+      [points >= 12 && skips === 0, "charades-clean-twelve"],
+      [points >= 8 && skips === 1, "charades-one-skip-eight"],
+      [skips >= 10, "charades-ten-skips"],
+      [points === 0 && skips >= 5, "charades-zero-five-skips"],
+      [points === 5 && skips === 5, "charades-equal-five"],
+      [points >= 3 && skips > points, "charades-skip-over-score"],
+      [points + skips >= 20, "charades-twenty-actions"],
+      [selectedDuration === 30 && points >= 4, "charades-sprint-four"],
+      [selectedDuration === 30 && points >= 8, "charades-sprint-eight"],
+      [selectedDuration === 120 && points >= 15, "charades-marathon-fifteen"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 4, "charades-hard-four"],
+      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 8 && skips === 0, "charades-hard-clean-eight"],
+      [selectedDifficulties.length >= 3 && points >= 8, "charades-all-difficulties-eight"],
+      [selectedTeamCount === 4 && points >= 8, "charades-four-teams-eight"],
+      [selectedCategories.length >= 5 && points >= 8, "charades-category-tour"],
+      [state.charadesRounds >= 200, "charades-two-hundred-rounds"],
+      [state.charadesRounds >= 250, "charades-two-fifty-rounds"],
+      [state.charadesPoints >= 2000, "charades-two-thousand-points"],
+      [state.charadesPoints >= 5000, "charades-five-thousand-points"],
+      [state.charadesSkips >= 250, "charades-two-fifty-skips"],
+      [state.charadesCleanRounds >= 100, "charades-hundred-clean-rounds"],
+      [state.charadesEightPlusRounds >= 25, "charades-twenty-five-eight-plus-rounds"],
+      [state.charadesEightPlusRounds >= 50, "charades-fifty-eight-plus-rounds"],
+      [state.charadesFifteenPlusRounds >= 10, "charades-ten-fifteen-plus-rounds"],
+      [state.charadesFifteenPlusRounds >= 25, "charades-twenty-five-fifteen-plus-rounds"],
+      [state.charadesZeroRounds >= 10, "charades-ten-zero-rounds"],
+      [state.charadesCurrentCleanStreak >= 10, "charades-clean-streak-ten"],
+      [points >= 20, "charades-twenty-round"],
+      [points >= 15 && skips === 0, "charades-clean-fifteen"],
+      [skips >= 15, "charades-fifteen-skips"],
+      [points + skips >= 30, "charades-thirty-actions"],
+      [selectedDuration === 30 && points >= 12, "charades-sprint-twelve"],
+    ]);
+    evaluatePartyModeCumulativeAchievements("charades");
+    persistWordGuessAchievementsState();
+    renderHiddenWordGuessAchievementsLab();
   }
 }
 
@@ -12824,6 +15755,7 @@ function confirmRoundResults() {
 
   const teamName = getTeamName(currentTeamIndex);
   const pointsEarned = score;
+  evaluatePartyRoundPatternAchievements();
   recordPartyModeAchievements(pointsEarned, skipped);
   teamScores[currentTeamIndex] += pointsEarned;
   roundsPlayedByTeam[currentTeamIndex] = (roundsPlayedByTeam[currentTeamIndex] || 0) + 1;
@@ -13054,6 +15986,7 @@ function markSkipped() {
 function handleRoundWordResult(result, animationClass) {
   isSwipeLocked = true;
 
+  evaluatePartyWordSpecificAchievements(result);
   recordRoundWord(result);
   recalculateRoundCounters();
   updateGameInfo();

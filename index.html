@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.4c-20260816" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.5-20260824-c7" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.4c-20260816" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.5-20260824-c7" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -31,7 +31,7 @@
   </button>
   <button id="menuAchievementsBtn" class="app-achievements-btn" type="button" aria-haspopup="dialog" aria-controls="achievementsModal" aria-label="Досягнення">
     <span class="app-achievements-icon" aria-hidden="true">🏆</span>
-    <span id="menuAchievementsProgress" class="app-achievements-badge">0/171</span>
+    <span id="menuAchievementsProgress" class="app-achievements-badge">0/210</span>
     <span id="menuAchievementsTitle" class="app-achievements-label">Досягнення</span>
     <span id="menuAchievementsProgressBar" hidden></span>
   </button>
@@ -131,7 +131,7 @@
               <p id="appLabsAchievementsEyebrow" class="app-settings-section-eyebrow">Achievements · Labs</p>
               <h4 id="appLabsAchievementsTitle">Нагороди й досягнення</h4>
             </div>
-            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/171</strong>
+            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/210</strong>
           </div>
           <p id="appLabsAchievementsCopy" class="app-labs-achievements-copy">Локальні нагороди зберігаються на цьому пристрої.</p>
           <button id="appLabsAchievementsOpenBtn" class="app-labs-achievements-open" type="button">Відкрити колекцію →</button>
@@ -153,7 +153,7 @@
         </div>
       </section>
       <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.4c</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.5</p>
     </div>
   </div>
 
@@ -166,9 +166,10 @@
           <p id="achievementsModalEyebrow" class="app-settings-section-eyebrow">Вгадай слово</p>
           <h2 id="achievementsModalTitle">Досягнення</h2>
         </div>
-        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/171</strong>
+        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/210</strong>
       </div>
       <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+      <div id="achievementsModalGameNav" class="achievements-modal-game-nav" role="tablist" aria-label="Ігри та нові досягнення"></div>
       <div class="achievements-modal-tools">
         <label id="achievementsModalSearchLabel" class="achievements-search-label" for="achievementsModalSearch">Пошук досягнень</label>
         <div class="achievements-search-field">
@@ -241,7 +242,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.4c</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.5</p>
         </div>
       </div>
     </section>
@@ -1012,7 +1013,7 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="wordguess-session.js?rev=0.6.4c-20260816"></script>
-  <script src="app.js?rev=0.6.4c-20260816"></script>
+  <script src="wordguess-session.js?rev=0.6.5-20260824-c7"></script>
+  <script src="app.js?rev=0.6.5-20260824-c7"></script>
 </body>
 </html>

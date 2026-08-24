@@ -8,8 +8,8 @@
 - Підказки оформлено як три зрозумілі рівні, локалізовано та розбито на окремі рядки; наступна доступна підказка може ненав’язливо підсвічуватись після використання попередньої або тривалої паузи.
 - Недопустимі слова отримали виразні staged-анімації з різними ефектами для літер, включно з particle/dust-розпадом; основне повідомлення про помилку показується довше й контрастніше, а декоративні comic-reactions не перекривають його.
 - Перемога має розширені confetti/fireworks, emoji, sparkles і glow-ефекти. Share результату формує PNG-картку з реальним полем спроб і використовує системний Share API, коли браузер підтримує передачу файлів.
-- Додано 171 локальне Achievement: звичайні, накопичувальні, кумедні та секретні. Загадкові плитки можуть після прихованої серії натискань розкрити точну умову, не видаючи саму нагороду. Achievement-toast показується довго та відкриває колекцію одразу на отриманій нагороді.
-- Кнопка досягнень компактно показує прогрес `X/171` поруч із глобальними налаштуваннями на головних/підготовчих екранах і не заважає під час активної гри.
+- Додано 210 локальних Achievement: звичайні, накопичувальні, кумедні та секретні. Загадкові плитки можуть після прихованої серії натискань розкрити точну умову, не видаючи саму нагороду. Achievement-toast показується довго та відкриває колекцію одразу на отриманій нагороді.
+- Кнопка досягнень компактно показує прогрес `X/210` поруч із глобальними налаштуваннями на головних/підготовчих екранах і не заважає під час активної гри.
 - У налаштуваннях додано повне скидання локального прогресу/налаштувань. Додано локальну заглушку зворотного зв’язку розробнику: bug report, like/dislike та скарга на конкретне слово з технічним контекстом для майбутньої серверної відправки.
 - Додано dormant `wordguess-session.js` та `WORD_GUESS_SESSION_PROTOCOL.md` як основу для майбутнього режиму на час і серверних сесій 2–5 гравців (realtime/turn-based). Поточний UI та локальний classic-режим не змінені.
 - Фоновий doodle-pattern працює в темній і світлій темах; виправлено wide-screen геометрію, стабільність масштабу поля після першого введення, dropdown setup, touch-зони та інші mobile/wide UX-деталі.
@@ -268,3 +268,45 @@
 - На отриманих нагородах показується локальна дата й час отримання.
 - Старі нагороди при оновленні не стають штучно «новими»: schema v5 мігрує їх як уже переглянуті.
 - Біля кнопки 🏆 з’являється окремий лічильник непроглянутих нагород.
+
+### 0.6.5 candidate-2
+
+- Achievements navigation now starts with a game-level filter, then category tags.
+- Unread achievement counters are gold, shown only when non-zero, and disappear immediately after viewing.
+- Global “New” inbox combines unread achievements from every game.
+- Added substantial Alias, Charades, and Who Am I achievement sets with persistent counters.
+
+
+- Candidate-2 expands Alias, Charades, and Who Am I to 75 achievements each, with per-round skill/chaos/secrets, difficulty/time/team challenges, persistent milestones, and real streak tracking. The full collection now contains 390 achievements.
+
+### 0.6.5 candidate-3
+
+- Expanded the party-game achievement pool again, with the largest new set focused on Alias: fast word solves, topic streaks, long/short word challenges, timed round feats, and local easter eggs.
+- Added the local word “Нікса” and “кішка” to party-game animal pools (and Who Am I), while keeping the easter eggs intentionally rare through normal shuffling.
+- Added four stylized Nixa sticker assets derived from the supplied photos. They pop in for cat/Nixa words in Alias and Charades.
+- Added a playful capybara sticker reaction for “капібара”.
+- Added special Nixa/cat/capybara achievements for Alias, Charades, and Who Am I, plus persistent counters for repeat discoveries.
+- Achievement storage schema is now v8 and remains forward-compatible with existing 0.6.4c/0.6.5 test progress.
+
+### 0.6.5 candidate-4
+- Reframed Nixa as a quiet memorial easter egg rather than an achievement theme; exact Nixa appearances show the supplied sticker with “Нікса · 2010–2025”, without a dedicated achievement.
+- Accepted Нікса/Никса/Nixa as valid 5-letter Word Guess inputs while keeping them out of target pools.
+- Added session exposure weighting across Alias, Charades, Word Guess, and Who Am I so already shown content loses priority until less-seen content catches up.
+- Expanded the Alias vocabulary with hundreds of curated Ukrainian nouns and broadened Crocodile noun prompts with actable concrete nouns.
+- Pruned arbitrary exact-score achievements and low-value one-off Nixa/capybara achievements, keeping the stronger skill, streak, pattern, and easter-egg set.
+
+### 0.6.5 candidate-5
+- Alias: progressive final-15-second timer urgency with subtle visual pulse and escalating timer ticks.
+- The warning remains confined to the timer so it does not cover the word card or actions.
+
+### 0.6.5 candidate-6
+- Removed stale localization strings for retired one-off capybara achievements so the Achievements catalogue no longer carries dead conditions.
+- Strengthened session content ranking for Alias, Charades, Who Am I, and Word Guess: exposure count remains the primary penalty and a recency penalty now pushes just-shown content farther back after deck rebuilds.
+- The ranking still guarantees unseen content outranks seen content while any unseen items remain, and duplicate normalized words stay deduplicated inside party-game pools.
+
+
+
+### 0.6.5 candidate-7
+- Added quiet RU Word Guess easter eggs for `Шерик` and `Шерлок`: both are accepted as manual guesses but never selected as targets.
+- Added four Sherik/Sherlock sticker reactions generated from the supplied photos.
+- Preserved the existing Nixa memorial easter egg and the stronger in-session anti-repeat word weighting.

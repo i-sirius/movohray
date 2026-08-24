@@ -1,5 +1,5 @@
-const MOVOHRAY_REVISION = "0.6.4c-20260816";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.4c-b20260816";
+const MOVOHRAY_REVISION = "0.6.5-20260824-c7";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.5-b20260824-c7";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
@@ -19,6 +19,15 @@ const MOVOHRAY_OPTIONAL_ASSETS = [
   `./assets/game-icons/charades.png?rev=${MOVOHRAY_REVISION}`,
   `./assets/game-icons/wordguess.png?rev=${MOVOHRAY_REVISION}`,
   `./assets/game-icons/whoami.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/nixa-1.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/nixa-2.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/nixa-3.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/nixa-4.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/sherik-1.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/sherik-2.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/sherik-3.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/sherik-4.png?rev=${MOVOHRAY_REVISION}`,
+  `./assets/easter-eggs/capybara.png?rev=${MOVOHRAY_REVISION}`,
   `./assets/sounds/correct.ogg?rev=${MOVOHRAY_REVISION}`,
   `./assets/sounds/skipped.ogg?rev=${MOVOHRAY_REVISION}`,
   `./assets/sounds/wrong.ogg?rev=${MOVOHRAY_REVISION}`,
