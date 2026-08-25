@@ -13,13 +13,13 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.5-20260824-c7" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.6-20260825" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.5-20260824-c7" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.6-20260825" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -86,6 +86,14 @@
           <label class="app-settings-check"><input type="checkbox" data-word-card-shape="splash" /><span id="wordCardShapeSplash">Крапля-сплеш</span></label>
           <label class="app-settings-check"><input type="checkbox" data-word-card-shape="gummy" /><span id="wordCardShapeGummy">Жуйка / мармелад</span></label>
           <label class="app-settings-check"><input type="checkbox" data-word-card-shape="paper" /><span id="wordCardShapePaper">Паперова пляма</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="amoeba" /><span id="wordCardShapeAmoeba">Амеба</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="coral" /><span id="wordCardShapeCoral">Корал</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="comet" /><span id="wordCardShapeComet">Комета</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="starfish" /><span id="wordCardShapeStarfish">Морська зірка</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="potato" /><span id="wordCardShapePotato">Картоплина</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="wave" /><span id="wordCardShapeWave">Хвиля</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="jelly" /><span id="wordCardShapeJelly">Медуза</span></label>
+          <label class="app-settings-check"><input type="checkbox" data-word-card-shape="meteor" /><span id="wordCardShapeMeteor">Метеорит</span></label>
         </div>
 
         <label class="app-settings-toggle-row" for="wordCardRandomColorsToggle">
@@ -138,6 +146,12 @@
           <output id="appLabsAchievementsDebug" hidden></output>
         </section>
       </section>
+      <section id="appUpcomingModesSection" class="app-settings-section app-upcoming-modes-section">
+        <p id="appUpcomingModesEyebrow" class="app-settings-section-eyebrow">У планах</p>
+        <h3 id="appUpcomingModesTitle" class="app-settings-section-title">Незабаром</h3>
+        <p id="appUpcomingModesCopy" class="app-upcoming-modes-copy">Готуємо нові режими для компанії.</p>
+        <div id="appUpcomingModesChips" class="upcoming-mode-chips" aria-label="Майбутні режими"></div>
+      </section>
       <section class="app-settings-section app-support-section">
         <p id="settingsSupportEyebrow" class="app-settings-section-eyebrow">Дані й підтримка</p>
         <h3 id="settingsSupportTitle" class="app-settings-section-title">Скидання та зв’язок</h3>
@@ -153,7 +167,7 @@
         </div>
       </section>
       <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.5</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.6</p>
     </div>
   </div>
 
@@ -242,7 +256,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.5</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.6</p>
         </div>
       </div>
     </section>
@@ -816,6 +830,9 @@
     </section>
 
     <section id="gameScreen" class="screen">
+      <div id="aliasCountdownFocus" class="alias-countdown-focus" aria-hidden="true">
+        <span id="aliasCountdownFocusText" class="alias-countdown-focus-number">7</span>
+      </div>
       <div class="game-layout bubble-panel">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
@@ -884,6 +901,14 @@
               <path class="word-card-blob-shape word-card-blob-splash" d="M101 248 C63 193 99 131 162 127 C170 68 265 50 320 97 C361 49 447 56 484 112 C533 72 622 72 663 119 C714 88 796 111 806 165 C871 148 931 195 917 258 C957 309 917 376 852 376 C824 432 731 447 682 404 C628 460 538 450 501 397 C448 444 354 444 319 385 C256 421 170 396 166 337 C112 342 74 300 101 248 Z"></path>
               <path class="word-card-blob-shape word-card-blob-gummy" d="M164 174 C203 110 311 96 391 124 C460 148 539 148 611 122 C698 91 801 111 839 178 C873 236 863 321 823 371 C780 424 691 443 618 417 C544 393 465 394 390 418 C305 445 200 425 157 367 C117 313 121 229 164 174 Z"></path>
               <path class="word-card-blob-shape word-card-blob-paper" d="M117 171 C150 129 210 123 266 136 C321 96 408 94 470 124 C542 87 639 88 704 124 C770 101 848 115 886 170 C920 219 917 285 879 334 C855 379 799 394 732 385 C670 423 594 431 522 404 C454 435 372 434 308 399 C238 418 161 403 124 356 C90 312 87 228 117 171 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-amoeba" d="M82 278 C61 219 93 159 151 140 C148 85 219 57 277 83 C318 43 389 55 421 99 C472 55 553 57 589 108 C646 70 730 88 753 140 C819 112 892 151 895 211 C945 236 949 302 909 335 C909 391 844 427 783 410 C745 455 669 458 620 421 C567 459 480 451 447 407 C390 447 305 431 280 382 C215 407 139 374 132 319 C95 319 73 300 82 278 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-coral" d="M90 302 C70 253 98 207 143 187 C120 145 145 102 190 98 C196 55 257 51 282 88 C325 58 380 69 398 111 C441 67 512 64 544 108 C586 69 651 76 672 119 C721 87 783 104 796 151 C850 134 907 173 902 224 C944 258 938 315 899 341 C889 395 830 425 775 405 C733 447 665 454 617 421 C564 457 487 453 446 414 C395 448 321 438 288 395 C233 421 166 398 151 350 C115 348 91 330 90 302 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-comet" d="M58 303 C111 284 137 250 154 204 C185 121 278 79 399 77 C559 74 725 102 830 151 C925 195 949 275 899 338 C847 404 716 431 566 425 C431 419 337 401 274 372 C207 342 160 337 97 354 C126 329 127 309 58 303 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-starfish" d="M501 64 C542 112 574 139 629 116 C682 94 713 110 704 161 C696 208 727 224 791 216 C861 207 893 241 850 286 C817 321 823 345 875 380 C920 411 894 445 832 436 C771 427 739 419 711 454 C678 496 638 475 616 426 C594 378 565 371 515 420 C470 465 426 458 414 406 C401 352 367 342 314 385 C259 430 220 412 241 355 C260 304 245 279 183 275 C121 271 104 235 157 207 C211 178 216 151 183 112 C151 74 181 45 238 72 C292 98 324 102 356 68 C398 25 452 27 501 64 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-potato" d="M118 268 C101 185 155 118 246 91 C333 65 405 78 480 96 C557 68 664 73 748 108 C839 145 903 207 895 284 C886 369 801 421 691 429 C598 436 547 416 474 435 C376 460 252 438 182 389 C139 359 112 317 118 268 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-wave" d="M74 257 C112 186 176 145 250 157 C323 168 357 111 430 104 C507 96 545 153 618 151 C695 149 740 96 808 120 C873 142 919 198 923 261 C928 332 875 389 806 397 C729 406 689 363 613 369 C535 376 501 428 422 425 C345 422 309 376 238 381 C164 386 104 350 74 292 C68 280 68 269 74 257 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-jelly" d="M151 332 C119 294 112 245 131 197 C161 121 248 79 358 70 C486 59 626 69 728 104 C822 137 877 196 873 260 C870 310 840 347 799 369 C776 399 745 420 710 397 C681 378 663 380 640 409 C614 441 577 439 552 405 C531 377 506 379 481 411 C454 446 414 441 391 405 C369 371 344 372 317 402 C287 435 248 421 229 387 C211 354 185 350 151 332 Z"></path>
+              <path class="word-card-blob-shape word-card-blob-meteor" d="M102 239 L157 151 Q179 118 226 119 L296 79 Q329 61 365 86 L446 66 Q489 56 523 89 L607 73 Q653 68 682 105 L770 101 Q815 103 831 145 L899 192 Q932 217 915 257 L925 329 Q927 370 884 385 L815 424 Q779 445 741 423 L654 444 Q612 454 580 424 L493 441 Q451 451 418 419 L326 432 Q284 436 259 399 L183 383 Q142 374 135 334 L94 285 Q74 260 102 239 Z"></path>
               </svg>
               <p id="wordText">Слово</p>
             </div>
@@ -1013,7 +1038,7 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="wordguess-session.js?rev=0.6.5-20260824-c7"></script>
-  <script src="app.js?rev=0.6.5-20260824-c7"></script>
+  <script src="wordguess-session.js?rev=0.6.6-20260825"></script>
+  <script src="app.js?rev=0.6.6-20260825"></script>
 </body>
 </html>

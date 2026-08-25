@@ -1,5 +1,13 @@
 # Мовограй
 
+## 0.6.6
+
+- Alias/Крокодил: набір великих карток збільшено з 8 до 16 форм; додано амебу, корал, комету, морську зірку, картоплину, хвилю, медузу та метеорит. Нові форми доступні в тому самому селекторі й беруть участь у випадковій ротації.
+- `words.json` розширено більш ніж на 550 нових записів. Кожна з 26 тем тепер має щонайменше 80 унікальних однословних easy+medium елементів, щоб дефолтний режим без словосполучень рідше доходив до повторного кола.
+- Production-звуки повністю замінено: замість коротких аркадних OGG використовується оригінальний м’який acoustic/UI MP3-набір із дерев’яними ударами, повітряними свіпами, теплими акордами та стриманими фінальними сигналами.
+- MP3 використовується як основний формат для кращої сумісності зі старими Safari/iOS; Web Audio tone patterns залишено лише як аварійний fallback.
+- PWA revision: `0.6.6-20260825`; cache: `movohray-cache-v0.6.6-b20260825`.
+
 ## 0.6.4
 
 - «Вгадай слово» суттєво розширено: український режим і експериментальні RU/EN Labs мають окремі словники, локалізовані клавіатури, правила, підказки, результати й службові повідомлення.
@@ -282,18 +290,18 @@
 ### 0.6.5 candidate-3
 
 - Expanded the party-game achievement pool again, with the largest new set focused on Alias: fast word solves, topic streaks, long/short word challenges, timed round feats, and local easter eggs.
-- Added the local word “Нікса” and “кішка” to party-game animal pools (and Who Am I), while keeping the easter eggs intentionally rare through normal shuffling.
-- Added four stylized Nixa sticker assets derived from the supplied photos. They pop in for cat/Nixa words in Alias and Charades.
+- Added a private cat-themed easter egg while keeping normal animal words in the party-game pools.
+- Added four private sticker assets for the cat-themed easter egg in Alias and Charades.
 - Added a playful capybara sticker reaction for “капібара”.
-- Added special Nixa/cat/capybara achievements for Alias, Charades, and Who Am I, plus persistent counters for repeat discoveries.
+- Added hidden cat/capybara easter-egg tracking plus persistent counters for repeat discoveries.
 - Achievement storage schema is now v8 and remains forward-compatible with existing 0.6.4c/0.6.5 test progress.
 
 ### 0.6.5 candidate-4
-- Reframed Nixa as a quiet memorial easter egg rather than an achievement theme; exact Nixa appearances show the supplied sticker with “Нікса · 2010–2025”, without a dedicated achievement.
-- Accepted Нікса/Никса/Nixa as valid 5-letter Word Guess inputs while keeping them out of target pools.
+- Reframed the private memorial reference as a quiet easter egg rather than an achievement theme.
+- Added a private manual Word Guess easter-egg input that is never selected as a target.
 - Added session exposure weighting across Alias, Charades, Word Guess, and Who Am I so already shown content loses priority until less-seen content catches up.
 - Expanded the Alias vocabulary with hundreds of curated Ukrainian nouns and broadened Crocodile noun prompts with actable concrete nouns.
-- Pruned arbitrary exact-score achievements and low-value one-off Nixa/capybara achievements, keeping the stronger skill, streak, pattern, and easter-egg set.
+- Pruned arbitrary exact-score achievements and low-value one-off easter-egg achievements, keeping the stronger skill, streak, pattern, and discovery set.
 
 ### 0.6.5 candidate-5
 - Alias: progressive final-15-second timer urgency with subtle visual pulse and escalating timer ticks.
@@ -307,6 +315,54 @@
 
 
 ### 0.6.5 candidate-7
-- Added quiet RU Word Guess easter eggs for `Шерик` and `Шерлок`: both are accepted as manual guesses but never selected as targets.
-- Added four Sherik/Sherlock sticker reactions generated from the supplied photos.
-- Preserved the existing Nixa memorial easter egg and the stronger in-session anti-repeat word weighting.
+- Added a quiet hidden RU Word Guess easter egg: secret manual guesses are accepted but never selected as targets.
+- Added four hidden sticker reactions for that Word Guess easter egg.
+- Preserved the existing private memorial easter egg and the stronger in-session anti-repeat word weighting.
+
+### 0.6.5 candidate-8
+
+- Alias: during the final 7 seconds, a large non-blocking countdown focus appears in the free upper viewport area.
+- The countdown grows every second and becomes strongest at 3–1 seconds while preserving the word card and controls.
+- Existing progressive 15-second sound/timer urgency remains active.
+
+### 0.6.5 candidate-10
+
+- Alias card handoff layering fix: outgoing card flies behind the new opaque card, so the previous word never covers the next one during swipe/button transitions.
+
+- Alias card handoff no longer snaps the outgoing word back to center after a swipe.
+- The outgoing physical card is frozen into a temporary visual ghost and continues its flight.
+- The next word is selected immediately and enters from the opposite direction during the same animation.
+- The same handoff is used for button actions and single-card next-card gestures.
+
+### 0.6.5 candidate-12
+
+- Replaced the overlapping Alias ghost/incoming-card transition with a single-card two-phase handoff.
+- The old word completes its exit first; only while the card is already invisible/outside is the content swapped.
+- The same physical card then enters from the opposite side, eliminating old/new animation conflicts entirely.
+- Swipe drag position is preserved into the exit, so the old card never snaps back to center.
+
+
+### 0.6.5 candidate-12
+- Alias round review now uses full-width rows and wraps complete words/phrases instead of clipping them inside compact tiles.
+- Correct / skip / wrong feedback now layers short randomized musical accents over the existing sounds so repeated actions feel less mechanical without becoming loud.
+- Word Guess accepted attempts receive a small context-sensitive audio cue based on how many letters matched; invalid attempts use the richer wrong feedback.
+
+### 0.6.5 candidate-13
+- Alias round review is a responsive multi-column tile table again.
+- Words and metadata are never ellipsized; long entries wrap and expand their tile vertically.
+- Compact landscape layout keeps the denser grid while preserving full word visibility.
+
+### 0.6.5 candidate-14
+- Strengthened session anti-repeat ordering: exposure count is now an absolute tier, then least-recently shown content wins within that tier; small random recency buckets avoid deterministic second-pass order.
+- Expanded Alias-friendly single-word pools so every category has at least 60 unique easy+medium entries when phrases are disabled, reducing forced repeats in category-only games.
+- Renamed the visible 100-guessed Who Am I achievement so a hidden Word Guess easter egg is not hinted at by the achievements screen.
+- Kept the private cat reaction available for regular cat words; its deeper memorial variant remains reachable only through the secret trigger.
+- Removed private easter-egg names from normal Alias, Charades, Who Am I, and Word Guess target dictionaries while keeping the secret manual Word Guess guesses functional.
+- Version checks now compare the candidate number too, so c15 can be detected after c14 even when both are built on the same date.
+
+
+
+### 0.6.5 candidate-15
+- Removed the public “Coming soon” block from the main game-mode screen and moved future-mode information into the settings menu.
+- The hidden Labs section can now be concealed and revealed again with the same seven-tap version gesture, without resetting unlocked languages, achievements, or progress.
+- Labs visibility is stored separately from Labs unlock state, so hiding the secret menu stays hidden after reopening the app until the gesture is repeated.

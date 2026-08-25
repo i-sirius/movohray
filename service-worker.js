@@ -1,5 +1,5 @@
-const MOVOHRAY_REVISION = "0.6.5-20260824-c7";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.5-b20260824-c7";
+const MOVOHRAY_REVISION = "0.6.6-20260825";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.6-b20260825";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
@@ -28,18 +28,22 @@ const MOVOHRAY_OPTIONAL_ASSETS = [
   `./assets/easter-eggs/sherik-3.png?rev=${MOVOHRAY_REVISION}`,
   `./assets/easter-eggs/sherik-4.png?rev=${MOVOHRAY_REVISION}`,
   `./assets/easter-eggs/capybara.png?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/correct.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/skipped.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/wrong.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/turn-change.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/round-start.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/countdown.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/round-complete.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/reveal.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/game-win.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/game-loss.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/game-tie.ogg?rev=${MOVOHRAY_REVISION}`,
-  `./assets/sounds/medal.ogg?rev=${MOVOHRAY_REVISION}`
+  `./assets/sounds/ui-click.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/ui-open.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/ui-close.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/positive-tick.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/correct.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/skipped.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/wrong.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/turn-change.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/round-start.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/countdown.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/round-complete.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/reveal.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/game-win.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/game-loss.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/game-tie.mp3?rev=${MOVOHRAY_REVISION}`,
+  `./assets/sounds/medal.mp3?rev=${MOVOHRAY_REVISION}`
 ];
 
 self.addEventListener("install", (event) => {

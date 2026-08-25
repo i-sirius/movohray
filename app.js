@@ -9,10 +9,11 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.5";
-const DATA_BUILD = "2026-08-24";
-const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}`;
-const ASSET_REVISION = `${DATA_REVISION}-c7`;
+const DATA_VERSION = "0.6.6";
+const DATA_BUILD = "2026-08-25";
+const DATA_CANDIDATE = 0;
+const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
+const ASSET_REVISION = DATA_REVISION;
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -31,11 +32,21 @@ const WORD_CARD_SHAPES = [
   { id: "splash", className: "word-card-shape-splash", label: "Крапля-сплеш" },
   { id: "gummy", className: "word-card-shape-gummy", label: "Жуйка / мармелад" },
   { id: "paper", className: "word-card-shape-paper", label: "Паперова пляма" },
+  { id: "amoeba", className: "word-card-shape-amoeba", label: "Амеба" },
+  { id: "coral", className: "word-card-shape-coral", label: "Корал" },
+  { id: "comet", className: "word-card-shape-comet", label: "Комета" },
+  { id: "starfish", className: "word-card-shape-starfish", label: "Морська зірка" },
+  { id: "potato", className: "word-card-shape-potato", label: "Картоплина" },
+  { id: "wave", className: "word-card-shape-wave", label: "Хвиля" },
+  { id: "jelly", className: "word-card-shape-jelly", label: "Медуза" },
+  { id: "meteor", className: "word-card-shape-meteor", label: "Метеорит" },
 ];
 const WORD_CARD_SHAPE_CLASS_NAMES = WORD_CARD_SHAPES.map((shape) => shape.className);
 const WORD_CARD_SHAPE_ID_SET = new Set(WORD_CARD_SHAPES.map((shape) => shape.id));
 const WORD_CARD_OUTLINE_MODES = new Set(["off", "random", "on"]);
 const WORD_CARD_FLIGHT_DURATION_MS = 320;
+const WORD_CARD_HANDOFF_EXIT_MS = 118;
+const WORD_CARD_HANDOFF_ENTER_MS = 190;
 const DEFAULT_WORD_CARD_SETTINGS = {
   useAllShapes: true,
   enabledShapes: WORD_CARD_SHAPES.map((shape) => shape.id),
@@ -152,18 +163,40 @@ const GAME_SOUND_PATTERNS = {
   ],
 };
 const GAME_SOUND_FILE_MAP = {
-  correct: getRevisionedAssetUrl("assets/sounds/correct.ogg"),
-  skipped: getRevisionedAssetUrl("assets/sounds/skipped.ogg"),
-  wrong: getRevisionedAssetUrl("assets/sounds/wrong.ogg"),
-  turnChange: getRevisionedAssetUrl("assets/sounds/turn-change.ogg"),
-  roundStart: getRevisionedAssetUrl("assets/sounds/round-start.ogg"),
-  countdown: getRevisionedAssetUrl("assets/sounds/countdown.ogg"),
-  roundComplete: getRevisionedAssetUrl("assets/sounds/round-complete.ogg"),
-  reveal: getRevisionedAssetUrl("assets/sounds/reveal.ogg"),
-  gameComplete: getRevisionedAssetUrl("assets/sounds/game-win.ogg"),
-  gameLoss: getRevisionedAssetUrl("assets/sounds/game-loss.ogg"),
-  tie: getRevisionedAssetUrl("assets/sounds/game-tie.ogg"),
-  medal: getRevisionedAssetUrl("assets/sounds/medal.ogg"),
+  uiClick: getRevisionedAssetUrl("assets/sounds/ui-click.mp3"),
+  uiOpen: getRevisionedAssetUrl("assets/sounds/ui-open.mp3"),
+  uiClose: getRevisionedAssetUrl("assets/sounds/ui-close.mp3"),
+  positiveTick: getRevisionedAssetUrl("assets/sounds/positive-tick.mp3"),
+  correct: getRevisionedAssetUrl("assets/sounds/correct.mp3"),
+  skipped: getRevisionedAssetUrl("assets/sounds/skipped.mp3"),
+  wrong: getRevisionedAssetUrl("assets/sounds/wrong.mp3"),
+  turnChange: getRevisionedAssetUrl("assets/sounds/turn-change.mp3"),
+  roundStart: getRevisionedAssetUrl("assets/sounds/round-start.mp3"),
+  countdown: getRevisionedAssetUrl("assets/sounds/countdown.mp3"),
+  roundComplete: getRevisionedAssetUrl("assets/sounds/round-complete.mp3"),
+  reveal: getRevisionedAssetUrl("assets/sounds/reveal.mp3"),
+  gameComplete: getRevisionedAssetUrl("assets/sounds/game-win.mp3"),
+  gameLoss: getRevisionedAssetUrl("assets/sounds/game-loss.mp3"),
+  tie: getRevisionedAssetUrl("assets/sounds/game-tie.mp3"),
+  medal: getRevisionedAssetUrl("assets/sounds/medal.mp3"),
+};
+const GAME_SOUND_EVENT_LEVELS = {
+  uiClick: "ui",
+  uiOpen: "ui",
+  uiClose: "ui",
+  positiveTick: "ui",
+  countdown: "ui",
+  reveal: "ui",
+  medal: "ui",
+  correct: "feedback",
+  skipped: "feedback",
+  wrong: "feedback",
+  turnChange: "transition",
+  roundStart: "round",
+  roundComplete: "round",
+  gameComplete: "finale",
+  gameLoss: "finale",
+  tie: "finale",
 };
 const WORD_GUESS_FEEDBACK_STORAGE_KEY = "movohray-wordguess-feedback-v1";
 const WORD_GUESS_MODE_STORAGE_KEY = "movohray-wordguess-mode";
@@ -172,13 +205,14 @@ const WORD_GUESS_ATTEMPTS_STORAGE_KEY = "movohray-wordguess-attempts";
 const WORD_GUESS_REPEATS_STORAGE_KEY = "movohray-wordguess-repeats";
 const WORD_GUESS_LANGUAGE_STORAGE_KEY = "movohray-wordguess-language-v1";
 const WORD_GUESS_LABS_STORAGE_KEY = "movohray-labs-unlocked-v1";
+const WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY = "movohray-labs-visible-v1";
 const WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY = "movohray-wordguess-achievements-v2";
 const WORD_GUESS_HINT_NUDGE_DELAY_MS = 24000;
 const WORD_GUESS_HINT_NUDGE_VISIBLE_MS = 6500;
 const WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS = 9000;
 const WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS = 650;
 const WORD_GUESS_FUTURE_FEATURES = Object.freeze({ timedModeUi: false, multiplayerUi: false, developerFeedbackPlaceholder: true });
-const MOVOHRAY_USER_RESET_STORAGE_KEYS = [THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
+const MOVOHRAY_USER_RESET_STORAGE_KEYS = [THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
 const WORD_GUESS_ACHIEVEMENTS = [
   { id: "first-win", reward: "🏆", titleKey: "achievementFirstWinTitle", descriptionKey: "achievementFirstWinDescription", category: "milestones" },
   { id: "first-try", reward: "🎯", titleKey: "achievementFirstTryTitle", descriptionKey: "achievementFirstTryDescription", category: "skill" },
@@ -722,10 +756,10 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткі правила", shortRulesText: "Введи слово потрібної довжини. Зелений означає правильну позицію, жовтий — літера є у слові, рожевий — літери немає. Є три підказки.",
     labsEyebrow: "Labs · прихований тест", labsTitle: "Експериментальні функції", labsCopy: "Мова змінюється тільки у грі «Вгадай слово». Українська лишається основною; RU та EN — тестові словники.", labsLanguageAria: "Мова гри Вгадай слово",
     labsStatusUk: "Основний перевірений словник: українська.", labsStatusRu: "Русский: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.", labsStatusEn: "English: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.",
-    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду", achievementDetailEyebrow: "Досягнення", achievementHowTo: "Як отримати", achievementBatchEyebrow: "Ще нагороди!", achievementBatchTitle: (count) => `Одразу ${count} досягнень!`, achievementBatchMore: (count) => `І ще +${count} — вони вже у колекції.`, achievementBatchDescription: "Не будемо засипати тебе сповіщеннями — решта вже чекає у колекції.", achievementBatchOpen: "Відкрити всі досягнення", achievementBatchSummaryAria: (count) => `Одночасно отримано ${count} досягнень. Відкрити колекцію.`, versionLabel: "Версія Мовограю", settingsOpen: "Відкрити налаштування", settingsTitle: "Налаштування", settingsClose: "Закрити налаштування", themeLight: "Світла тема", themeDark: "Темна тема", themeToLight: "Перемкнути на світле оформлення", themeToDark: "Перемкнути на темне оформлення", soundOn: "Звук увімкнено", soundOff: "Звук вимкнено", soundDisable: "Вимкнути звуки гри", soundEnable: "Увімкнути звуки гри", hapticOn: "Вібрація увімкнена", hapticOff: "Вібрація вимкнена", hapticDisable: "Легкі вібрації для ігрових дій", hapticEnable: "Увімкнути легку вібрацію", menuSubtitle: "Ігри зі словами для компанії.", menuModeNote: "Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?", menuRulesTitle: "Правила", menuRulesText1: "Обери режим, налаштуй гру і передай телефон тому, хто грає. У кожному режимі є короткі підказки на екрані.", menuRulesText2: "У компанії грайте в Alias або Крокодила, а «Вгадай слово» можна пройти самостійно за кілька хвилин.", hintsToolbarAria: "Підказки і правила", hintsClusterAria: "Три рівні підказок",
+    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду", achievementDetailEyebrow: "Досягнення", achievementHowTo: "Як отримати", achievementBatchEyebrow: "Ще нагороди!", achievementBatchTitle: (count) => `Одразу ${count} досягнень!`, achievementBatchMore: (count) => `І ще +${count} — вони вже у колекції.`, achievementBatchDescription: "Не будемо засипати тебе сповіщеннями — решта вже чекає у колекції.", achievementBatchOpen: "Відкрити всі досягнення", achievementBatchSummaryAria: (count) => `Одночасно отримано ${count} досягнень. Відкрити колекцію.`, versionLabel: "Версія Мовограю", settingsOpen: "Відкрити налаштування", settingsTitle: "Налаштування", settingsClose: "Закрити налаштування", upcomingEyebrow: "У планах", upcomingTitle: "Незабаром", upcomingCopy: "Готуємо нові режими для компанії.", themeLight: "Світла тема", themeDark: "Темна тема", themeToLight: "Перемкнути на світле оформлення", themeToDark: "Перемкнути на темне оформлення", soundOn: "Звук увімкнено", soundOff: "Звук вимкнено", soundDisable: "Вимкнути звуки гри", soundEnable: "Увімкнути звуки гри", hapticOn: "Вібрація увімкнена", hapticOff: "Вібрація вимкнена", hapticDisable: "Легкі вібрації для ігрових дій", hapticEnable: "Увімкнути легку вібрацію", menuSubtitle: "Ігри зі словами для компанії.", menuModeNote: "Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?", menuRulesTitle: "Правила", menuRulesText1: "Обери режим, налаштуй гру і передай телефон тому, хто грає. У кожному режимі є короткі підказки на екрані.", menuRulesText2: "У компанії грайте в Alias або Крокодила, а «Вгадай слово» можна пройти самостійно за кілька хвилин.", hintsToolbarAria: "Підказки і правила", hintsClusterAria: "Три рівні підказок",
     modeAliasTitle: "Поясни слово (Alias)", modeAliasDescription: "Пояснюй слово, не називаючи його.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показуй завдання жестами. Говорити не можна.", modeWhoAmITitle: "Хто я?", modeWhoAmIDescription: "Відгадуй персонажа за питаннями.",
     setupGameSettings: "Налаштування гри", setupFormat: "Формат гри", setupSingle: "Одне слово", setupTimed: "На час", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Середньо", difficultyHard: "Складно", phrasesYes: "Словосполучення: так", phrasesNo: "Словосполучення: ні", setupRound: "Раунд", setupTime: "Час", setupAfterTime: "Після часу", setupFinishLast: "Довгадати", setupStop: "Стоп", setupGame: "Гра", setupTarget: "Ціль", setupTeams: "Команди", setupTeamNames: "Назви команд", teamNameBase: "Команда", allTopics: "Усі теми",
-    cardsEyebrow: "Alias та Крокодил", cardsTitle: "Картки слів", cardsAllShapesTitle: "Випадково з усіх форм", cardsAllShapesCopy: "Коли увімкнено — гра міксує весь набір форм.", cardsRandomColorsTitle: "Рандомні кольори картки", cardsRandomColorsCopy: "Якщо вимкнути — картки повернуться до базового кольору теми.", cardsOutlineLight: "Окантовка у світлій темі", cardsOutlineDark: "Окантовка у темній темі", choiceNever: "Ніколи", choiceRandom: "Випадково", choiceAlways: "Завжди", cardShapeOrganic: "М’яка шайба", cardShapeSplat: "Асиметрична клякса", cardShapePebble: "Камінчик / жетон", cardShapeSticker: "Стікер-клякса", cardShapeCloud: "Хмаринка", cardShapeSplash: "Крапля-сплеш", cardShapeGummy: "Жуйка / мармелад", cardShapePaper: "Паперова пляма", cardsNote: "Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.",
+    cardsEyebrow: "Alias та Крокодил", cardsTitle: "Картки слів", cardsAllShapesTitle: "Випадково з усіх форм", cardsAllShapesCopy: "Коли увімкнено — гра міксує весь набір форм.", cardsRandomColorsTitle: "Рандомні кольори картки", cardsRandomColorsCopy: "Якщо вимкнути — картки повернуться до базового кольору теми.", cardsOutlineLight: "Окантовка у світлій темі", cardsOutlineDark: "Окантовка у темній темі", choiceNever: "Ніколи", choiceRandom: "Випадково", choiceAlways: "Завжди", cardShapeOrganic: "М’яка шайба", cardShapeSplat: "Асиметрична клякса", cardShapePebble: "Камінчик / жетон", cardShapeSticker: "Стікер-клякса", cardShapeCloud: "Хмаринка", cardShapeSplash: "Крапля-сплеш", cardShapeGummy: "Жуйка / мармелад", cardShapePaper: "Паперова пляма", cardShapeAmoeba: "Амеба", cardShapeCoral: "Корал", cardShapeComet: "Комета", cardShapeStarfish: "Морська зірка", cardShapePotato: "Картоплина", cardShapeWave: "Хвиля", cardShapeJelly: "Медуза", cardShapeMeteor: "Метеорит", cardsNote: "Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.",
     achievementCategoriesAria: "Категорії досягнень", achievementCategoryAll: "Всі", achievementCategoryNew: "Нові", achievementNewLabel: "Нове", achievementReceivedAt: (dateText) => `Отримано ${dateText}`, achievementNewCountAria: (count) => `Нових досягнень: ${count}.`, achievementSearchLabel: "Пошук досягнень", achievementSearchPlaceholder: "Знайти досягнення…", achievementSearchEmpty: "Нічого не знайдено. Спробуй інше слово або категорію.", achievementShowMore: "Показати ще", achievementGameWordGuess: "Вгадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
     achievementGamesAria: "Ігри та нові досягнення",
     achievementGameAll: "Усі ігри",
@@ -1375,7 +1409,7 @@ const WORD_GUESS_TEXT = {
     achievementCharadesFourTeamsEightDescription: "Грай у Крокодила чотирма командами й набери 8+ очок за раунд.",
     achievementCharadesCategoryTourTitle: "Гастролі жанрами",
     achievementCharadesCategoryTourDescription: "Обери щонайменше 5 тем і набери 8+ очок за раунд Крокодила.",
-    achievementWhoamiHundredGuessedTitle: "Шерлок у відпустці",
+    achievementWhoamiHundredGuessedTitle: "Сто масок",
     achievementWhoamiHundredGuessedDescription: "Відгадай 100 ролей у «Хто я?».",
     achievementWhoamiTwoFiftyGuessedTitle: "Рентген",
     achievementWhoamiTwoFiftyGuessedDescription: "Відгадай 250 ролей у «Хто я?».",
@@ -1660,10 +1694,10 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткие правила", shortRulesText: "Введите слово выбранной длины. Зелёный — правильная позиция, жёлтый — буква есть в слове, розовый — буквы нет. Доступны три подсказки.",
     labsEyebrow: "Labs · скрытый тест", labsTitle: "Экспериментальные функции", labsCopy: "Язык меняется только в игре «Угадай слово». Украинский остаётся основным; RU и EN — тестовые словари.", labsLanguageAria: "Язык игры Угадай слово",
     labsStatusUk: "Основной проверенный словарь: украинский.", labsStatusRu: "Русский: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.", labsStatusEn: "English: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.",
-    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду", achievementDetailEyebrow: "Достижение", achievementHowTo: "Как получить", achievementBatchEyebrow: "Ещё награды!", achievementBatchTitle: (count) => `Сразу ${count} достижений!`, achievementBatchMore: (count) => `И ещё +${count} — они уже в коллекции.`, achievementBatchDescription: "Не будем засыпать тебя уведомлениями — остальные уже ждут в коллекции.", achievementBatchOpen: "Открыть все достижения", achievementBatchSummaryAria: (count) => `Одновременно получено ${count} достижений. Открыть коллекцию.`, versionLabel: "Версия Мовограя", settingsOpen: "Открыть настройки", settingsTitle: "Настройки", settingsClose: "Закрыть настройки", themeLight: "Светлая тема", themeDark: "Тёмная тема", themeToLight: "Переключить на светлое оформление", themeToDark: "Переключить на тёмное оформление", soundOn: "Звук включён", soundOff: "Звук выключен", soundDisable: "Выключить звуки игры", soundEnable: "Включить звуки игры", hapticOn: "Вибрация включена", hapticOff: "Вибрация выключена", hapticDisable: "Лёгкие вибрации для игровых действий", hapticEnable: "Включить лёгкую вибрацию", menuSubtitle: "Игры со словами для компании.", menuModeNote: "Режимы: Объясни слово, Покажи слово, Угадай слово и Кто я?", menuRulesTitle: "Правила", menuRulesText1: "Выбери режим, настрой игру и передай телефон тому, кто играет. В каждом режиме есть короткие подсказки на экране.", menuRulesText2: "В компании играйте в Alias или Крокодила, а «Угадай слово» можно пройти самостоятельно за несколько минут.", hintsToolbarAria: "Подсказки и правила", hintsClusterAria: "Три уровня подсказок",
+    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду", achievementDetailEyebrow: "Достижение", achievementHowTo: "Как получить", achievementBatchEyebrow: "Ещё награды!", achievementBatchTitle: (count) => `Сразу ${count} достижений!`, achievementBatchMore: (count) => `И ещё +${count} — они уже в коллекции.`, achievementBatchDescription: "Не будем засыпать тебя уведомлениями — остальные уже ждут в коллекции.", achievementBatchOpen: "Открыть все достижения", achievementBatchSummaryAria: (count) => `Одновременно получено ${count} достижений. Открыть коллекцию.`, versionLabel: "Версия Мовограя", settingsOpen: "Открыть настройки", settingsTitle: "Настройки", settingsClose: "Закрыть настройки", upcomingEyebrow: "В планах", upcomingTitle: "Скоро", upcomingCopy: "Готовим новые режимы для компании.", themeLight: "Светлая тема", themeDark: "Тёмная тема", themeToLight: "Переключить на светлое оформление", themeToDark: "Переключить на тёмное оформление", soundOn: "Звук включён", soundOff: "Звук выключен", soundDisable: "Выключить звуки игры", soundEnable: "Включить звуки игры", hapticOn: "Вибрация включена", hapticOff: "Вибрация выключена", hapticDisable: "Лёгкие вибрации для игровых действий", hapticEnable: "Включить лёгкую вибрацию", menuSubtitle: "Игры со словами для компании.", menuModeNote: "Режимы: Объясни слово, Покажи слово, Угадай слово и Кто я?", menuRulesTitle: "Правила", menuRulesText1: "Выбери режим, настрой игру и передай телефон тому, кто играет. В каждом режиме есть короткие подсказки на экране.", menuRulesText2: "В компании играйте в Alias или Крокодила, а «Угадай слово» можно пройти самостоятельно за несколько минут.", hintsToolbarAria: "Подсказки и правила", hintsClusterAria: "Три уровня подсказок",
     modeAliasTitle: "Объясни слово (Alias)", modeAliasDescription: "Объясняй слово, не называя его.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показывай задания жестами. Говорить нельзя.", modeWhoAmITitle: "Кто я?", modeWhoAmIDescription: "Угадывай персонажа с помощью вопросов.",
     setupGameSettings: "Настройки игры", setupFormat: "Формат игры", setupSingle: "Одно слово", setupTimed: "На время", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Средне", difficultyHard: "Сложно", phrasesYes: "Словосочетания: да", phrasesNo: "Словосочетания: нет", setupRound: "Раунд", setupTime: "Время", setupAfterTime: "После времени", setupFinishLast: "Доиграть слово", setupStop: "Стоп", setupGame: "Игра", setupTarget: "Цель", setupTeams: "Команды", setupTeamNames: "Названия команд", teamNameBase: "Команда", allTopics: "Все темы",
-    cardsEyebrow: "Alias и Крокодил", cardsTitle: "Карточки слов", cardsAllShapesTitle: "Случайно из всех форм", cardsAllShapesCopy: "Когда включено — игра смешивает весь набор форм.", cardsRandomColorsTitle: "Случайные цвета карточки", cardsRandomColorsCopy: "Если выключить — карточки вернутся к базовому цвету темы.", cardsOutlineLight: "Обводка в светлой теме", cardsOutlineDark: "Обводка в тёмной теме", choiceNever: "Никогда", choiceRandom: "Случайно", choiceAlways: "Всегда", cardShapeOrganic: "Мягкая шайба", cardShapeSplat: "Асимметричная клякса", cardShapePebble: "Камешек / жетон", cardShapeSticker: "Стикер-клякса", cardShapeCloud: "Облачко", cardShapeSplash: "Капля-сплэш", cardShapeGummy: "Жвачка / мармелад", cardShapePaper: "Бумажное пятно", cardsNote: "Новые формы, случайные цвета и обводка работают для больших карточек слов в Alias и Крокодиле.",
+    cardsEyebrow: "Alias и Крокодил", cardsTitle: "Карточки слов", cardsAllShapesTitle: "Случайно из всех форм", cardsAllShapesCopy: "Когда включено — игра смешивает весь набор форм.", cardsRandomColorsTitle: "Случайные цвета карточки", cardsRandomColorsCopy: "Если выключить — карточки вернутся к базовому цвету темы.", cardsOutlineLight: "Обводка в светлой теме", cardsOutlineDark: "Обводка в тёмной теме", choiceNever: "Никогда", choiceRandom: "Случайно", choiceAlways: "Всегда", cardShapeOrganic: "Мягкая шайба", cardShapeSplat: "Асимметричная клякса", cardShapePebble: "Камешек / жетон", cardShapeSticker: "Стикер-клякса", cardShapeCloud: "Облачко", cardShapeSplash: "Капля-сплэш", cardShapeGummy: "Жвачка / мармелад", cardShapePaper: "Бумажное пятно", cardShapeAmoeba: "Амёба", cardShapeCoral: "Коралл", cardShapeComet: "Комета", cardShapeStarfish: "Морская звезда", cardShapePotato: "Картофелина", cardShapeWave: "Волна", cardShapeJelly: "Медуза", cardShapeMeteor: "Метеорит", cardsNote: "Новые формы, случайные цвета и обводка работают для больших карточек слов в Alias и Крокодиле.",
     achievementCategoriesAria: "Категории достижений", achievementCategoryAll: "Все", achievementCategoryNew: "Новые", achievementNewLabel: "Новое", achievementReceivedAt: (dateText) => `Получено ${dateText}`, achievementNewCountAria: (count) => `Новых достижений: ${count}.`, achievementSearchLabel: "Поиск достижений", achievementSearchPlaceholder: "Найти достижение…", achievementSearchEmpty: "Ничего не найдено. Попробуй другое слово или категорию.", achievementShowMore: "Показать ещё", achievementGameWordGuess: "Угадай слово", achievementGameAlias: "Alias", achievementGameCharades: "Крокодил", achievementGameMovohray: "Мовограй",
     achievementGamesAria: "Игры и новые достижения",
     achievementGameAll: "Все игры",
@@ -2311,7 +2345,7 @@ const WORD_GUESS_TEXT = {
     achievementCharadesFourTeamsEightDescription: "Играй в Крокодила четырьмя командами и набери 8+ очков за раунд.",
     achievementCharadesCategoryTourTitle: "Гастроли по жанрам",
     achievementCharadesCategoryTourDescription: "Выбери минимум 5 тем и набери 8+ очков за раунд Крокодила.",
-    achievementWhoamiHundredGuessedTitle: "Шерлок в отпуске",
+    achievementWhoamiHundredGuessedTitle: "Сто масок",
     achievementWhoamiHundredGuessedDescription: "Угадай 100 ролей в «Кто я?».",
     achievementWhoamiTwoFiftyGuessedTitle: "Рентген",
     achievementWhoamiTwoFiftyGuessedDescription: "Угадай 250 ролей в «Кто я?».",
@@ -2596,10 +2630,10 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Quick rules", shortRulesText: "Enter a word of the selected length. Green is the correct position, yellow means the letter exists elsewhere, pink means it is absent. Three hints are available.",
     labsEyebrow: "Labs · hidden test", labsTitle: "Experimental features", labsCopy: "The language changes only in Guess the word. Ukrainian remains the primary dictionary; RU and EN are experimental.", labsLanguageAria: "Guess the word language",
     labsStatusUk: "Primary verified dictionary: Ukrainian.", labsStatusRu: "Russian: experimental Labs mode. The dictionary is still being expanded and moderated.", labsStatusEn: "English: experimental Labs mode. The dictionary is still being expanded and moderated.",
-    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Locked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement", achievementDetailEyebrow: "Achievement", achievementHowTo: "How to unlock", achievementBatchEyebrow: "More rewards!", achievementBatchTitle: (count) => `${count} achievements at once!`, achievementBatchMore: (count) => `And +${count} more — already in your collection.`, achievementBatchDescription: "We won't flood you with notifications — the rest are already waiting in your collection.", achievementBatchOpen: "Open all achievements", achievementBatchSummaryAria: (count) => `${count} achievements unlocked at once. Open the collection.`, versionLabel: "Movohray version", settingsOpen: "Open settings", settingsTitle: "Settings", settingsClose: "Close settings", themeLight: "Light theme", themeDark: "Dark theme", themeToLight: "Switch to light appearance", themeToDark: "Switch to dark appearance", soundOn: "Sound on", soundOff: "Sound off", soundDisable: "Turn game sounds off", soundEnable: "Turn game sounds on", hapticOn: "Haptics on", hapticOff: "Haptics off", hapticDisable: "Light haptics for game actions", hapticEnable: "Turn light haptics on", menuSubtitle: "Word games for friends and parties.", menuModeNote: "Modes: Explain a word, Charades, Guess the word, and Who am I?", menuRulesTitle: "Rules", menuRulesText1: "Choose a mode, set up the game, and hand the phone to the player. Each mode has short on-screen guidance.", menuRulesText2: "Play Alias or Charades with friends, while Guess the word can be played solo in a few minutes.", hintsToolbarAria: "Hints and rules", hintsClusterAria: "Three hint levels",
+    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Locked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement", achievementDetailEyebrow: "Achievement", achievementHowTo: "How to unlock", achievementBatchEyebrow: "More rewards!", achievementBatchTitle: (count) => `${count} achievements at once!`, achievementBatchMore: (count) => `And +${count} more — already in your collection.`, achievementBatchDescription: "We won't flood you with notifications — the rest are already waiting in your collection.", achievementBatchOpen: "Open all achievements", achievementBatchSummaryAria: (count) => `${count} achievements unlocked at once. Open the collection.`, versionLabel: "Movohray version", settingsOpen: "Open settings", settingsTitle: "Settings", settingsClose: "Close settings", upcomingEyebrow: "Coming up", upcomingTitle: "Coming soon", upcomingCopy: "More party modes are in the works.", themeLight: "Light theme", themeDark: "Dark theme", themeToLight: "Switch to light appearance", themeToDark: "Switch to dark appearance", soundOn: "Sound on", soundOff: "Sound off", soundDisable: "Turn game sounds off", soundEnable: "Turn game sounds on", hapticOn: "Haptics on", hapticOff: "Haptics off", hapticDisable: "Light haptics for game actions", hapticEnable: "Turn light haptics on", menuSubtitle: "Word games for friends and parties.", menuModeNote: "Modes: Explain a word, Charades, Guess the word, and Who am I?", menuRulesTitle: "Rules", menuRulesText1: "Choose a mode, set up the game, and hand the phone to the player. Each mode has short on-screen guidance.", menuRulesText2: "Play Alias or Charades with friends, while Guess the word can be played solo in a few minutes.", hintsToolbarAria: "Hints and rules", hintsClusterAria: "Three hint levels",
     modeAliasTitle: "Explain a word (Alias)", modeAliasDescription: "Explain the word without saying it.", modeCharadesTitle: "Charades", modeCharadesDescription: "Act out the prompt using gestures. No talking.", modeWhoAmITitle: "Who am I?", modeWhoAmIDescription: "Guess the character by asking questions.",
     setupGameSettings: "Game setup", setupFormat: "Game format", setupSingle: "One prompt", setupTimed: "Timed", setupWords: "Words", difficultyEasy: "Easy", difficultyMedium: "Medium", difficultyHard: "Hard", phrasesYes: "Phrases: on", phrasesNo: "Phrases: off", setupRound: "Round", setupTime: "Time", setupAfterTime: "When time is up", setupFinishLast: "Finish the prompt", setupStop: "Stop", setupGame: "Game", setupTarget: "Target", setupTeams: "Teams", setupTeamNames: "Team names", teamNameBase: "Team", allTopics: "All topics",
-    cardsEyebrow: "Alias & Charades", cardsTitle: "Word cards", cardsAllShapesTitle: "Random from all shapes", cardsAllShapesCopy: "When enabled, the game mixes the full set of card shapes.", cardsRandomColorsTitle: "Random card colors", cardsRandomColorsCopy: "Turn this off to use the theme's base card color.", cardsOutlineLight: "Outline in light theme", cardsOutlineDark: "Outline in dark theme", choiceNever: "Never", choiceRandom: "Random", choiceAlways: "Always", cardShapeOrganic: "Soft puck", cardShapeSplat: "Asymmetric blob", cardShapePebble: "Pebble / token", cardShapeSticker: "Blob sticker", cardShapeCloud: "Cloud", cardShapeSplash: "Splash drop", cardShapeGummy: "Gummy", cardShapePaper: "Paper blot", cardsNote: "New shapes, random colors, and outlines apply to the large word cards in Alias and Charades.",
+    cardsEyebrow: "Alias & Charades", cardsTitle: "Word cards", cardsAllShapesTitle: "Random from all shapes", cardsAllShapesCopy: "When enabled, the game mixes the full set of card shapes.", cardsRandomColorsTitle: "Random card colors", cardsRandomColorsCopy: "Turn this off to use the theme's base card color.", cardsOutlineLight: "Outline in light theme", cardsOutlineDark: "Outline in dark theme", choiceNever: "Never", choiceRandom: "Random", choiceAlways: "Always", cardShapeOrganic: "Soft puck", cardShapeSplat: "Asymmetric blob", cardShapePebble: "Pebble / token", cardShapeSticker: "Blob sticker", cardShapeCloud: "Cloud", cardShapeSplash: "Splash drop", cardShapeGummy: "Gummy", cardShapePaper: "Paper blot", cardShapeAmoeba: "Amoeba", cardShapeCoral: "Coral", cardShapeComet: "Comet", cardShapeStarfish: "Starfish", cardShapePotato: "Potato", cardShapeWave: "Wave", cardShapeJelly: "Jellyfish", cardShapeMeteor: "Meteor", cardsNote: "New shapes, random colors, and outlines apply to the large word cards in Alias and Charades.",
     achievementCategoriesAria: "Achievement categories", achievementCategoryAll: "All", achievementCategoryNew: "New", achievementNewLabel: "New", achievementReceivedAt: (dateText) => `Unlocked ${dateText}`, achievementNewCountAria: (count) => `New achievements: ${count}.`, achievementSearchLabel: "Search achievements", achievementSearchPlaceholder: "Find an achievement…", achievementSearchEmpty: "Nothing found. Try another word or category.", achievementShowMore: "Show more", achievementGameWordGuess: "Guess the word", achievementGameAlias: "Alias", achievementGameCharades: "Charades", achievementGameMovohray: "Movohray",
     achievementGamesAria: "Games and new achievements",
     achievementGameAll: "All games",
@@ -3247,7 +3281,7 @@ const WORD_GUESS_TEXT = {
     achievementCharadesFourTeamsEightDescription: "Play Charades with four teams and score 8+ points in a round.",
     achievementCharadesCategoryTourTitle: "Genre tour",
     achievementCharadesCategoryTourDescription: "Select at least 5 themes and score 8+ points in a Charades round.",
-    achievementWhoamiHundredGuessedTitle: "Sherlock on vacation",
+    achievementWhoamiHundredGuessedTitle: "A hundred faces",
     achievementWhoamiHundredGuessedDescription: "Guess 100 roles in Who Am I.",
     achievementWhoamiTwoFiftyGuessedTitle: "X-ray vision",
     achievementWhoamiTwoFiftyGuessedDescription: "Guess 250 roles in Who Am I.",
@@ -3889,11 +3923,12 @@ const WORD_GUESS_BLOCKED_TARGETS = new Set([
   "нотка", "нотки", "німий", "ніхто", "окрас", "паличка", "песик", "пиріжок",
   "робочий", "рукавиц", "сирок", "соломин", "сомик", "сонечко", "струнні",
   "сухарик", "турбо", "ужгород", "хатинка", "хотин", "цукорок", "чужий",
-  "щедро", "шмель",
+  "щедро", "шмель", "нікса",
 ]);
 const WORD_GUESS_BLOCKED_RU_TARGETS = new Set([
   "двойка", "тройка", "четверка", "четвёрка", "пятерка", "пятёрка",
   "шестерка", "шестёрка", "семерка", "семёрка", "восьмерка", "восьмёрка", "девятка", "десятка",
+  "никса", "шерик", "шерлок",
 ]);
 
 const WORD_GUESS_DICTIONARY_LINKS = {
@@ -4038,6 +4073,7 @@ let wordGuessStartRequestId = 0;
 let wordGuessLoadedModeKey = "";
 let selectedWordGuessLanguage = readWordGuessLanguagePreference();
 let wordGuessLabsUnlocked = readWordGuessLabsPreference();
+let wordGuessLabsVisible = readWordGuessLabsVisibilityPreference(wordGuessLabsUnlocked);
 let wordGuessLabsTapCount = 0;
 let wordGuessLabsTapResetTimeoutId = null;
 let selectedWordGuessLength = readWordGuessNumberPreference(WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_DEFAULT_LENGTH);
@@ -4138,6 +4174,7 @@ let dragOffsetY = 0;
 let dragVelocityY = 0;
 let activePointerId = null;
 let wordActionTimeoutId = null;
+let wordCardTransitionToken = 0;
 
 const modeConfigs = [
   {
@@ -4222,6 +4259,11 @@ const appSettingsModal = document.getElementById("appSettingsModal");
 const appSettingsCloseBtn = document.getElementById("appSettingsCloseBtn");
 const appSettingsVersion = document.getElementById("appSettingsVersion");
 const appLabsSection = document.getElementById("appLabsSection");
+const appUpcomingModesSection = document.getElementById("appUpcomingModesSection");
+const appUpcomingModesEyebrow = document.getElementById("appUpcomingModesEyebrow");
+const appUpcomingModesTitle = document.getElementById("appUpcomingModesTitle");
+const appUpcomingModesCopy = document.getElementById("appUpcomingModesCopy");
+const appUpcomingModesChips = document.getElementById("appUpcomingModesChips");
 const appLabsEyebrow = document.getElementById("appLabsEyebrow");
 const appLabsTitle = document.getElementById("appLabsTitle");
 const appLabsCopy = document.getElementById("appLabsCopy");
@@ -4349,6 +4391,8 @@ const gameCategoryName = document.getElementById("gameCategoryName");
 const gameThemesPopover = document.getElementById("gameThemesPopover");
 const timerText = document.getElementById("timerText");
 const timerRingProgress = document.getElementById("timerRingProgress");
+const aliasCountdownFocus = document.getElementById("aliasCountdownFocus");
+const aliasCountdownFocusText = document.getElementById("aliasCountdownFocusText");
 const roundTimeMessage = document.getElementById("roundTimeMessage");
 const teamProgressText = document.getElementById("teamProgressText");
 const teamProgressFill = document.getElementById("teamProgressFill");
@@ -4701,10 +4745,14 @@ function normalizeReleaseInfo(data) {
     return null;
   }
   const build = normalizeBuildLabel(data && data.build);
+  const parsedCandidate = Number.parseInt(data && data.candidate, 10);
+  const candidate = Number.isFinite(parsedCandidate) && parsedCandidate > 0 ? parsedCandidate : 0;
+  const candidateSuffix = candidate ? `-c${candidate}` : "";
   return {
     version,
     build,
-    revision: build ? `${version}-${build.replace(/-/g, "")}` : version,
+    candidate,
+    revision: build ? `${version}-${build.replace(/-/g, "")}${candidateSuffix}` : version,
     required: Boolean(data && data.required),
   };
 }
@@ -4713,6 +4761,7 @@ function getLocalReleaseInfo() {
   return {
     version: DATA_VERSION,
     build: DATA_BUILD,
+    candidate: DATA_CANDIDATE,
     revision: DATA_REVISION,
     required: true,
   };
@@ -4788,6 +4837,14 @@ function compareReleaseInfo(leftRelease, rightRelease) {
   if (leftRelease.build < rightRelease.build) {
     return -1;
   }
+  const leftCandidate = Number(leftRelease.candidate) || 0;
+  const rightCandidate = Number(rightRelease.candidate) || 0;
+  if (leftCandidate > rightCandidate) {
+    return 1;
+  }
+  if (leftCandidate < rightCandidate) {
+    return -1;
+  }
   return 0;
 }
 
@@ -4797,10 +4854,11 @@ function clearCompletedUpdateTarget(localRelease) {
     if (!pendingRevision) {
       return;
     }
-    const revisionMatch = /^(\d+(?:\.\d+)*[a-z]*)-(\d{4})(\d{2})(\d{2})$/i.exec(pendingRevision);
+    const revisionMatch = /^(\d+(?:\.\d+)*[a-z]*)-(\d{4})(\d{2})(\d{2})(?:-c(\d+))?$/i.exec(pendingRevision);
     const pendingRelease = revisionMatch ? {
       version: revisionMatch[1],
       build: `${revisionMatch[2]}-${revisionMatch[3]}-${revisionMatch[4]}`,
+      candidate: Number.parseInt(revisionMatch[5], 10) || 0,
     } : null;
     if (!pendingRelease || compareReleaseInfo(localRelease, pendingRelease) >= 0) {
       localStorage.removeItem(UPDATE_TARGET_STORAGE_KEY);
@@ -4883,6 +4941,7 @@ function showRequiredUpdateOverlay(remoteRelease) {
   updateButton.type = "button";
   updateButton.dataset.remoteVersion = remoteRelease.version;
   updateButton.dataset.remoteBuild = remoteRelease.build;
+  updateButton.dataset.remoteCandidate = String(remoteRelease.candidate || 0);
   updateButton.dataset.remoteRevision = remoteRelease.revision;
   const updateStatus = document.createElement("p");
   updateStatus.className = "required-update-status";
@@ -4989,6 +5048,7 @@ async function forceRequiredUpdate(button, remoteRelease) {
   const targetRelease = remoteRelease || normalizeReleaseInfo({
     version: button && button.dataset ? button.dataset.remoteVersion : "",
     build: button && button.dataset ? button.dataset.remoteBuild : "",
+    candidate: button && button.dataset ? button.dataset.remoteCandidate : 0,
     required: true,
   });
 
@@ -7144,6 +7204,38 @@ function readWordGuessLabsPreference() {
   }
 }
 
+function readWordGuessLabsVisibilityPreference(isUnlocked) {
+  if (!isUnlocked) {
+    return false;
+  }
+  try {
+    const storedVisibility = localStorage.getItem(WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY);
+    if (storedVisibility === "false") {
+      return false;
+    }
+    if (storedVisibility === "true") {
+      return true;
+    }
+  } catch (error) {
+    // Existing Labs users keep the section visible when storage is unavailable.
+  }
+  return true;
+}
+
+function persistWordGuessLabsVisibility() {
+  try {
+    localStorage.setItem(WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, wordGuessLabsVisible ? "true" : "false");
+  } catch (error) {
+    // Visibility still toggles for the current session.
+  }
+}
+
+function setWordGuessLabsVisibility(isVisible) {
+  wordGuessLabsVisible = Boolean(isVisible) && wordGuessLabsUnlocked;
+  persistWordGuessLabsVisibility();
+  renderWordGuessLabsControls();
+}
+
 function readWordGuessLanguagePreference() {
   try {
     const savedLanguage = String(localStorage.getItem(WORD_GUESS_LANGUAGE_STORAGE_KEY) || "").toLowerCase();
@@ -7165,7 +7257,7 @@ function persistWordGuessLanguagePreference() {
 }
 
 function renderWordGuessLabsControls() {
-  if (appLabsSection) appLabsSection.hidden = !wordGuessLabsUnlocked;
+  if (appLabsSection) appLabsSection.hidden = !(wordGuessLabsUnlocked && wordGuessLabsVisible);
   if (appLabsEyebrow) appLabsEyebrow.textContent = getWordGuessText("labsEyebrow");
   if (appLabsTitle) appLabsTitle.textContent = getWordGuessText("labsTitle");
   if (appLabsCopy) appLabsCopy.textContent = getWordGuessText("labsCopy");
@@ -7264,16 +7356,19 @@ function playWordGuessLabsUnlockEffect() {
 
 function unlockWordGuessLabs() {
   if (wordGuessLabsUnlocked) {
+    setWordGuessLabsVisibility(true);
     return;
   }
   wordGuessLabsUnlocked = true;
+  wordGuessLabsVisible = true;
   wordGuessAchievementsState.labsUnlocks = Math.max(1, Number(wordGuessAchievementsState.labsUnlocks) || 0);
   persistWordGuessAchievementsState();
   evaluateWordGuessMetaAchievements();
   try {
     localStorage.setItem(WORD_GUESS_LABS_STORAGE_KEY, "true");
+    localStorage.setItem(WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, "true");
   } catch (error) {
-    // Labs remains unlocked for this session.
+    // Labs remains unlocked and visible for this session.
   }
   renderWordGuessLabsControls();
   playGameSound("medal");
@@ -7282,16 +7377,24 @@ function unlockWordGuessLabs() {
 }
 
 function handleWordGuessLabsVersionTap() {
-  if (wordGuessLabsUnlocked) {
-    return;
-  }
   wordGuessLabsTapCount += 1;
   if (wordGuessLabsTapResetTimeoutId) {
     window.clearTimeout(wordGuessLabsTapResetTimeoutId);
   }
   if (wordGuessLabsTapCount >= WORD_GUESS_LABS_UNLOCK_TAPS) {
     wordGuessLabsTapCount = 0;
-    unlockWordGuessLabs();
+    wordGuessLabsTapResetTimeoutId = null;
+    if (!wordGuessLabsUnlocked) {
+      unlockWordGuessLabs();
+    } else {
+      setWordGuessLabsVisibility(!wordGuessLabsVisible);
+      playHapticFeedback("tap");
+      if (wordGuessLabsVisible && appLabsSection && appLabsSection.scrollIntoView) {
+        window.setTimeout(function () {
+          appLabsSection.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 40);
+      }
+    }
     return;
   }
   wordGuessLabsTapResetTimeoutId = window.setTimeout(() => {
@@ -7337,6 +7440,9 @@ function selectWordGuessLanguage(languageId) {
 }
 
 function initializeWordGuessLabs() {
+  if (!wordGuessLabsUnlocked) {
+    wordGuessLabsVisible = false;
+  }
   if (wordGuessLabsUnlocked && (Number(wordGuessAchievementsState.labsUnlocks) || 0) < 1) {
     wordGuessAchievementsState.labsUnlocks = 1;
     persistWordGuessAchievementsState();
@@ -7362,6 +7468,9 @@ function applyWordGuessLanguageUi() {
   if (appSettingsVersion) appSettingsVersion.setAttribute("aria-label", text.versionLabel);
   if (appSettingsCloseBtn) appSettingsCloseBtn.setAttribute("aria-label", text.settingsClose);
   if (appSettingsTitle) appSettingsTitle.textContent = text.settingsTitle;
+  if (appUpcomingModesEyebrow) appUpcomingModesEyebrow.textContent = text.upcomingEyebrow;
+  if (appUpcomingModesTitle) appUpcomingModesTitle.textContent = text.upcomingTitle;
+  if (appUpcomingModesCopy) appUpcomingModesCopy.textContent = text.upcomingCopy;
   if (appSubtitle) appSubtitle.textContent = text.menuSubtitle;
   if (menuModeNote) menuModeNote.textContent = text.menuModeNote;
   if (menuRulesTitle) menuRulesTitle.textContent = text.menuRulesTitle;
@@ -7392,7 +7501,7 @@ function applyWordGuessLanguageUi() {
   if (wordCardOutlineLightTitle) wordCardOutlineLightTitle.textContent = text.cardsOutlineLight;
   if (wordCardOutlineDarkTitle) wordCardOutlineDarkTitle.textContent = text.cardsOutlineDark;
   if (appSettingsNote) appSettingsNote.textContent = text.cardsNote;
-  const shapeTextKeys = { organic: "cardShapeOrganic", splat: "cardShapeSplat", pebble: "cardShapePebble", sticker: "cardShapeSticker", cloud: "cardShapeCloud", splash: "cardShapeSplash", gummy: "cardShapeGummy", paper: "cardShapePaper" };
+  const shapeTextKeys = { organic: "cardShapeOrganic", splat: "cardShapeSplat", pebble: "cardShapePebble", sticker: "cardShapeSticker", cloud: "cardShapeCloud", splash: "cardShapeSplash", gummy: "cardShapeGummy", paper: "cardShapePaper", amoeba: "cardShapeAmoeba", coral: "cardShapeCoral", comet: "cardShapeComet", starfish: "cardShapeStarfish", potato: "cardShapePotato", wave: "cardShapeWave", jelly: "cardShapeJelly", meteor: "cardShapeMeteor" };
   wordCardShapeCheckboxes.forEach(function (input) { const label = input.parentElement && input.parentElement.querySelector("span"); const key = shapeTextKeys[input.dataset.wordCardShape]; if (label && key && text[key]) label.textContent = text[key]; });
   wordCardOutlineModeButtons.forEach(function (button) { const mode = button.dataset.outlineMode; button.textContent = mode === "off" ? text.choiceNever : (mode === "random" ? text.choiceRandom : text.choiceAlways); });
   syncPhraseFilterButton();
@@ -7538,6 +7647,14 @@ async function loadWordGuessDictionary() {
     }));
 
     answerWords.forEach((word) => {
+      allowedGuessSet.add(normalizeWordGuessComparisonWord(word));
+    });
+
+    // Hidden easter-egg guesses are accepted manually but never participate in target selection.
+    const hiddenManualGuesses = selectedWordGuessLanguage === "uk"
+      ? ["нікса"]
+      : (selectedWordGuessLanguage === "ru" ? ["никса", "шерик", "шерлок"] : []);
+    normalizeWordGuessList(hiddenManualGuesses, wordLength, allowRepeats).forEach(function (word) {
       allowedGuessSet.add(normalizeWordGuessComparisonWord(word));
     });
 
@@ -8586,7 +8703,7 @@ function submitWordGuess() {
 
   if (validationMessage) {
     if (Array.from(guess).length !== wordLength) wordGuessGameIncompleteSubmitCount += 1;
-    playGameSound("wrong");
+    playWrongSound();
     addWordGuessAttemptLog(guess, "invalid", [], validationMessage);
     if (wordGuessGameIncompleteSubmitCount >= 7) unlockWordGuessAchievement("empty-enter-seven");
     if (wordGuessAttemptLog.filter(function (attempt) { return attempt.status === "invalid"; }).length >= 10) unlockWordGuessAchievement("invalid-tornado");
@@ -8601,7 +8718,7 @@ function submitWordGuess() {
   }
 
   if (!wordGuessAllowedGuesses.has(normalizeWordGuessComparisonWord(guess))) {
-    playGameSound("wrong");
+    playWrongSound();
     addWordGuessAttemptLog(guess, "invalid", [], getWordGuessText("notInDictionary"));
     if (wordGuessAttemptLog.filter(function (attempt) { return attempt.status === "invalid"; }).length >= 10) unlockWordGuessAchievement("invalid-tornado");
     if (wordGuessGameStartedAtMs > 0 && Date.now() - wordGuessGameStartedAtMs <= 5000) unlockWordGuessAchievement("speed-mistake");
@@ -8629,13 +8746,13 @@ function submitWordGuess() {
   addWordGuessAttemptLog(guess, "valid", statuses, "");
   clearWordGuessHintNudgeVisual();
   scheduleWordGuessHintNudge(WORD_GUESS_HINT_NUDGE_DELAY_MS);
-  playGameSound("reveal");
 
   clearWordGuessInvalidClearTimer();
   acceptedGuess.keyboardRevealLetters = updateWordGuessKeyboardStatuses(guess, statuses);
   wordGuessCurrentGuess = "";
   setWordGuessMessage("");
   const isWon = normalizeWordGuessComparisonWord(guess) === normalizeWordGuessComparisonWord(wordGuessTarget);
+  playWordGuessAttemptSound(statuses, isWon);
   const isLost = !isWon && wordGuessGuesses.length >= getWordGuessAttempts();
   const rowIndex = wordGuessGuesses.length - 1;
   revealWordGuessAcceptedRow(rowIndex, acceptedGuess, function () {
@@ -9351,7 +9468,7 @@ function showWordGuessSecondHint() {
   if (wordGuessInputLocked) return;
   clearWordGuessHintNudgeVisual();
   if (!wordGuessTarget || wordGuessHintLevel < 1) {
-    playGameSound("wrong");
+    playWrongSound();
     triggerInvalidShake(wordGuessHintSecondBtn);
     setWordGuessMessage(getWordGuessText("openHint1First"));
     return;
@@ -9374,7 +9491,7 @@ function showWordGuessThirdHint() {
   if (wordGuessInputLocked) return;
   clearWordGuessHintNudgeVisual();
   if (!wordGuessTarget || wordGuessHintLevel < 2) {
-    playGameSound("wrong");
+    playWrongSound();
     triggerInvalidShake(wordGuessHintThirdBtn);
     setWordGuessMessage(getWordGuessText("openHint2First"));
     return;
@@ -11048,7 +11165,7 @@ function handleWhoAmIAnswer(type) {
   renderHiddenWordGuessAchievementsLab();
 
   if (type === "yes") {
-    playGameSound("positiveTick");
+    playPositiveTickSound();
     playHapticFeedback("tap");
   } else {
     playSkipSound();
@@ -13457,23 +13574,21 @@ function renderModes() {
   });
 
   modeList.appendChild(activeModesWrap);
+  renderUpcomingModesInSettings(upcomingModes);
+}
 
-  if (upcomingModes.length > 0) {
-    const upcomingBox = document.createElement("div");
-    upcomingBox.className = "upcoming-modes";
-    const upcomingCopy = document.createElement("div");
-    upcomingCopy.className = "upcoming-modes-copy";
-    appendTextElement(upcomingCopy, "strong", "", "Незабаром");
-    appendTextElement(upcomingCopy, "span", "", "Готуємо нові режими для компанії.");
-    upcomingBox.appendChild(upcomingCopy);
-    const upcomingChips = document.createElement("div");
-    upcomingChips.className = "upcoming-mode-chips";
-    upcomingModes.forEach((mode) => {
-      appendTextElement(upcomingChips, "span", "upcoming-mode-chip", mode.title.replace(/\s*\([^)]*\)/g, ""));
-    });
-    upcomingBox.appendChild(upcomingChips);
-    modeList.appendChild(upcomingBox);
+function renderUpcomingModesInSettings(upcomingModes) {
+  if (!appUpcomingModesSection || !appUpcomingModesChips) {
+    return;
   }
+  const modes = Array.isArray(upcomingModes)
+    ? upcomingModes
+    : modeConfigs.filter((mode) => !mode.available);
+  appUpcomingModesSection.hidden = modes.length === 0;
+  appUpcomingModesChips.innerHTML = "";
+  modes.forEach((mode) => {
+    appendTextElement(appUpcomingModesChips, "span", "upcoming-mode-chip", mode.title.replace(/\s*\([^)]*\)/g, ""));
+  });
 }
 
 function getSelectedModeConfig() {
@@ -14173,7 +14288,11 @@ function resetWordCardPosition() {
   if (!wordCardMotion) {
     return;
   }
-  wordCardMotion.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe");
+
+  // Invalidate any pending two-phase handoff callbacks. A reset must leave
+  // exactly one live card in its neutral position.
+  wordCardTransitionToken += 1;
+  wordCardMotion.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe", "is-entering", "is-handoff-exiting", "is-handoff-entering");
   wordCardMotion.style.transition = "opacity 0.22s ease, transform 0.22s ease";
   wordCardMotion.style.transform = "";
   wordCardMotion.style.opacity = "";
@@ -14407,6 +14526,11 @@ function resetAliasTimerUrgencyVisual() {
   timerShell.style.removeProperty("--alias-timer-scale");
   timerShell.style.removeProperty("--alias-timer-glow");
   timerShell.style.removeProperty("--alias-timer-ring-width");
+  if (aliasCountdownFocus) {
+    aliasCountdownFocus.classList.remove("is-visible", "is-warning", "is-critical", "is-tick");
+    aliasCountdownFocus.style.removeProperty("--alias-focus-size");
+    aliasCountdownFocus.style.removeProperty("--alias-focus-glow");
+  }
 }
 
 function updateAliasTimerUrgencyVisual(secondsRemaining, shouldPulse) {
@@ -14427,11 +14551,29 @@ function updateAliasTimerUrgencyVisual(secondsRemaining, shouldPulse) {
   timerShell.style.setProperty("--alias-timer-glow", `${Math.round(10 + urgency * 22)}px`);
   timerShell.style.setProperty("--alias-timer-ring-width", (5 + urgency * 2.4).toFixed(2));
 
+  if (aliasCountdownFocus && aliasCountdownFocusText) {
+    const focusVisible = secondsRemaining <= 7;
+    const focusUrgency = focusVisible
+      ? Math.max(0, Math.min(1, (7 - Math.max(1, secondsRemaining)) / 6))
+      : 0;
+    aliasCountdownFocus.classList.toggle("is-visible", focusVisible);
+    aliasCountdownFocus.classList.toggle("is-warning", focusVisible && secondsRemaining <= 5 && secondsRemaining > 3);
+    aliasCountdownFocus.classList.toggle("is-critical", focusVisible && secondsRemaining <= 3);
+    aliasCountdownFocusText.textContent = String(Math.max(0, secondsRemaining));
+    aliasCountdownFocus.style.setProperty("--alias-focus-size", `${Math.round(76 + focusUrgency * 92)}px`);
+    aliasCountdownFocus.style.setProperty("--alias-focus-glow", `${Math.round(18 + focusUrgency * 34)}px`);
+  }
+
   if (shouldPulse && aliasTimerUrgencyLastVisualSecond !== secondsRemaining) {
     aliasTimerUrgencyLastVisualSecond = secondsRemaining;
     timerShell.classList.remove("is-alias-tick");
     void timerShell.offsetWidth;
     timerShell.classList.add("is-alias-tick");
+    if (aliasCountdownFocus && aliasCountdownFocus.classList.contains("is-visible")) {
+      aliasCountdownFocus.classList.remove("is-tick");
+      void aliasCountdownFocus.offsetWidth;
+      aliasCountdownFocus.classList.add("is-tick");
+    }
   }
 }
 
@@ -14439,41 +14581,7 @@ function playAliasTimerUrgencyTick(secondsRemaining) {
   if (!isGameSoundEnabled || selectedMode !== "explain" || secondsRemaining <= 0 || secondsRemaining > 15) {
     return;
   }
-  const urgency = getAliasTimerUrgencyProgress(secondsRemaining);
-  const frequency = 470 + urgency * 500;
-  const volume = 0.07 + urgency * 0.09;
-  const duration = 0.055 + urgency * 0.035;
-  const sequence = [{
-    frequency,
-    start: 0,
-    duration,
-    volume,
-    type: secondsRemaining <= 5 ? "square" : "triangle",
-    level: "ui",
-    attack: 0.004,
-    release: Math.max(0.04, duration * 0.72),
-  }];
-  if (secondsRemaining <= 5) {
-    sequence.push({
-      frequency: frequency * 1.22,
-      start: 0.07,
-      duration: 0.045 + urgency * 0.025,
-      volume: volume * 0.48,
-      type: "sine",
-      level: "ui",
-      attack: 0.003,
-      release: 0.045,
-    });
-  }
-  playToneSequence(sequence);
-}
-
-function playAliasTimerUrgencyEnd() {
-  if (!isGameSoundEnabled || selectedMode !== "explain") return;
-  playToneSequence([
-    { frequency: 980, start: 0, duration: 0.085, volume: 0.15, type: "square", level: "ui", attack: 0.004, release: 0.06 },
-    { frequency: 740, start: 0.095, duration: 0.12, volume: 0.11, type: "triangle", level: "ui", attack: 0.004, release: 0.09 },
-  ]);
+  playGameSound("countdown");
 }
 
 function updateRoundTimerFromDeadline(now) {
@@ -14492,8 +14600,6 @@ function updateRoundTimerFromDeadline(now) {
       roundTimerLastCountdownSecond = nextSeconds;
       if (nextSeconds > 0) {
         playAliasTimerUrgencyTick(nextSeconds);
-      } else {
-        playAliasTimerUrgencyEnd();
       }
     }
   } else {
@@ -14618,21 +14724,39 @@ function markSessionContentExposure(namespace, value) {
 
 function buildWeightedSessionDeck(entries, namespace, valueGetter) {
   const getter = typeof valueGetter === "function" ? valueGetter : function (entry) { return entry && entry.word ? entry.word : entry; };
+  const recencyBucketSize = 4;
+
   return entries.map(function (entry) {
     const value = getter(entry);
     const seen = getSessionContentExposureCount(namespace, value);
     const age = getSessionContentExposureAge(namespace, value);
+    const ageBucket = Number.isFinite(age)
+      ? Math.floor(age / recencyBucketSize)
+      : Number.MAX_SAFE_INTEGER;
 
-    // pop() takes the smallest rank first. Exposure count is the strongest penalty:
-    // an unseen item always beats a previously shown one. Among equally exposed items,
-    // recently shown content is pushed farther back so a deck rebuild cannot immediately
-    // repeat the word that was just on screen.
-    const exposurePenalty = seen * 4;
-    const recencyPenalty = Number.isFinite(age) ? Math.max(0, 1.8 - Math.min(age, 18) * 0.1) : 0;
-    const randomJitter = Math.random() * 0.9;
-    return { entry, rank: exposurePenalty + recencyPenalty + randomJitter };
+    return {
+      entry,
+      seen,
+      ageBucket,
+      randomJitter: Math.random(),
+    };
   }).sort(function (a, b) {
-    return b.rank - a.rank;
+    // pop() takes the item at the end of the array.
+    // 1) Exposure count is absolute priority: every never-shown word is exhausted
+    //    before a once-shown word can return; once-shown words are exhausted before
+    //    twice-shown words, and so on.
+    if (a.seen !== b.seen) {
+      return b.seen - a.seen;
+    }
+
+    // 2) Within the same exposure tier prefer the least-recently shown content.
+    //    Buckets keep a little randomness so the second pass does not reproduce the
+    //    first pass in exactly the same order, while still keeping repeats far apart.
+    if (a.ageBucket !== b.ageBucket) {
+      return a.ageBucket - b.ageBucket;
+    }
+
+    return a.randomJitter - b.randomJitter;
   }).map(function (item) {
     return item.entry;
   });
@@ -14657,7 +14781,7 @@ function isPartyCatWord(value) {
 
 function isPartyNixaWord(value) {
   const word = normalizePartyEasterWord(value);
-  return word === "нікса" || word === "nixa";
+  return word === "нікса" || word === "никса" || word === "nixa";
 }
 
 function isPartyCapybaraWord(value) {
@@ -14880,12 +15004,12 @@ function showSingleNextCard(animationClass = "fly-up") {
 
   const exitAnimationClass = animationClass === "fly-down" ? "fly-down" : "fly-up";
   isSwipeLocked = true;
-  animateWordCard(exitAnimationClass);
   playGameSound("turnChange");
+
+  transitionToNextWordCard(exitAnimationClass);
 
   clearWordActionTimeout();
   wordActionTimeoutId = setTimeout(() => {
-    showNextWord();
     isSwipeLocked = false;
     wordActionTimeoutId = null;
     resetWordCardPosition();
@@ -15302,6 +15426,13 @@ function finishRound(reason = "manual") {
   roundTimerDeadlineMs = 0;
   roundTimerPauseReasons = {};
   setRoundPaused(false, { resumeTimer: false });
+  if (reason === "time") {
+    setTimeout(() => {
+      if (!roundTimerIsActive) {
+        resetAliasTimerUrgencyVisual();
+      }
+    }, 950);
+  }
 
   if (reason === "time" && currentEntry) {
     if (shouldGuessLastWordAfterTime()) {
@@ -15998,24 +16129,89 @@ function handleRoundWordResult(result, animationClass) {
     playSkipSound();
   }
 
-  animateWordCard(animationClass);
+  if (isAwaitingLastWordResult) {
+    animateWordCard(animationClass);
 
-  clearWordActionTimeout();
-  wordActionTimeoutId = setTimeout(() => {
-    if (isAwaitingLastWordResult) {
+    clearWordActionTimeout();
+    wordActionTimeoutId = setTimeout(() => {
       isAwaitingLastWordResult = false;
       wordActionTimeoutId = null;
       resetWordCardPosition();
       showRoundReview();
-      return;
-    }
+    }, WORD_CARD_FLIGHT_DURATION_MS);
+    return;
+  }
 
-    currentEntry = null;
-    showNextWord();
+  transitionToNextWordCard(animationClass);
+
+  clearWordActionTimeout();
+  wordActionTimeoutId = setTimeout(() => {
     isSwipeLocked = false;
     wordActionTimeoutId = null;
     resetWordCardPosition();
   }, WORD_CARD_FLIGHT_DURATION_MS);
+}
+
+function transitionToNextWordCard(animationClass) {
+  if (!wordCardMotion) {
+    currentEntry = null;
+    showNextWord();
+    return;
+  }
+
+  // Candidate-11 deliberately uses ONE physical card for the handoff.
+  // Phase 1: the current card finishes leaving the screen.
+  // Phase 2: only after it is out of the centre do we replace its content and
+  // bring the same element back from the opposite side. This makes it
+  // impossible for the old and new words to visually fight each other.
+  const exitsDown = animationClass === "fly-down";
+  const exitY = exitsDown ? "118%" : "-118%";
+  const enterY = exitsDown ? "-82%" : "82%";
+  const exitRotation = exitsDown ? "5deg" : "-5deg";
+  const enterRotation = exitsDown ? "-3deg" : "3deg";
+  const transitionToken = ++wordCardTransitionToken;
+
+  wordCardMotion.classList.remove("fly-up", "fly-down", "correct-swipe", "skip-swipe", "is-entering", "is-handoff-entering");
+  wordCardMotion.classList.add("is-handoff-exiting");
+
+  // Keep the user's drag position as the starting frame and continue from it;
+  // never snap the old word back to the centre before it leaves.
+  wordCardMotion.style.transition = `transform ${WORD_CARD_HANDOFF_EXIT_MS}ms cubic-bezier(0.22, 0.72, 0.24, 1), opacity ${WORD_CARD_HANDOFF_EXIT_MS}ms ease`;
+  void wordCardMotion.offsetWidth;
+
+  window.requestAnimationFrame(function () {
+    if (transitionToken !== wordCardTransitionToken) {
+      return;
+    }
+    wordCardMotion.style.transform = `translate3d(0, ${exitY}, 0) scale(0.965) rotate(${exitRotation})`;
+    wordCardMotion.style.opacity = "0";
+  });
+
+  window.setTimeout(function () {
+    if (transitionToken !== wordCardTransitionToken) {
+      return;
+    }
+
+    // Swap the word only while the physical card is already invisible/outside.
+    wordCardMotion.style.transition = "none";
+    wordCardMotion.classList.remove("is-handoff-exiting");
+    wordCardMotion.classList.add("is-handoff-entering");
+    wordCardMotion.style.transform = `translate3d(0, ${enterY}, 0) scale(0.97) rotate(${enterRotation})`;
+    wordCardMotion.style.opacity = "1";
+
+    currentEntry = null;
+    showNextWord();
+    void wordCardMotion.offsetWidth;
+
+    window.requestAnimationFrame(function () {
+      if (transitionToken !== wordCardTransitionToken) {
+        return;
+      }
+      wordCardMotion.style.transition = `transform ${WORD_CARD_HANDOFF_ENTER_MS}ms cubic-bezier(0.18, 0.86, 0.20, 1)`;
+      wordCardMotion.style.transform = "translate3d(0, 0, 0) scale(1) rotate(0deg)";
+      wordCardMotion.style.opacity = "1";
+    });
+  }, WORD_CARD_HANDOFF_EXIT_MS);
 }
 
 function animateWordCard(className) {
@@ -16183,9 +16379,7 @@ function playBufferedGameSound(eventName) {
   try {
     const source = context.createBufferSource();
     const gain = context.createGain();
-    const levelName = eventName === "gameComplete" || eventName === "gameWin" || eventName === "gameLoss" || eventName === "tie" || eventName === "gameTie"
-      ? "finale"
-      : eventName === "roundComplete" || eventName === "roundStart" ? "round" : eventName === "turnChange" ? "transition" : "feedback";
+    const levelName = GAME_SOUND_EVENT_LEVELS[eventName] || "feedback";
     const levelVolume = getSoundLevelVolume(levelName);
     const startTime = context.currentTime + 0.004;
     const volume = Math.max(0.0001, GAME_SOUND_MASTER_VOLUME * levelVolume);
@@ -16277,8 +16471,27 @@ function playGameSound(eventName = "uiClick") {
     return;
   }
 
+  // When a production sample is still loading, prefer one silent interaction
+  // over briefly falling back to the old oscillator-like beep palette.
+  if (GAME_SOUND_FILE_MAP[eventName] && !gameSoundBufferFailures[eventName] && gameSoundBufferPromises[eventName]) {
+    return;
+  }
+
   const sequence = GAME_SOUND_PATTERNS[eventName] || GAME_SOUND_PATTERNS.uiClick;
   playToneSequence(sequence);
+}
+
+function playWrongSound() {
+  playGameSound("wrong");
+  playHapticFeedback("wrong");
+}
+
+function playPositiveTickSound() {
+  playGameSound("positiveTick");
+}
+
+function playWordGuessAttemptSound(statuses, isWon) {
+  playGameSound(isWon ? "correct" : "reveal");
 }
 
 function playHapticFeedback(type = "tap") {
@@ -16289,6 +16502,7 @@ function playHapticFeedback(type = "tap") {
   const patterns = {
     correct: [18],
     skipped: [32],
+    wrong: [24, 30, 12],
     roundComplete: [18, 42, 18],
     gameComplete: [24, 44, 38],
     gameLoss: [58],
