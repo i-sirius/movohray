@@ -16,7 +16,7 @@ var Slovesnyi = (function () {
       wins: "Перемоги", battles: "Батли", newGame: "Нова гра", loading: "Завантажуємо теми…", error: "Не вдалося завантажити теми. Спробуйте ще раз.",
       retry: "Спробувати ще раз", invalid: "Введіть різні імена та оберіть хоча б один рівень тем.", pause: "Пауза", resume: "Продовжити",
       paused: "На паузі", round: "Батл", leaderboard: "Таблиця результатів", exit: "Завершити цю партію?", exitCopy: "Поточні результати буде втрачено.",
-      stay: "Залишитися", leave: "Завершити партію"
+      stay: "Залишитися", leave: "Завершити партію", battleStatus: "Батл {round} · До {target} перемог"
     },
     ru: {
       title: "Словесный", description: "Батл аргументов", setup: "Новая игра", players: "Игроки", player: "Игрок",
@@ -31,7 +31,7 @@ var Slovesnyi = (function () {
       wins: "Победы", battles: "Батлы", newGame: "Новая игра", loading: "Загружаем темы…", error: "Не удалось загрузить темы. Попробуйте ещё раз.",
       retry: "Попробовать ещё раз", invalid: "Введите разные имена и выберите хотя бы один уровень тем.", pause: "Пауза", resume: "Продолжить",
       paused: "На паузе", round: "Батл", leaderboard: "Таблица результатов", exit: "Завершить эту партию?", exitCopy: "Текущие результаты будут потеряны.",
-      stay: "Остаться", leave: "Завершить партию"
+      stay: "Остаться", leave: "Завершить партию", battleStatus: "Батл {round} · До {target} побед"
     },
     en: {
       title: "Word Duel", description: "A battle of arguments", setup: "New game", players: "Players", player: "Player",
@@ -46,7 +46,7 @@ var Slovesnyi = (function () {
       wins: "Wins", battles: "Duels", newGame: "New game", loading: "Loading topics…", error: "Could not load topics. Please try again.",
       retry: "Try again", invalid: "Enter different names and select at least one topic level.", pause: "Pause", resume: "Resume",
       paused: "Paused", round: "Duel", leaderboard: "Leaderboard", exit: "End this game?", exitCopy: "The current scores will be lost.",
-      stay: "Stay", leave: "End game"
+      stay: "Stay", leave: "End game", battleStatus: "Battle {round} · First to {target}"
     }
   };
   var state = null, topics = null, interval = null, lastSecond = -1, manualPause = false;
@@ -236,7 +236,7 @@ var Slovesnyi = (function () {
     var phase = state.phase;
     var header = el("div", "slovesnyi-toolbar", undefined, box);
     button(header, "← " + text("back"), function () { requestAppBack({}); }, true);
-    el("span", "slovesnyi-eyebrow", text("round") + " " + state.roundIndex + " · " + text("wins") + ": " + state.settings.target, header);
+    el("span", "slovesnyi-eyebrow", text("battleStatus").replace("{round}", state.roundIndex).replace("{target}", state.settings.target), header);
     var title = phase === "intro" ? text("intro") : phase === "preparation" ? text("preparation") :
       phase.indexOf("speech") === 0 ? text("speech") : phase.indexOf("rebuttal") === 0 ? text("rebuttal") : text(phase);
     var speakerIndex = /[AB]$/.test(phase) ? (phase.slice(-1) === "A" ? 0 : 1) : -1;
@@ -255,7 +255,7 @@ var Slovesnyi = (function () {
       if (i === 0) el("span", "slovesnyi-vs", "VS", pair);
     });
     if (phase === "intro") {
-      el("p", "slovesnyi-copy", text("positions"), box);
+      if (state.roundIndex === 1) el("p", "slovesnyi-copy", text("positions"), box);
       button(box, text("ready"), advance, false, "slovesnyiAdvance");
     } else if (E.duration(state)) {
       if (phase.indexOf("rebuttal") === 0) el("p", "slovesnyi-copy", text("rebuttalHint"), box);
@@ -272,7 +272,9 @@ var Slovesnyi = (function () {
       });
       button(box, text("draw"), function () { vote(null); }, true, "slovesnyiDraw");
     } else if (phase === "result") {
-      el("p", "slovesnyi-result", state.currentMatch.winnerId ? player(state.currentMatch.winnerId).name + " · " + text("point") : text("drawResult"), box);
+      var feedback = el("p", "slovesnyi-result" + (state.currentMatch.winnerId ? " slovesnyi-result-winner" : ""), undefined, box);
+      if (state.currentMatch.winnerId) el("span", "slovesnyi-result-star", "★", feedback).setAttribute("aria-hidden", "true");
+      el("span", "", state.currentMatch.winnerId ? player(state.currentMatch.winnerId).name + " · " + text("point") : text("drawResult"), feedback);
       leaderboard(box);
       button(box, text(state.winnerId ? "final" : "next"), function () {
         if (state.winnerId) { E.finish(state, Date.now()); renderFinal(); } else next();

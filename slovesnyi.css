@@ -1,5 +1,13 @@
 /* Scoped candidate mode; shared cards, controls and palette remain the foundation. */
 .mode-card-battle .mode-card-icon-fallback { font-size: 38px; color: #458481; }
+@media (min-width: 600px) {
+  #menuScreen .active-mode-grid > .mode-card-battle:last-child {
+    grid-column: 1 / -1; justify-self: center; width: calc(50% - 6px);
+  }
+}
+@media (min-width: 1180px) {
+  #menuScreen .active-mode-grid > .mode-card-battle:last-child { width: calc(25% - 9px); }
+}
 .slovesnyi-screen { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
 .slovesnyi-card { width: 100%; box-sizing: border-box; text-align: center; }
 .slovesnyi-card .card-inner { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
@@ -27,7 +35,11 @@
 .slovesnyi-con { background: rgba(230, 175, 126, .22); }
 .slovesnyi-side.is-speaking { border-color: #819d96; box-shadow: 0 0 0 3px rgba(128, 199, 194, .15); }
 .slovesnyi-name { font-size: clamp(16px, 4vw, 24px); overflow-wrap: anywhere; max-width: 100%; }
-.slovesnyi-position { font-size: 12px; letter-spacing: .08em; font-weight: 900; }
+.slovesnyi-position { font-size: 12px; line-height: 1.2; letter-spacing: .06em; font-weight: 900; padding: 5px 10px; border-radius: 999px; border: 1px solid; }
+.slovesnyi-pro .slovesnyi-position { color: #285b50; background: #d9eee5; border-color: #a1cbbb; }
+.slovesnyi-con .slovesnyi-position { color: #795035; background: #fbe4cf; border-color: #ddb99a; }
+body[data-theme="dark"] .slovesnyi-pro .slovesnyi-position { color: #e1f7ec; background: #35584f; border-color: #638d7e; }
+body[data-theme="dark"] .slovesnyi-con .slovesnyi-position { color: #ffe8d4; background: #624837; border-color: #a77d5c; }
 .slovesnyi-vs { font-size: 12px; opacity: .6; font-weight: 900; }
 .slovesnyi-timer { font-size: clamp(64px, 15vw, 100px); line-height: 1.05; font-weight: 900; font-variant-numeric: tabular-nums; }
 .slovesnyi-pause-status { font-size: 12px; min-height: 16px; }
@@ -35,6 +47,10 @@
 .slovesnyi-card button { white-space: normal; overflow-wrap: anywhere; flex-shrink: 0; }
 .slovesnyi-heading, .slovesnyi-name, .slovesnyi-topic, .slovesnyi-card button, .slovesnyi-board strong { word-wrap: break-word; }
 .slovesnyi-result { font-size: 22px; font-weight: 800; overflow-wrap: anywhere; }
+.slovesnyi-result-winner { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border: 1px solid #dfcba0; border-radius: 16px; background: #fff2d9; }
+.slovesnyi-result-star { color: #927022; font-size: 26px; flex-shrink: 0; }
+body[data-theme="dark"] .slovesnyi-result-winner { background: #423a2d; border-color: #806e48; }
+body[data-theme="dark"] .slovesnyi-result-star { color: #f5d68c; }
 .slovesnyi-board-title { font-size: 17px; }
 .slovesnyi-board { padding: 0; margin: 0; list-style: none; text-align: left; display: flex; flex-direction: column; gap: 8px; }
 .slovesnyi-board li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; background: rgba(128, 199, 194, .12); padding: 12px; border-radius: 12px; }

@@ -1,5 +1,12 @@
 # Мовограй
 
+## 0.6.7-c2 — UI polish candidate
+
+- П’ята картка на HOME центрована в наявній tablet/desktop grid; mobile збережено.
+- «Словесний»: локалізований статус «Батл 1 · До 5 перемог», green/peach badges позицій, intro-підказка лише в першому батлі, зірка й легка підкладка для переможця. Нічия нейтральна; нових анімацій немає.
+- Engine, теми, таймери, правила, audio та achievement hooks не змінено. JS/JSON/CSS/IDs/assets audit, engine tests, browser smoke, dark theme та PWA offline пройдено; HOME перевірено на 360×800, 390×844, 768×1024 і 1600×900.
+- Build `2026-09-07`; candidate `c2`; revision `0.6.7-20260907-c2`; cache `movohray-cache-v0.6.7-b20260907-c2`; `required: true`. Локальний candidate без production tag і push.
+
 ## 0.6.7-c1 — експериментальний candidate
 
 - «Словесний» / «Словесный» / Word Duel: локальний батл аргументів для 2–8 гравців, випадкові збалансовані позиції, підготовка, виступи, заперечення, ручне голосування й фінальна таблиця.
