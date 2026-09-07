@@ -12666,6 +12666,8 @@ body[data-theme="dark"] .whoami-category-mini-btn {
 
 /* 0.5.5 - shared final results and stable Who Am I overlay */
 #whoAmIFinalScreen.screen.active {
+  width: auto;
+  max-width: none;
   position: fixed;
   top: 0;
   right: 0;
