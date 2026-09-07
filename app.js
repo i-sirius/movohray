@@ -9,9 +9,9 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.6a";
-const DATA_BUILD = "2026-08-25";
-const DATA_CANDIDATE = 0;
+const DATA_VERSION = "0.6.7";
+const DATA_BUILD = "2026-09-07";
+const DATA_CANDIDATE = 1;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
 const VERSION_CHECK_FILE = "version.json";
@@ -756,7 +756,7 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткі правила", shortRulesText: "Введи слово потрібної довжини. Зелений означає правильну позицію, жовтий — літера є у слові, рожевий — літери немає. Є три підказки.",
     labsEyebrow: "Labs · прихований тест", labsTitle: "Експериментальні функції", labsCopy: "Мова змінюється тільки у грі «Вгадай слово». Українська лишається основною; RU та EN — тестові словники.", labsLanguageAria: "Мова гри Вгадай слово",
     labsStatusUk: "Основний перевірений словник: українська.", labsStatusRu: "Русский: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.", labsStatusEn: "English: експериментальний Labs-режим. Словник продовжує розширюватися й модеруватися.",
-    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду", achievementDetailEyebrow: "Досягнення", achievementHowTo: "Як отримати", achievementBatchEyebrow: "Ще нагороди!", achievementBatchTitle: (count) => `Одразу ${count} досягнень!`, achievementBatchMore: (count) => `І ще +${count} — вони вже у колекції.`, achievementBatchDescription: "Не будемо засипати тебе сповіщеннями — решта вже чекає у колекції.", achievementBatchOpen: "Відкрити всі досягнення", achievementBatchSummaryAria: (count) => `Одночасно отримано ${count} досягнень. Відкрити колекцію.`, versionLabel: "Версія Мовограю", settingsOpen: "Відкрити налаштування", settingsTitle: "Налаштування", settingsClose: "Закрити налаштування", upcomingEyebrow: "У планах", upcomingTitle: "Незабаром", upcomingCopy: "Готуємо нові режими для компанії.", themeLight: "Світла тема", themeDark: "Темна тема", themeToLight: "Перемкнути на світле оформлення", themeToDark: "Перемкнути на темне оформлення", soundOn: "Звук увімкнено", soundOff: "Звук вимкнено", soundDisable: "Вимкнути звуки гри", soundEnable: "Увімкнути звуки гри", hapticOn: "Вібрація увімкнена", hapticOff: "Вібрація вимкнена", hapticDisable: "Легкі вібрації для ігрових дій", hapticEnable: "Увімкнути легку вібрацію", menuSubtitle: "Ігри зі словами для компанії.", menuModeNote: "Режими: Поясни слово, Покажи слово, Вгадай слово та Хто я?", menuRulesTitle: "Правила", menuRulesText1: "Обери режим, налаштуй гру і передай телефон тому, хто грає. У кожному режимі є короткі підказки на екрані.", menuRulesText2: "У компанії грайте в Alias або Крокодила, а «Вгадай слово» можна пройти самостійно за кілька хвилин.", hintsToolbarAria: "Підказки і правила", hintsClusterAria: "Три рівні підказок",
+    labsUnlocked: "Секретний режим відкрито", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Нагороди й досягнення", achievementSectionCopy: "Локальні нагороди зберігаються на цьому пристрої.", achievementProgress: "Відкрито", achievementUnlocked: "Отримано", achievementLocked: "Не відкрито", achievementToast: "Досягнення відкрито!", achievementDismiss: "Закрити сповіщення", achievementToastOpen: "Натисни, щоб переглянути нагороду", achievementDetailEyebrow: "Досягнення", achievementHowTo: "Як отримати", achievementBatchEyebrow: "Ще нагороди!", achievementBatchTitle: (count) => `Одразу ${count} досягнень!`, achievementBatchMore: (count) => `І ще +${count} — вони вже у колекції.`, achievementBatchDescription: "Не будемо засипати тебе сповіщеннями — решта вже чекає у колекції.", achievementBatchOpen: "Відкрити всі досягнення", achievementBatchSummaryAria: (count) => `Одночасно отримано ${count} досягнень. Відкрити колекцію.`, versionLabel: "Версія Мовограю", settingsOpen: "Відкрити налаштування", settingsTitle: "Налаштування", settingsClose: "Закрити налаштування", upcomingEyebrow: "У планах", upcomingTitle: "Незабаром", upcomingCopy: "Готуємо нові режими для компанії.", themeLight: "Світла тема", themeDark: "Темна тема", themeToLight: "Перемкнути на світле оформлення", themeToDark: "Перемкнути на темне оформлення", soundOn: "Звук увімкнено", soundOff: "Звук вимкнено", soundDisable: "Вимкнути звуки гри", soundEnable: "Увімкнути звуки гри", hapticOn: "Вібрація увімкнена", hapticOff: "Вібрація вимкнена", hapticDisable: "Легкі вібрації для ігрових дій", hapticEnable: "Увімкнути легку вібрацію", menuSubtitle: "Ігри зі словами для компанії.", menuModeNote: "Режими: Поясни слово, Покажи слово, Вгадай слово, Хто я? та Словесний", menuRulesTitle: "Правила", menuRulesText1: "Обери режим, налаштуй гру і передай телефон тому, хто грає. У кожному режимі є короткі підказки на екрані.", menuRulesText2: "У компанії грайте в Alias або Крокодила, а «Вгадай слово» можна пройти самостійно за кілька хвилин.", hintsToolbarAria: "Підказки і правила", hintsClusterAria: "Три рівні підказок",
     modeAliasTitle: "Поясни слово (Alias)", modeAliasDescription: "Пояснюй слово, не називаючи його.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показуй завдання жестами. Говорити не можна.", modeWhoAmITitle: "Хто я?", modeWhoAmIDescription: "Відгадуй персонажа за питаннями.",
     setupGameSettings: "Налаштування гри", setupFormat: "Формат гри", setupSingle: "Одне слово", setupTimed: "На час", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Середньо", difficultyHard: "Складно", phrasesYes: "Словосполучення: так", phrasesNo: "Словосполучення: ні", setupRound: "Раунд", setupTime: "Час", setupAfterTime: "Після часу", setupFinishLast: "Довгадати", setupStop: "Стоп", setupGame: "Гра", setupTarget: "Ціль", setupTeams: "Команди", setupTeamNames: "Назви команд", teamNameBase: "Команда", allTopics: "Усі теми",
     cardsEyebrow: "Alias та Крокодил", cardsTitle: "Картки слів", cardsAllShapesTitle: "Випадково з усіх форм", cardsAllShapesCopy: "Коли увімкнено — гра міксує весь набір форм.", cardsRandomColorsTitle: "Рандомні кольори картки", cardsRandomColorsCopy: "Якщо вимкнути — картки повернуться до базового кольору теми.", cardsOutlineLight: "Окантовка у світлій темі", cardsOutlineDark: "Окантовка у темній темі", choiceNever: "Ніколи", choiceRandom: "Випадково", choiceAlways: "Завжди", cardShapeOrganic: "М’яка шайба", cardShapeSplat: "Асиметрична клякса", cardShapePebble: "Камінчик / жетон", cardShapeSticker: "Стікер-клякса", cardShapeCloud: "Хмаринка", cardShapeSplash: "Крапля-сплеш", cardShapeGummy: "Жуйка / мармелад", cardShapePaper: "Паперова пляма", cardShapeAmoeba: "Амеба", cardShapeCoral: "Корал", cardShapeComet: "Комета", cardShapeStarfish: "Морська зірка", cardShapePotato: "Картоплина", cardShapeWave: "Хвиля", cardShapeJelly: "Медуза", cardShapeMeteor: "Метеорит", cardsNote: "Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.",
@@ -1694,7 +1694,7 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Короткие правила", shortRulesText: "Введите слово выбранной длины. Зелёный — правильная позиция, жёлтый — буква есть в слове, розовый — буквы нет. Доступны три подсказки.",
     labsEyebrow: "Labs · скрытый тест", labsTitle: "Экспериментальные функции", labsCopy: "Язык меняется только в игре «Угадай слово». Украинский остаётся основным; RU и EN — тестовые словари.", labsLanguageAria: "Язык игры Угадай слово",
     labsStatusUk: "Основной проверенный словарь: украинский.", labsStatusRu: "Русский: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.", labsStatusEn: "English: экспериментальный Labs-режим. Словарь продолжает расширяться и модерироваться.",
-    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду", achievementDetailEyebrow: "Достижение", achievementHowTo: "Как получить", achievementBatchEyebrow: "Ещё награды!", achievementBatchTitle: (count) => `Сразу ${count} достижений!`, achievementBatchMore: (count) => `И ещё +${count} — они уже в коллекции.`, achievementBatchDescription: "Не будем засыпать тебя уведомлениями — остальные уже ждут в коллекции.", achievementBatchOpen: "Открыть все достижения", achievementBatchSummaryAria: (count) => `Одновременно получено ${count} достижений. Открыть коллекцию.`, versionLabel: "Версия Мовограя", settingsOpen: "Открыть настройки", settingsTitle: "Настройки", settingsClose: "Закрыть настройки", upcomingEyebrow: "В планах", upcomingTitle: "Скоро", upcomingCopy: "Готовим новые режимы для компании.", themeLight: "Светлая тема", themeDark: "Тёмная тема", themeToLight: "Переключить на светлое оформление", themeToDark: "Переключить на тёмное оформление", soundOn: "Звук включён", soundOff: "Звук выключен", soundDisable: "Выключить звуки игры", soundEnable: "Включить звуки игры", hapticOn: "Вибрация включена", hapticOff: "Вибрация выключена", hapticDisable: "Лёгкие вибрации для игровых действий", hapticEnable: "Включить лёгкую вибрацию", menuSubtitle: "Игры со словами для компании.", menuModeNote: "Режимы: Объясни слово, Покажи слово, Угадай слово и Кто я?", menuRulesTitle: "Правила", menuRulesText1: "Выбери режим, настрой игру и передай телефон тому, кто играет. В каждом режиме есть короткие подсказки на экране.", menuRulesText2: "В компании играйте в Alias или Крокодила, а «Угадай слово» можно пройти самостоятельно за несколько минут.", hintsToolbarAria: "Подсказки и правила", hintsClusterAria: "Три уровня подсказок",
+    labsUnlocked: "Секретный режим открыт", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Награды и достижения", achievementSectionCopy: "Локальные награды сохраняются на этом устройстве.", achievementProgress: "Открыто", achievementUnlocked: "Получено", achievementLocked: "Не открыто", achievementToast: "Достижение открыто!", achievementDismiss: "Закрыть уведомление", achievementToastOpen: "Нажми, чтобы посмотреть награду", achievementDetailEyebrow: "Достижение", achievementHowTo: "Как получить", achievementBatchEyebrow: "Ещё награды!", achievementBatchTitle: (count) => `Сразу ${count} достижений!`, achievementBatchMore: (count) => `И ещё +${count} — они уже в коллекции.`, achievementBatchDescription: "Не будем засыпать тебя уведомлениями — остальные уже ждут в коллекции.", achievementBatchOpen: "Открыть все достижения", achievementBatchSummaryAria: (count) => `Одновременно получено ${count} достижений. Открыть коллекцию.`, versionLabel: "Версия Мовограя", settingsOpen: "Открыть настройки", settingsTitle: "Настройки", settingsClose: "Закрыть настройки", upcomingEyebrow: "В планах", upcomingTitle: "Скоро", upcomingCopy: "Готовим новые режимы для компании.", themeLight: "Светлая тема", themeDark: "Тёмная тема", themeToLight: "Переключить на светлое оформление", themeToDark: "Переключить на тёмное оформление", soundOn: "Звук включён", soundOff: "Звук выключен", soundDisable: "Выключить звуки игры", soundEnable: "Включить звуки игры", hapticOn: "Вибрация включена", hapticOff: "Вибрация выключена", hapticDisable: "Лёгкие вибрации для игровых действий", hapticEnable: "Включить лёгкую вибрацию", menuSubtitle: "Игры со словами для компании.", menuModeNote: "Режимы: Объясни слово, Покажи слово, Угадай слово, Кто я? и Словесный", menuRulesTitle: "Правила", menuRulesText1: "Выбери режим, настрой игру и передай телефон тому, кто играет. В каждом режиме есть короткие подсказки на экране.", menuRulesText2: "В компании играйте в Alias или Крокодила, а «Угадай слово» можно пройти самостоятельно за несколько минут.", hintsToolbarAria: "Подсказки и правила", hintsClusterAria: "Три уровня подсказок",
     modeAliasTitle: "Объясни слово (Alias)", modeAliasDescription: "Объясняй слово, не называя его.", modeCharadesTitle: "Покажи слово (Крокодил)", modeCharadesDescription: "Показывай задания жестами. Говорить нельзя.", modeWhoAmITitle: "Кто я?", modeWhoAmIDescription: "Угадывай персонажа с помощью вопросов.",
     setupGameSettings: "Настройки игры", setupFormat: "Формат игры", setupSingle: "Одно слово", setupTimed: "На время", setupWords: "Слова", difficultyEasy: "Легко", difficultyMedium: "Средне", difficultyHard: "Сложно", phrasesYes: "Словосочетания: да", phrasesNo: "Словосочетания: нет", setupRound: "Раунд", setupTime: "Время", setupAfterTime: "После времени", setupFinishLast: "Доиграть слово", setupStop: "Стоп", setupGame: "Игра", setupTarget: "Цель", setupTeams: "Команды", setupTeamNames: "Названия команд", teamNameBase: "Команда", allTopics: "Все темы",
     cardsEyebrow: "Alias и Крокодил", cardsTitle: "Карточки слов", cardsAllShapesTitle: "Случайно из всех форм", cardsAllShapesCopy: "Когда включено — игра смешивает весь набор форм.", cardsRandomColorsTitle: "Случайные цвета карточки", cardsRandomColorsCopy: "Если выключить — карточки вернутся к базовому цвету темы.", cardsOutlineLight: "Обводка в светлой теме", cardsOutlineDark: "Обводка в тёмной теме", choiceNever: "Никогда", choiceRandom: "Случайно", choiceAlways: "Всегда", cardShapeOrganic: "Мягкая шайба", cardShapeSplat: "Асимметричная клякса", cardShapePebble: "Камешек / жетон", cardShapeSticker: "Стикер-клякса", cardShapeCloud: "Облачко", cardShapeSplash: "Капля-сплэш", cardShapeGummy: "Жвачка / мармелад", cardShapePaper: "Бумажное пятно", cardShapeAmoeba: "Амёба", cardShapeCoral: "Коралл", cardShapeComet: "Комета", cardShapeStarfish: "Морская звезда", cardShapePotato: "Картофелина", cardShapeWave: "Волна", cardShapeJelly: "Медуза", cardShapeMeteor: "Метеорит", cardsNote: "Новые формы, случайные цвета и обводка работают для больших карточек слов в Alias и Крокодиле.",
@@ -2630,7 +2630,7 @@ const WORD_GUESS_TEXT = {
     shortRulesTitle: "Quick rules", shortRulesText: "Enter a word of the selected length. Green is the correct position, yellow means the letter exists elsewhere, pink means it is absent. Three hints are available.",
     labsEyebrow: "Labs · hidden test", labsTitle: "Experimental features", labsCopy: "The language changes only in Guess the word. Ukrainian remains the primary dictionary; RU and EN are experimental.", labsLanguageAria: "Guess the word language",
     labsStatusUk: "Primary verified dictionary: Ukrainian.", labsStatusRu: "Russian: experimental Labs mode. The dictionary is still being expanded and moderated.", labsStatusEn: "English: experimental Labs mode. The dictionary is still being expanded and moderated.",
-    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Locked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement", achievementDetailEyebrow: "Achievement", achievementHowTo: "How to unlock", achievementBatchEyebrow: "More rewards!", achievementBatchTitle: (count) => `${count} achievements at once!`, achievementBatchMore: (count) => `And +${count} more — already in your collection.`, achievementBatchDescription: "We won't flood you with notifications — the rest are already waiting in your collection.", achievementBatchOpen: "Open all achievements", achievementBatchSummaryAria: (count) => `${count} achievements unlocked at once. Open the collection.`, versionLabel: "Movohray version", settingsOpen: "Open settings", settingsTitle: "Settings", settingsClose: "Close settings", upcomingEyebrow: "Coming up", upcomingTitle: "Coming soon", upcomingCopy: "More party modes are in the works.", themeLight: "Light theme", themeDark: "Dark theme", themeToLight: "Switch to light appearance", themeToDark: "Switch to dark appearance", soundOn: "Sound on", soundOff: "Sound off", soundDisable: "Turn game sounds off", soundEnable: "Turn game sounds on", hapticOn: "Haptics on", hapticOff: "Haptics off", hapticDisable: "Light haptics for game actions", hapticEnable: "Turn light haptics on", menuSubtitle: "Word games for friends and parties.", menuModeNote: "Modes: Explain a word, Charades, Guess the word, and Who am I?", menuRulesTitle: "Rules", menuRulesText1: "Choose a mode, set up the game, and hand the phone to the player. Each mode has short on-screen guidance.", menuRulesText2: "Play Alias or Charades with friends, while Guess the word can be played solo in a few minutes.", hintsToolbarAria: "Hints and rules", hintsClusterAria: "Three hint levels",
+    labsUnlocked: "Secret mode unlocked", achievementSectionEyebrow: "Achievements · Labs", achievementSectionTitle: "Awards & achievements", achievementSectionCopy: "Local achievements are stored on this device.", achievementProgress: "Unlocked", achievementUnlocked: "Unlocked", achievementLocked: "Locked", achievementToast: "Achievement unlocked!", achievementDismiss: "Dismiss notification", achievementToastOpen: "Tap to view this achievement", achievementDetailEyebrow: "Achievement", achievementHowTo: "How to unlock", achievementBatchEyebrow: "More rewards!", achievementBatchTitle: (count) => `${count} achievements at once!`, achievementBatchMore: (count) => `And +${count} more — already in your collection.`, achievementBatchDescription: "We won't flood you with notifications — the rest are already waiting in your collection.", achievementBatchOpen: "Open all achievements", achievementBatchSummaryAria: (count) => `${count} achievements unlocked at once. Open the collection.`, versionLabel: "Movohray version", settingsOpen: "Open settings", settingsTitle: "Settings", settingsClose: "Close settings", upcomingEyebrow: "Coming up", upcomingTitle: "Coming soon", upcomingCopy: "More party modes are in the works.", themeLight: "Light theme", themeDark: "Dark theme", themeToLight: "Switch to light appearance", themeToDark: "Switch to dark appearance", soundOn: "Sound on", soundOff: "Sound off", soundDisable: "Turn game sounds off", soundEnable: "Turn game sounds on", hapticOn: "Haptics on", hapticOff: "Haptics off", hapticDisable: "Light haptics for game actions", hapticEnable: "Turn light haptics on", menuSubtitle: "Word games for friends and parties.", menuModeNote: "Modes: Explain a word, Charades, Guess the word, Who am I?, and Word Duel", menuRulesTitle: "Rules", menuRulesText1: "Choose a mode, set up the game, and hand the phone to the player. Each mode has short on-screen guidance.", menuRulesText2: "Play Alias or Charades with friends, while Guess the word can be played solo in a few minutes.", hintsToolbarAria: "Hints and rules", hintsClusterAria: "Three hint levels",
     modeAliasTitle: "Explain a word (Alias)", modeAliasDescription: "Explain the word without saying it.", modeCharadesTitle: "Charades", modeCharadesDescription: "Act out the prompt using gestures. No talking.", modeWhoAmITitle: "Who am I?", modeWhoAmIDescription: "Guess the character by asking questions.",
     setupGameSettings: "Game setup", setupFormat: "Game format", setupSingle: "One prompt", setupTimed: "Timed", setupWords: "Words", difficultyEasy: "Easy", difficultyMedium: "Medium", difficultyHard: "Hard", phrasesYes: "Phrases: on", phrasesNo: "Phrases: off", setupRound: "Round", setupTime: "Time", setupAfterTime: "When time is up", setupFinishLast: "Finish the prompt", setupStop: "Stop", setupGame: "Game", setupTarget: "Target", setupTeams: "Teams", setupTeamNames: "Team names", teamNameBase: "Team", allTopics: "All topics",
     cardsEyebrow: "Alias & Charades", cardsTitle: "Word cards", cardsAllShapesTitle: "Random from all shapes", cardsAllShapesCopy: "When enabled, the game mixes the full set of card shapes.", cardsRandomColorsTitle: "Random card colors", cardsRandomColorsCopy: "Turn this off to use the theme's base card color.", cardsOutlineLight: "Outline in light theme", cardsOutlineDark: "Outline in dark theme", choiceNever: "Never", choiceRandom: "Random", choiceAlways: "Always", cardShapeOrganic: "Soft puck", cardShapeSplat: "Asymmetric blob", cardShapePebble: "Pebble / token", cardShapeSticker: "Blob sticker", cardShapeCloud: "Cloud", cardShapeSplash: "Splash drop", cardShapeGummy: "Gummy", cardShapePaper: "Paper blot", cardShapeAmoeba: "Amoeba", cardShapeCoral: "Coral", cardShapeComet: "Comet", cardShapeStarfish: "Starfish", cardShapePotato: "Potato", cardShapeWave: "Wave", cardShapeJelly: "Jellyfish", cardShapeMeteor: "Meteor", cardsNote: "New shapes, random colors, and outlines apply to the large word cards in Alias and Charades.",
@@ -4216,9 +4216,10 @@ const modeConfigs = [
   },
   {
     id: "battle",
-    title: "Словесний батл",
-    description: "Дискутувати й доводити свою думку.",
-    available: false,
+    title: "Словесний",
+    description: "Батл аргументів",
+    dataFile: "debates.json",
+    available: true,
   },
 ];
 
@@ -4745,7 +4746,7 @@ function normalizeReleaseInfo(data) {
     return null;
   }
   const build = normalizeBuildLabel(data && data.build);
-  const parsedCandidate = Number.parseInt(data && data.candidate, 10);
+  const parsedCandidate = Number.parseInt(String(data && data.candidate || "").replace(/^c/i, ""), 10);
   const candidate = Number.isFinite(parsedCandidate) && parsedCandidate > 0 ? parsedCandidate : 0;
   const candidateSuffix = candidate ? `-c${candidate}` : "";
   return {
@@ -5261,10 +5262,10 @@ function updateMenuVersionInfo() {
     return;
   }
 
-  menuVersionInfo.textContent = `v${DATA_VERSION}`;
+  menuVersionInfo.textContent = `v${DATA_VERSION}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 
   if (appSettingsVersion) {
-    appSettingsVersion.textContent = `v${DATA_VERSION}`;
+    appSettingsVersion.textContent = `v${DATA_VERSION}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
   }
 }
 
@@ -12002,6 +12003,8 @@ function isAppStandalone() {
 }
 
 function getAppNavigationLevel(screenName) {
+  if (screenName === "slovesnyiSetup") return "setup";
+  if (screenName === "slovesnyiFinal") return "result";
   if (screenName === "menu") {
     return "menu";
   }
@@ -12256,6 +12259,8 @@ function requestAppBack(options) {
   if (screenName === "menu") {
     return false;
   }
+
+  if (Slovesnyi.back(settings)) return true;
 
   if (settings.destination === "menu") {
     if (screenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden) {
@@ -13490,11 +13495,12 @@ function renderModes() {
       charades: "assets/game-icons/charades.png",
       wordguess: "assets/game-icons/wordguess.png",
       whoami: "assets/game-icons/whoami.png",
+      battle: "assets/game-icons/slovesnyi.svg",
     };
     const iconWrap = document.createElement("span");
     iconWrap.className = "mode-card-icon";
     iconWrap.setAttribute("aria-hidden", "true");
-    const iconFallback = appendTextElement(iconWrap, "span", "mode-card-icon-fallback", "?");
+    const iconFallback = appendTextElement(iconWrap, "span", "mode-card-icon-fallback", mode.id === "battle" ? "☏" : "?");
     if (modeIcons[mode.id]) {
       const icon = document.createElement("img");
       icon.src = getRevisionedAssetUrl(modeIcons[mode.id]);
@@ -13515,8 +13521,8 @@ function renderModes() {
       whoami: ["modeWhoAmITitle", "modeWhoAmIDescription"],
     };
     const localeKeys = modeLocaleKeys[mode.id];
-    const renderedTitle = localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
-    const renderedDescription = localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
+    const renderedTitle = mode.id === "battle" ? Slovesnyi.text("title", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
+    const renderedDescription = mode.id === "battle" ? Slovesnyi.text("description", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
     appendTextElement(button, "strong", "", renderedTitle);
     appendTextElement(button, "span", "mode-card-description", renderedDescription);
 
@@ -13526,6 +13532,15 @@ function renderModes() {
       selectedCategories = [];
       selectedCategory = null;
       areCategoriesExpanded = false;
+
+      if (mode.id === "battle") {
+        resetActiveGameState();
+        clearWhoAmITimer();
+        document.body.dataset.mode = mode.id;
+        document.body.classList.remove("single-card-mode");
+        Slovesnyi.open();
+        return;
+      }
 
       if (isWordGuess()) {
         resetActiveGameState();
@@ -15973,6 +15988,10 @@ function showWinnerScreen() {
 }
 
 function showScreen(screenName, options) {
+  Slovesnyi.onScreen(screenName);
+  ["slovesnyiSetup", "slovesnyiGame", "slovesnyiFinal"].forEach(function (name) {
+    document.getElementById(name + "Screen").classList.toggle("active", name === screenName);
+  });
   const navigationOptions = options || {};
   const previousScreenName = getCurrentAppScreenName();
   closeThemesPopover();

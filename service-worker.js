@@ -1,8 +1,13 @@
-const MOVOHRAY_REVISION = "0.6.6a-20260825";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.6a-b20260825";
+const MOVOHRAY_REVISION = "0.6.7-20260907-c1";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260907-c1";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
+  `./slovesnyi-engine.js?rev=${MOVOHRAY_REVISION}`,
+  `./slovesnyi.js?rev=${MOVOHRAY_REVISION}`,
+  `./slovesnyi.css?rev=${MOVOHRAY_REVISION}`,
+  `./debates.json?rev=${MOVOHRAY_REVISION}`,
+  `./assets/game-icons/slovesnyi.svg?rev=${MOVOHRAY_REVISION}`,
   `./styles.css?rev=${MOVOHRAY_REVISION}`,
   `./wordguess-session.js?rev=${MOVOHRAY_REVISION}`,
   `./app.js?rev=${MOVOHRAY_REVISION}`,

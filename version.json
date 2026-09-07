@@ -1,5 +1,6 @@
 {
-  "version": "0.6.6a",
-  "build": "2026-08-25",
+  "version": "0.6.7",
+  "build": "2026-09-07",
+  "candidate": "c1",
   "required": true
 }

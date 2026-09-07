@@ -1,0 +1,1805 @@
+{
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "debate-001",
+      "text": {
+        "ua": "Ліжко краще застеляти одразу після пробудження",
+        "ru": "Кровать лучше заправлять сразу после пробуждения",
+        "en": "Beds should be made as soon as you wake up"
+      },
+      "category": "household",
+      "level": "easy"
+    },
+    {
+      "id": "debate-002",
+      "text": {
+        "ua": "Кімнатні рослини кращі за декоративні статуетки",
+        "ru": "Комнатные растения лучше декоративных статуэток",
+        "en": "Houseplants are better than decorative ornaments"
+      },
+      "category": "household",
+      "level": "easy"
+    },
+    {
+      "id": "debate-003",
+      "text": {
+        "ua": "Прибирати під музику приємніше, ніж у тиші",
+        "ru": "Убираться под музыку приятнее, чем в тишине",
+        "en": "Cleaning is more enjoyable with music than in silence"
+      },
+      "category": "household",
+      "level": "easy"
+    },
+    {
+      "id": "debate-004",
+      "text": {
+        "ua": "Удома варто ходити босоніж",
+        "ru": "Дома стоит ходить босиком",
+        "en": "People should go barefoot at home"
+      },
+      "category": "household",
+      "level": "easy"
+    },
+    {
+      "id": "debate-005",
+      "text": {
+        "ua": "Великий диван важливіший за великий телевізор",
+        "ru": "Большой диван важнее большого телевизора",
+        "en": "A big sofa matters more than a big television"
+      },
+      "category": "household",
+      "level": "easy"
+    },
+    {
+      "id": "debate-006",
+      "text": {
+        "ua": "У кожній квартирі має бути полиця для речей без місця",
+        "ru": "В каждой квартире нужна полка для вещей без места",
+        "en": "Every home needs a shelf for things with no proper place"
+      },
+      "category": "household",
+      "level": "normal"
+    },
+    {
+      "id": "debate-007",
+      "text": {
+        "ua": "Сусідам варто мати спільний набір інструментів",
+        "ru": "Соседям стоит иметь общий набор инструментов",
+        "en": "Neighbours should share a set of tools"
+      },
+      "category": "household",
+      "level": "normal"
+    },
+    {
+      "id": "debate-008",
+      "text": {
+        "ua": "Краще мати менше речей, ніж більше місць для зберігання",
+        "ru": "Лучше иметь меньше вещей, чем больше мест для хранения",
+        "en": "Having fewer things is better than having more storage"
+      },
+      "category": "household",
+      "level": "normal"
+    },
+    {
+      "id": "debate-009",
+      "text": {
+        "ua": "Домашні справи слід розподіляти жеребкуванням щотижня",
+        "ru": "Домашние дела следует распределять жеребьёвкой каждую неделю",
+        "en": "Household chores should be assigned by drawing lots every week"
+      },
+      "category": "household",
+      "level": "normal"
+    },
+    {
+      "id": "debate-010",
+      "text": {
+        "ua": "Гостей потрібно попереджати, що вдома безлад",
+        "ru": "Гостей нужно предупреждать, что дома беспорядок",
+        "en": "Guests should be warned when your home is messy"
+      },
+      "category": "household",
+      "level": "normal"
+    },
+    {
+      "id": "debate-011",
+      "text": {
+        "ua": "Загублені шкарпетки мають право на власну кімнату",
+        "ru": "Потерянные носки имеют право на собственную комнату",
+        "en": "Lost socks deserve a room of their own"
+      },
+      "category": "household",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-012",
+      "text": {
+        "ua": "Холодильник повинен коментувати нічні перекуси",
+        "ru": "Холодильник должен комментировать ночные перекусы",
+        "en": "Fridges should comment on midnight snacks"
+      },
+      "category": "household",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-013",
+      "text": {
+        "ua": "Робот-пилосос заслуговує на вихідний",
+        "ru": "Робот-пылесос заслуживает выходного",
+        "en": "Robot vacuums deserve a day off"
+      },
+      "category": "household",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-014",
+      "text": {
+        "ua": "Пил — це тимчасовий декор",
+        "ru": "Пыль — это временный декор",
+        "en": "Dust is temporary decoration"
+      },
+      "category": "household",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-015",
+      "text": {
+        "ua": "Дверний дзвінок має грати особистий гімн гостя",
+        "ru": "Дверной звонок должен играть личный гимн гостя",
+        "en": "Doorbells should play each visitor's personal anthem"
+      },
+      "category": "household",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-016",
+      "text": {
+        "ua": "Сніданок смачніший на вечерю",
+        "ru": "Завтрак вкуснее на ужин",
+        "en": "Breakfast tastes better at dinner"
+      },
+      "category": "food",
+      "level": "easy"
+    },
+    {
+      "id": "debate-017",
+      "text": {
+        "ua": "Хрустка картопля краща за м’яку",
+        "ru": "Хрустящая картошка лучше мягкой",
+        "en": "Crispy potatoes are better than soft potatoes"
+      },
+      "category": "food",
+      "level": "easy"
+    },
+    {
+      "id": "debate-018",
+      "text": {
+        "ua": "Їсти морозиво взимку приємно",
+        "ru": "Есть мороженое зимой приятно",
+        "en": "Ice cream is enjoyable in winter"
+      },
+      "category": "food",
+      "level": "easy"
+    },
+    {
+      "id": "debate-019",
+      "text": {
+        "ua": "Домашній лимонад кращий за газовані напої",
+        "ru": "Домашний лимонад лучше газировки",
+        "en": "Homemade lemonade is better than fizzy drinks"
+      },
+      "category": "food",
+      "level": "easy"
+    },
+    {
+      "id": "debate-020",
+      "text": {
+        "ua": "Десертом варто ділитися",
+        "ru": "Десертом стоит делиться",
+        "en": "Dessert should be shared"
+      },
+      "category": "food",
+      "level": "easy"
+    },
+    {
+      "id": "debate-021",
+      "text": {
+        "ua": "У ресторанах потрібні дегустаційні порції кожної страви",
+        "ru": "В ресторанах нужны дегустационные порции каждого блюда",
+        "en": "Restaurants should offer tasting portions of every dish"
+      },
+      "category": "food",
+      "level": "normal"
+    },
+    {
+      "id": "debate-022",
+      "text": {
+        "ua": "Рецепт — це підказка, а не інструкція",
+        "ru": "Рецепт — это подсказка, а не инструкция",
+        "en": "A recipe is a suggestion rather than an instruction"
+      },
+      "category": "food",
+      "level": "normal"
+    },
+    {
+      "id": "debate-023",
+      "text": {
+        "ua": "Меню з п’яти страв краще за меню з п’ятдесяти",
+        "ru": "Меню из пяти блюд лучше меню из пятидесяти",
+        "en": "A five-dish menu is better than a fifty-dish menu"
+      },
+      "category": "food",
+      "level": "normal"
+    },
+    {
+      "id": "debate-024",
+      "text": {
+        "ua": "На пікнік кожен має приносити сюрприз замість узгодженої страви",
+        "ru": "На пикник каждый должен приносить сюрприз вместо согласованного блюда",
+        "en": "Everyone should bring a surprise dish to a picnic"
+      },
+      "category": "food",
+      "level": "normal"
+    },
+    {
+      "id": "debate-025",
+      "text": {
+        "ua": "Гарна подача виправдовує вищу ціну страви",
+        "ru": "Красивая подача оправдывает более высокую цену блюда",
+        "en": "Beautiful presentation justifies a higher price for food"
+      },
+      "category": "food",
+      "level": "normal"
+    },
+    {
+      "id": "debate-026",
+      "text": {
+        "ua": "Суп заслуговує на келих, а не тарілку",
+        "ru": "Суп заслуживает бокала, а не тарелки",
+        "en": "Soup deserves a fancy glass instead of a bowl"
+      },
+      "category": "food",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-027",
+      "text": {
+        "ua": "Пельмені — найкраща валюта для дружніх послуг",
+        "ru": "Пельмени — лучшая валюта для дружеских услуг",
+        "en": "Dumplings are the best currency for favours between friends"
+      },
+      "category": "food",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-028",
+      "text": {
+        "ua": "Тостер має друкувати ранкові компліменти на хлібі",
+        "ru": "Тостер должен печатать утренние комплименты на хлебе",
+        "en": "Toasters should print morning compliments on bread"
+      },
+      "category": "food",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-029",
+      "text": {
+        "ua": "Усі страви можна покращити, зробивши їх у формі зірки",
+        "ru": "Все блюда можно улучшить, придав им форму звезды",
+        "en": "Every dish improves when it is shaped like a star"
+      },
+      "category": "food",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-030",
+      "text": {
+        "ua": "Останнє печиво має обирати свого власника",
+        "ru": "Последнее печенье должно выбирать своего владельца",
+        "en": "The last biscuit should choose its owner"
+      },
+      "category": "food",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-031",
+      "text": {
+        "ua": "Голосові повідомлення зручніші за текстові",
+        "ru": "Голосовые сообщения удобнее текстовых",
+        "en": "Voice messages are more convenient than texts"
+      },
+      "category": "technology",
+      "level": "easy"
+    },
+    {
+      "id": "debate-032",
+      "text": {
+        "ua": "Паперові книжки приємніші за електронні",
+        "ru": "Бумажные книги приятнее электронных",
+        "en": "Paper books are more enjoyable than ebooks"
+      },
+      "category": "technology",
+      "level": "easy"
+    },
+    {
+      "id": "debate-033",
+      "text": {
+        "ua": "Телефон краще заряджати поза спальнею",
+        "ru": "Телефон лучше заряжать вне спальни",
+        "en": "Phones should be charged outside the bedroom"
+      },
+      "category": "technology",
+      "level": "easy"
+    },
+    {
+      "id": "debate-034",
+      "text": {
+        "ua": "Фізичні кнопки кращі за сенсорні",
+        "ru": "Физические кнопки лучше сенсорных",
+        "en": "Physical buttons are better than touch controls"
+      },
+      "category": "technology",
+      "level": "easy"
+    },
+    {
+      "id": "debate-035",
+      "text": {
+        "ua": "Темна тема зручніша за світлу",
+        "ru": "Тёмная тема удобнее светлой",
+        "en": "Dark mode is more comfortable than light mode"
+      },
+      "category": "technology",
+      "level": "easy"
+    },
+    {
+      "id": "debate-036",
+      "text": {
+        "ua": "Застосунки повинні показувати, скільки часу вони зекономили",
+        "ru": "Приложения должны показывать, сколько времени они сэкономили",
+        "en": "Apps should show how much time they have saved you"
+      },
+      "category": "technology",
+      "level": "normal"
+    },
+    {
+      "id": "debate-037",
+      "text": {
+        "ua": "Сповіщення мають надходити лише тричі на день",
+        "ru": "Уведомления должны приходить только трижды в день",
+        "en": "Notifications should arrive only three times a day"
+      },
+      "category": "technology",
+      "level": "normal"
+    },
+    {
+      "id": "debate-038",
+      "text": {
+        "ua": "Розумний годинник додає більше клопоту, ніж користі",
+        "ru": "Умные часы добавляют больше хлопот, чем пользы",
+        "en": "Smartwatches create more hassle than benefit"
+      },
+      "category": "technology",
+      "level": "normal"
+    },
+    {
+      "id": "debate-039",
+      "text": {
+        "ua": "Сімейним фотографіям потрібен щорічний друкований альбом",
+        "ru": "Семейным фотографиям нужен ежегодный печатный альбом",
+        "en": "Family photos need a printed album every year"
+      },
+      "category": "technology",
+      "level": "normal"
+    },
+    {
+      "id": "debate-040",
+      "text": {
+        "ua": "Автоматичне виправлення тексту заважає більше, ніж допомагає",
+        "ru": "Автоисправление текста мешает больше, чем помогает",
+        "en": "Autocorrect causes more trouble than it saves"
+      },
+      "category": "technology",
+      "level": "normal"
+    },
+    {
+      "id": "debate-041",
+      "text": {
+        "ua": "Паролі слід замінити секретним танцем",
+        "ru": "Пароли следует заменить секретным танцем",
+        "en": "Passwords should be replaced by a secret dance"
+      },
+      "category": "technology",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-042",
+      "text": {
+        "ua": "Принтер має вибачатися за кожне застрягання паперу",
+        "ru": "Принтер должен извиняться за каждое застревание бумаги",
+        "en": "Printers should apologise for every paper jam"
+      },
+      "category": "technology",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-043",
+      "text": {
+        "ua": "Wi-Fi краще працював би від компліментів",
+        "ru": "Wi-Fi лучше работал бы от комплиментов",
+        "en": "Wi-Fi would work better if powered by compliments"
+      },
+      "category": "technology",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-044",
+      "text": {
+        "ua": "Телефону потрібен режим «удавай картоплю»",
+        "ru": "Телефону нужен режим «притворись картошкой»",
+        "en": "Phones need a pretend-to-be-a-potato mode"
+      },
+      "category": "technology",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-045",
+      "text": {
+        "ua": "Смайлики повинні мати власні звукові ефекти",
+        "ru": "Смайлики должны иметь собственные звуковые эффекты",
+        "en": "Emojis should have their own sound effects"
+      },
+      "category": "technology",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-046",
+      "text": {
+        "ua": "Уроки надворі цікавіші за уроки в класі",
+        "ru": "Уроки на улице интереснее уроков в классе",
+        "en": "Outdoor lessons are more interesting than classroom lessons"
+      },
+      "category": "school",
+      "level": "easy"
+    },
+    {
+      "id": "debate-047",
+      "text": {
+        "ua": "Шкільний день варто починати пізніше",
+        "ru": "Школьный день стоит начинать позже",
+        "en": "The school day should start later"
+      },
+      "category": "school",
+      "level": "easy"
+    },
+    {
+      "id": "debate-048",
+      "text": {
+        "ua": "Малювати на полях зошита корисно",
+        "ru": "Рисовать на полях тетради полезно",
+        "en": "Doodling in notebook margins is useful"
+      },
+      "category": "school",
+      "level": "easy"
+    },
+    {
+      "id": "debate-049",
+      "text": {
+        "ua": "Працювати в парі веселіше, ніж самостійно",
+        "ru": "Работать в паре веселее, чем самостоятельно",
+        "en": "Working in pairs is more fun than working alone"
+      },
+      "category": "school",
+      "level": "easy"
+    },
+    {
+      "id": "debate-050",
+      "text": {
+        "ua": "Екскурсії запам’ятовуються краще за підручники",
+        "ru": "Экскурсии запоминаются лучше учебников",
+        "en": "School trips are more memorable than textbooks"
+      },
+      "category": "school",
+      "level": "easy"
+    },
+    {
+      "id": "debate-051",
+      "text": {
+        "ua": "Учні повинні самі обирати книжки для обговорення",
+        "ru": "Ученики должны сами выбирать книги для обсуждения",
+        "en": "Students should choose the books they discuss"
+      },
+      "category": "school",
+      "level": "normal"
+    },
+    {
+      "id": "debate-052",
+      "text": {
+        "ua": "Уміння ставити запитання важливіше за швидку відповідь",
+        "ru": "Умение задавать вопросы важнее быстрого ответа",
+        "en": "Asking good questions matters more than answering quickly"
+      },
+      "category": "school",
+      "level": "normal"
+    },
+    {
+      "id": "debate-053",
+      "text": {
+        "ua": "Шкільні проєкти краще оцінювати виставкою, ніж балами",
+        "ru": "Школьные проекты лучше оценивать выставкой, чем баллами",
+        "en": "School projects should be celebrated in exhibitions instead of graded"
+      },
+      "category": "school",
+      "level": "normal"
+    },
+    {
+      "id": "debate-054",
+      "text": {
+        "ua": "Один день на тиждень варто присвячувати практичним навичкам",
+        "ru": "Один день в неделю стоит посвящать практическим навыкам",
+        "en": "One school day a week should focus on practical skills"
+      },
+      "category": "school",
+      "level": "normal"
+    },
+    {
+      "id": "debate-055",
+      "text": {
+        "ua": "Школі потрібен предмет про те, як навчатися",
+        "ru": "Школе нужен предмет о том, как учиться",
+        "en": "Schools need a subject about learning how to learn"
+      },
+      "category": "school",
+      "level": "normal"
+    },
+    {
+      "id": "debate-056",
+      "text": {
+        "ua": "Дзвінок на перерву має оголошувати кіт",
+        "ru": "Звонок на перемену должен объявлять кот",
+        "en": "A cat should announce school breaks"
+      },
+      "category": "school",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-057",
+      "text": {
+        "ua": "Контрольні краще писати в костюмах чарівників",
+        "ru": "Контрольные лучше писать в костюмах волшебников",
+        "en": "Tests are better when everyone wears wizard costumes"
+      },
+      "category": "school",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-058",
+      "text": {
+        "ua": "Рюкзаки повинні самі ходити до школи",
+        "ru": "Рюкзаки должны сами ходить в школу",
+        "en": "School bags should walk to school by themselves"
+      },
+      "category": "school",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-059",
+      "text": {
+        "ua": "На уроках географії потрібен уявний паспорт",
+        "ru": "На уроках географии нужен воображаемый паспорт",
+        "en": "Geography lessons need imaginary passports"
+      },
+      "category": "school",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-060",
+      "text": {
+        "ua": "Шкільним талісманом має бути лінивець",
+        "ru": "Школьным талисманом должен быть ленивец",
+        "en": "A sloth should be the school mascot"
+      },
+      "category": "school",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-061",
+      "text": {
+        "ua": "Перерва на прогулянку краща за перерву в телефоні",
+        "ru": "Перерыв на прогулку лучше перерыва в телефоне",
+        "en": "A walking break is better than a phone break"
+      },
+      "category": "work",
+      "level": "easy"
+    },
+    {
+      "id": "debate-062",
+      "text": {
+        "ua": "Працювати біля вікна приємніше",
+        "ru": "Работать у окна приятнее",
+        "en": "Working beside a window is more enjoyable"
+      },
+      "category": "work",
+      "level": "easy"
+    },
+    {
+      "id": "debate-063",
+      "text": {
+        "ua": "Робочому столу потрібна особиста дрібничка",
+        "ru": "Рабочему столу нужна личная безделушка",
+        "en": "Every desk needs a personal trinket"
+      },
+      "category": "work",
+      "level": "easy"
+    },
+    {
+      "id": "debate-064",
+      "text": {
+        "ua": "Найскладнішу справу краще робити зранку",
+        "ru": "Самое сложное дело лучше делать утром",
+        "en": "The hardest task should be done in the morning"
+      },
+      "category": "work",
+      "level": "easy"
+    },
+    {
+      "id": "debate-065",
+      "text": {
+        "ua": "Зручний одяг допомагає працювати",
+        "ru": "Удобная одежда помогает работать",
+        "en": "Comfortable clothes help people work"
+      },
+      "category": "work",
+      "level": "easy"
+    },
+    {
+      "id": "debate-066",
+      "text": {
+        "ua": "Наради повинні тривати не довше двадцяти хвилин",
+        "ru": "Совещания должны длиться не дольше двадцати минут",
+        "en": "Meetings should last no longer than twenty minutes"
+      },
+      "category": "work",
+      "level": "normal"
+    },
+    {
+      "id": "debate-067",
+      "text": {
+        "ua": "Робочий тиждень краще планувати за результатами, а не годинами",
+        "ru": "Рабочую неделю лучше планировать по результатам, а не часам",
+        "en": "The working week should be planned around results rather than hours"
+      },
+      "category": "work",
+      "level": "normal"
+    },
+    {
+      "id": "debate-068",
+      "text": {
+        "ua": "Спільний обід корисніший за командні тренінги",
+        "ru": "Общий обед полезнее командных тренингов",
+        "en": "A shared lunch is more useful than team-building workshops"
+      },
+      "category": "work",
+      "level": "normal"
+    },
+    {
+      "id": "debate-069",
+      "text": {
+        "ua": "У робочому чаті слід заборонити повідомлення без конкретного запитання",
+        "ru": "В рабочем чате следует запретить сообщения без конкретного вопроса",
+        "en": "Work chats should require a specific question in each request"
+      },
+      "category": "work",
+      "level": "normal"
+    },
+    {
+      "id": "debate-070",
+      "text": {
+        "ua": "Щотижня потрібна година для безглуздих на перший погляд ідей",
+        "ru": "Каждую неделю нужен час для на первый взгляд нелепых идей",
+        "en": "Every week needs an hour for seemingly silly ideas"
+      },
+      "category": "work",
+      "level": "normal"
+    },
+    {
+      "id": "debate-071",
+      "text": {
+        "ua": "Посада має називатися так, як її пояснює п’ятирічна дитина",
+        "ru": "Должность должна называться так, как её объясняет пятилетний ребёнок",
+        "en": "Job titles should use a five-year-old's explanation"
+      },
+      "category": "work",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-072",
+      "text": {
+        "ua": "На нараді слово має отримувати той, хто тримає кабачок",
+        "ru": "На совещании слово должен получать тот, кто держит кабачок",
+        "en": "Only the person holding a courgette should speak in meetings"
+      },
+      "category": "work",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-073",
+      "text": {
+        "ua": "Офісний кавник заслуговує на премію",
+        "ru": "Офисная кофеварка заслуживает премии",
+        "en": "The office coffee machine deserves a bonus"
+      },
+      "category": "work",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-074",
+      "text": {
+        "ua": "Дедлайн треба зустрічати фанфарами",
+        "ru": "Дедлайн нужно встречать фанфарами",
+        "en": "Deadlines should arrive with a trumpet fanfare"
+      },
+      "category": "work",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-075",
+      "text": {
+        "ua": "У резюме слід указувати улюбленого динозавра",
+        "ru": "В резюме следует указывать любимого динозавра",
+        "en": "CVs should list your favourite dinosaur"
+      },
+      "category": "work",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-076",
+      "text": {
+        "ua": "Несподівана листівка краща за довге повідомлення",
+        "ru": "Неожиданная открытка лучше длинного сообщения",
+        "en": "An unexpected postcard is better than a long message"
+      },
+      "category": "friendship",
+      "level": "easy"
+    },
+    {
+      "id": "debate-077",
+      "text": {
+        "ua": "З друзями приємно іноді просто мовчати",
+        "ru": "С друзьями приятно иногда просто молчать",
+        "en": "Sometimes it is nice to sit silently with friends"
+      },
+      "category": "friendship",
+      "level": "easy"
+    },
+    {
+      "id": "debate-078",
+      "text": {
+        "ua": "Спільне хобі допомагає дружбі",
+        "ru": "Общее хобби помогает дружбе",
+        "en": "A shared hobby helps a friendship"
+      },
+      "category": "friendship",
+      "level": "easy"
+    },
+    {
+      "id": "debate-079",
+      "text": {
+        "ua": "Подарунок, зроблений власноруч, цінніший за куплений",
+        "ru": "Подарок, сделанный своими руками, ценнее покупного",
+        "en": "A handmade gift is more valuable than a bought one"
+      },
+      "category": "friendship",
+      "level": "easy"
+    },
+    {
+      "id": "debate-080",
+      "text": {
+        "ua": "Прогулянка — найкращий спосіб зустрітися з другом",
+        "ru": "Прогулка — лучший способ встретиться с другом",
+        "en": "A walk is the best way to catch up with a friend"
+      },
+      "category": "friendship",
+      "level": "easy"
+    },
+    {
+      "id": "debate-081",
+      "text": {
+        "ua": "Друзі не зобов’язані любити однакові фільми",
+        "ru": "Друзья не обязаны любить одинаковые фильмы",
+        "en": "Friends do not need to like the same films"
+      },
+      "category": "friendship",
+      "level": "normal"
+    },
+    {
+      "id": "debate-082",
+      "text": {
+        "ua": "Плани на зустріч краще робити спонтанно",
+        "ru": "Планы на встречу лучше строить спонтанно",
+        "en": "Plans to meet friends are better made spontaneously"
+      },
+      "category": "friendship",
+      "level": "normal"
+    },
+    {
+      "id": "debate-083",
+      "text": {
+        "ua": "У груповому чаті корисно мати день тиші",
+        "ru": "В групповом чате полезно иметь день тишины",
+        "en": "Group chats benefit from a quiet day"
+      },
+      "category": "friendship",
+      "level": "normal"
+    },
+    {
+      "id": "debate-084",
+      "text": {
+        "ua": "Вибирати подарунок за списком побажань краще, ніж робити сюрприз",
+        "ru": "Выбирать подарок по списку желаний лучше, чем делать сюрприз",
+        "en": "Choosing from a wish list is better than giving a surprise"
+      },
+      "category": "friendship",
+      "level": "normal"
+    },
+    {
+      "id": "debate-085",
+      "text": {
+        "ua": "Кожен у компанії має по черзі планувати зустріч",
+        "ru": "Каждый в компании должен по очереди планировать встречу",
+        "en": "Everyone in a group should take turns planning get-togethers"
+      },
+      "category": "friendship",
+      "level": "normal"
+    },
+    {
+      "id": "debate-086",
+      "text": {
+        "ua": "Дружбі потрібен спільний прапор",
+        "ru": "Дружбе нужен общий флаг",
+        "en": "Every friendship needs a shared flag"
+      },
+      "category": "friendship",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-087",
+      "text": {
+        "ua": "За вдалий жарт друг має отримувати уявний орден",
+        "ru": "За удачную шутку друг должен получать воображаемый орден",
+        "en": "Friends deserve imaginary medals for good jokes"
+      },
+      "category": "friendship",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-088",
+      "text": {
+        "ua": "Найкращий тест дружби — разом скласти шафу без інструкції",
+        "ru": "Лучший тест дружбы — вместе собрать шкаф без инструкции",
+        "en": "The best friendship test is building a wardrobe without instructions"
+      },
+      "category": "friendship",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-089",
+      "text": {
+        "ua": "У кожної компанії друзів має бути придворний літописець",
+        "ru": "У каждой компании друзей должен быть придворный летописец",
+        "en": "Every group of friends needs a royal chronicler"
+      },
+      "category": "friendship",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-090",
+      "text": {
+        "ua": "Побажання на день народження слід передавати азбукою печива",
+        "ru": "Пожелания на день рождения следует передавать азбукой печенья",
+        "en": "Birthday wishes should be written in a biscuit alphabet"
+      },
+      "category": "friendship",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-091",
+      "text": {
+        "ua": "Подорож потягом цікавіша за переліт",
+        "ru": "Путешествие поездом интереснее перелёта",
+        "en": "Train journeys are more interesting than flights"
+      },
+      "category": "travel",
+      "level": "easy"
+    },
+    {
+      "id": "debate-092",
+      "text": {
+        "ua": "У відпустці краще вставати без будильника",
+        "ru": "В отпуске лучше вставать без будильника",
+        "en": "Holidays are better without alarm clocks"
+      },
+      "category": "travel",
+      "level": "easy"
+    },
+    {
+      "id": "debate-093",
+      "text": {
+        "ua": "Сувенір має бути корисним",
+        "ru": "Сувенир должен быть полезным",
+        "en": "Souvenirs should be useful"
+      },
+      "category": "travel",
+      "level": "easy"
+    },
+    {
+      "id": "debate-094",
+      "text": {
+        "ua": "Маленький рюкзак кращий за велику валізу",
+        "ru": "Маленький рюкзак лучше большого чемодана",
+        "en": "A small backpack is better than a big suitcase"
+      },
+      "category": "travel",
+      "level": "easy"
+    },
+    {
+      "id": "debate-095",
+      "text": {
+        "ua": "Місцевий ринок цікавіший за торговий центр",
+        "ru": "Местный рынок интереснее торгового центра",
+        "en": "A local market is more interesting than a shopping centre"
+      },
+      "category": "travel",
+      "level": "easy"
+    },
+    {
+      "id": "debate-096",
+      "text": {
+        "ua": "Один день подорожі варто залишати без плану",
+        "ru": "Один день путешествия стоит оставлять без плана",
+        "en": "One day of every trip should have no plan"
+      },
+      "category": "travel",
+      "level": "normal"
+    },
+    {
+      "id": "debate-097",
+      "text": {
+        "ua": "Краще повертатися в улюблене місце, ніж щоразу шукати нове",
+        "ru": "Лучше возвращаться в любимое место, чем каждый раз искать новое",
+        "en": "Returning to a favourite place is better than always finding somewhere new"
+      },
+      "category": "travel",
+      "level": "normal"
+    },
+    {
+      "id": "debate-098",
+      "text": {
+        "ua": "Фото в подорожі заважають помічати деталі",
+        "ru": "Фото в путешествии мешают замечать детали",
+        "en": "Taking photos on trips stops people noticing details"
+      },
+      "category": "travel",
+      "level": "normal"
+    },
+    {
+      "id": "debate-099",
+      "text": {
+        "ua": "Туристична група має щодня змінювати свого планувальника",
+        "ru": "Туристическая группа должна ежедневно менять своего планировщика",
+        "en": "Travel groups should change their planner every day"
+      },
+      "category": "travel",
+      "level": "normal"
+    },
+    {
+      "id": "debate-100",
+      "text": {
+        "ua": "Вихідні неподалік дому можуть замінити далеку відпустку",
+        "ru": "Выходные недалеко от дома могут заменить далёкий отпуск",
+        "en": "A nearby weekend break can replace a faraway holiday"
+      },
+      "category": "travel",
+      "level": "normal"
+    },
+    {
+      "id": "debate-101",
+      "text": {
+        "ua": "Валізам потрібні номери, як спортивним гравцям",
+        "ru": "Чемоданам нужны номера, как спортивным игрокам",
+        "en": "Suitcases need jersey numbers like sports players"
+      },
+      "category": "travel",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-102",
+      "text": {
+        "ua": "Мапи мають позначати місця з найкращою луною",
+        "ru": "Карты должны отмечать места с лучшим эхом",
+        "en": "Maps should mark places with the best echoes"
+      },
+      "category": "travel",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-103",
+      "text": {
+        "ua": "Хмару слід брати з собою як парасольку",
+        "ru": "Облако следует брать с собой как зонтик",
+        "en": "People should travel with a cloud as an umbrella"
+      },
+      "category": "travel",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-104",
+      "text": {
+        "ua": "У готелях потрібне меню сновидінь",
+        "ru": "В отелях нужно меню сновидений",
+        "en": "Hotels need a dream menu"
+      },
+      "category": "travel",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-105",
+      "text": {
+        "ua": "Магнітики на холодильнику повинні проводити екскурсії",
+        "ru": "Магнитики на холодильнике должны проводить экскурсии",
+        "en": "Fridge magnets should give guided tours"
+      },
+      "category": "travel",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-106",
+      "text": {
+        "ua": "Комедію краще дивитися разом",
+        "ru": "Комедию лучше смотреть вместе",
+        "en": "Comedies are better watched together"
+      },
+      "category": "entertainment",
+      "level": "easy"
+    },
+    {
+      "id": "debate-107",
+      "text": {
+        "ua": "Настільні ігри цікавіші за телевізійні шоу",
+        "ru": "Настольные игры интереснее телевизионных шоу",
+        "en": "Board games are more interesting than television shows"
+      },
+      "category": "entertainment",
+      "level": "easy"
+    },
+    {
+      "id": "debate-108",
+      "text": {
+        "ua": "Співати в караоке можна без гарного голосу",
+        "ru": "Петь в караоке можно без хорошего голоса",
+        "en": "You do not need a good voice for karaoke"
+      },
+      "category": "entertainment",
+      "level": "easy"
+    },
+    {
+      "id": "debate-109",
+      "text": {
+        "ua": "Короткі серіали кращі за багатосезонні",
+        "ru": "Короткие сериалы лучше многосезонных",
+        "en": "Short series are better than shows with many seasons"
+      },
+      "category": "entertainment",
+      "level": "easy"
+    },
+    {
+      "id": "debate-110",
+      "text": {
+        "ua": "Пікнік цікавіший за похід у кіно",
+        "ru": "Пикник интереснее похода в кино",
+        "en": "A picnic is more fun than going to the cinema"
+      },
+      "category": "entertainment",
+      "level": "easy"
+    },
+    {
+      "id": "debate-111",
+      "text": {
+        "ua": "Трейлери розповідають про фільм забагато",
+        "ru": "Трейлеры рассказывают о фильме слишком много",
+        "en": "Trailers reveal too much about films"
+      },
+      "category": "entertainment",
+      "level": "normal"
+    },
+    {
+      "id": "debate-112",
+      "text": {
+        "ua": "У настільних іграх слід дозволяти спільно вигадані правила",
+        "ru": "В настольных играх стоит разрешать совместно придуманные правила",
+        "en": "Board games should allow rules invented by the group"
+      },
+      "category": "entertainment",
+      "level": "normal"
+    },
+    {
+      "id": "debate-113",
+      "text": {
+        "ua": "Невідомий виконавець на маленькому концерті цікавіший за зірку на стадіоні",
+        "ru": "Неизвестный исполнитель на маленьком концерте интереснее звезды на стадионе",
+        "en": "An unknown artist at a small gig is more interesting than a stadium star"
+      },
+      "category": "entertainment",
+      "level": "normal"
+    },
+    {
+      "id": "debate-114",
+      "text": {
+        "ua": "Хобі не повинно обов’язково приносити результат",
+        "ru": "Хобби не обязано приносить результат",
+        "en": "A hobby does not need to produce results"
+      },
+      "category": "entertainment",
+      "level": "normal"
+    },
+    {
+      "id": "debate-115",
+      "text": {
+        "ua": "Книжковим клубам варто обговорювати й недочитані книжки",
+        "ru": "Книжным клубам стоит обсуждать и недочитанные книги",
+        "en": "Book clubs should also discuss unfinished books"
+      },
+      "category": "entertainment",
+      "level": "normal"
+    },
+    {
+      "id": "debate-116",
+      "text": {
+        "ua": "У кінотеатрах потрібні сеанси з коментарями домашніх тварин",
+        "ru": "В кинотеатрах нужны сеансы с комментариями домашних животных",
+        "en": "Cinemas need screenings with pet commentary"
+      },
+      "category": "entertainment",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-117",
+      "text": {
+        "ua": "Шахам потрібна фігура, яка просто підбадьорює інших",
+        "ru": "Шахматам нужна фигура, которая просто подбадривает остальных",
+        "en": "Chess needs a piece that only cheers the others on"
+      },
+      "category": "entertainment",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-118",
+      "text": {
+        "ua": "Оркестр із кухонного посуду заслуговує на світове турне",
+        "ru": "Оркестр из кухонной посуды заслуживает мирового турне",
+        "en": "A kitchen-utensil orchestra deserves a world tour"
+      },
+      "category": "entertainment",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-119",
+      "text": {
+        "ua": "Фільмам потрібні альтернативні кінцівки від випадкового глядача",
+        "ru": "Фильмам нужны альтернативные концовки от случайного зрителя",
+        "en": "Films need alternative endings written by a random viewer"
+      },
+      "category": "entertainment",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-120",
+      "text": {
+        "ua": "Змагання з урочистого лежання стали б популярним спортом",
+        "ru": "Соревнования по торжественному лежанию стали бы популярным спортом",
+        "en": "Competitive ceremonial lounging would become a popular sport"
+      },
+      "category": "entertainment",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-121",
+      "text": {
+        "ua": "Уміти літати краще, ніж ставати невидимим",
+        "ru": "Уметь летать лучше, чем становиться невидимым",
+        "en": "Flying is better than becoming invisible"
+      },
+      "category": "fantasy",
+      "level": "easy"
+    },
+    {
+      "id": "debate-122",
+      "text": {
+        "ua": "Чарівний сад цікавіший за чарівний замок",
+        "ru": "Волшебный сад интереснее волшебного замка",
+        "en": "A magical garden is more interesting than a magical castle"
+      },
+      "category": "fantasy",
+      "level": "easy"
+    },
+    {
+      "id": "debate-123",
+      "text": {
+        "ua": "Дракон був би чудовим домашнім улюбленцем",
+        "ru": "Дракон был бы отличным домашним любимцем",
+        "en": "A dragon would make a wonderful pet"
+      },
+      "category": "fantasy",
+      "level": "easy"
+    },
+    {
+      "id": "debate-124",
+      "text": {
+        "ua": "Можливість говорити з тваринами краща за суперсилу",
+        "ru": "Возможность говорить с животными лучше суперсилы",
+        "en": "Talking to animals is better than super strength"
+      },
+      "category": "fantasy",
+      "level": "easy"
+    },
+    {
+      "id": "debate-125",
+      "text": {
+        "ua": "Килим-літак зручніший за чарівну мітлу",
+        "ru": "Ковёр-самолёт удобнее волшебной метлы",
+        "en": "A flying carpet is more comfortable than a magic broom"
+      },
+      "category": "fantasy",
+      "level": "easy"
+    },
+    {
+      "id": "debate-126",
+      "text": {
+        "ua": "Магія повинна працювати лише після ввічливого прохання",
+        "ru": "Магия должна работать только после вежливой просьбы",
+        "en": "Magic should work only after a polite request"
+      },
+      "category": "fantasy",
+      "level": "normal"
+    },
+    {
+      "id": "debate-127",
+      "text": {
+        "ua": "Одна подорож у майбутнє цікавіша за десять у минуле",
+        "ru": "Одно путешествие в будущее интереснее десяти в прошлое",
+        "en": "One trip to the future is more interesting than ten trips to the past"
+      },
+      "category": "fantasy",
+      "level": "normal"
+    },
+    {
+      "id": "debate-128",
+      "text": {
+        "ua": "Уміння зупиняти час зіпсувало б пунктуальність",
+        "ru": "Умение останавливать время испортило бы пунктуальность",
+        "en": "Being able to stop time would ruin punctuality"
+      },
+      "category": "fantasy",
+      "level": "normal"
+    },
+    {
+      "id": "debate-129",
+      "text": {
+        "ua": "Краще мати одну надійну суперздібність, ніж щодня нову випадкову",
+        "ru": "Лучше иметь одну надёжную суперспособность, чем каждый день новую случайную",
+        "en": "One reliable superpower is better than a random new one each day"
+      },
+      "category": "fantasy",
+      "level": "normal"
+    },
+    {
+      "id": "debate-130",
+      "text": {
+        "ua": "Чарівні речі повинні мати інструкцію з обмеженнями",
+        "ru": "Волшебные вещи должны иметь инструкцию с ограничениями",
+        "en": "Magical objects should come with instructions listing their limits"
+      },
+      "category": "fantasy",
+      "level": "normal"
+    },
+    {
+      "id": "debate-131",
+      "text": {
+        "ua": "Єдинороги повинні проходити техогляд рогу",
+        "ru": "Единороги должны проходить техосмотр рога",
+        "en": "Unicorns need horn inspections"
+      },
+      "category": "fantasy",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-132",
+      "text": {
+        "ua": "Привидам краще працювати екскурсоводами, ніж лякати людей",
+        "ru": "Привидениям лучше работать экскурсоводами, чем пугать людей",
+        "en": "Ghosts should work as tour guides instead of scaring people"
+      },
+      "category": "fantasy",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-133",
+      "text": {
+        "ua": "Велетням слід грати в мінігольф",
+        "ru": "Великанам следует играть в мини-гольф",
+        "en": "Giants should play miniature golf"
+      },
+      "category": "fantasy",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-134",
+      "text": {
+        "ua": "Чарівна паличка має вимагати перерви на чай",
+        "ru": "Волшебная палочка должна требовать перерыва на чай",
+        "en": "Magic wands should demand tea breaks"
+      },
+      "category": "fantasy",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-135",
+      "text": {
+        "ua": "Русалкам потрібні водонепроникні бібліотеки",
+        "ru": "Русалкам нужны водонепроницаемые библиотеки",
+        "en": "Mermaids need waterproof libraries"
+      },
+      "category": "fantasy",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-136",
+      "text": {
+        "ua": "Кумедний капелюх покращує день",
+        "ru": "Смешная шляпа улучшает день",
+        "en": "A funny hat improves the day"
+      },
+      "category": "absurd",
+      "level": "easy"
+    },
+    {
+      "id": "debate-137",
+      "text": {
+        "ua": "Речам приємніше користуватися, якщо дати їм ім’я",
+        "ru": "Вещами приятнее пользоваться, если дать им имя",
+        "en": "Things are more enjoyable to use when they have names"
+      },
+      "category": "absurd",
+      "level": "easy"
+    },
+    {
+      "id": "debate-138",
+      "text": {
+        "ua": "Різнокольорові шкарпетки веселіші за однакові",
+        "ru": "Разноцветные носки веселее одинаковых",
+        "en": "Mismatched socks are more fun than matching ones"
+      },
+      "category": "absurd",
+      "level": "easy"
+    },
+    {
+      "id": "debate-139",
+      "text": {
+        "ua": "Ходити задом наперед іноді корисно для настрою",
+        "ru": "Ходить задом наперёд иногда полезно для настроения",
+        "en": "Walking backwards sometimes improves your mood"
+      },
+      "category": "absurd",
+      "level": "easy"
+    },
+    {
+      "id": "debate-140",
+      "text": {
+        "ua": "У кожного дня має бути жартівлива назва",
+        "ru": "У каждого дня должно быть шуточное название",
+        "en": "Every day should have a silly name"
+      },
+      "category": "absurd",
+      "level": "easy"
+    },
+    {
+      "id": "debate-141",
+      "text": {
+        "ua": "Нагорода за найкумеднішу помилку допоможе менше соромитися",
+        "ru": "Награда за самую смешную ошибку поможет меньше стесняться",
+        "en": "An award for the funniest mistake would make people less embarrassed"
+      },
+      "category": "absurd",
+      "level": "normal"
+    },
+    {
+      "id": "debate-142",
+      "text": {
+        "ua": "Місту потрібен щорічний день безглуздих капелюхів",
+        "ru": "Городу нужен ежегодный день нелепых шляп",
+        "en": "Every town needs an annual silly-hat day"
+      },
+      "category": "absurd",
+      "level": "normal"
+    },
+    {
+      "id": "debate-143",
+      "text": {
+        "ua": "Інструкції у віршах запам’ятовуються краще",
+        "ru": "Инструкции в стихах запоминаются лучше",
+        "en": "Instructions in verse are easier to remember"
+      },
+      "category": "absurd",
+      "level": "normal"
+    },
+    {
+      "id": "debate-144",
+      "text": {
+        "ua": "Нудні черги слід перетворювати на імпровізовані вікторини",
+        "ru": "Скучные очереди стоит превращать в импровизированные викторины",
+        "en": "Boring queues should become impromptu quizzes"
+      },
+      "category": "absurd",
+      "level": "normal"
+    },
+    {
+      "id": "debate-145",
+      "text": {
+        "ua": "Незграбний танець краще знімає напругу, ніж серйозна промова",
+        "ru": "Неуклюжий танец лучше снимает напряжение, чем серьёзная речь",
+        "en": "An awkward dance eases tension better than a serious speech"
+      },
+      "category": "absurd",
+      "level": "normal"
+    },
+    {
+      "id": "debate-146",
+      "text": {
+        "ua": "Качки повинні керувати прогнозом погоди",
+        "ru": "Утки должны управлять прогнозом погоды",
+        "en": "Ducks should be in charge of weather forecasts"
+      },
+      "category": "absurd",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-147",
+      "text": {
+        "ua": "Бананам потрібні кишені",
+        "ru": "Бананам нужны карманы",
+        "en": "Bananas need pockets"
+      },
+      "category": "absurd",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-148",
+      "text": {
+        "ua": "Тіні мають право на окрему відпустку",
+        "ru": "Тени имеют право на отдельный отпуск",
+        "en": "Shadows deserve their own holidays"
+      },
+      "category": "absurd",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-149",
+      "text": {
+        "ua": "Ескалатори повинні іноді муркотіти",
+        "ru": "Эскалаторы должны иногда мурлыкать",
+        "en": "Escalators should purr sometimes"
+      },
+      "category": "absurd",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-150",
+      "text": {
+        "ua": "Місяць варто щовечора прикрашати новою наліпкою",
+        "ru": "Луну стоит каждый вечер украшать новой наклейкой",
+        "en": "The moon should get a new sticker every evening"
+      },
+      "category": "absurd",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-151",
+      "text": {
+        "ua": "Краще завжди носити капелюх, ніж завжди носити рукавички",
+        "ru": "Лучше всегда носить шляпу, чем всегда носить перчатки",
+        "en": "Always wearing a hat is better than always wearing gloves"
+      },
+      "category": "choices",
+      "level": "easy"
+    },
+    {
+      "id": "debate-152",
+      "text": {
+        "ua": "Краще мати довші вихідні, ніж коротші будні",
+        "ru": "Лучше иметь длиннее выходные, чем короче будни",
+        "en": "Longer weekends are better than shorter weekdays"
+      },
+      "category": "choices",
+      "level": "easy"
+    },
+    {
+      "id": "debate-153",
+      "text": {
+        "ua": "Краще знати всі пісні, ніж усі рецепти",
+        "ru": "Лучше знать все песни, чем все рецепты",
+        "en": "Knowing every song is better than knowing every recipe"
+      },
+      "category": "choices",
+      "level": "easy"
+    },
+    {
+      "id": "debate-154",
+      "text": {
+        "ua": "Краще отримати квиток на подію, ніж нову річ",
+        "ru": "Лучше получить билет на событие, чем новую вещь",
+        "en": "An event ticket is a better gift than a new possession"
+      },
+      "category": "choices",
+      "level": "easy"
+    },
+    {
+      "id": "debate-155",
+      "text": {
+        "ua": "Краще жити поруч із парком, ніж поруч із кав’ярнею",
+        "ru": "Лучше жить рядом с парком, чем рядом с кофейней",
+        "en": "Living next to a park is better than living next to a cafe"
+      },
+      "category": "choices",
+      "level": "easy"
+    },
+    {
+      "id": "debate-156",
+      "text": {
+        "ua": "Краще вміти пояснити будь-що, ніж пам’ятати будь-що",
+        "ru": "Лучше уметь объяснить что угодно, чем помнить что угодно",
+        "en": "Being able to explain anything is better than remembering anything"
+      },
+      "category": "choices",
+      "level": "normal"
+    },
+    {
+      "id": "debate-157",
+      "text": {
+        "ua": "Краще мати більше вільного часу, ніж більше варіантів розваг",
+        "ru": "Лучше иметь больше свободного времени, чем больше вариантов развлечений",
+        "en": "More free time is better than more entertainment options"
+      },
+      "category": "choices",
+      "level": "normal"
+    },
+    {
+      "id": "debate-158",
+      "text": {
+        "ua": "Краще рік вивчати одне хобі, ніж щомісяця пробувати нове",
+        "ru": "Лучше год изучать одно хобби, чем каждый месяц пробовать новое",
+        "en": "A year learning one hobby is better than trying a new hobby each month"
+      },
+      "category": "choices",
+      "level": "normal"
+    },
+    {
+      "id": "debate-159",
+      "text": {
+        "ua": "Краще завжди мати план Б, ніж ідеальний план А",
+        "ru": "Лучше всегда иметь план Б, чем идеальный план А",
+        "en": "Always having a plan B is better than having a perfect plan A"
+      },
+      "category": "choices",
+      "level": "normal"
+    },
+    {
+      "id": "debate-160",
+      "text": {
+        "ua": "Краще обирати маршрут із гарним краєвидом, навіть якщо він довший",
+        "ru": "Лучше выбирать маршрут с красивым видом, даже если он длиннее",
+        "en": "The scenic route is worth taking even when it is longer"
+      },
+      "category": "choices",
+      "level": "normal"
+    },
+    {
+      "id": "debate-161",
+      "text": {
+        "ua": "Краще чхати конфеті, ніж гикати мильними бульбашками",
+        "ru": "Лучше чихать конфетти, чем икать мыльными пузырями",
+        "en": "Sneezing confetti is better than hiccupping bubbles"
+      },
+      "category": "choices",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-162",
+      "text": {
+        "ua": "Краще мати хвіст-парасольку, ніж вуха-віяла",
+        "ru": "Лучше иметь хвост-зонтик, чем уши-веера",
+        "en": "An umbrella tail is better than fan ears"
+      },
+      "category": "choices",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-163",
+      "text": {
+        "ua": "Краще говорити римами, ніж ходити під власний саундтрек",
+        "ru": "Лучше говорить рифмами, чем ходить под собственный саундтрек",
+        "en": "Speaking in rhyme is better than walking to your own soundtrack"
+      },
+      "category": "choices",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-164",
+      "text": {
+        "ua": "Краще возити в кишені крихітний оркестр, ніж особистого коментатора",
+        "ru": "Лучше носить в кармане крошечный оркестр, чем личного комментатора",
+        "en": "A tiny pocket orchestra is better than a personal commentator"
+      },
+      "category": "choices",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-165",
+      "text": {
+        "ua": "Краще мати їстівні ґудзики, ніж світні шнурки",
+        "ru": "Лучше иметь съедобные пуговицы, чем светящиеся шнурки",
+        "en": "Edible buttons are better than glowing shoelaces"
+      },
+      "category": "choices",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-166",
+      "text": {
+        "ua": "Лавок у парках має бути більше",
+        "ru": "Скамеек в парках должно быть больше",
+        "en": "Parks should have more benches"
+      },
+      "category": "everyday",
+      "level": "easy"
+    },
+    {
+      "id": "debate-167",
+      "text": {
+        "ua": "Ліфт — гарне місце для короткого привітання",
+        "ru": "Лифт — хорошее место для короткого приветствия",
+        "en": "Lifts are a good place for a quick greeting"
+      },
+      "category": "everyday",
+      "level": "easy"
+    },
+    {
+      "id": "debate-168",
+      "text": {
+        "ua": "Позичати книжки приємніше, ніж купувати",
+        "ru": "Брать книги взаймы приятнее, чем покупать",
+        "en": "Borrowing books is more enjoyable than buying them"
+      },
+      "category": "everyday",
+      "level": "easy"
+    },
+    {
+      "id": "debate-169",
+      "text": {
+        "ua": "Вуличні музиканти покращують настрій міста",
+        "ru": "Уличные музыканты улучшают настроение города",
+        "en": "Street musicians improve a city's mood"
+      },
+      "category": "everyday",
+      "level": "easy"
+    },
+    {
+      "id": "debate-170",
+      "text": {
+        "ua": "Сходами іноді цікавіше, ніж ліфтом",
+        "ru": "По лестнице иногда интереснее, чем на лифте",
+        "en": "Taking the stairs is sometimes more interesting than taking the lift"
+      },
+      "category": "everyday",
+      "level": "easy"
+    },
+    {
+      "id": "debate-171",
+      "text": {
+        "ua": "Бібліотеки повинні позичати настільні ігри й інструменти",
+        "ru": "Библиотеки должны одалживать настольные игры и инструменты",
+        "en": "Libraries should lend board games and tools"
+      },
+      "category": "everyday",
+      "level": "normal"
+    },
+    {
+      "id": "debate-172",
+      "text": {
+        "ua": "Дворам потрібні спільні столи для знайомства сусідів",
+        "ru": "Дворам нужны общие столы для знакомства соседей",
+        "en": "Courtyards need shared tables where neighbours can meet"
+      },
+      "category": "everyday",
+      "level": "normal"
+    },
+    {
+      "id": "debate-173",
+      "text": {
+        "ua": "У транспорті має бути зона для тихих розмов",
+        "ru": "В транспорте должна быть зона для тихих разговоров",
+        "en": "Public transport should have a quiet-conversation zone"
+      },
+      "category": "everyday",
+      "level": "normal"
+    },
+    {
+      "id": "debate-174",
+      "text": {
+        "ua": "Міські свята краще робити маленькими в кожному районі",
+        "ru": "Городские праздники лучше делать небольшими в каждом районе",
+        "en": "Small neighbourhood celebrations are better than one big city event"
+      },
+      "category": "everyday",
+      "level": "normal"
+    },
+    {
+      "id": "debate-175",
+      "text": {
+        "ua": "На табличках у парках варто пояснювати причини правил",
+        "ru": "На табличках в парках стоит объяснять причины правил",
+        "en": "Park signs should explain the reasons behind rules"
+      },
+      "category": "everyday",
+      "level": "normal"
+    },
+    {
+      "id": "debate-176",
+      "text": {
+        "ua": "Світлофори повинні показувати настрій замість кольорів",
+        "ru": "Светофоры должны показывать настроение вместо цветов",
+        "en": "Traffic lights should show moods instead of colours"
+      },
+      "category": "everyday",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-177",
+      "text": {
+        "ua": "Поштові скриньки мають дякувати за листи",
+        "ru": "Почтовые ящики должны благодарить за письма",
+        "en": "Postboxes should say thank you for letters"
+      },
+      "category": "everyday",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-178",
+      "text": {
+        "ua": "Фонтанам потрібен щотижневий конкурс зачісок",
+        "ru": "Фонтанам нужен еженедельный конкурс причёсок",
+        "en": "Fountains need a weekly hairstyle contest"
+      },
+      "category": "everyday",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-179",
+      "text": {
+        "ua": "Міські дерева повинні мати бейджики з іменами",
+        "ru": "Городские деревья должны иметь бейджи с именами",
+        "en": "City trees should wear name badges"
+      },
+      "category": "everyday",
+      "level": "crazy"
+    },
+    {
+      "id": "debate-180",
+      "text": {
+        "ua": "Зупинки транспорту мають розповідати короткі казки",
+        "ru": "Остановки транспорта должны рассказывать короткие сказки",
+        "en": "Bus stops should tell short fairy tales"
+      },
+      "category": "everyday",
+      "level": "crazy"
+    }
+  ]
+}
