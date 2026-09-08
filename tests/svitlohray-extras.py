@@ -31,7 +31,7 @@ with sync_playwright() as p:
         page.locator('#svitlohrayHint').click();page.locator('.is-hint').click()
     page.wait_for_selector('#svitlohrayReplay')
     page.evaluate('wordGuessLabsUnlocked=true;selectWordGuessLanguage("en")')
-    assert page.locator('#svitlohrayScreen h1').inner_text()=='The light comes together!'
+    assert page.locator('#svitlohrayScreen h1').inner_text()=='Solved!'
     page.locator('#svitlohrayMenu').click()
     for mode in ['explain','charades','wordguess','whoami','battle']:
         page.locator('.mode-card-'+mode).click()
