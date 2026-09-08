@@ -10,8 +10,8 @@ let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
-const DATA_BUILD = "2026-09-07";
-const DATA_CANDIDATE = 2;
+const DATA_BUILD = "2026-09-08";
+const DATA_CANDIDATE = 3;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
 const VERSION_CHECK_FILE = "version.json";
@@ -4202,12 +4202,6 @@ const modeConfigs = [
     available: true,
   },
   {
-    id: "svitlohray",
-    title: "Світлограй",
-    description: "Світлова гра на реакцію без слів.",
-    available: false,
-  },
-  {
     id: "whoami",
     title: "Хто я?",
     description: "Відгадувати персонажа за питаннями.",
@@ -7464,6 +7458,7 @@ function getWordGuessLanguageDescription(wordLength, attempts, allowRepeats) {
 }
 
 function applyWordGuessLanguageUi() {
+  Svitlohray.localize();
   const text = WORD_GUESS_TEXT[selectedWordGuessLanguage] || WORD_GUESS_TEXT.uk;
   if (appSettingsBtn) appSettingsBtn.setAttribute("aria-label", text.settingsOpen);
   if (appSettingsVersion) appSettingsVersion.setAttribute("aria-label", text.versionLabel);
@@ -12260,6 +12255,7 @@ function requestAppBack(options) {
     return false;
   }
 
+  if (Svitlohray.back(settings)) return true;
   if (Slovesnyi.back(settings)) return true;
 
   if (settings.destination === "menu") {
@@ -15988,6 +15984,7 @@ function showWinnerScreen() {
 }
 
 function showScreen(screenName, options) {
+  Svitlohray.onScreen(screenName);
   Slovesnyi.onScreen(screenName);
   ["slovesnyiSetup", "slovesnyiGame", "slovesnyiFinal"].forEach(function (name) {
     document.getElementById(name + "Screen").classList.toggle("active", name === screenName);

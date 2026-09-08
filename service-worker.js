@@ -1,8 +1,11 @@
-const MOVOHRAY_REVISION = "0.6.7-20260907-c2";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260907-c2";
+const MOVOHRAY_REVISION = "0.6.7-20260908-c3";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260908-c3";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
+  `./svitlohray-engine.js?rev=${MOVOHRAY_REVISION}`,
+  `./svitlohray.js?rev=${MOVOHRAY_REVISION}`,
+  `./svitlohray.css?rev=${MOVOHRAY_REVISION}`,
   `./slovesnyi-engine.js?rev=${MOVOHRAY_REVISION}`,
   `./slovesnyi.js?rev=${MOVOHRAY_REVISION}`,
   `./slovesnyi.css?rev=${MOVOHRAY_REVISION}`,

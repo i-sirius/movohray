@@ -1,0 +1,29 @@
+/* Scoped native bonus game. Square cells, a rectangular 3 x 4 board. */
+#svitlohrayScreen { width: 100%; max-width: 560px; margin-inline: auto; padding-bottom: max(16px, env(safe-area-inset-bottom)); }
+.svitlohray-card { display: flex; flex-direction: column; gap: 12px; padding: 20px; width: 100%; box-sizing: border-box; text-align: center; }
+.svitlohray-card h1, .svitlohray-card p { margin: 0; }
+.svitlohray-card h1 { font-size: clamp(25px, 6vw, 34px); }
+.svitlohray-copy { font-size: 13px; line-height: 1.5; }
+.svitlohray-grid { display: grid; gap: 7px; width: 100%; max-width: 340px; margin-inline: auto; }
+.svitlohray-tile { appearance: none; width: 100%; min-width: 0; aspect-ratio: 1; border: 2px solid rgba(0,0,0,.22); border-radius: 12px; padding: 0; cursor: pointer; touch-action: manipulation; transition: background-color .15s ease, transform .15s ease; font-size: 24px; }
+.svitlohray-tile:active { transform: scale(.94); }
+.svitlohray-tile.is-hint { color: #fff; text-shadow: -1px -1px 0 #000, 1px 1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 5px #111; }
+.svitlohray-card :focus-visible, .svitlohray-entry:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
+.svitlohray-hud, .svitlohray-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.svitlohray-hud { font-size: 12px; }
+.svitlohray-hud strong { display: block; font-size: 26px; font-variant-numeric: tabular-nums; }
+.svitlohray-status { min-height: 18px; font-size: 12px; }
+.svitlohray-size { display: flex; align-items: center; gap: 8px; font-size: 12px; text-align: left; }
+.svitlohray-size select { flex: 1; min-width: 0; min-height: 44px; font-size: 16px; border-radius: 12px; padding: 8px; color: var(--color-text); background: var(--color-surface, #fff); border: 1px solid #829690; }
+body[data-theme="dark"] .svitlohray-size select { background: #29333e; }
+body[data-theme="dark"] .svitlohray-card .primary-btn { color: #191b34; }
+.svitlohray-card button { min-height: 44px; touch-action: manipulation; white-space: normal; }
+.svitlohray-colors { text-align: left; border-top: 1px solid #829690; padding-top: 5px; }
+.svitlohray-colors summary { cursor: pointer; padding: 12px 0; min-height: 44px; box-sizing: border-box; }
+.svitlohray-colors label { display: flex; align-items: center; justify-content: space-between; gap: 5px; font-size: 12px; margin-bottom: 10px; }
+.svitlohray-colors input { width: 48px; height: 44px; padding: 3px; cursor: pointer; }
+.svitlohray-entry { width: 100%; margin-top: 12px; text-align: left; }
+.svitlohray-entry span { display: block; font-weight: 400; font-size: 13px; margin-top: 4px; }
+.svitlohray-result { font-size: 22px; font-weight: 700; }
+@media (max-width: 390px) { .svitlohray-card { padding: 14px; gap: 10px; } .svitlohray-grid { gap: 6px; } }
+@media (prefers-reduced-motion: reduce) { .svitlohray-tile { transition: none; } .svitlohray-tile:active { transform: none; } }
