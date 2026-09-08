@@ -44,7 +44,7 @@ with sync_playwright() as p:
     page.locator('.svitlohray-colors summary').click()
     page.evaluate('wordGuessLabsUnlocked=true')
     reports=[]
-    for lang,title in ([('uk','Світлограй')] if os.environ.get('MOVOHRAY_QUICK') else [('uk','Світлограй'),('ru','Светлоигра'),('en','Lightplay')]):
+    for lang,title in ([('uk','Світлограй')] if os.environ.get('MOVOHRAY_QUICK') else [('uk','Світлограй'),('ru','Цветоигра'),('en','Lightplay')]):
         page.evaluate('(lang)=>selectWordGuessLanguage(lang)',lang)
         assert page.locator('#svitlohrayScreen h1').inner_text()==title
         for size,count in [('0',12),('1',16),('2',25)]:
