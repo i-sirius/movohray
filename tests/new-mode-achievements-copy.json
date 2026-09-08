@@ -1,0 +1,388 @@
+[
+  {
+    "definition": {
+      "id": "svitlohray-first-win",
+      "game": "svitlohray",
+      "reward": "💡",
+      "titleKey": "achievementSvitlohrayFirstWinTitle",
+      "descriptionKey": "achievementSvitlohrayFirstWinDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Хай буде світло!",
+        "description": "Заверши першу гру у Світлограї."
+      },
+      "ru": {
+        "title": "Да будет свет!",
+        "description": "Заверши первую игру в Цветоигре."
+      },
+      "en": {
+        "title": "Let There Be Light!",
+        "description": "Solve your first Lightplay board."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-no-hint",
+      "game": "svitlohray",
+      "reward": "🧩",
+      "titleKey": "achievementSvitlohrayNoHintTitle",
+      "descriptionKey": "achievementSvitlohrayNoHintDescription",
+      "category": "hints"
+    },
+    "texts": {
+      "uk": {
+        "title": "Сам розібрався",
+        "description": "Заверши гру без підказки."
+      },
+      "ru": {
+        "title": "Сам разобрался",
+        "description": "Заверши игру без подсказки."
+      },
+      "en": {
+        "title": "On My Own",
+        "description": "Solve a board without using a hint."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-big-picture",
+      "game": "svitlohray",
+      "reward": "🔲",
+      "titleKey": "achievementSvitlohrayBigPictureTitle",
+      "descriptionKey": "achievementSvitlohrayBigPictureDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Велика картина",
+        "description": "Заверши поле 5×5."
+      },
+      "ru": {
+        "title": "Большая картина",
+        "description": "Заверши поле 5×5."
+      },
+      "en": {
+        "title": "Big Picture",
+        "description": "Solve a 5×5 board."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-all-sizes",
+      "game": "svitlohray",
+      "reward": "▦",
+      "titleKey": "achievementSvitlohrayAllSizesTitle",
+      "descriptionKey": "achievementSvitlohrayAllSizesDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Три розміри",
+        "description": "Заверши поля 3×4, 4×4 і 5×5."
+      },
+      "ru": {
+        "title": "Три размера",
+        "description": "Заверши поля 3×4, 4×4 и 5×5."
+      },
+      "en": {
+        "title": "All Three Boards",
+        "description": "Solve a 3×4, 4×4 and 5×5 board."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-ten-wins",
+      "game": "svitlohray",
+      "reward": "✨",
+      "titleKey": "achievementSvitlohrayTenWinsTitle",
+      "descriptionKey": "achievementSvitlohrayTenWinsDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Світлова звичка",
+        "description": "Заверши 10 ігор у Світлограї."
+      },
+      "ru": {
+        "title": "Световая привычка",
+        "description": "Заверши 10 игр в Цветоигре."
+      },
+      "en": {
+        "title": "Light Habit",
+        "description": "Solve 10 Lightplay boards."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-twenty-five-wins",
+      "game": "svitlohray",
+      "reward": "🔆",
+      "titleKey": "achievementSvitlohrayTwentyFiveWinsTitle",
+      "descriptionKey": "achievementSvitlohrayTwentyFiveWinsDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Не вимикай",
+        "description": "Заверши 25 ігор у Світлограї."
+      },
+      "ru": {
+        "title": "Не выключай",
+        "description": "Заверши 25 игр в Цветоигре."
+      },
+      "en": {
+        "title": "Keep It On",
+        "description": "Solve 25 Lightplay boards."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-colorist",
+      "game": "svitlohray",
+      "reward": "🎨",
+      "titleKey": "achievementSvitlohrayColoristTitle",
+      "descriptionKey": "achievementSvitlohrayColoristDescription",
+      "category": "skill"
+    },
+    "texts": {
+      "uk": {
+        "title": "Колорист",
+        "description": "Зміни кольори вручну й заверши гру."
+      },
+      "ru": {
+        "title": "Колорист",
+        "description": "Измени цвета вручную и заверши игру."
+      },
+      "en": {
+        "title": "Colorist",
+        "description": "Choose your own colors and solve the board."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-new-mood",
+      "game": "svitlohray",
+      "reward": "🌈",
+      "titleKey": "achievementSvitlohrayNewMoodTitle",
+      "descriptionKey": "achievementSvitlohrayNewMoodDescription",
+      "category": "skill"
+    },
+    "texts": {
+      "uk": {
+        "title": "Новий настрій",
+        "description": "Обери інші кольори навмання й заверши гру."
+      },
+      "ru": {
+        "title": "Новое настроение",
+        "description": "Выбери другие цвета случайно и заверши игру."
+      },
+      "en": {
+        "title": "New Mood",
+        "description": "Use a random palette and solve the board."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-no-help",
+      "game": "svitlohray",
+      "reward": "🧠",
+      "titleKey": "achievementSvitlohrayNoHelpTitle",
+      "descriptionKey": "achievementSvitlohrayNoHelpDescription",
+      "category": "streaks"
+    },
+    "texts": {
+      "uk": {
+        "title": "Без допомоги",
+        "description": "Заверши 5 ігор поспіль без підказок."
+      },
+      "ru": {
+        "title": "Без помощи",
+        "description": "Заверши 5 игр подряд без подсказок."
+      },
+      "en": {
+        "title": "No Help Needed",
+        "description": "Solve 5 boards in a row without hints."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "svitlohray-patience",
+      "game": "svitlohray",
+      "reward": "🐢",
+      "titleKey": "achievementSvitlohrayPatienceTitle",
+      "descriptionKey": "achievementSvitlohrayPatienceDescription",
+      "category": "secrets",
+      "mystery": true,
+      "hintKey": "achievementSvitlohrayPatienceDescription"
+    },
+    "texts": {
+      "uk": {
+        "title": "Світло любить терплячих",
+        "description": "Заверши поле 5×5 за 75 або більше ходів."
+      },
+      "ru": {
+        "title": "Свет любит терпеливых",
+        "description": "Заверши поле 5×5 за 75 или больше ходов."
+      },
+      "en": {
+        "title": "Patience Pays Off",
+        "description": "Solve a 5×5 board in 75 moves or more."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-first-duel",
+      "game": "slovesnyi",
+      "reward": "🗣️",
+      "titleKey": "achievementSlovesnyiFirstDuelTitle",
+      "descriptionKey": "achievementSlovesnyiFirstDuelDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Є аргумент",
+        "description": "Виграй свій перший батл."
+      },
+      "ru": {
+        "title": "Есть аргумент",
+        "description": "Выиграй свой первый батл."
+      },
+      "en": {
+        "title": "Case Made",
+        "description": "Win your first duel."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-first-game",
+      "game": "slovesnyi",
+      "reward": "🏆",
+      "titleKey": "achievementSlovesnyiFirstGameTitle",
+      "descriptionKey": "achievementSlovesnyiFirstGameDescription",
+      "category": "milestones"
+    },
+    "texts": {
+      "uk": {
+        "title": "Переконав",
+        "description": "Виграй першу партію у Словесному."
+      },
+      "ru": {
+        "title": "Убедил",
+        "description": "Выиграй первую игру в Словесном."
+      },
+      "en": {
+        "title": "Persuasive",
+        "description": "Win your first Word Duel game."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-devils-advocate",
+      "game": "slovesnyi",
+      "reward": "😈",
+      "titleKey": "achievementSlovesnyiDevilsAdvocateTitle",
+      "descriptionKey": "achievementSlovesnyiDevilsAdvocateDescription",
+      "category": "skill"
+    },
+    "texts": {
+      "uk": {
+        "title": "Адвокат диявола",
+        "description": "Виграй батл на позиції ПРОТИ."
+      },
+      "ru": {
+        "title": "Адвокат дьявола",
+        "description": "Выиграй батл на стороне ПРОТИВ."
+      },
+      "en": {
+        "title": "Devil's Advocate",
+        "description": "Win a duel while arguing AGAINST."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-crazy-win",
+      "game": "slovesnyi",
+      "reward": "🤪",
+      "titleKey": "achievementSlovesnyiCrazyWinTitle",
+      "descriptionKey": "achievementSlovesnyiCrazyWinDescription",
+      "category": "skill"
+    },
+    "texts": {
+      "uk": {
+        "title": "І це я відстояв",
+        "description": "Виграй батл на божевільній темі."
+      },
+      "ru": {
+        "title": "И это я отстоял",
+        "description": "Выиграй батл на безумной теме."
+      },
+      "en": {
+        "title": "I Defended That",
+        "description": "Win a duel on a Crazy topic."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-three-streak",
+      "game": "slovesnyi",
+      "reward": "🔥",
+      "titleKey": "achievementSlovesnyiThreeStreakTitle",
+      "descriptionKey": "achievementSlovesnyiThreeStreakDescription",
+      "category": "streaks"
+    },
+    "texts": {
+      "uk": {
+        "title": "Серія доказів",
+        "description": "Виграй 3 батли поспіль."
+      },
+      "ru": {
+        "title": "Серия аргументов",
+        "description": "Выиграй 3 батла подряд."
+      },
+      "en": {
+        "title": "Winning Argument",
+        "description": "Win 3 duels in a row."
+      }
+    }
+  },
+  {
+    "definition": {
+      "id": "slovesnyi-both-sides",
+      "game": "slovesnyi",
+      "reward": "⚖️",
+      "titleKey": "achievementSlovesnyiBothSidesTitle",
+      "descriptionKey": "achievementSlovesnyiBothSidesDescription",
+      "category": "skill"
+    },
+    "texts": {
+      "uk": {
+        "title": "Універсальний оратор",
+        "description": "Виграй батли і ЗА, і ПРОТИ в одній партії."
+      },
+      "ru": {
+        "title": "Универсальный оратор",
+        "description": "Выиграй батлы и ЗА, и ПРОТИВ в одной игре."
+      },
+      "en": {
+        "title": "Both Sides",
+        "description": "Win duels on both sides in the same game."
+      }
+    }
+  }
+]

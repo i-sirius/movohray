@@ -79,7 +79,7 @@ with sync_playwright() as p:
     page.locator('#appSettingsCloseBtn').click();page.wait_for_selector('#menuScreen.active')
     page.evaluate('navigator.serviceWorker.ready')
     page.wait_for_function('navigator.serviceWorker.controller!==null')
-    keys=page.evaluate('caches.keys()');assert keys==['movohray-cache-v0.6.7-b20260908-c4'],keys
+    keys=page.evaluate('caches.keys()');assert keys==['movohray-cache-v0.6.7-b20260908-c5'],keys
     assert not errors,errors
     context.set_offline(True);page.reload();page.wait_for_selector('.mode-card-battle')
     page.locator('#appSettingsBtn').click();page.locator('#svitlohrayOpen').click()
