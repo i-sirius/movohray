@@ -21,15 +21,17 @@ from playwright.sync_api import sync_playwright
 ROOT = Path.cwd()
 ARTIFACTS = Path(tempfile.gettempdir()) / 'movohray-c3-checks'
 ARTIFACTS.mkdir(exist_ok=True)
-REVISION = '0.6.7-20260908-c5'
-CACHE = 'movohray-cache-v0.6.7-b20260908-c5'
-BASELINE = os.environ.get('MOVOHRAY_BASELINE', 'v0.6.6a')
-OLD_CACHE = {'095a8d9':'movohray-cache-v0.6.7-b20260908-c4', '03d572e':'movohray-cache-v0.6.7-b20260907-c2'}.get(BASELINE, 'movohray-cache-v0.6.6a-b20260825')
+REVISION = '0.6.7-20260913-c6'
+CACHE = 'movohray-cache-v0.6.7-b20260913-c6'
+BASELINE = os.environ.get('MOVOHRAY_BASELINE', '2d5ce60')
+OLD_CACHE = {'2d5ce60':'movohray-cache-v0.6.7-b20260908-c5', '095a8d9':'movohray-cache-v0.6.7-b20260908-c4', '03d572e':'movohray-cache-v0.6.7-b20260907-c2'}.get(BASELINE, 'movohray-cache-v0.6.6a-b20260825')
 baseline = {name: subprocess.check_output(['git', 'show', BASELINE + ':' + name])
             for name in ['index.html', 'app.js', 'styles.css', 'version.json', 'service-worker.js']}
-if BASELINE == '095a8d9':
+if BASELINE in ['095a8d9', '2d5ce60']:
     for name in ['svitlohray.js','svitlohray-engine.js','svitlohray.css','slovesnyi.js','slovesnyi-engine.js','slovesnyi.css']:
         baseline[name] = subprocess.check_output(['git','show',BASELINE+':'+name])
+if BASELINE == '2d5ce60':
+    baseline['new-mode-achievements.js'] = subprocess.check_output(['git','show',BASELINE+':new-mode-achievements.js'])
 serve_baseline = False
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -85,7 +87,7 @@ def static_audit():
     for lang in ['ua', 'ru', 'en']:
         assert len({t['text'][lang].strip().casefold() for t in data}) == 180
         assert all(t['text'][lang].strip() for t in data)
-    assert json.loads((ROOT / 'version.json').read_text()) == {'version': '0.6.7', 'build': '2026-09-08', 'candidate': 'c5', 'required': True}
+    assert json.loads((ROOT / 'version.json').read_text()) == {'version': '0.6.7', 'build': '2026-09-13', 'candidate': 'c6', 'required': True}
     assert REVISION in sw and CACHE in sw
     print('STATIC PASS', dict(collections.Counter(t['level'] for t in data)), 'categories', len({t['category'] for t in data}))
 
@@ -331,10 +333,10 @@ def pwa(browser, base_url):
     wait_async(page, '''async () => {
       const r = await navigator.serviceWorker.getRegistration();
       if (r.waiting) r.waiting.postMessage({type:'SKIP_WAITING'});
-      return r.active && r.active.scriptURL.includes('0.6.7-20260908-c5') && r.active.state === 'activated' && !r.installing;
+      return r.active && r.active.scriptURL.includes('0.6.7-20260913-c6') && r.active.state === 'activated' && !r.installing;
     }''')
     assert page.evaluate('getLocalReleaseInfo().revision') == REVISION
-    assert page.evaluate('normalizeReleaseInfo({version:"0.6.7",build:"2026-09-08",candidate:"c5"}).revision') == REVISION
+    assert page.evaluate('normalizeReleaseInfo({version:"0.6.7",build:"2026-09-13",candidate:"c6"}).revision') == REVISION
     assets = page.evaluate('(name) => caches.open(name).then(c=>c.keys()).then(keys=>keys.map(r=>r.url))', CACHE)
     cached_shell = page.evaluate('(rev) => caches.match("./index.html?rev="+rev).then(r=>r.text())', REVISION)
     assert 'slovesnyi-engine.js' in cached_shell, cached_shell[-600:]
@@ -353,7 +355,7 @@ def pwa(browser, base_url):
     assert phase(page) == 'preparation'
     assert page.locator('#slovesnyiTopic').inner_text()
     context.close()
-    print('PWA PASS:', BASELINE, 'install -> c5 waiting -> activate; old cache removed; all revisioned assets; offline reload and play')
+    print('PWA PASS:', BASELINE, 'install -> c6 waiting -> activate; old cache removed; all revisioned assets; offline reload and play')
 
 static_audit()
 server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Handler, directory=str(ROOT)))

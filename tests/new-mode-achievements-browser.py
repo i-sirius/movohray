@@ -1,14 +1,14 @@
-"""Edge achievement flows. --prepare-live saves c4; --live tests fresh c5; --upgrade checks saved c4.
+"""Edge achievement flows. --prepare-live saves c5; --live tests fresh c6; --upgrade checks saved c5.
 Default serves the current workspace. Runtime injection only creates test boards/captures state.
 """
 import functools, http.server, json, sys, tempfile, threading, time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path.cwd()
-ART=Path(tempfile.gettempdir())/'movohray-c5-checks';ART.mkdir(exist_ok=True)
-PROFILE=Path(tempfile.gettempdir())/'movohray-c5-upgrade-profile'
+ART=Path(tempfile.gettempdir())/'movohray-c6-achievements';ART.mkdir(exist_ok=True)
+PROFILE=Path(tempfile.gettempdir())/'movohray-c6-upgrade-profile'
 LIVE='https://i-sirius.github.io/movohray/'
-REV='0.6.7-20260908-c5';CACHE='movohray-cache-v0.6.7-b20260908-c5'
+REV='0.6.7-20260913-c6';CACHE='movohray-cache-v0.6.7-b20260913-c6'
 COPY=json.loads((ROOT/'tests/new-mode-achievements-copy.json').read_text(encoding='utf-8'))
 class Handler(http.server.SimpleHTTPRequestHandler):
     def log_message(self,*args):pass
@@ -186,10 +186,10 @@ with sync_playwright() as p:
         page.goto(LIVE);page.wait_for_selector('.mode-card-battle')
         page.evaluate('navigator.serviceWorker.ready');wait_async(page,'navigator.serviceWorker.controller!==null')
         if '--prepare-live' in sys.argv:
-            assert page.evaluate('getLocalReleaseInfo().revision')=='0.6.7-20260908-c4'
+            assert page.evaluate('getLocalReleaseInfo().revision')=='0.6.7-20260908-c5'
             page.evaluate('unlockWordGuessAchievement("first-win");markWordGuessAchievementViewed("first-win");wordGuessAchievementsState.aliasRounds=12;persistWordGuessAchievementsState()')
             (ART/'c4-unlocked.json').write_text(json.dumps(page.evaluate('wordGuessAchievementsState.unlocked["first-win"]')))
-            print('PREPARED live c4 profile',page.evaluate('caches.keys()'),flush=True)
+            print('PREPARED live c5 profile',page.evaluate('caches.keys()'),flush=True)
         else:
             if page.evaluate('getLocalReleaseInfo().revision')!=REV:
                 page.wait_for_selector('#requiredUpdateBtn',timeout=60000);page.locator('#requiredUpdateBtn').click()
@@ -200,7 +200,7 @@ with sync_playwright() as p:
             assert page.evaluate('wordGuessAchievementsState.unlocked["first-win"]')==json.loads((ART/'c4-unlocked.json').read_text())
             assert not page.evaluate('isWordGuessAchievementNew("first-win")')
             run_flows(page,context,LIVE+'?rev='+REV)
-            print('LIVE c4 -> c5 update, legacy persistence PASS',flush=True)
+            print('LIVE c5 -> c6 update, legacy persistence PASS',flush=True)
         context.close()
     else:
         browser=p.chromium.launch(**opts);context=browser.new_context(viewport={'width':390,'height':844},has_touch=True)
