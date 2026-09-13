@@ -11,14 +11,23 @@ let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
 const DATA_BUILD = "2026-09-13";
-const DATA_CANDIDATE = 6;
+const DATA_CANDIDATE = 7;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
+const DATA_CACHE = "movohray-cache-v0.6.7-b20260913-c7";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
 const SERVICE_WORKER_ACTIVATION_TIMEOUT_MS = 45000;
 const UPDATE_TARGET_STORAGE_KEY = "movohray-update-target-revision";
+const REQUIRED_UPDATE_RELOAD_GUARD_KEY = "movohray-required-update-reload-v1";
+const SERVICE_WORKER_REVISION_QUERY_TIMEOUT_MS = 2500;
+const KIDS_MODE_STORAGE_KEY = "movohray-kids-mode-v1";
+const KIDS_AGE_STORAGE_KEY = "movohray-kids-age-v1";
+const KIDS_DICTIONARY_FILE = "kids-dictionary.json";
+const KIDS_DEFAULT_AGE = 7;
+const KIDS_MIN_AGE = 5;
+const KIDS_MAX_AGE = 10;
 const ALIAS_SWIPE_LEARNING_KEY = "movohray-alias-swipe-learning-v1";
 const THEME_STORAGE_KEY = "movohray-theme";
 const SOUND_STORAGE_KEY = "movohray-sound";
@@ -213,7 +222,7 @@ const WORD_GUESS_HINT_NUDGE_VISIBLE_MS = 6500;
 const WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS = 9000;
 const WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS = 650;
 const WORD_GUESS_FUTURE_FEATURES = Object.freeze({ timedModeUi: false, multiplayerUi: false, developerFeedbackPlaceholder: true });
-const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
+const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
 const WORD_GUESS_ACHIEVEMENTS = [
   { id: "first-win", reward: "🏆", titleKey: "achievementFirstWinTitle", descriptionKey: "achievementFirstWinDescription", category: "milestones" },
   { id: "first-try", reward: "🎯", titleKey: "achievementFirstTryTitle", descriptionKey: "achievementFirstTryDescription", category: "skill" },
@@ -380,6 +389,7 @@ const WORD_GUESS_ACHIEVEMENTS = [
   { id: "uk-kishka", reward: "🐾", titleKey: "achievementUkKishkaTitle", descriptionKey: "achievementUkKishkaDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKishkaHint" },
   { id: "uk-kapibar", reward: "🦫", titleKey: "achievementUkKapibarTitle", descriptionKey: "achievementUkKapibarDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKapibarHint" },
   { id: "uk-khovrakh", reward: "🌾", titleKey: "achievementUkKhovrakhTitle", descriptionKey: "achievementUkKhovrakhDescription", category: "secrets", game: "wordguess", mystery: true, hintKey: "achievementUkKhovrakhHint" },
+  { id: "alias-goose-anya", reward: "🪶", titleKey: "achievementAliasGooseAnyaTitle", descriptionKey: "achievementAliasGooseAnyaDescription", category: "secrets", game: "alias", mystery: true, hintKey: "achievementAliasGooseAnyaHint" },
   { id: "alias-first-point", reward: "💬", titleKey: "achievementAliasFirstPointTitle", descriptionKey: "achievementAliasFirstPointDescription", category: "milestones", game: "alias" },
   { id: "alias-ten-round", reward: "🗯️", titleKey: "achievementAliasTenRoundTitle", descriptionKey: "achievementAliasTenRoundDescription", category: "skill", game: "alias" },
   { id: "alias-clean-five", reward: "🧼", titleKey: "achievementAliasCleanFiveTitle", descriptionKey: "achievementAliasCleanFiveDescription", category: "skill", game: "alias" },
@@ -785,6 +795,9 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Хто я?",
     achievementGameSvitlohray: "Світлограй",
     achievementGameSlovesnyi: "Словесний",
+    kidsModeTitle: "Дитячий режим", kidsModeDescription: "Лише слова й теми, що підходять дітям.", kidsAgeLabel: "Вік дитини", kidsAgeSuffix: "років", kidsDifficultyNote: "Складність підбирається за віком.",
+    updateEyebrow: "ОНОВЛЕННЯ", updateTitle: "Оновлюємо Мовограй", updateText: "Є нова версія. Це займе кілька секунд.", updateFinishText: "Нові файли вже завантажені. Завершуємо оновлення перед грою.", updateButton: "Оновити гру", updatePending: "Оновлюємо...", updateRetry: "Спробувати ще раз", updateNote: "Після оновлення сторінка перезавантажиться автоматично.", updateFailed: "Не вдалося завершити оновлення. Перевір з’єднання та спробуй ще раз.", updateRecoveryBrowser: "Не вдалося завершити оновлення. Закрий інші вкладки Мовограю та спробуй ще раз.", updateRecoveryPwa: "Не вдалося завершити оновлення. Закрий Мовограй, відкрий його знову або спробуй ще раз.",
+    achievementAliasGooseAnyaTitle: "Ань-ань-ань? АНЯ?", achievementAliasGooseAnyaDescription: "П’ять гусячих появ — і це вже не випадковість.", achievementAliasGooseAnyaHint: "Дослухайся до гусей.",
     achievementSvitlohrayFirstWinTitle: "Хай буде світло!",
     achievementSvitlohrayFirstWinDescription: "Заверши першу гру у Світлограї.",
     achievementSvitlohrayNoHintTitle: "Сам розібрався",
@@ -1757,6 +1770,9 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Кто я?",
     achievementGameSvitlohray: "Цветоигра",
     achievementGameSlovesnyi: "Словесный",
+    kidsModeTitle: "Детский режим", kidsModeDescription: "Только слова и темы, подходящие детям.", kidsAgeLabel: "Возраст ребёнка", kidsAgeSuffix: "лет", kidsDifficultyNote: "Сложность подбирается по возрасту.",
+    updateEyebrow: "ОБНОВЛЕНИЕ", updateTitle: "Обновляем Мовограй", updateText: "Доступна новая версия. Это займёт несколько секунд.", updateFinishText: "Новые файлы уже загружены. Завершаем обновление перед игрой.", updateButton: "Обновить игру", updatePending: "Обновляем...", updateRetry: "Попробовать ещё раз", updateNote: "После обновления страница перезагрузится автоматически.", updateFailed: "Не удалось завершить обновление. Проверь соединение и попробуй ещё раз.", updateRecoveryBrowser: "Не удалось завершить обновление. Закрой другие вкладки Мовограю и попробуй ещё раз.", updateRecoveryPwa: "Не удалось завершить обновление. Закрой Мовограй, открой его снова или попробуй ещё раз.",
+    achievementAliasGooseAnyaTitle: "Ань-ань-ань? АНЯ?", achievementAliasGooseAnyaDescription: "Пять гусиных появлений — и это уже не совпадение.", achievementAliasGooseAnyaHint: "Прислушайся к гусям.",
     achievementSvitlohrayFirstWinTitle: "Да будет свет!",
     achievementSvitlohrayFirstWinDescription: "Заверши первую игру в Цветоигре.",
     achievementSvitlohrayNoHintTitle: "Сам разобрался",
@@ -2727,6 +2743,9 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Who am I?",
     achievementGameSvitlohray: "Lightplay",
     achievementGameSlovesnyi: "Word Duel",
+    kidsModeTitle: "Kids mode", kidsModeDescription: "Only kid-friendly words and topics.", kidsAgeLabel: "Child's age", kidsAgeSuffix: "years", kidsDifficultyNote: "Difficulty follows the child's age.",
+    updateEyebrow: "UPDATE", updateTitle: "Updating Movohray", updateText: "A new version is available. This will take a few seconds.", updateFinishText: "The new files are already downloaded. Finishing the update before play.", updateButton: "Update game", updatePending: "Updating...", updateRetry: "Try again", updateNote: "The page will reload automatically after the update.", updateFailed: "Could not finish the update. Check your connection and try again.", updateRecoveryBrowser: "Could not finish the update. Close other Movohray tabs and try again.", updateRecoveryPwa: "Could not finish the update. Close Movohray, open it again, or try again.",
+    achievementAliasGooseAnyaTitle: "An-an-an? ANYA?", achievementAliasGooseAnyaDescription: "Five goose encounters later, you can hear it too.", achievementAliasGooseAnyaHint: "Listen closely to the geese.",
     achievementSvitlohrayFirstWinTitle: "Let There Be Light!",
     achievementSvitlohrayFirstWinDescription: "Solve your first Lightplay board.",
     achievementSvitlohrayNoHintTitle: "On My Own",
@@ -4185,6 +4204,10 @@ let isServiceWorkerLifecycleBound = false;
 let isUpdateReloadPending = false;
 let requiredUpdateAttemptGeneration = 0;
 let cancelRequiredUpdateActivation = null;
+let kidsModeEnabled = readKidsModePreference();
+let kidsAge = readKidsAgePreference();
+let kidsDictionaryData = null;
+let kidsDictionaryPromise = null;
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
@@ -4256,6 +4279,7 @@ let isWordGuessResultHistoryOpen = false;
 
 let whoAmIData = null;
 let whoAmIDataPromise = null;
+let whoAmIDataProfileKey = "";
 let whoAmICategories = [];
 let whoAmISelectedCategoryNames = [];
 let whoAmISelectedDifficulties = ["easy", "medium"];
@@ -4403,6 +4427,14 @@ const settingsHapticToggleBtn = document.getElementById("settingsHapticToggleBtn
 const settingsHapticIcon = document.getElementById("settingsHapticIcon");
 const settingsHapticTitle = document.getElementById("settingsHapticTitle");
 const settingsHapticText = document.getElementById("settingsHapticText");
+const kidsModeToggle = document.getElementById("kidsModeToggle");
+const kidsModeTitle = document.getElementById("kidsModeTitle");
+const kidsModeToggleTitle = document.getElementById("kidsModeToggleTitle");
+const kidsModeText = document.getElementById("kidsModeText");
+const kidsAgeRow = document.getElementById("kidsAgeRow");
+const kidsAgeLabel = document.getElementById("kidsAgeLabel");
+const kidsAgeSelect = document.getElementById("kidsAgeSelect");
+const kidsDifficultyNote = document.getElementById("kidsDifficultyNote");
 const wordCardUseAllShapesToggle = document.getElementById("wordCardUseAllShapesToggle");
 const wordCardRandomColorsToggle = document.getElementById("wordCardRandomColorsToggle");
 const wordCardShapeCheckboxes = Array.from(document.querySelectorAll("[data-word-card-shape]"));
@@ -4733,10 +4765,14 @@ async function init() {
   initializeSoundSetting();
   initializeHapticSetting();
   initializeWordCardSettings();
+  initializeKidsSettings();
   validateWordGuessLocaleCoverage();
   initializeWordGuessLabs();
   registerServiceWorker();
-  checkRequiredUpdate();
+  await checkRequiredUpdate({ startup: true });
+  if (document.body.classList.contains("required-update-open")) {
+    return;
+  }
   await loadModeCategories(selectedMode);
   renderCategories();
   syncTeamNamesForCount();
@@ -4781,29 +4817,42 @@ function getRevisionedAssetUrl(path) {
   return `${path}?rev=${encodeURIComponent(ASSET_REVISION)}`;
 }
 
-function checkRequiredUpdate() {
+function checkRequiredUpdate(options = {}) {
   if (updateCheckPromise) {
     return updateCheckPromise;
   }
 
-  const checkPromise = fetchRemoteRelease().then((remoteRelease) => {
+  const checkPromise = fetchRemoteRelease().then(async (remoteRelease) => {
     if (!remoteRelease) {
       return null;
     }
 
     const localRelease = getLocalReleaseInfo();
-    if (compareReleaseInfo(remoteRelease, localRelease) <= 0) {
-      removeRequiredUpdateOverlay();
-      clearCompletedUpdateTarget(localRelease);
+    const comparison = compareReleaseInfo(remoteRelease, localRelease);
+    if (comparison > 0) {
+      if (remoteRelease.required) {
+        showRequiredUpdateOverlay(remoteRelease, { autoStart: Boolean(options.startup) });
+      } else {
+        removeRequiredUpdateOverlay();
+        showOptionalUpdateNotice(remoteRelease);
+      }
       return remoteRelease;
     }
 
-    if (remoteRelease.required) {
-      showRequiredUpdateOverlay(remoteRelease);
-    } else {
-      removeRequiredUpdateOverlay();
-      showOptionalUpdateNotice(remoteRelease);
+    if (remoteRelease.required && comparison === 0 && navigator.serviceWorker && navigator.serviceWorker.controller) {
+      const controllerInfo = await getActiveServiceWorkerInfo();
+      const controllerMismatch = !controllerInfo
+        || controllerInfo.revision !== remoteRelease.revision
+        || (remoteRelease.cache && controllerInfo.cache !== remoteRelease.cache);
+      if (controllerMismatch) {
+        showRequiredUpdateOverlay(remoteRelease, { autoStart: Boolean(options.startup), controllerMismatch: true });
+        return remoteRelease;
+      }
     }
+
+    removeRequiredUpdateOverlay();
+    clearCompletedUpdateTarget(localRelease);
+    clearRequiredUpdateReloadGuard(remoteRelease.revision);
     return remoteRelease;
   });
 
@@ -4819,6 +4868,68 @@ function checkRequiredUpdate() {
     },
   );
   return updateCheckPromise;
+}
+
+function getActiveServiceWorkerInfo() {
+  return new Promise((resolve) => {
+    if (!("serviceWorker" in navigator) || !navigator.serviceWorker.controller || typeof MessageChannel === "undefined") {
+      resolve(null);
+      return;
+    }
+    let settled = false;
+    const channel = new MessageChannel();
+    const timeoutId = window.setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        resolve(null);
+      }
+    }, SERVICE_WORKER_REVISION_QUERY_TIMEOUT_MS);
+    channel.port1.onmessage = (event) => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      const data = event && event.data;
+      if (data && data.type === "MOVOHRAY_REVISION") {
+        resolve({ revision: String(data.revision || ""), cache: String(data.cache || "") });
+      } else {
+        resolve(null);
+      }
+    };
+    try {
+      navigator.serviceWorker.controller.postMessage({ type: "GET_REVISION" }, [channel.port2]);
+    } catch (error) {
+      window.clearTimeout(timeoutId);
+      settled = true;
+      resolve(null);
+    }
+  });
+}
+
+function readRequiredUpdateReloadGuard() {
+  try {
+    const data = JSON.parse(sessionStorage.getItem(REQUIRED_UPDATE_RELOAD_GUARD_KEY) || "null");
+    return data && typeof data === "object" ? data : null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function markRequiredUpdateReload(revision) {
+  try {
+    const old = readRequiredUpdateReloadGuard();
+    const count = old && old.revision === revision ? (Number(old.count) || 0) + 1 : 1;
+    sessionStorage.setItem(REQUIRED_UPDATE_RELOAD_GUARD_KEY, JSON.stringify({ revision, count }));
+    return count;
+  } catch (error) {
+    return 1;
+  }
+}
+
+function clearRequiredUpdateReloadGuard(revision) {
+  try {
+    const old = readRequiredUpdateReloadGuard();
+    if (!old || !revision || old.revision === revision) sessionStorage.removeItem(REQUIRED_UPDATE_RELOAD_GUARD_KEY);
+  } catch (error) { /* session storage unavailable */ }
 }
 
 async function fetchRemoteRelease() {
@@ -4874,6 +4985,7 @@ function normalizeReleaseInfo(data) {
     build,
     candidate,
     revision: build ? `${version}-${build.replace(/-/g, "")}${candidateSuffix}` : version,
+    cache: String(data && data.cache || "").trim(),
     required: Boolean(data && data.required),
   };
 }
@@ -4884,6 +4996,7 @@ function getLocalReleaseInfo() {
     build: DATA_BUILD,
     candidate: DATA_CANDIDATE,
     revision: DATA_REVISION,
+    cache: DATA_CACHE,
     required: true,
   };
 }
@@ -5019,8 +5132,9 @@ function showOptionalUpdateNotice(remoteRelease) {
   showAppToastWhenReady(`Доступне оновлення v${remoteRelease.version}. Воно застосовується після наступного відкриття.`);
 }
 
-function showRequiredUpdateOverlay(remoteRelease) {
-  if (!remoteRelease || compareReleaseInfo(remoteRelease, getLocalReleaseInfo()) <= 0) {
+function showRequiredUpdateOverlay(remoteRelease, options = {}) {
+  const controllerMismatch = Boolean(options.controllerMismatch);
+  if (!remoteRelease || (!controllerMismatch && compareReleaseInfo(remoteRelease, getLocalReleaseInfo()) <= 0)) {
     removeRequiredUpdateOverlay();
     return;
   }
@@ -5047,17 +5161,17 @@ function showRequiredUpdateOverlay(remoteRelease) {
   card.className = "required-update-card";
   const icon = appendTextElement(card, "div", "required-update-icon", "↻");
   icon.setAttribute("aria-hidden", "true");
-  appendTextElement(card, "p", "required-update-eyebrow", "ПОТРІБНО ОНОВИТИ");
-  const title = appendTextElement(card, "h2", "", "Доступна нова версія гри");
+  appendTextElement(card, "p", "required-update-eyebrow", getWordGuessText("updateEyebrow"));
+  const title = appendTextElement(card, "h2", "", getWordGuessText("updateTitle"));
   title.id = "requiredUpdateTitle";
   const text = appendTextElement(
     card,
     "p",
     "",
-    `На пристрої відкрилася ревізія ${DATA_REVISION}, а на сайті вже є ${remoteRelease.revision}. Натисни кнопку, щоб завантажити оновлення.`,
+    controllerMismatch ? getWordGuessText("updateFinishText") : getWordGuessText("updateText"),
   );
   text.id = "requiredUpdateText";
-  const updateButton = appendTextElement(card, "button", "required-update-btn", "Оновити гру");
+  const updateButton = appendTextElement(card, "button", "required-update-btn", getWordGuessText("updateButton"));
   updateButton.id = "requiredUpdateBtn";
   updateButton.type = "button";
   updateButton.dataset.remoteVersion = remoteRelease.version;
@@ -5072,13 +5186,23 @@ function showRequiredUpdateOverlay(remoteRelease) {
   updateStatus.setAttribute("aria-live", "polite");
   updateStatus.hidden = true;
   card.appendChild(updateStatus);
-  appendTextElement(card, "p", "required-update-note", "Після оновлення сторінка перезавантажиться автоматично.");
+  appendTextElement(card, "p", "required-update-note", getWordGuessText("updateNote"));
   overlay.appendChild(card);
 
   document.body.appendChild(overlay);
 
   updateButton.focus();
   updateButton.addEventListener("click", () => forceRequiredUpdate(updateButton, remoteRelease));
+  if (options.autoStart) {
+    const guard = readRequiredUpdateReloadGuard();
+    if (guard && guard.revision === remoteRelease.revision && Number(guard.count) >= 2) {
+      setRequiredUpdateRecoveryState(updateButton);
+    } else {
+      window.setTimeout(() => {
+        if (document.body.contains(updateButton) && !updateButton.disabled) forceRequiredUpdate(updateButton, remoteRelease);
+      }, 0);
+    }
+  }
 }
 
 function beginRequiredUpdateAttempt() {
@@ -5102,20 +5226,36 @@ function setRequiredUpdateAttemptPending(button) {
   }
   if (button) {
     button.disabled = true;
-    button.textContent = "Оновлюємо...";
+    button.textContent = getWordGuessText("updatePending");
     button.setAttribute("aria-busy", "true");
+  }
+}
+
+function setRequiredUpdateRecoveryState(button) {
+  const status = document.getElementById("requiredUpdateStatus");
+  if (status) {
+    const standalone = document.body.classList.contains("is-standalone");
+    status.textContent = standalone
+      ? getWordGuessText("updateRecoveryPwa")
+      : getWordGuessText("updateRecoveryBrowser");
+    status.hidden = false;
+  }
+  if (button) {
+    button.disabled = false;
+    button.textContent = getWordGuessText("updateRetry");
+    button.removeAttribute("aria-busy");
   }
 }
 
 function setRequiredUpdateAttemptFailed(button) {
   const status = document.getElementById("requiredUpdateStatus");
   if (status) {
-    status.textContent = "Не вдалося перевірити оновлення. Перевірте з’єднання та спробуйте ще раз.";
+    status.textContent = getWordGuessText("updateFailed");
     status.hidden = false;
   }
   if (button) {
     button.disabled = false;
-    button.textContent = "Оновити гру";
+    button.textContent = getWordGuessText("updateButton");
     button.removeAttribute("aria-busy");
   }
 }
@@ -5188,6 +5328,13 @@ async function forceRequiredUpdate(button, remoteRelease) {
           return false;
         }
         await activateWaitingServiceWorker(registration, attemptId);
+        if (!isRequiredUpdateAttemptCurrent(attemptId)) return false;
+        const controllerInfo = await getActiveServiceWorkerInfo();
+        if (!controllerInfo || !targetRelease
+          || controllerInfo.revision !== targetRelease.revision
+          || (targetRelease.cache && controllerInfo.cache !== targetRelease.cache)) {
+          throw new Error("Active service worker revision/cache does not match required release");
+        }
       }
     }
   } catch (error) {
@@ -5210,6 +5357,12 @@ async function forceRequiredUpdate(button, remoteRelease) {
     }
   } catch (error) {
     // Reload still works if storage is unavailable.
+  }
+
+  if (targetRelease && markRequiredUpdateReload(targetRelease.revision) > 2) {
+    isUpdateReloadPending = false;
+    setRequiredUpdateRecoveryState(button);
+    return false;
   }
 
   const cleanUrl = new URL("index.html", window.location.href);
@@ -5960,6 +6113,7 @@ function openAppSettings() {
 
   appSettingsModal.hidden = false;
   document.body.classList.add("app-settings-open");
+  syncKidsModeUi();
   pauseRoundTimer("app-settings");
   pauseWhoAmITimer("app-settings");
 
@@ -6000,44 +6154,183 @@ function toggleTheme() {
   }
 }
 
+
+function readKidsModePreference() {
+  try { return localStorage.getItem(KIDS_MODE_STORAGE_KEY) === "true"; }
+  catch (error) { return false; }
+}
+
+function readKidsAgePreference() {
+  try {
+    const value = Number.parseInt(localStorage.getItem(KIDS_AGE_STORAGE_KEY), 10);
+    return Number.isFinite(value) && value >= KIDS_MIN_AGE && value <= KIDS_MAX_AGE ? value : KIDS_DEFAULT_AGE;
+  } catch (error) { return KIDS_DEFAULT_AGE; }
+}
+
+function persistKidsSettings() {
+  try {
+    localStorage.setItem(KIDS_MODE_STORAGE_KEY, kidsModeEnabled ? "true" : "false");
+    localStorage.setItem(KIDS_AGE_STORAGE_KEY, String(kidsAge));
+  } catch (error) { /* in-memory fallback */ }
+}
+
+function isKidsModeEnabled() { return Boolean(kidsModeEnabled); }
+function getKidsModeSettings() { return { enabled: Boolean(kidsModeEnabled), age: kidsAge }; }
+
+function getKidsDifficultyWeights() {
+  const table = kidsDictionaryData && kidsDictionaryData.difficultyWeights;
+  const fallback = { easy: 0.6, medium: 0.35, hard: 0.05 };
+  return table && table[String(kidsAge)] ? table[String(kidsAge)] : fallback;
+}
+
+function getKidsDifficultyWeight(difficulty) {
+  const weights = getKidsDifficultyWeights();
+  return Math.max(0.01, Number(weights[difficulty]) || 0.01);
+}
+
+function getEffectivePartyDifficulties() {
+  return kidsModeEnabled ? ["easy", "medium", "hard"] : selectedDifficulties;
+}
+
+function getEffectiveWhoAmIDifficulties() {
+  return kidsModeEnabled ? ["easy", "medium", "hard"] : whoAmISelectedDifficulties;
+}
+
+async function loadKidsDictionary() {
+  if (kidsDictionaryData) return kidsDictionaryData;
+  if (!kidsDictionaryPromise) {
+    kidsDictionaryPromise = fetch(getRevisionedAssetUrl(KIDS_DICTIONARY_FILE))
+      .then(function (response) { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
+      .then(function (data) {
+        if (!data || data.schemaVersion !== 1 || !data.games) throw new Error("Invalid kids dictionary");
+        kidsDictionaryData = data;
+        kidsDictionaryPromise = null;
+        return data;
+      });
+  }
+  try { return await kidsDictionaryPromise; }
+  catch (error) { kidsDictionaryPromise = null; throw error; }
+}
+
+function normalizeKidsPartyCategories(rawCategories) {
+  return Array.isArray(rawCategories) ? rawCategories : [];
+}
+
+function isKidsEntryEligible(entry) {
+  if (!kidsModeEnabled) return true;
+  const minAge = entry && typeof entry === "object" ? Number(entry.minAge) || KIDS_MIN_AGE : KIDS_MIN_AGE;
+  return minAge <= kidsAge;
+}
+
+function initializeKidsSettings() {
+  kidsModeEnabled = readKidsModePreference();
+  kidsAge = readKidsAgePreference();
+  syncKidsModeUi();
+}
+
+function syncKidsModeUi() {
+  const settingsLocked = typeof getAppNavigationLevel === "function"
+    && getAppNavigationLevel(getCurrentAppScreenName()) === "active";
+  if (kidsModeToggle) {
+    kidsModeToggle.checked = kidsModeEnabled;
+    kidsModeToggle.disabled = settingsLocked;
+  }
+  if (kidsAgeRow) kidsAgeRow.hidden = !kidsModeEnabled;
+  if (kidsAgeSelect) {
+    kidsAgeSelect.value = String(kidsAge);
+    kidsAgeSelect.disabled = settingsLocked;
+  }
+  document.body.classList.toggle("kids-mode-active", kidsModeEnabled);
+  difficultyButtons.forEach(function (button) {
+    button.disabled = kidsModeEnabled;
+    const active = kidsModeEnabled || selectedDifficulties.indexOf(button.dataset.difficulty) >= 0;
+    button.classList.toggle("selected", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
+    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
+  });
+  whoAmIDifficultyButtons.forEach(function (button) {
+    button.disabled = kidsModeEnabled;
+    const active = kidsModeEnabled || whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    button.classList.toggle("selected", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
+    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
+  });
+  if (kidsDifficultyNote) kidsDifficultyNote.hidden = !kidsModeEnabled;
+}
+
+async function refreshContentForKidsSettings() {
+  wordGuessLoadedModeKey = "";
+  wordGuessConfig = null;
+  wordGuessAnswerWords = [];
+  whoAmIData = null;
+  whoAmIDataPromise = null;
+  whoAmIDataProfileKey = "";
+  whoAmICategories = [];
+  whoAmISelectedCategoryNames = [];
+  selectedCategories = [];
+  selectedCategory = null;
+  if (selectedMode === "explain" || selectedMode === "charades") {
+    await loadModeCategories(selectedMode);
+    renderCategories();
+    updateModeLabels();
+  }
+  if (selectedMode === "whoami") await loadWhoAmIData();
+  syncKidsModeUi();
+}
+
+async function setKidsModeEnabled(enabled) {
+  kidsModeEnabled = Boolean(enabled);
+  persistKidsSettings();
+  await refreshContentForKidsSettings();
+}
+
+async function setKidsAge(value) {
+  const parsed = Number.parseInt(value, 10);
+  kidsAge = Number.isFinite(parsed) ? Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, parsed)) : KIDS_DEFAULT_AGE;
+  persistKidsSettings();
+  await refreshContentForKidsSettings();
+}
+
 async function loadModeCategories(modeId = selectedMode) {
   const mode = modeConfigs.find((item) => item.id === modeId) || modeConfigs[0];
+  const useKidsDictionary = kidsModeEnabled && (mode.id === "explain" || mode.id === "charades");
+  const cacheKey = `${mode.id}:${useKidsDictionary ? "kids" : "normal"}`;
 
-  if (modeCategoryCache[mode.id]) {
-    if (selectedMode === mode.id) {
-      categories = modeCategoryCache[mode.id];
-    }
+  if (modeCategoryCache[cacheKey]) {
+    if (selectedMode === mode.id) categories = modeCategoryCache[cacheKey];
     return true;
   }
 
   try {
-    if (!modeCategoryPromises[mode.id]) {
-      const dictionaryUrl = getRevisionedAssetUrl(mode.dataFile);
-      modeCategoryPromises[mode.id] = fetch(dictionaryUrl)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((loadedCategories) => {
-          modeCategoryCache[mode.id] = loadedCategories;
-          modeCategoryPromises[mode.id] = null;
-          return loadedCategories;
+    if (!modeCategoryPromises[cacheKey]) {
+      if (useKidsDictionary) {
+        modeCategoryPromises[cacheKey] = loadKidsDictionary().then(function (data) {
+          const gameKey = mode.id === "explain" ? "alias" : "charades";
+          return normalizeKidsPartyCategories(data.games[gameKey] && data.games[gameKey].categories);
         });
+      } else {
+        const dictionaryUrl = getRevisionedAssetUrl(mode.dataFile);
+        modeCategoryPromises[cacheKey] = fetch(dictionaryUrl)
+          .then((response) => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); });
+      }
+      modeCategoryPromises[cacheKey] = modeCategoryPromises[cacheKey].then(function (loadedCategories) {
+        modeCategoryCache[cacheKey] = loadedCategories;
+        modeCategoryPromises[cacheKey] = null;
+        return loadedCategories;
+      });
     }
 
-    const loadedCategories = await modeCategoryPromises[mode.id];
-    if (selectedMode === mode.id) {
-      categories = loadedCategories;
-    }
+    const loadedCategories = await modeCategoryPromises[cacheKey];
+    if (selectedMode === mode.id) categories = loadedCategories;
     return true;
   } catch (error) {
-    modeCategoryPromises[mode.id] = null;
-    console.error(`Не вдалося завантажити ${mode.dataFile}`, error);
+    modeCategoryPromises[cacheKey] = null;
+    console.error(`Не вдалося завантажити ${useKidsDictionary ? KIDS_DICTIONARY_FILE : mode.dataFile}`, error);
     if (selectedMode === mode.id) {
       categories = [];
-      settingsMessage.textContent = "Не вдалося завантажити словник режиму.";
+      settingsMessage.textContent = kidsModeEnabled ? "Не вдалося завантажити дитячий словник." : "Не вдалося завантажити словник режиму.";
     }
     return false;
   }
@@ -6144,6 +6437,7 @@ function readWordGuessAchievementsState() {
     aliasCatWords: 0,
     aliasCapybaraWords: 0,
     aliasSpecialWords: 0,
+    aliasGooseAppearances: 0,
     charadesRounds: 0,
     charadesPoints: 0,
     charadesSkips: 0,
@@ -6257,6 +6551,7 @@ function readWordGuessAchievementsState() {
       aliasCatWords: Number(parsed.aliasCatWords) || 0,
       aliasCapybaraWords: Number(parsed.aliasCapybaraWords) || 0,
       aliasSpecialWords: Number(parsed.aliasSpecialWords) || 0,
+      aliasGooseAppearances: Math.min(5, Math.max(0, Number(parsed.aliasGooseAppearances) || 0)),
       charadesRounds: Number(parsed.charadesRounds) || 0,
       charadesPoints: Number(parsed.charadesPoints) || 0,
       charadesSkips: Number(parsed.charadesSkips) || 0,
@@ -7706,6 +8001,16 @@ function applyWordGuessLanguageUi() {
   if (appSettingsVersion) appSettingsVersion.setAttribute("aria-label", text.versionLabel);
   if (appSettingsCloseBtn) appSettingsCloseBtn.setAttribute("aria-label", text.settingsClose);
   if (appSettingsTitle) appSettingsTitle.textContent = text.settingsTitle;
+  if (kidsModeTitle) kidsModeTitle.textContent = text.kidsModeTitle;
+  if (kidsModeToggleTitle) kidsModeToggleTitle.textContent = text.kidsModeTitle;
+  if (kidsModeText) kidsModeText.textContent = text.kidsModeDescription;
+  if (kidsAgeLabel) kidsAgeLabel.textContent = text.kidsAgeLabel;
+  if (kidsDifficultyNote) kidsDifficultyNote.textContent = text.kidsDifficultyNote;
+  if (kidsAgeSelect) {
+    kidsAgeSelect.setAttribute("aria-label", text.kidsAgeLabel);
+    Array.from(kidsAgeSelect.options).forEach(function (option) { option.textContent = `${option.value} ${text.kidsAgeSuffix}`; });
+  }
+  syncKidsModeUi();
   if (appUpcomingModesEyebrow) appUpcomingModesEyebrow.textContent = text.upcomingEyebrow;
   if (appUpcomingModesTitle) appUpcomingModesTitle.textContent = text.upcomingTitle;
   if (appUpcomingModesCopy) appUpcomingModesCopy.textContent = text.upcomingCopy;
@@ -7869,12 +8174,20 @@ async function loadWordGuessDictionary() {
     const attempts = selectedWordGuessAttempts;
     const allowRepeats = selectedWordGuessAllowRepeats;
     const rawAnswerWords = Array.isArray(modeData.answers) ? modeData.answers : modeData.words || [];
-    const answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats)
+    let answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats)
       .filter(function (word) {
         if (selectedWordGuessLanguage === "uk") return !WORD_GUESS_BLOCKED_TARGETS.has(word);
         if (selectedWordGuessLanguage === "ru") return !WORD_GUESS_BLOCKED_RU_TARGETS.has(word);
         return true;
       });
+    if (kidsModeEnabled) {
+      const kidsData = await loadKidsDictionary();
+      const entries = kidsData.games.wordguess && kidsData.games.wordguess[selectedWordGuessLanguage]
+        ? kidsData.games.wordguess[selectedWordGuessLanguage][String(wordLength)] || [] : [];
+      const eligible = new Set(entries.filter(function (entry) { return Number(entry.minAge) <= kidsAge; })
+        .map(function (entry) { return normalizeWordGuessComparisonWord(entry.text); }));
+      answerWords = answerWords.filter(function (word) { return eligible.has(normalizeWordGuessComparisonWord(word)); });
+    }
     const allowedGuessWords = normalizeWordGuessList(
       Array.isArray(modeData.allowedGuesses) ? modeData.allowedGuesses : answerWords,
       wordLength,
@@ -7939,7 +8252,7 @@ async function loadWordGuessDictionary() {
 function getSelectedWordGuessModeKey() {
   const length = Number(selectedWordGuessLength) || WORD_GUESS_DEFAULT_LENGTH;
   const attempts = Number(selectedWordGuessAttempts) || WORD_GUESS_DEFAULT_ATTEMPTS;
-  return `${selectedWordGuessLanguage}-${length}-${attempts}-${selectedWordGuessAllowRepeats ? "repeat" : "unique"}`;
+  return `${selectedWordGuessLanguage}-${length}-${attempts}-${selectedWordGuessAllowRepeats ? "repeat" : "unique"}-${kidsModeEnabled ? `kids${kidsAge}` : "normal"}`;
 }
 
 function getSelectedWordGuessDictionaryKey() {
@@ -10444,53 +10757,36 @@ function isWhoAmI() {
 }
 
 async function loadWhoAmIData() {
-  if (whoAmIData && whoAmICategories.length > 0) {
-    return true;
-  }
+  const profileKey = kidsModeEnabled ? "kids" : "normal";
+  if (whoAmIData && whoAmICategories.length > 0 && whoAmIDataProfileKey === profileKey) return true;
 
-  if (whoAmISettingsMessage) {
-    whoAmISettingsMessage.textContent = "Завантажуємо ролі...";
-  }
+  if (whoAmISettingsMessage) whoAmISettingsMessage.textContent = "Завантажуємо ролі...";
 
   try {
-    if (!whoAmIDataPromise) {
-      whoAmIDataPromise = fetch(getRevisionedAssetUrl(WHOAMI_DATA_FILE))
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          whoAmIDataPromise = null;
-          return data;
-        });
+    if (!whoAmIDataPromise || whoAmIDataProfileKey !== profileKey) {
+      whoAmIDataProfileKey = profileKey;
+      whoAmIDataPromise = kidsModeEnabled
+        ? loadKidsDictionary().then(function (data) { return { version: data.version, categories: data.games.whoami.categories }; })
+        : fetch(getRevisionedAssetUrl(WHOAMI_DATA_FILE)).then(function (response) {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+          });
+      whoAmIDataPromise = whoAmIDataPromise.then(function (data) { whoAmIDataPromise = null; return data; });
     }
 
     whoAmIData = await whoAmIDataPromise;
     whoAmICategories = normalizeWhoAmICategories(whoAmIData);
-    if (whoAmICategories.length === 0) {
-      throw new Error("Empty whoami dictionary");
-    }
-
-    if (whoAmISelectedCategoryNames.length === 0) {
-      whoAmISelectedCategoryNames = whoAmICategories.map((category) => category.name);
-    }
-
-    if (whoAmISettingsMessage) {
-      whoAmISettingsMessage.textContent = "";
-    }
-
+    if (whoAmICategories.length === 0) throw new Error("Empty whoami dictionary");
+    if (whoAmISelectedCategoryNames.length === 0) whoAmISelectedCategoryNames = whoAmICategories.map((category) => category.name);
+    if (whoAmISettingsMessage) whoAmISettingsMessage.textContent = "";
     renderWhoAmISettings();
     return true;
   } catch (error) {
     whoAmIDataPromise = null;
-    console.error(`Не вдалося завантажити ${WHOAMI_DATA_FILE}`, error);
+    console.error(`Не вдалося завантажити ${kidsModeEnabled ? KIDS_DICTIONARY_FILE : WHOAMI_DATA_FILE}`, error);
     whoAmIData = null;
     whoAmICategories = [];
-    if (whoAmISettingsMessage) {
-      whoAmISettingsMessage.textContent = "Не вдалося завантажити ролі.";
-    }
+    if (whoAmISettingsMessage) whoAmISettingsMessage.textContent = "Не вдалося завантажити ролі.";
     return false;
   }
 }
@@ -10739,10 +11035,13 @@ function getWhoAmICategoryStatus() {
   return `${count} категорій · ${getWhoAmIRolePool().length} ролей`;
 }
 
+function getWhoAmIRoleText(entry) { return entry && typeof entry === "object" ? entry.text : entry; }
+function isKidsWhoAmIRoleEligible(entry) { return !kidsModeEnabled || (Number(entry && entry.minAge) || KIDS_MIN_AGE) <= kidsAge; }
+
 function getWhoAmICategoryCount(category) {
   let total = 0;
-  whoAmISelectedDifficulties.forEach((difficulty) => {
-    total += category.levels[difficulty].length;
+  getEffectiveWhoAmIDifficulties().forEach((difficulty) => {
+    total += category.levels[difficulty].filter(isKidsWhoAmIRoleEligible).length;
   });
   return total;
 }
@@ -10803,8 +11102,10 @@ function getWhoAmIRolePool() {
       return;
     }
 
-    whoAmISelectedDifficulties.forEach((difficulty) => {
-      category.levels[difficulty].forEach((role) => {
+    getEffectiveWhoAmIDifficulties().forEach((difficulty) => {
+      category.levels[difficulty].forEach((roleEntry) => {
+        if (!isKidsWhoAmIRoleEligible(roleEntry)) return;
+        const role = getWhoAmIRoleText(roleEntry);
         const key = normalizePartyEasterWord(role);
         if (!key || seenRoles.has(key)) return;
         seenRoles.add(key);
@@ -10832,9 +11133,12 @@ function syncWhoAmIButtons() {
     button.classList.toggle("selected", Number(button.dataset.whoamiPlayers) === whoAmIPlayerCount);
   });
   whoAmIDifficultyButtons.forEach((button) => {
-    const active = whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    const active = kidsModeEnabled || whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    button.disabled = kidsModeEnabled;
     button.classList.toggle("selected", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
+    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
   });
   whoAmIDurationButtons.forEach((button) => {
     button.classList.toggle("selected", Number(button.dataset.whoamiSeconds) === whoAmIDuration);
@@ -10857,7 +11161,7 @@ function updateWhoAmISettingsVisibility() {
 
 function validateWhoAmISettings() {
   const pool = getWhoAmIRolePool();
-  if (whoAmISelectedDifficulties.length === 0) {
+  if (!kidsModeEnabled && whoAmISelectedDifficulties.length === 0) {
     whoAmISettingsMessage.textContent = "Оберіть хоча б один рівень складності.";
     return false;
   }
@@ -12921,6 +13225,17 @@ function setupEvents() {
     settingsHapticToggleBtn.addEventListener("click", toggleHapticSetting);
   }
 
+  if (kidsModeToggle) {
+    kidsModeToggle.addEventListener("change", function (event) {
+      setKidsModeEnabled(event.currentTarget.checked).catch(function (error) { console.warn("Kids mode refresh failed", error); });
+    });
+  }
+  if (kidsAgeSelect) {
+    kidsAgeSelect.addEventListener("change", function (event) {
+      setKidsAge(event.currentTarget.value).catch(function (error) { console.warn("Kids age refresh failed", error); });
+    });
+  }
+
   if (appSettingsVersion) {
     appSettingsVersion.addEventListener("click", handleWordGuessLabsVersionTap);
     appSettingsVersion.addEventListener("keydown", (event) => {
@@ -14382,7 +14697,7 @@ function hasDifficultyLevels(category) {
 }
 
 function getCategoryWordsByDifficulty(category) {
-  return getWordsFromCategoryByFilters(category);
+  return getWordsFromCategoryByFilters(category, getEffectivePartyDifficulties());
 }
 
 function getWordsFromCategoryByFilters(category, difficulties = selectedDifficulties, shouldExcludePhrases = excludePhrases) {
@@ -14392,6 +14707,10 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
       const kind = getEntryKind(entry);
 
       if (!text) {
+        return false;
+      }
+
+      if (!isKidsEntryEligible(entry)) {
         return false;
       }
 
@@ -14408,6 +14727,7 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
       categoryName: category.name || "Тема",
       difficulty: difficultyId,
       difficultyName: getDifficultyName(difficultyId),
+      minAge: typeof entry === "object" && entry !== null ? Number(entry.minAge) || KIDS_MIN_AGE : KIDS_MIN_AGE,
     }));
   };
 
@@ -14430,7 +14750,7 @@ function getWordsFromCategoryByFilters(category, difficulties = selectedDifficul
 }
 
 function getCategoryAvailableCount(category) {
-  return getWordsFromCategoryByFilters(category).length;
+  return getWordsFromCategoryByFilters(category, getEffectivePartyDifficulties()).length;
 }
 
 function getEffectiveSelectedCategories() {
@@ -14477,7 +14797,7 @@ function validateGameSettings() {
     missingSettings.push("ціль гри");
   }
 
-  if (selectedDifficulties.length === 0) {
+  if (!kidsModeEnabled && selectedDifficulties.length === 0) {
     settingsMessage.textContent = "Оберіть хоча б один рівень складності.";
     return false;
   }
@@ -14984,6 +15304,13 @@ function markSessionContentExposure(namespace, value) {
 function buildWeightedSessionDeck(entries, namespace, valueGetter) {
   const getter = typeof valueGetter === "function" ? valueGetter : function (entry) { return entry && entry.word ? entry.word : entry; };
   const recencyBucketSize = 4;
+  const difficultyCounts = {};
+  if (kidsModeEnabled) {
+    entries.forEach(function (entry) {
+      if (!entry || !entry.difficulty) return;
+      difficultyCounts[entry.difficulty] = (difficultyCounts[entry.difficulty] || 0) + 1;
+    });
+  }
 
   return entries.map(function (entry) {
     const value = getter(entry);
@@ -14992,12 +15319,22 @@ function buildWeightedSessionDeck(entries, namespace, valueGetter) {
     const ageBucket = Number.isFinite(age)
       ? Math.floor(age / recencyBucketSize)
       : Number.MAX_SAFE_INTEGER;
+    let randomJitter = Math.random();
+    if (kidsModeEnabled && entry && entry.difficulty) {
+      // Normalize the per-item probability by pool size. Otherwise a large Medium
+      // pool would swamp Easy/Hard regardless of the selected child's age. This
+      // only breaks ties inside the same exposure + recency bucket.
+      const difficultyCount = Math.max(1, difficultyCounts[entry.difficulty] || 1);
+      const unitWeight = Math.max(0.000001, getKidsDifficultyWeight(entry.difficulty) / difficultyCount);
+      randomJitter = Math.pow(Math.random(), 1 / unitWeight);
+    }
 
     return {
       entry,
       seen,
       ageBucket,
-      randomJitter: Math.random(),
+      randomJitter,
+      gooseBonus: namespace === "explain" && shouldBoostAliasGoose() && isAliasGooseWord(value) ? 0.03 : 0,
     };
   }).sort(function (a, b) {
     // pop() takes the item at the end of the array.
@@ -15015,7 +15352,7 @@ function buildWeightedSessionDeck(entries, namespace, valueGetter) {
       return a.ageBucket - b.ageBucket;
     }
 
-    return a.randomJitter - b.randomJitter;
+    return (a.randomJitter + a.gooseBonus) - (b.randomJitter + b.gooseBonus);
   }).map(function (item) {
     return item.entry;
   });
@@ -15027,6 +15364,24 @@ function pickWeightedSessionValue(values, namespace) {
   const picked = deckValues.pop() || values[Math.floor(Math.random() * values.length)] || "";
   if (picked) markSessionContentExposure(namespace, picked);
   return picked;
+}
+
+function isAliasGooseWord(value) {
+  const word = normalizePartyEasterWord(value);
+  return word === "гусь" || word === "гуска";
+}
+
+function shouldBoostAliasGoose() {
+  return (Number(wordGuessAchievementsState.aliasGooseAppearances) || 0) < 5
+    && !wordGuessAchievementsState.unlocked["alias-goose-anya"];
+}
+
+function recordAliasGooseAppearance(entry) {
+  if (selectedMode !== "explain" || !entry || !isAliasGooseWord(entry.word)) return;
+  if ((Number(wordGuessAchievementsState.aliasGooseAppearances) || 0) >= 5) return;
+  wordGuessAchievementsState.aliasGooseAppearances = (Number(wordGuessAchievementsState.aliasGooseAppearances) || 0) + 1;
+  if (wordGuessAchievementsState.aliasGooseAppearances >= 5) unlockWordGuessAchievement("alias-goose-anya");
+  persistWordGuessAchievementsState();
 }
 
 function isPartyRegularCatWord(value) {
@@ -15178,9 +15533,9 @@ function evaluatePartyRoundPatternAchievements() {
       [guessedWords.length >= 8 && lengths.every(function (length) { return length >= 7; }), "alias-all-long-eight"],
       [guessedWords.length >= 10 && categoriesUsed.size === 1, "alias-single-category-ten"],
       [guessedWords.length >= 12 && categoriesUsed.size <= 2, "alias-two-categories-twelve"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 15, "alias-easy-fifteen"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 15, "alias-medium-fifteen"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 15, "alias-hard-fifteen"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 15, "alias-easy-fifteen"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 15, "alias-medium-fifteen"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 15, "alias-hard-fifteen"],
       [score >= 18 && skipped === 0, "alias-clean-eighteen"],
       [score >= 15 && skipped === 1, "alias-one-skip-fifteen"],
       [score + skipped >= 40, "alias-forty-actions"],
@@ -15195,9 +15550,9 @@ function evaluatePartyRoundPatternAchievements() {
       [hasThreeConsecutiveSameInitial(guessedWords), "charades-same-initial-three"],
       [guessedWords.length >= 8 && initials.size >= 8, "charades-unique-initial-eight"],
       [guessedWords.length >= 8 && categoriesUsed.size === 1, "charades-single-category-eight"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 10, "charades-easy-ten"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 10, "charades-medium-ten"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 10, "charades-hard-ten"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "easy" && score >= 10, "charades-easy-ten"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "medium" && score >= 10, "charades-medium-ten"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && score >= 10, "charades-hard-ten"],
       [score >= 12 && skipped === 0, "charades-clean-twelve-plus"],
     ]);
   }
@@ -15241,6 +15596,7 @@ function showNextWord() {
   currentEntry = nextEntry;
   const mode = getSelectedModeConfig();
   currentWord = nextEntry.word;
+  recordAliasGooseAppearance(nextEntry);
   markSessionContentExposure(selectedMode, currentWord);
   currentWordShownAtMs = Date.now();
   wordText.textContent = currentWord;
@@ -16037,9 +16393,9 @@ function recordPartyModeAchievements(pointsEarned, skippedCount) {
       [selectedDuration === 30 && points >= 5, "alias-sprint-five"],
       [selectedDuration === 30 && points >= 10, "alias-sprint-ten"],
       [selectedDuration === 120 && points >= 20, "alias-marathon-twenty"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 5, "alias-hard-five"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 10 && skips === 0, "alias-hard-clean-ten"],
-      [selectedDifficulties.length >= 3 && points >= 10, "alias-all-difficulties-ten"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 5, "alias-hard-five"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 10 && skips === 0, "alias-hard-clean-ten"],
+      [!kidsModeEnabled && selectedDifficulties.length >= 3 && points >= 10, "alias-all-difficulties-ten"],
       [selectedTeamCount === 4 && points >= 10, "alias-four-teams-ten"],
       [selectedCategories.length >= 5 && points >= 10, "alias-category-tour"],
       [state.aliasRounds >= 200, "alias-two-hundred-rounds"],
@@ -16115,9 +16471,9 @@ function recordPartyModeAchievements(pointsEarned, skippedCount) {
       [selectedDuration === 30 && points >= 4, "charades-sprint-four"],
       [selectedDuration === 30 && points >= 8, "charades-sprint-eight"],
       [selectedDuration === 120 && points >= 15, "charades-marathon-fifteen"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 4, "charades-hard-four"],
-      [selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 8 && skips === 0, "charades-hard-clean-eight"],
-      [selectedDifficulties.length >= 3 && points >= 8, "charades-all-difficulties-eight"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 4, "charades-hard-four"],
+      [!kidsModeEnabled && selectedDifficulties.length === 1 && selectedDifficulties[0] === "hard" && points >= 8 && skips === 0, "charades-hard-clean-eight"],
+      [!kidsModeEnabled && selectedDifficulties.length >= 3 && points >= 8, "charades-all-difficulties-eight"],
       [selectedTeamCount === 4 && points >= 8, "charades-four-teams-eight"],
       [selectedCategories.length >= 5 && points >= 8, "charades-category-tour"],
       [state.charadesRounds >= 200, "charades-two-hundred-rounds"],

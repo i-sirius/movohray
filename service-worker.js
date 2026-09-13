@@ -1,5 +1,5 @@
-const MOVOHRAY_REVISION = "0.6.7-20260913-c6";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260913-c6";
+const MOVOHRAY_REVISION = "0.6.7-20260913-c7";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260913-c7";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
@@ -20,7 +20,8 @@ const MOVOHRAY_CRITICAL_ASSETS = [
   `./wordguess-en.json?rev=${MOVOHRAY_REVISION}`,
   `./whoami.json?rev=${MOVOHRAY_REVISION}`,
   `./words.json?rev=${MOVOHRAY_REVISION}`,
-  `./crocodile.json?rev=${MOVOHRAY_REVISION}`
+  `./crocodile.json?rev=${MOVOHRAY_REVISION}`,
+  `./kids-dictionary.json?rev=${MOVOHRAY_REVISION}`
 ];
 const MOVOHRAY_OPTIONAL_ASSETS = [
   `./manifest.webmanifest?rev=${MOVOHRAY_REVISION}`,
@@ -80,7 +81,23 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
+  if (!event.data) return;
+
+  if (event.data.type === "GET_REVISION") {
+    const payload = {
+      type: "MOVOHRAY_REVISION",
+      revision: MOVOHRAY_REVISION,
+      cache: MOVOHRAY_CACHE_NAME,
+    };
+    if (event.ports && event.ports[0]) {
+      event.ports[0].postMessage(payload);
+    } else if (event.source && typeof event.source.postMessage === "function") {
+      event.source.postMessage(payload);
+    }
+    return;
+  }
+
+  if (event.data.type === "SKIP_WAITING") {
     event.waitUntil(self.skipWaiting());
   }
 });

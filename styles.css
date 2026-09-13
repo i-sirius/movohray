@@ -17430,3 +17430,42 @@ body.has-focused-gameplay #slovesnyiGameScreen .slovesnyi-toolbar,
 body.has-focused-gameplay #whoAmIGameScreen .whoami-game-header {
   margin-bottom: 44px;
 }
+
+/* 0.6.7-c7: global Kids mode settings. */
+.kids-age-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(83, 92, 132, 0.13);
+}
+.kids-age-row[hidden],
+.kids-difficulty-note[hidden] { display: none !important; }
+body[data-theme="dark"] .kids-age-row {
+  background: rgba(28, 32, 52, 0.72);
+  border-color: rgba(220, 225, 255, 0.12);
+}
+.kids-age-row > span:first-child { font-weight: 700; }
+.kids-age-control { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+#kidsAgeSelect {
+  min-width: 68px;
+  min-height: 42px;
+  padding: 6px 28px 6px 12px;
+  border: 1px solid rgba(83, 92, 132, 0.22);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+}
+body[data-theme="dark"] #kidsAgeSelect { background: rgba(28, 32, 52, 0.96); border-color: rgba(220, 225, 255, 0.18); }
+.kids-difficulty-note { margin: 10px 4px 0; font-size: 0.86rem; line-height: 1.35; opacity: 0.72; }
+.setting-chip:disabled,
+.setting-chip[aria-disabled="true"] { opacity: 0.48; cursor: not-allowed; transform: none; }
+@media (max-width: 420px) {
+  .kids-age-row { padding: 11px 12px; }
+}

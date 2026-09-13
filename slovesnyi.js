@@ -49,7 +49,7 @@ var Slovesnyi = (function () {
       stay: "Stay", leave: "End game", battleStatus: "Duel {round} · First to {target}"
     }
   };
-  var state = null, topics = null, interval = null, lastSecond = -1, manualPause = false;
+  var state = null, topics = null, topicsProfileKey = "", interval = null, lastSecond = -1, manualPause = false;
   var language = null, draft = null, pendingExit = null, loadToken = 0;
   var exposure = {}, historyKey = "movohray-debates-exposure-v1";
   function lang() { return language || selectedWordGuessLanguage || "uk"; }
@@ -102,20 +102,36 @@ var Slovesnyi = (function () {
     var h = parent.querySelector("h1");
     if (h) h.focus({ preventScroll: true });
   }
+  function kidsSettings() {
+    return typeof getKidsModeSettings === "function" ? getKidsModeSettings() : { enabled: false, age: 7 };
+  }
+  function profileKey() {
+    var settings = kidsSettings();
+    return settings.enabled ? "kids-" + settings.age : "normal";
+  }
   function open() {
     stop(); language = null; state = null;
     if (!draft) draft = { names: ["", "", "", ""], settings: E.snapshot(E.defaults) };
+    if (topicsProfileKey !== profileKey()) { topics = null; }
     showScreen("slovesnyiSetup"); renderSetup();
   }
   function load() {
     var token = ++loadToken;
+    var requestedProfile = profileKey();
+    var settings = kidsSettings();
     var box = content("slovesnyiSetup");
     heading(box, text("title"), text("loading"));
     button(box, text("home"), function () { showScreen("menu"); }, true);
-    return fetch(getRevisionedAssetUrl("debates.json")).then(function (response) {
-      if (!response.ok) throw new Error("Topic request failed");
-      return response.json();
-    }).then(function (data) {
+    var source = settings.enabled && typeof loadKidsDictionary === "function"
+      ? loadKidsDictionary().then(function (kidsData) {
+          var sourceTopics = kidsData && kidsData.games && kidsData.games.slovesnyi ? kidsData.games.slovesnyi.topics : [];
+          return { schemaVersion: 1, topics: (sourceTopics || []).filter(function (topic) { return Number(topic.minAge) <= settings.age; }) };
+        })
+      : fetch(getRevisionedAssetUrl("debates.json")).then(function (response) {
+          if (!response.ok) throw new Error("Topic request failed");
+          return response.json();
+        });
+    return source.then(function (data) {
       var ids = {};
       if (data.schemaVersion !== 1 || !Array.isArray(data.topics) || !data.topics.length) throw new Error("Invalid topic data");
       data.topics.forEach(function (topic) {
@@ -123,7 +139,8 @@ var Slovesnyi = (function () {
             !topic.text || !topic.text.ua || !topic.text.ru || !topic.text.en) throw new Error("Invalid topic");
         ids[topic.id] = true;
       });
-      topics = data.topics; readExposure();
+      if (requestedProfile !== profileKey()) return;
+      topics = data.topics; topicsProfileKey = requestedProfile; readExposure();
       if (token === loadToken && getCurrentAppScreenName() === "slovesnyiSetup") renderSetup();
     }).catch(function () {
       if (token !== loadToken || getCurrentAppScreenName() !== "slovesnyiSetup") return;
@@ -146,6 +163,7 @@ var Slovesnyi = (function () {
     return input;
   }
   function renderSetup() {
+    if (topicsProfileKey !== profileKey()) topics = null;
     if (!topics) { load(); return; }
     var box = content("slovesnyiSetup");
     button(box, "← " + text("home"), function () { requestAppBack({ destination: "menu" }); }, true);
@@ -175,26 +193,35 @@ var Slovesnyi = (function () {
     });
     var levels = el("fieldset", "slovesnyi-levels", undefined, form);
     el("legend", "", text("levels"), levels);
+    var childMode = kidsSettings().enabled;
     E.defaults.levels.forEach(function (level) {
       var label = el("label", "slovesnyi-level", undefined, levels);
       var checkbox = el("input", "", undefined, label); checkbox.type = "checkbox"; checkbox.value = level;
-      checkbox.checked = draft.settings.levels.indexOf(level) >= 0;
+      checkbox.checked = childMode || draft.settings.levels.indexOf(level) >= 0;
+      checkbox.disabled = childMode;
       checkbox.addEventListener("change", function () {
         draft.settings.levels = Array.from(levels.querySelectorAll("input:checked")).map(function (input) { return input.value; });
       });
       el("span", "", text(level), label);
     });
+    if (childMode) {
+      var kidsNote = el("p", "slovesnyi-copy", undefined, form);
+      kidsNote.textContent = typeof getWordGuessText === "function" ? getWordGuessText("kidsDifficultyNote") : "Difficulty follows the selected child age.";
+    }
     var message = el("p", "message", "", form); message.id = "slovesnyiSetupMessage"; message.setAttribute("role", "alert");
     var submit = el("button", "primary-btn", text("start"), form); submit.type = "submit"; submit.id = "slovesnyiStart";
   }
   function start() {
     var names = draft.names.map(function (name, i) { return name.trim() || text("player") + " " + (i + 1); });
     var unique = names.map(function (name) { return name.toLocaleLowerCase(); });
-    if (!draft.settings.levels.length || unique.some(function (name, i) { return unique.indexOf(name) !== i; })) {
+    var childMode = kidsSettings().enabled;
+    if ((!childMode && !draft.settings.levels.length) || unique.some(function (name, i) { return unique.indexOf(name) !== i; })) {
       document.getElementById("slovesnyiSetupMessage").textContent = text("invalid"); return;
     }
     language = lang();
-    state = E.create(names, draft.settings, exposure, Date.now());
+    var gameSettings = E.snapshot(draft.settings);
+    if (childMode) gameSettings.levels = E.defaults.levels.slice();
+    state = E.create(names, gameSettings, exposure, Date.now());
     state.settings.language = language;
     manualPause = false; next();
   }
