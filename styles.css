@@ -17469,3 +17469,67 @@ body[data-theme="dark"] #kidsAgeSelect { background: rgba(28, 32, 52, 0.96); bor
 @media (max-width: 420px) {
   .kids-age-row { padding: 11px 12px; }
 }
+
+
+/* 0.6.7-c8 — Kids-mode age badge and playful local pictograms. */
+.word-meta-kids {
+  background: rgba(111, 106, 168, 0.14);
+  color: #514b8f;
+  border-color: rgba(111, 106, 168, 0.18);
+}
+
+body[data-theme="dark"] .word-meta-kids {
+  background: rgba(183, 176, 255, 0.16);
+  color: #ddd8ff;
+  border-color: rgba(210, 205, 255, 0.18);
+}
+
+#gameScreen .kids-word-illustration {
+  --kids-illustration-rotate: 0deg;
+  --kids-illustration-scale: 1;
+  position: absolute;
+  z-index: 1;
+  width: clamp(72px, 16vw, 118px);
+  aspect-ratio: 1;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.98;
+  transform: translateY(-50%) rotate(var(--kids-illustration-rotate)) scale(var(--kids-illustration-scale));
+  transform-origin: center;
+  filter: drop-shadow(0 9px 12px rgba(49, 46, 83, 0.14));
+  -webkit-filter: drop-shadow(0 9px 12px rgba(49, 46, 83, 0.14));
+}
+
+#gameScreen .kids-word-illustration[hidden] { display: none !important; }
+#gameScreen .kids-word-illustration img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+#gameScreen .kids-word-illustration-left-upper { left: -12%; top: 32%; }
+#gameScreen .kids-word-illustration-right-upper { right: -12%; top: 32%; }
+#gameScreen .kids-word-illustration-left-lower { left: -12%; top: 68%; }
+#gameScreen .kids-word-illustration-right-lower { right: -12%; top: 68%; }
+
+#gameScreen .word-card.is-paused .kids-word-illustration { opacity: 0.14; }
+
+@media (max-width: 599px) {
+  #gameScreen .kids-word-illustration {
+    width: clamp(66px, 18vw, 88px);
+  }
+  #gameScreen .kids-word-illustration-left-upper,
+  #gameScreen .kids-word-illustration-left-lower { left: -14%; }
+  #gameScreen .kids-word-illustration-right-upper,
+  #gameScreen .kids-word-illustration-right-lower { right: -14%; }
+  #gameScreen .word-meta-kids { font-size: 9px; padding-left: 6px; padding-right: 6px; }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  #gameScreen .kids-word-illustration { width: clamp(56px, 10vw, 76px); }
+  #gameScreen .kids-word-illustration-left-upper,
+  #gameScreen .kids-word-illustration-right-upper { top: 38%; }
+  #gameScreen .kids-word-illustration-left-lower,
+  #gameScreen .kids-word-illustration-right-lower { top: 62%; }
+}

@@ -1,5 +1,5 @@
-const MOVOHRAY_REVISION = "0.6.7-20260913-c7";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260913-c7";
+const MOVOHRAY_REVISION = "0.6.7-20260913-c8";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260913-c8";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
@@ -21,7 +21,8 @@ const MOVOHRAY_CRITICAL_ASSETS = [
   `./whoami.json?rev=${MOVOHRAY_REVISION}`,
   `./words.json?rev=${MOVOHRAY_REVISION}`,
   `./crocodile.json?rev=${MOVOHRAY_REVISION}`,
-  `./kids-dictionary.json?rev=${MOVOHRAY_REVISION}`
+  `./kids-dictionary.json?rev=${MOVOHRAY_REVISION}`,
+  `./kids-illustrations.json?rev=${MOVOHRAY_REVISION}`
 ];
 const MOVOHRAY_OPTIONAL_ASSETS = [
   `./manifest.webmanifest?rev=${MOVOHRAY_REVISION}`,

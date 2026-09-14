@@ -1,0 +1,2122 @@
+{
+  "schemaVersion": 1,
+  "version": "0.6.7-c8",
+  "style": "local-noto-emoji-stickers",
+  "assetsBase": "assets/kids-illustrations/",
+  "concepts": {
+    "cat": {
+      "asset": "cat.png",
+      "emoji": "🐱"
+    },
+    "dog": {
+      "asset": "dog.png",
+      "emoji": "🐶"
+    },
+    "rabbit": {
+      "asset": "rabbit.png",
+      "emoji": "🐰"
+    },
+    "bear": {
+      "asset": "bear.png",
+      "emoji": "🐻"
+    },
+    "fox": {
+      "asset": "fox.png",
+      "emoji": "🦊"
+    },
+    "wolf": {
+      "asset": "wolf.png",
+      "emoji": "🐺"
+    },
+    "lion": {
+      "asset": "lion.png",
+      "emoji": "🦁"
+    },
+    "tiger": {
+      "asset": "tiger.png",
+      "emoji": "🐯"
+    },
+    "elephant": {
+      "asset": "elephant.png",
+      "emoji": "🐘"
+    },
+    "monkey": {
+      "asset": "monkey.png",
+      "emoji": "🐵"
+    },
+    "panda": {
+      "asset": "panda.png",
+      "emoji": "🐼"
+    },
+    "horse": {
+      "asset": "horse.png",
+      "emoji": "🐴"
+    },
+    "cow": {
+      "asset": "cow.png",
+      "emoji": "🐮"
+    },
+    "pig": {
+      "asset": "pig.png",
+      "emoji": "🐷"
+    },
+    "sheep": {
+      "asset": "sheep.png",
+      "emoji": "🐑"
+    },
+    "goat": {
+      "asset": "goat.png",
+      "emoji": "🐐"
+    },
+    "chicken": {
+      "asset": "chicken.png",
+      "emoji": "🐔"
+    },
+    "duck": {
+      "asset": "duck.png",
+      "emoji": "🦆"
+    },
+    "goose": {
+      "asset": "goose.png",
+      "emoji": "🪿"
+    },
+    "frog": {
+      "asset": "frog.png",
+      "emoji": "🐸"
+    },
+    "fish": {
+      "asset": "fish.png",
+      "emoji": "🐟"
+    },
+    "turtle": {
+      "asset": "turtle.png",
+      "emoji": "🐢"
+    },
+    "butterfly": {
+      "asset": "butterfly.png",
+      "emoji": "🦋"
+    },
+    "bee": {
+      "asset": "bee.png",
+      "emoji": "🐝"
+    },
+    "ladybug": {
+      "asset": "ladybug.png",
+      "emoji": "🐞"
+    },
+    "penguin": {
+      "asset": "penguin.png",
+      "emoji": "🐧"
+    },
+    "hamster": {
+      "asset": "hamster.png",
+      "emoji": "🐹"
+    },
+    "giraffe": {
+      "asset": "giraffe.png",
+      "emoji": "🦒"
+    },
+    "kangaroo": {
+      "asset": "kangaroo.png",
+      "emoji": "🦘"
+    },
+    "dolphin": {
+      "asset": "dolphin.png",
+      "emoji": "🐬"
+    },
+    "whale": {
+      "asset": "whale.png",
+      "emoji": "🐳"
+    },
+    "octopus": {
+      "asset": "octopus.png",
+      "emoji": "🐙"
+    },
+    "crocodile": {
+      "asset": "crocodile.png",
+      "emoji": "🐊"
+    },
+    "snake": {
+      "asset": "snake.png",
+      "emoji": "🐍"
+    },
+    "owl": {
+      "asset": "owl.png",
+      "emoji": "🦉"
+    },
+    "parrot": {
+      "asset": "parrot.png",
+      "emoji": "🦜"
+    },
+    "hedgehog": {
+      "asset": "hedgehog.png",
+      "emoji": "🦔"
+    },
+    "squirrel": {
+      "asset": "squirrel.png",
+      "emoji": "🐿️"
+    },
+    "koala": {
+      "asset": "koala.png",
+      "emoji": "🐨"
+    },
+    "apple": {
+      "asset": "apple.png",
+      "emoji": "🍎"
+    },
+    "banana": {
+      "asset": "banana.png",
+      "emoji": "🍌"
+    },
+    "pear": {
+      "asset": "pear.png",
+      "emoji": "🍐"
+    },
+    "watermelon": {
+      "asset": "watermelon.png",
+      "emoji": "🍉"
+    },
+    "lemon": {
+      "asset": "lemon.png",
+      "emoji": "🍋"
+    },
+    "orange": {
+      "asset": "orange.png",
+      "emoji": "🍊"
+    },
+    "grapes": {
+      "asset": "grapes.png",
+      "emoji": "🍇"
+    },
+    "carrot": {
+      "asset": "carrot.png",
+      "emoji": "🥕"
+    },
+    "cucumber": {
+      "asset": "cucumber.png",
+      "emoji": "🥒"
+    },
+    "tomato": {
+      "asset": "tomato.png",
+      "emoji": "🍅"
+    },
+    "potato": {
+      "asset": "potato.png",
+      "emoji": "🥔"
+    },
+    "egg": {
+      "asset": "egg.png",
+      "emoji": "🥚"
+    },
+    "cookie": {
+      "asset": "cookie.png",
+      "emoji": "🍪"
+    },
+    "candy": {
+      "asset": "candy.png",
+      "emoji": "🍬"
+    },
+    "icecream": {
+      "asset": "icecream.png",
+      "emoji": "🍦"
+    },
+    "cake": {
+      "asset": "cake.png",
+      "emoji": "🎂"
+    },
+    "pizza": {
+      "asset": "pizza.png",
+      "emoji": "🍕"
+    },
+    "soup": {
+      "asset": "soup.png",
+      "emoji": "🍲"
+    },
+    "juice": {
+      "asset": "juice.png",
+      "emoji": "🧃"
+    },
+    "water": {
+      "asset": "water.png",
+      "emoji": "💧"
+    },
+    "honey": {
+      "asset": "honey.png",
+      "emoji": "🍯"
+    },
+    "strawberry": {
+      "asset": "strawberry.png",
+      "emoji": "🍓"
+    },
+    "peach": {
+      "asset": "peach.png",
+      "emoji": "🍑"
+    },
+    "bread": {
+      "asset": "bread.png",
+      "emoji": "🍞"
+    },
+    "cheese": {
+      "asset": "cheese.png",
+      "emoji": "🧀"
+    },
+    "milk": {
+      "asset": "milk.png",
+      "emoji": "🥛"
+    },
+    "burger": {
+      "asset": "burger.png",
+      "emoji": "🍔"
+    },
+    "croissant": {
+      "asset": "croissant.png",
+      "emoji": "🥐"
+    },
+    "popcorn": {
+      "asset": "popcorn.png",
+      "emoji": "🍿"
+    },
+    "donut": {
+      "asset": "donut.png",
+      "emoji": "🍩"
+    },
+    "chocolate": {
+      "asset": "chocolate.png",
+      "emoji": "🍫"
+    },
+    "corn": {
+      "asset": "corn.png",
+      "emoji": "🌽"
+    },
+    "pineapple": {
+      "asset": "pineapple.png",
+      "emoji": "🍍"
+    },
+    "coconut": {
+      "asset": "coconut.png",
+      "emoji": "🥥"
+    },
+    "sushi": {
+      "asset": "sushi.png",
+      "emoji": "🍣"
+    },
+    "avocado": {
+      "asset": "avocado.png",
+      "emoji": "🥑"
+    },
+    "broccoli": {
+      "asset": "broccoli.png",
+      "emoji": "🥦"
+    },
+    "ball": {
+      "asset": "ball.png",
+      "emoji": "⚽"
+    },
+    "doll": {
+      "asset": "doll.png",
+      "emoji": "🪆"
+    },
+    "toycar": {
+      "asset": "toycar.png",
+      "emoji": "🚗"
+    },
+    "puzzle": {
+      "asset": "puzzle.png",
+      "emoji": "🧩"
+    },
+    "robot": {
+      "asset": "robot.png",
+      "emoji": "🤖"
+    },
+    "teddy": {
+      "asset": "teddy.png",
+      "emoji": "🧸"
+    },
+    "balloon": {
+      "asset": "balloon.png",
+      "emoji": "🎈"
+    },
+    "kite": {
+      "asset": "kite.png",
+      "emoji": "🪁"
+    },
+    "swing": {
+      "asset": "swing.png",
+      "emoji": "🛝"
+    },
+    "game": {
+      "asset": "game.png",
+      "emoji": "🎮"
+    },
+    "chess": {
+      "asset": "chess.png",
+      "emoji": "♟️"
+    },
+    "dice": {
+      "asset": "dice.png",
+      "emoji": "🎲"
+    },
+    "book": {
+      "asset": "book.png",
+      "emoji": "📚"
+    },
+    "notebook": {
+      "asset": "notebook.png",
+      "emoji": "📓"
+    },
+    "pencil": {
+      "asset": "pencil.png",
+      "emoji": "✏️"
+    },
+    "pen": {
+      "asset": "pen.png",
+      "emoji": "🖊️"
+    },
+    "ruler": {
+      "asset": "ruler.png",
+      "emoji": "📏"
+    },
+    "backpack": {
+      "asset": "backpack.png",
+      "emoji": "🎒"
+    },
+    "scissors": {
+      "asset": "scissors.png",
+      "emoji": "✂️"
+    },
+    "paint": {
+      "asset": "paint.png",
+      "emoji": "🎨"
+    },
+    "globe": {
+      "asset": "globe.png",
+      "emoji": "🌍"
+    },
+    "microscope": {
+      "asset": "microscope.png",
+      "emoji": "🔬"
+    },
+    "telescope": {
+      "asset": "telescope.png",
+      "emoji": "🔭"
+    },
+    "bed": {
+      "asset": "bed.png",
+      "emoji": "🛏️"
+    },
+    "chair": {
+      "asset": "chair.png",
+      "emoji": "🪑"
+    },
+    "sofa": {
+      "asset": "sofa.png",
+      "emoji": "🛋️"
+    },
+    "lamp": {
+      "asset": "lamp.png",
+      "emoji": "💡"
+    },
+    "cup": {
+      "asset": "cup.png",
+      "emoji": "☕"
+    },
+    "spoon": {
+      "asset": "spoon.png",
+      "emoji": "🥄"
+    },
+    "mirror": {
+      "asset": "mirror.png",
+      "emoji": "🪞"
+    },
+    "door": {
+      "asset": "door.png",
+      "emoji": "🚪"
+    },
+    "window": {
+      "asset": "window.png",
+      "emoji": "🪟"
+    },
+    "fridge": {
+      "asset": "fridge.png",
+      "emoji": "🧊"
+    },
+    "tv": {
+      "asset": "tv.png",
+      "emoji": "📺"
+    },
+    "clock": {
+      "asset": "clock.png",
+      "emoji": "⏰"
+    },
+    "key": {
+      "asset": "key.png",
+      "emoji": "🔑"
+    },
+    "umbrella": {
+      "asset": "umbrella.png",
+      "emoji": "☂️"
+    },
+    "flashlight": {
+      "asset": "flashlight.png",
+      "emoji": "🔦"
+    },
+    "sun": {
+      "asset": "sun.png",
+      "emoji": "☀️"
+    },
+    "moon": {
+      "asset": "moon.png",
+      "emoji": "🌙"
+    },
+    "star": {
+      "asset": "star.png",
+      "emoji": "⭐"
+    },
+    "cloud": {
+      "asset": "cloud.png",
+      "emoji": "☁️"
+    },
+    "rain": {
+      "asset": "rain.png",
+      "emoji": "🌧️"
+    },
+    "snow": {
+      "asset": "snow.png",
+      "emoji": "❄️"
+    },
+    "wind": {
+      "asset": "wind.png",
+      "emoji": "💨"
+    },
+    "rainbow": {
+      "asset": "rainbow.png",
+      "emoji": "🌈"
+    },
+    "tree": {
+      "asset": "tree.png",
+      "emoji": "🌳"
+    },
+    "flower": {
+      "asset": "flower.png",
+      "emoji": "🌸"
+    },
+    "sea": {
+      "asset": "sea.png",
+      "emoji": "🌊"
+    },
+    "mountain": {
+      "asset": "mountain.png",
+      "emoji": "⛰️"
+    },
+    "mushroom": {
+      "asset": "mushroom.png",
+      "emoji": "🍄"
+    },
+    "waterfall": {
+      "asset": "waterfall.png",
+      "emoji": "🏞️"
+    },
+    "island": {
+      "asset": "island.png",
+      "emoji": "🏝️"
+    },
+    "volcano": {
+      "asset": "volcano.png",
+      "emoji": "🌋"
+    },
+    "lightning": {
+      "asset": "lightning.png",
+      "emoji": "⚡"
+    },
+    "cactus": {
+      "asset": "cactus.png",
+      "emoji": "🌵"
+    },
+    "palm": {
+      "asset": "palm.png",
+      "emoji": "🌴"
+    },
+    "meteor": {
+      "asset": "meteor.png",
+      "emoji": "☄️"
+    },
+    "bus": {
+      "asset": "bus.png",
+      "emoji": "🚌"
+    },
+    "train": {
+      "asset": "train.png",
+      "emoji": "🚆"
+    },
+    "plane": {
+      "asset": "plane.png",
+      "emoji": "✈️"
+    },
+    "bicycle": {
+      "asset": "bicycle.png",
+      "emoji": "🚲"
+    },
+    "scooter": {
+      "asset": "scooter.png",
+      "emoji": "🛴"
+    },
+    "ship": {
+      "asset": "ship.png",
+      "emoji": "🚢"
+    },
+    "boat": {
+      "asset": "boat.png",
+      "emoji": "⛵"
+    },
+    "tram": {
+      "asset": "tram.png",
+      "emoji": "🚋"
+    },
+    "metro": {
+      "asset": "metro.png",
+      "emoji": "🚇"
+    },
+    "taxi": {
+      "asset": "taxi.png",
+      "emoji": "🚕"
+    },
+    "tractor": {
+      "asset": "tractor.png",
+      "emoji": "🚜"
+    },
+    "truck": {
+      "asset": "truck.png",
+      "emoji": "🚚"
+    },
+    "rocket": {
+      "asset": "rocket.png",
+      "emoji": "🚀"
+    },
+    "motorcycle": {
+      "asset": "motorcycle.png",
+      "emoji": "🏍️"
+    },
+    "helicopter": {
+      "asset": "helicopter.png",
+      "emoji": "🚁"
+    },
+    "firetruck": {
+      "asset": "firetruck.png",
+      "emoji": "🚒"
+    },
+    "ambulance": {
+      "asset": "ambulance.png",
+      "emoji": "🚑"
+    },
+    "submarine": {
+      "asset": "submarine.png",
+      "emoji": "🛟"
+    },
+    "doctor": {
+      "asset": "doctor.png",
+      "emoji": "🩺"
+    },
+    "teacher": {
+      "asset": "teacher.png",
+      "emoji": "🧑‍🏫"
+    },
+    "cook": {
+      "asset": "cook.png",
+      "emoji": "🧑‍🍳"
+    },
+    "driver": {
+      "asset": "driver.png",
+      "emoji": "🧑‍✈️"
+    },
+    "firefighter": {
+      "asset": "firefighter.png",
+      "emoji": "🧑‍🚒"
+    },
+    "police": {
+      "asset": "police.png",
+      "emoji": "👮"
+    },
+    "hairdresser": {
+      "asset": "hairdresser.png",
+      "emoji": "💇"
+    },
+    "gardener": {
+      "asset": "gardener.png",
+      "emoji": "🪴"
+    },
+    "vet": {
+      "asset": "vet.png",
+      "emoji": "🐾"
+    },
+    "photographer": {
+      "asset": "photographer.png",
+      "emoji": "📷"
+    },
+    "musician": {
+      "asset": "musician.png",
+      "emoji": "🎸"
+    },
+    "artist": {
+      "asset": "artist.png",
+      "emoji": "🧑‍🎨"
+    },
+    "pilot": {
+      "asset": "pilot.png",
+      "emoji": "🧑‍✈️"
+    },
+    "rescuer": {
+      "asset": "rescuer.png",
+      "emoji": "🛟"
+    },
+    "astronaut": {
+      "asset": "astronaut.png",
+      "emoji": "🧑‍🚀"
+    },
+    "basketball": {
+      "asset": "basketball.png",
+      "emoji": "🏀"
+    },
+    "tennis": {
+      "asset": "tennis.png",
+      "emoji": "🎾"
+    },
+    "swimming": {
+      "asset": "swimming.png",
+      "emoji": "🏊"
+    },
+    "running": {
+      "asset": "running.png",
+      "emoji": "🏃"
+    },
+    "dance": {
+      "asset": "dance.png",
+      "emoji": "💃"
+    },
+    "ski": {
+      "asset": "ski.png",
+      "emoji": "⛷️"
+    },
+    "skates": {
+      "asset": "skates.png",
+      "emoji": "⛸️"
+    },
+    "badminton": {
+      "asset": "badminton.png",
+      "emoji": "🏸"
+    },
+    "volleyball": {
+      "asset": "volleyball.png",
+      "emoji": "🏐"
+    },
+    "hockey": {
+      "asset": "hockey.png",
+      "emoji": "🏒"
+    },
+    "bowling": {
+      "asset": "bowling.png",
+      "emoji": "🎳"
+    },
+    "dragon": {
+      "asset": "dragon.png",
+      "emoji": "🐉"
+    },
+    "unicorn": {
+      "asset": "unicorn.png",
+      "emoji": "🦄"
+    },
+    "fairy": {
+      "asset": "fairy.png",
+      "emoji": "🧚"
+    },
+    "mermaid": {
+      "asset": "mermaid.png",
+      "emoji": "🧜"
+    },
+    "princess": {
+      "asset": "princess.png",
+      "emoji": "👸"
+    },
+    "prince": {
+      "asset": "prince.png",
+      "emoji": "🤴"
+    },
+    "pirate": {
+      "asset": "pirate.png",
+      "emoji": "🏴‍☠️"
+    },
+    "wizard": {
+      "asset": "wizard.png",
+      "emoji": "🧙"
+    },
+    "castle": {
+      "asset": "castle.png",
+      "emoji": "🏰"
+    },
+    "crown": {
+      "asset": "crown.png",
+      "emoji": "👑"
+    },
+    "treasure": {
+      "asset": "treasure.png",
+      "emoji": "💎"
+    },
+    "magic": {
+      "asset": "magic.png",
+      "emoji": "✨"
+    },
+    "superhero": {
+      "asset": "superhero.png",
+      "emoji": "🦸"
+    },
+    "alien": {
+      "asset": "alien.png",
+      "emoji": "👽"
+    },
+    "ghost": {
+      "asset": "ghost.png",
+      "emoji": "👻"
+    },
+    "gift": {
+      "asset": "gift.png",
+      "emoji": "🎁"
+    },
+    "snowman": {
+      "asset": "snowman.png",
+      "emoji": "⛄"
+    },
+    "card": {
+      "asset": "card.png",
+      "emoji": "💌"
+    },
+    "confetti": {
+      "asset": "confetti.png",
+      "emoji": "🎊"
+    },
+    "mask": {
+      "asset": "mask.png",
+      "emoji": "🎭"
+    },
+    "candle": {
+      "asset": "candle.png",
+      "emoji": "🕯️"
+    },
+    "party": {
+      "asset": "party.png",
+      "emoji": "🥳"
+    },
+    "fireworks": {
+      "asset": "fireworks.png",
+      "emoji": "🎆"
+    },
+    "picnic": {
+      "asset": "picnic.png",
+      "emoji": "🧺"
+    },
+    "karaoke": {
+      "asset": "karaoke.png",
+      "emoji": "🎤"
+    },
+    "sleep": {
+      "asset": "sleep.png",
+      "emoji": "😴"
+    },
+    "jump": {
+      "asset": "jump.png",
+      "emoji": "🤾"
+    },
+    "clap": {
+      "asset": "clap.png",
+      "emoji": "👏"
+    },
+    "laugh": {
+      "asset": "laugh.png",
+      "emoji": "😂"
+    },
+    "cry": {
+      "asset": "cry.png",
+      "emoji": "😢"
+    },
+    "sneeze": {
+      "asset": "sneeze.png",
+      "emoji": "🤧"
+    },
+    "yawn": {
+      "asset": "yawn.png",
+      "emoji": "🥱"
+    },
+    "wash": {
+      "asset": "wash.png",
+      "emoji": "🧼"
+    },
+    "brushteeth": {
+      "asset": "brushteeth.png",
+      "emoji": "🪥"
+    },
+    "read": {
+      "asset": "read.png",
+      "emoji": "📖"
+    },
+    "draw": {
+      "asset": "draw.png",
+      "emoji": "🖍️"
+    },
+    "wave": {
+      "asset": "wave.png",
+      "emoji": "👋"
+    },
+    "happy": {
+      "asset": "happy.png",
+      "emoji": "😊"
+    },
+    "surprised": {
+      "asset": "surprised.png",
+      "emoji": "😮"
+    },
+    "fear": {
+      "asset": "fear.png",
+      "emoji": "😨"
+    },
+    "angry": {
+      "asset": "angry.png",
+      "emoji": "😠"
+    },
+    "tired": {
+      "asset": "tired.png",
+      "emoji": "😴"
+    },
+    "mouse": {
+      "asset": "mouse.png",
+      "emoji": "🐭"
+    },
+    "ogre": {
+      "asset": "ogre.png",
+      "emoji": "👹"
+    },
+    "snowflake": {
+      "asset": "snowflake.png",
+      "emoji": "❄️"
+    },
+    "spider": {
+      "asset": "spider.png",
+      "emoji": "🕷️"
+    },
+    "bat": {
+      "asset": "bat.png",
+      "emoji": "🦇"
+    },
+    "genie": {
+      "asset": "genie.png",
+      "emoji": "🧞"
+    },
+    "cowboy": {
+      "asset": "cowboy.png",
+      "emoji": "🤠"
+    },
+    "shield": {
+      "asset": "shield.png",
+      "emoji": "🛡️"
+    },
+    "ring": {
+      "asset": "ring.png",
+      "emoji": "💍"
+    },
+    "dragonface": {
+      "asset": "dragonface.png",
+      "emoji": "🐲"
+    },
+    "ocean": {
+      "asset": "ocean.png",
+      "emoji": "🌊"
+    }
+  },
+  "words": {
+    "кіт": {
+      "concept": "cat",
+      "asset": "cat.png"
+    },
+    "кішка": {
+      "concept": "cat",
+      "asset": "cat.png"
+    },
+    "пес": {
+      "concept": "dog",
+      "asset": "dog.png"
+    },
+    "собака": {
+      "concept": "dog",
+      "asset": "dog.png"
+    },
+    "заєць": {
+      "concept": "rabbit",
+      "asset": "rabbit.png"
+    },
+    "ведмідь": {
+      "concept": "bear",
+      "asset": "bear.png"
+    },
+    "лисиця": {
+      "concept": "fox",
+      "asset": "fox.png"
+    },
+    "вовк": {
+      "concept": "wolf",
+      "asset": "wolf.png"
+    },
+    "лев": {
+      "concept": "lion",
+      "asset": "lion.png"
+    },
+    "тигр": {
+      "concept": "tiger",
+      "asset": "tiger.png"
+    },
+    "слон": {
+      "concept": "elephant",
+      "asset": "elephant.png"
+    },
+    "мавпа": {
+      "concept": "monkey",
+      "asset": "monkey.png"
+    },
+    "панда": {
+      "concept": "panda",
+      "asset": "panda.png"
+    },
+    "кінь": {
+      "concept": "horse",
+      "asset": "horse.png"
+    },
+    "корова": {
+      "concept": "cow",
+      "asset": "cow.png"
+    },
+    "свинка": {
+      "concept": "pig",
+      "asset": "pig.png"
+    },
+    "вівця": {
+      "concept": "sheep",
+      "asset": "sheep.png"
+    },
+    "коза": {
+      "concept": "goat",
+      "asset": "goat.png"
+    },
+    "курка": {
+      "concept": "chicken",
+      "asset": "chicken.png"
+    },
+    "качка": {
+      "concept": "duck",
+      "asset": "duck.png"
+    },
+    "гуска": {
+      "concept": "goose",
+      "asset": "goose.png"
+    },
+    "гусь": {
+      "concept": "goose",
+      "asset": "goose.png"
+    },
+    "жаба": {
+      "concept": "frog",
+      "asset": "frog.png"
+    },
+    "риба": {
+      "concept": "fish",
+      "asset": "fish.png"
+    },
+    "черепаха": {
+      "concept": "turtle",
+      "asset": "turtle.png"
+    },
+    "метелик": {
+      "concept": "butterfly",
+      "asset": "butterfly.png"
+    },
+    "бджола": {
+      "concept": "bee",
+      "asset": "bee.png"
+    },
+    "сонечко": {
+      "concept": "ladybug",
+      "asset": "ladybug.png"
+    },
+    "пінгвін": {
+      "concept": "penguin",
+      "asset": "penguin.png"
+    },
+    "хомяк": {
+      "concept": "hamster",
+      "asset": "hamster.png"
+    },
+    "жирафа": {
+      "concept": "giraffe",
+      "asset": "giraffe.png"
+    },
+    "кенгуру": {
+      "concept": "kangaroo",
+      "asset": "kangaroo.png"
+    },
+    "дельфін": {
+      "concept": "dolphin",
+      "asset": "dolphin.png"
+    },
+    "кит": {
+      "concept": "whale",
+      "asset": "whale.png"
+    },
+    "восьминіг": {
+      "concept": "octopus",
+      "asset": "octopus.png"
+    },
+    "крокодил": {
+      "concept": "crocodile",
+      "asset": "crocodile.png"
+    },
+    "змія": {
+      "concept": "snake",
+      "asset": "snake.png"
+    },
+    "сова": {
+      "concept": "owl",
+      "asset": "owl.png"
+    },
+    "папуга": {
+      "concept": "parrot",
+      "asset": "parrot.png"
+    },
+    "їжак": {
+      "concept": "hedgehog",
+      "asset": "hedgehog.png"
+    },
+    "білка": {
+      "concept": "squirrel",
+      "asset": "squirrel.png"
+    },
+    "коала": {
+      "concept": "koala",
+      "asset": "koala.png"
+    },
+    "яблуко": {
+      "concept": "apple",
+      "asset": "apple.png"
+    },
+    "банан": {
+      "concept": "banana",
+      "asset": "banana.png"
+    },
+    "груша": {
+      "concept": "pear",
+      "asset": "pear.png"
+    },
+    "кавун": {
+      "concept": "watermelon",
+      "asset": "watermelon.png"
+    },
+    "лимон": {
+      "concept": "lemon",
+      "asset": "lemon.png"
+    },
+    "апельсин": {
+      "concept": "orange",
+      "asset": "orange.png"
+    },
+    "виноград": {
+      "concept": "grapes",
+      "asset": "grapes.png"
+    },
+    "морква": {
+      "concept": "carrot",
+      "asset": "carrot.png"
+    },
+    "огірок": {
+      "concept": "cucumber",
+      "asset": "cucumber.png"
+    },
+    "помідор": {
+      "concept": "tomato",
+      "asset": "tomato.png"
+    },
+    "картопля": {
+      "concept": "potato",
+      "asset": "potato.png"
+    },
+    "яйце": {
+      "concept": "egg",
+      "asset": "egg.png"
+    },
+    "печиво": {
+      "concept": "cookie",
+      "asset": "cookie.png"
+    },
+    "цукерка": {
+      "concept": "candy",
+      "asset": "candy.png"
+    },
+    "морозиво": {
+      "concept": "icecream",
+      "asset": "icecream.png"
+    },
+    "торт": {
+      "concept": "cake",
+      "asset": "cake.png"
+    },
+    "тортзісвічками": {
+      "concept": "cake",
+      "asset": "cake.png"
+    },
+    "піца": {
+      "concept": "pizza",
+      "asset": "pizza.png"
+    },
+    "суп": {
+      "concept": "soup",
+      "asset": "soup.png"
+    },
+    "борщ": {
+      "concept": "soup",
+      "asset": "soup.png"
+    },
+    "сік": {
+      "concept": "juice",
+      "asset": "juice.png"
+    },
+    "вода": {
+      "concept": "water",
+      "asset": "water.png"
+    },
+    "мед": {
+      "concept": "honey",
+      "asset": "honey.png"
+    },
+    "полуниця": {
+      "concept": "strawberry",
+      "asset": "strawberry.png"
+    },
+    "персик": {
+      "concept": "peach",
+      "asset": "peach.png"
+    },
+    "хліб": {
+      "concept": "bread",
+      "asset": "bread.png"
+    },
+    "сир": {
+      "concept": "cheese",
+      "asset": "cheese.png"
+    },
+    "молоко": {
+      "concept": "milk",
+      "asset": "milk.png"
+    },
+    "бургер": {
+      "concept": "burger",
+      "asset": "burger.png"
+    },
+    "круасан": {
+      "concept": "croissant",
+      "asset": "croissant.png"
+    },
+    "попкорн": {
+      "concept": "popcorn",
+      "asset": "popcorn.png"
+    },
+    "пончик": {
+      "concept": "donut",
+      "asset": "donut.png"
+    },
+    "шоколад": {
+      "concept": "chocolate",
+      "asset": "chocolate.png"
+    },
+    "кукурудза": {
+      "concept": "corn",
+      "asset": "corn.png"
+    },
+    "ананас": {
+      "concept": "pineapple",
+      "asset": "pineapple.png"
+    },
+    "кокос": {
+      "concept": "coconut",
+      "asset": "coconut.png"
+    },
+    "суші": {
+      "concept": "sushi",
+      "asset": "sushi.png"
+    },
+    "авокадо": {
+      "concept": "avocado",
+      "asset": "avocado.png"
+    },
+    "броколі": {
+      "concept": "broccoli",
+      "asset": "broccoli.png"
+    },
+    "мяч": {
+      "concept": "ball",
+      "asset": "ball.png"
+    },
+    "футбол": {
+      "concept": "ball",
+      "asset": "ball.png"
+    },
+    "лялька": {
+      "concept": "doll",
+      "asset": "doll.png"
+    },
+    "машинка": {
+      "concept": "toycar",
+      "asset": "toycar.png"
+    },
+    "машина": {
+      "concept": "toycar",
+      "asset": "toycar.png"
+    },
+    "гоночнамашина": {
+      "concept": "toycar",
+      "asset": "toycar.png"
+    },
+    "пазл": {
+      "concept": "puzzle",
+      "asset": "puzzle.png"
+    },
+    "головоломка": {
+      "concept": "puzzle",
+      "asset": "puzzle.png"
+    },
+    "робот": {
+      "concept": "robot",
+      "asset": "robot.png"
+    },
+    "ведмедик": {
+      "concept": "teddy",
+      "asset": "teddy.png"
+    },
+    "повітрянакулька": {
+      "concept": "balloon",
+      "asset": "balloon.png"
+    },
+    "кулька": {
+      "concept": "balloon",
+      "asset": "balloon.png"
+    },
+    "повітрянийзмій": {
+      "concept": "kite",
+      "asset": "kite.png"
+    },
+    "гойдалка": {
+      "concept": "swing",
+      "asset": "swing.png"
+    },
+    "гірка": {
+      "concept": "swing",
+      "asset": "swing.png"
+    },
+    "відеогра": {
+      "concept": "game",
+      "asset": "game.png"
+    },
+    "шахи": {
+      "concept": "chess",
+      "asset": "chess.png"
+    },
+    "настільнагра": {
+      "concept": "dice",
+      "asset": "dice.png"
+    },
+    "книга": {
+      "concept": "book",
+      "asset": "book.png"
+    },
+    "підручник": {
+      "concept": "book",
+      "asset": "book.png"
+    },
+    "енциклопедія": {
+      "concept": "book",
+      "asset": "book.png"
+    },
+    "зошит": {
+      "concept": "notebook",
+      "asset": "notebook.png"
+    },
+    "щоденник": {
+      "concept": "notebook",
+      "asset": "notebook.png"
+    },
+    "олівець": {
+      "concept": "pencil",
+      "asset": "pencil.png"
+    },
+    "ручка": {
+      "concept": "pen",
+      "asset": "pen.png"
+    },
+    "лінійка": {
+      "concept": "ruler",
+      "asset": "ruler.png"
+    },
+    "рюкзак": {
+      "concept": "backpack",
+      "asset": "backpack.png"
+    },
+    "ножиці": {
+      "concept": "scissors",
+      "asset": "scissors.png"
+    },
+    "фарби": {
+      "concept": "paint",
+      "asset": "paint.png"
+    },
+    "малювання": {
+      "concept": "paint",
+      "asset": "paint.png"
+    },
+    "глобус": {
+      "concept": "globe",
+      "asset": "globe.png"
+    },
+    "мікроскоп": {
+      "concept": "microscope",
+      "asset": "microscope.png"
+    },
+    "телескоп": {
+      "concept": "telescope",
+      "asset": "telescope.png"
+    },
+    "ліжко": {
+      "concept": "bed",
+      "asset": "bed.png"
+    },
+    "стілець": {
+      "concept": "chair",
+      "asset": "chair.png"
+    },
+    "диван": {
+      "concept": "sofa",
+      "asset": "sofa.png"
+    },
+    "лампа": {
+      "concept": "lamp",
+      "asset": "lamp.png"
+    },
+    "настільналампа": {
+      "concept": "lamp",
+      "asset": "lamp.png"
+    },
+    "чашка": {
+      "concept": "cup",
+      "asset": "cup.png"
+    },
+    "какао": {
+      "concept": "cup",
+      "asset": "cup.png"
+    },
+    "ложка": {
+      "concept": "spoon",
+      "asset": "spoon.png"
+    },
+    "дзеркало": {
+      "concept": "mirror",
+      "asset": "mirror.png"
+    },
+    "двері": {
+      "concept": "door",
+      "asset": "door.png"
+    },
+    "вікно": {
+      "concept": "window",
+      "asset": "window.png"
+    },
+    "холодильник": {
+      "concept": "fridge",
+      "asset": "fridge.png"
+    },
+    "телевізор": {
+      "concept": "tv",
+      "asset": "tv.png"
+    },
+    "годинник": {
+      "concept": "clock",
+      "asset": "clock.png"
+    },
+    "будильник": {
+      "concept": "clock",
+      "asset": "clock.png"
+    },
+    "ключ": {
+      "concept": "key",
+      "asset": "key.png"
+    },
+    "парасоля": {
+      "concept": "umbrella",
+      "asset": "umbrella.png"
+    },
+    "ліхтарик": {
+      "concept": "flashlight",
+      "asset": "flashlight.png"
+    },
+    "сонце": {
+      "concept": "sun",
+      "asset": "sun.png"
+    },
+    "місяць": {
+      "concept": "moon",
+      "asset": "moon.png"
+    },
+    "зірка": {
+      "concept": "star",
+      "asset": "star.png"
+    },
+    "хмара": {
+      "concept": "cloud",
+      "asset": "cloud.png"
+    },
+    "дощ": {
+      "concept": "rain",
+      "asset": "rain.png"
+    },
+    "сніг": {
+      "concept": "snow",
+      "asset": "snow.png"
+    },
+    "вітер": {
+      "concept": "wind",
+      "asset": "wind.png"
+    },
+    "веселка": {
+      "concept": "rainbow",
+      "asset": "rainbow.png"
+    },
+    "дерево": {
+      "concept": "tree",
+      "asset": "tree.png"
+    },
+    "ліс": {
+      "concept": "tree",
+      "asset": "tree.png"
+    },
+    "квітка": {
+      "concept": "flower",
+      "asset": "flower.png"
+    },
+    "море": {
+      "concept": "sea",
+      "asset": "sea.png"
+    },
+    "гора": {
+      "concept": "mountain",
+      "asset": "mountain.png"
+    },
+    "гриб": {
+      "concept": "mushroom",
+      "asset": "mushroom.png"
+    },
+    "водоспад": {
+      "concept": "waterfall",
+      "asset": "waterfall.png"
+    },
+    "острів": {
+      "concept": "island",
+      "asset": "island.png"
+    },
+    "вулкан": {
+      "concept": "volcano",
+      "asset": "volcano.png"
+    },
+    "блискавка": {
+      "concept": "lightning",
+      "asset": "lightning.png"
+    },
+    "гроза": {
+      "concept": "lightning",
+      "asset": "lightning.png"
+    },
+    "кактус": {
+      "concept": "cactus",
+      "asset": "cactus.png"
+    },
+    "пальма": {
+      "concept": "palm",
+      "asset": "palm.png"
+    },
+    "метеорит": {
+      "concept": "meteor",
+      "asset": "meteor.png"
+    },
+    "комета": {
+      "concept": "meteor",
+      "asset": "meteor.png"
+    },
+    "автобус": {
+      "concept": "bus",
+      "asset": "bus.png"
+    },
+    "потяг": {
+      "concept": "train",
+      "asset": "train.png"
+    },
+    "іграшковийпотяг": {
+      "concept": "train",
+      "asset": "train.png"
+    },
+    "літак": {
+      "concept": "plane",
+      "asset": "plane.png"
+    },
+    "велосипед": {
+      "concept": "bicycle",
+      "asset": "bicycle.png"
+    },
+    "самокат": {
+      "concept": "scooter",
+      "asset": "scooter.png"
+    },
+    "корабель": {
+      "concept": "ship",
+      "asset": "ship.png"
+    },
+    "човен": {
+      "concept": "boat",
+      "asset": "boat.png"
+    },
+    "трамвай": {
+      "concept": "tram",
+      "asset": "tram.png"
+    },
+    "метро": {
+      "concept": "metro",
+      "asset": "metro.png"
+    },
+    "таксі": {
+      "concept": "taxi",
+      "asset": "taxi.png"
+    },
+    "трактор": {
+      "concept": "tractor",
+      "asset": "tractor.png"
+    },
+    "вантажівка": {
+      "concept": "truck",
+      "asset": "truck.png"
+    },
+    "ракета": {
+      "concept": "rocket",
+      "asset": "rocket.png"
+    },
+    "запускатиракету": {
+      "concept": "rocket",
+      "asset": "rocket.png"
+    },
+    "мотоцикл": {
+      "concept": "motorcycle",
+      "asset": "motorcycle.png"
+    },
+    "вертоліт": {
+      "concept": "helicopter",
+      "asset": "helicopter.png"
+    },
+    "пожежнамашина": {
+      "concept": "firetruck",
+      "asset": "firetruck.png"
+    },
+    "швидкадопомога": {
+      "concept": "ambulance",
+      "asset": "ambulance.png"
+    },
+    "підводнийчовен": {
+      "concept": "submarine",
+      "asset": "submarine.png"
+    },
+    "лікар": {
+      "concept": "doctor",
+      "asset": "doctor.png"
+    },
+    "вчитель": {
+      "concept": "teacher",
+      "asset": "teacher.png"
+    },
+    "кухар": {
+      "concept": "cook",
+      "asset": "cook.png"
+    },
+    "кондитер": {
+      "concept": "cook",
+      "asset": "cook.png"
+    },
+    "водій": {
+      "concept": "driver",
+      "asset": "driver.png"
+    },
+    "пожежник": {
+      "concept": "firefighter",
+      "asset": "firefighter.png"
+    },
+    "поліцейський": {
+      "concept": "police",
+      "asset": "police.png"
+    },
+    "перукар": {
+      "concept": "hairdresser",
+      "asset": "hairdresser.png"
+    },
+    "садівник": {
+      "concept": "gardener",
+      "asset": "gardener.png"
+    },
+    "ветеринар": {
+      "concept": "vet",
+      "asset": "vet.png"
+    },
+    "фотограф": {
+      "concept": "photographer",
+      "asset": "photographer.png"
+    },
+    "фотографувати": {
+      "concept": "photographer",
+      "asset": "photographer.png"
+    },
+    "музикант": {
+      "concept": "musician",
+      "asset": "musician.png"
+    },
+    "гратинагітарі": {
+      "concept": "musician",
+      "asset": "musician.png"
+    },
+    "художник": {
+      "concept": "artist",
+      "asset": "artist.png"
+    },
+    "пілот": {
+      "concept": "pilot",
+      "asset": "pilot.png"
+    },
+    "рятувальник": {
+      "concept": "rescuer",
+      "asset": "rescuer.png"
+    },
+    "астронавт": {
+      "concept": "astronaut",
+      "asset": "astronaut.png"
+    },
+    "баскетбол": {
+      "concept": "basketball",
+      "asset": "basketball.png"
+    },
+    "теніс": {
+      "concept": "tennis",
+      "asset": "tennis.png"
+    },
+    "плавання": {
+      "concept": "swimming",
+      "asset": "swimming.png"
+    },
+    "плавати": {
+      "concept": "swimming",
+      "asset": "swimming.png"
+    },
+    "біг": {
+      "concept": "running",
+      "asset": "running.png"
+    },
+    "бігти": {
+      "concept": "running",
+      "asset": "running.png"
+    },
+    "танці": {
+      "concept": "dance",
+      "asset": "dance.png"
+    },
+    "танцювати": {
+      "concept": "dance",
+      "asset": "dance.png"
+    },
+    "лижі": {
+      "concept": "ski",
+      "asset": "ski.png"
+    },
+    "ковзани": {
+      "concept": "skates",
+      "asset": "skates.png"
+    },
+    "кататисянаковзанах": {
+      "concept": "skates",
+      "asset": "skates.png"
+    },
+    "бадмінтон": {
+      "concept": "badminton",
+      "asset": "badminton.png"
+    },
+    "волейбол": {
+      "concept": "volleyball",
+      "asset": "volleyball.png"
+    },
+    "хокей": {
+      "concept": "hockey",
+      "asset": "hockey.png"
+    },
+    "боулінг": {
+      "concept": "bowling",
+      "asset": "bowling.png"
+    },
+    "дракон": {
+      "concept": "dragon",
+      "asset": "dragon.png"
+    },
+    "єдиноріг": {
+      "concept": "unicorn",
+      "asset": "unicorn.png"
+    },
+    "фея": {
+      "concept": "fairy",
+      "asset": "fairy.png"
+    },
+    "русалка": {
+      "concept": "mermaid",
+      "asset": "mermaid.png"
+    },
+    "принцеса": {
+      "concept": "princess",
+      "asset": "princess.png"
+    },
+    "принц": {
+      "concept": "prince",
+      "asset": "prince.png"
+    },
+    "пірат": {
+      "concept": "pirate",
+      "asset": "pirate.png"
+    },
+    "чарівник": {
+      "concept": "wizard",
+      "asset": "wizard.png"
+    },
+    "замок": {
+      "concept": "castle",
+      "asset": "castle.png"
+    },
+    "корона": {
+      "concept": "crown",
+      "asset": "crown.png"
+    },
+    "скарб": {
+      "concept": "treasure",
+      "asset": "treasure.png"
+    },
+    "шукатискарб": {
+      "concept": "treasure",
+      "asset": "treasure.png"
+    },
+    "магія": {
+      "concept": "magic",
+      "asset": "magic.png"
+    },
+    "супергерой": {
+      "concept": "superhero",
+      "asset": "superhero.png"
+    },
+    "інопланетянин": {
+      "concept": "alien",
+      "asset": "alien.png"
+    },
+    "привид": {
+      "concept": "ghost",
+      "asset": "ghost.png"
+    },
+    "подарунок": {
+      "concept": "gift",
+      "asset": "gift.png"
+    },
+    "сюрприз": {
+      "concept": "gift",
+      "asset": "gift.png"
+    },
+    "сніговик": {
+      "concept": "snowman",
+      "asset": "snowman.png"
+    },
+    "ліпитисніговика": {
+      "concept": "snowman",
+      "asset": "snowman.png"
+    },
+    "листівка": {
+      "concept": "card",
+      "asset": "card.png"
+    },
+    "конфеті": {
+      "concept": "confetti",
+      "asset": "confetti.png"
+    },
+    "маска": {
+      "concept": "mask",
+      "asset": "mask.png"
+    },
+    "свічка": {
+      "concept": "candle",
+      "asset": "candle.png"
+    },
+    "вечірка": {
+      "concept": "party",
+      "asset": "party.png"
+    },
+    "деньнародження": {
+      "concept": "party",
+      "asset": "party.png"
+    },
+    "феєрверк": {
+      "concept": "fireworks",
+      "asset": "fireworks.png"
+    },
+    "пікнік": {
+      "concept": "picnic",
+      "asset": "picnic.png"
+    },
+    "караоке": {
+      "concept": "karaoke",
+      "asset": "karaoke.png"
+    },
+    "спати": {
+      "concept": "sleep",
+      "asset": "sleep.png"
+    },
+    "стрибати": {
+      "concept": "jump",
+      "asset": "jump.png"
+    },
+    "стрибок": {
+      "concept": "jump",
+      "asset": "jump.png"
+    },
+    "плескати": {
+      "concept": "clap",
+      "asset": "clap.png"
+    },
+    "сміятися": {
+      "concept": "laugh",
+      "asset": "laugh.png"
+    },
+    "сміх": {
+      "concept": "laugh",
+      "asset": "laugh.png"
+    },
+    "плакати": {
+      "concept": "cry",
+      "asset": "cry.png"
+    },
+    "сум": {
+      "concept": "cry",
+      "asset": "cry.png"
+    },
+    "чихати": {
+      "concept": "sneeze",
+      "asset": "sneeze.png"
+    },
+    "позіхати": {
+      "concept": "yawn",
+      "asset": "yawn.png"
+    },
+    "митируки": {
+      "concept": "wash",
+      "asset": "wash.png"
+    },
+    "чиститизуби": {
+      "concept": "brushteeth",
+      "asset": "brushteeth.png"
+    },
+    "читатикнигу": {
+      "concept": "read",
+      "asset": "read.png"
+    },
+    "малювати": {
+      "concept": "draw",
+      "asset": "draw.png"
+    },
+    "махатирукою": {
+      "concept": "wave",
+      "asset": "wave.png"
+    },
+    "радість": {
+      "concept": "happy",
+      "asset": "happy.png"
+    },
+    "здивування": {
+      "concept": "surprised",
+      "asset": "surprised.png"
+    },
+    "страх": {
+      "concept": "fear",
+      "asset": "fear.png"
+    },
+    "злість": {
+      "concept": "angry",
+      "asset": "angry.png"
+    },
+    "втома": {
+      "concept": "tired",
+      "asset": "tired.png"
+    },
+    "міккімаус": {
+      "concept": "mouse",
+      "asset": "mouse.png"
+    },
+    "міньйон": {
+      "concept": "balloon",
+      "asset": "balloon.png"
+    },
+    "сімба": {
+      "concept": "lion",
+      "asset": "lion.png"
+    },
+    "шрек": {
+      "concept": "ogre",
+      "asset": "ogre.png"
+    },
+    "ельза": {
+      "concept": "snowflake",
+      "asset": "snowflake.png"
+    },
+    "вінніпух": {
+      "concept": "bear",
+      "asset": "bear.png"
+    },
+    "скубіду": {
+      "concept": "dog",
+      "asset": "dog.png"
+    },
+    "пікачу": {
+      "concept": "lightning",
+      "asset": "lightning.png"
+    },
+    "стіч": {
+      "concept": "alien",
+      "asset": "alien.png"
+    },
+    "попелюшка": {
+      "concept": "princess",
+      "asset": "princess.png"
+    },
+    "колобок": {
+      "concept": "bread",
+      "asset": "bread.png"
+    },
+    "червонашапочка": {
+      "concept": "picnic",
+      "asset": "picnic.png"
+    },
+    "кітучоботях": {
+      "concept": "cat",
+      "asset": "cat.png"
+    },
+    "русалонька": {
+      "concept": "mermaid",
+      "asset": "mermaid.png"
+    },
+    "рапунцель": {
+      "concept": "princess",
+      "asset": "princess.png"
+    },
+    "людинапавук": {
+      "concept": "spider",
+      "asset": "spider.png"
+    },
+    "бетмен": {
+      "concept": "bat",
+      "asset": "bat.png"
+    },
+    "супермен": {
+      "concept": "superhero",
+      "asset": "superhero.png"
+    },
+    "гарріпоттер": {
+      "concept": "wizard",
+      "asset": "wizard.png"
+    },
+    "герміона": {
+      "concept": "wizard",
+      "asset": "wizard.png"
+    },
+    "аладдін": {
+      "concept": "genie",
+      "asset": "genie.png"
+    },
+    "пітерпен": {
+      "concept": "fairy",
+      "asset": "fairy.png"
+    },
+    "мулан": {
+      "concept": "superhero",
+      "asset": "superhero.png"
+    },
+    "томіджеррі": {
+      "concept": "cat",
+      "asset": "cat.png"
+    },
+    "пандапо": {
+      "concept": "panda",
+      "asset": "panda.png"
+    },
+    "меріпоппінс": {
+      "concept": "umbrella",
+      "asset": "umbrella.png"
+    },
+    "паддінгтон": {
+      "concept": "bear",
+      "asset": "bear.png"
+    },
+    "йода": {
+      "concept": "alien",
+      "asset": "alien.png"
+    },
+    "баззлайтер": {
+      "concept": "astronaut",
+      "asset": "astronaut.png"
+    },
+    "вуді": {
+      "concept": "cowboy",
+      "asset": "cowboy.png"
+    },
+    "фродо": {
+      "concept": "ring",
+      "asset": "ring.png"
+    },
+    "грут": {
+      "concept": "tree",
+      "asset": "tree.png"
+    },
+    "дартвейдер": {
+      "concept": "alien",
+      "asset": "alien.png"
+    },
+    "моана": {
+      "concept": "ocean",
+      "asset": "ocean.png"
+    },
+    "рая": {
+      "concept": "dragon",
+      "asset": "dragon.png"
+    },
+    "хіккап": {
+      "concept": "dragon",
+      "asset": "dragon.png"
+    },
+    "беззубик": {
+      "concept": "dragonface",
+      "asset": "dragonface.png"
+    },
+    "круелла": {
+      "concept": "dog",
+      "asset": "dog.png"
+    },
+    "чеширськийкіт": {
+      "concept": "cat",
+      "asset": "cat.png"
+    },
+    "капітанамерика": {
+      "concept": "shield",
+      "asset": "shield.png"
+    }
+  }
+}

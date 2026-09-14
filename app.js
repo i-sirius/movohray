@@ -11,10 +11,10 @@ let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
 const DATA_BUILD = "2026-09-13";
-const DATA_CANDIDATE = 7;
+const DATA_CANDIDATE = 8;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.7-b20260913-c7";
+const DATA_CACHE = "movohray-cache-v0.6.7-b20260913-c8";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -25,6 +25,7 @@ const SERVICE_WORKER_REVISION_QUERY_TIMEOUT_MS = 2500;
 const KIDS_MODE_STORAGE_KEY = "movohray-kids-mode-v1";
 const KIDS_AGE_STORAGE_KEY = "movohray-kids-age-v1";
 const KIDS_DICTIONARY_FILE = "kids-dictionary.json";
+const KIDS_ILLUSTRATIONS_FILE = "kids-illustrations.json";
 const KIDS_DEFAULT_AGE = 7;
 const KIDS_MIN_AGE = 5;
 const KIDS_MAX_AGE = 10;
@@ -4208,6 +4209,8 @@ let kidsModeEnabled = readKidsModePreference();
 let kidsAge = readKidsAgePreference();
 let kidsDictionaryData = null;
 let kidsDictionaryPromise = null;
+let kidsIllustrationsData = null;
+let kidsIllustrationsPromise = null;
 
 let wordGuessConfig = null;
 let wordGuessDictionaryData = null;
@@ -4554,6 +4557,8 @@ const wordText = document.getElementById("wordText");
 const wordCard = document.getElementById("wordCard");
 const wordCardMotion = document.getElementById("wordCardMotion");
 const wordCategoryBadge = document.getElementById("wordCategoryBadge");
+const kidsWordIllustration = document.getElementById("kidsWordIllustration");
+const kidsWordIllustrationImage = document.getElementById("kidsWordIllustrationImage");
 const wordModeHint = document.getElementById("wordModeHint");
 const swipeHint = document.getElementById("swipeHint");
 const singleCardActions = document.getElementById("singleCardActions");
@@ -6212,6 +6217,26 @@ async function loadKidsDictionary() {
   catch (error) { kidsDictionaryPromise = null; throw error; }
 }
 
+async function loadKidsIllustrations() {
+  if (kidsIllustrationsData) return kidsIllustrationsData;
+  if (!kidsIllustrationsPromise) {
+    kidsIllustrationsPromise = fetch(getRevisionedAssetUrl(KIDS_ILLUSTRATIONS_FILE))
+      .then(function (response) { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
+      .then(function (data) {
+        kidsIllustrationsData = data && data.words ? data : { words: {} };
+        kidsIllustrationsPromise = null;
+        return kidsIllustrationsData;
+      })
+      .catch(function (error) {
+        console.warn("Kids illustration manifest unavailable", error);
+        kidsIllustrationsData = { words: {} };
+        kidsIllustrationsPromise = null;
+        return kidsIllustrationsData;
+      });
+  }
+  return kidsIllustrationsPromise;
+}
+
 function normalizeKidsPartyCategories(rawCategories) {
   return Array.isArray(rawCategories) ? rawCategories : [];
 }
@@ -6282,6 +6307,7 @@ async function refreshContentForKidsSettings() {
 
 async function setKidsModeEnabled(enabled) {
   kidsModeEnabled = Boolean(enabled);
+  clearKidsWordIllustration();
   persistKidsSettings();
   await refreshContentForKidsSettings();
 }
@@ -6306,7 +6332,8 @@ async function loadModeCategories(modeId = selectedMode) {
   try {
     if (!modeCategoryPromises[cacheKey]) {
       if (useKidsDictionary) {
-        modeCategoryPromises[cacheKey] = loadKidsDictionary().then(function (data) {
+        modeCategoryPromises[cacheKey] = Promise.all([loadKidsDictionary(), loadKidsIllustrations()]).then(function (results) {
+          const data = results[0];
           const gameKey = mode.id === "explain" ? "alias" : "charades";
           return normalizeKidsPartyCategories(data.games[gameKey] && data.games[gameKey].categories);
         });
@@ -14632,6 +14659,12 @@ function renderGameSummary() {
   renderThemesPopover();
 }
 
+function getKidsCardBadgeLabel(minAge) {
+  const age = Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, Number(minAge) || KIDS_MIN_AGE));
+  const prefix = selectedWordGuessLanguage === "ru" ? "ДЕТСКОЕ" : (selectedWordGuessLanguage === "en" ? "KIDS" : "ДИТЯЧЕ");
+  return `${prefix} · ${age}+`;
+}
+
 function renderWordMeta(entry) {
   if (!wordCategoryBadge) {
     return;
@@ -14655,6 +14688,13 @@ function renderWordMeta(entry) {
   difficultyBadge.className = `word-meta-badge word-meta-difficulty word-meta-difficulty-${difficulty}`;
   difficultyBadge.textContent = (entry.difficultyName || getDifficultyName(difficulty)).toUpperCase();
   leftGroup.appendChild(difficultyBadge);
+
+  if (kidsModeEnabled) {
+    const kidsBadge = document.createElement("span");
+    kidsBadge.className = "word-meta-badge word-meta-kids";
+    kidsBadge.textContent = getKidsCardBadgeLabel(entry.minAge);
+    leftGroup.appendChild(kidsBadge);
+  }
 
   wordCategoryBadge.appendChild(leftGroup);
   wordCategoryBadge.appendChild(rightGroup);
@@ -15449,6 +15489,44 @@ function showPartyWordEasterEggSticker(value, hostElement) {
   }, isMemorial ? 4300 : 2900);
 }
 
+function clearKidsWordIllustration() {
+  if (!kidsWordIllustration || !kidsWordIllustrationImage) return;
+  kidsWordIllustration.hidden = true;
+  kidsWordIllustration.className = "kids-word-illustration";
+  kidsWordIllustration.style.removeProperty("--kids-illustration-rotate");
+  kidsWordIllustration.style.removeProperty("--kids-illustration-scale");
+  kidsWordIllustrationImage.removeAttribute("src");
+  kidsWordIllustrationImage.alt = "";
+}
+
+function getKidsIllustrationRecord(value) {
+  if (!kidsIllustrationsData || !kidsIllustrationsData.words) return null;
+  const key = normalizePartyEasterWord(value);
+  return key ? kidsIllustrationsData.words[key] || null : null;
+}
+
+function showKidsWordIllustration(entry) {
+  clearKidsWordIllustration();
+  if (!kidsModeEnabled || (selectedMode !== "explain" && selectedMode !== "charades") || !entry) return;
+  if (!kidsWordIllustration || !kidsWordIllustrationImage) return;
+  const record = getKidsIllustrationRecord(entry.word);
+  if (!record || !record.asset) return;
+
+  const anchors = ["left-upper", "right-upper", "left-lower", "right-lower"];
+  const anchor = anchors[Math.floor(Math.random() * anchors.length)] || anchors[0];
+  const rotation = Math.round((Math.random() * 12) - 6);
+  const scale = (0.92 + Math.random() * 0.16).toFixed(3);
+  const base = kidsIllustrationsData.assetsBase || "assets/kids-illustrations/";
+  kidsWordIllustration.className = `kids-word-illustration kids-word-illustration-${anchor}`;
+  kidsWordIllustration.style.setProperty("--kids-illustration-rotate", `${rotation}deg`);
+  kidsWordIllustration.style.setProperty("--kids-illustration-scale", scale);
+  kidsWordIllustration.dataset.concept = record.concept || "";
+  kidsWordIllustrationImage.onerror = function () { clearKidsWordIllustration(); };
+  kidsWordIllustrationImage.src = getRevisionedAssetUrl(`${base}${record.asset}`);
+  kidsWordIllustrationImage.alt = "";
+  kidsWordIllustration.hidden = false;
+}
+
 function countPartyWordLength(value) {
   return Array.from(String(value || "").replace(/\s+/g, "").trim()).length;
 }
@@ -15601,6 +15679,7 @@ function showNextWord() {
   currentWordShownAtMs = Date.now();
   wordText.textContent = currentWord;
   showPartyWordEasterEggSticker(currentWord);
+  showKidsWordIllustration(nextEntry);
   applyRandomWordCardShape();
   updateWordCardMotionWidth();
   window.requestAnimationFrame(updateWordCardMotionWidth);

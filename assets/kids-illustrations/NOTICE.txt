@@ -1,0 +1,5 @@
+Movohray kids illustration starter pack
+
+These PNG pictograms are rasterized from Noto Color Emoji glyphs installed in the build environment.
+Noto Emoji is distributed under the Apache License 2.0 by Google.
+The font file itself is not included in this package.
