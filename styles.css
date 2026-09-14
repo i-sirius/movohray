@@ -17349,21 +17349,26 @@ body[data-theme="dark"] .game-hud-timer.is-alias-critical {
   -webkit-filter: drop-shadow(0 19px 24px rgba(54, 49, 94, 0.14));
 }
 
-/* c6: static guidance inside the existing gesture area, below the word token. */
+/* c6/c9 polish: onboarding hint gets its own reserved row between the card and action buttons. */
+#gameScreen .word-card.has-swipe-learning {
+  margin-bottom: 96px;
+}
 #gameScreen .swipe-hint.is-learning {
-  top: calc(50% + 140px);
-  bottom: auto;
+  top: auto;
+  bottom: -76px;
   left: 50%;
   right: auto;
   width: max-content;
   max-width: calc(100% - 24px);
   transform: translateX(-50%);
-  padding: 10px 18px;
+  padding: 9px 16px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, .72);
+  background: rgba(255, 255, 255, .78);
   color: #343052;
-  font-size: 18px;
-  line-height: 1.5;
+  border: 1px solid rgba(111, 106, 168, .14);
+  box-shadow: 0 5px 14px rgba(54, 49, 94, .08);
+  font-size: 16px;
+  line-height: 1.35;
   font-weight: 700;
   text-align: left;
   white-space: pre-line;
@@ -17372,28 +17377,31 @@ body[data-theme="dark"] .game-hud-timer.is-alias-critical {
   cursor: default;
 }
 body[data-theme="dark"] #gameScreen .swipe-hint.is-learning {
-  background: rgba(40, 43, 65, .9);
+  background: rgba(40, 43, 65, .94);
   color: #f5f2ff;
+  border-color: rgba(220, 225, 255, .12);
 }
-@media (max-height: 700px), (min-width: 600px) {
+@media (max-width: 599px) {
+  #gameScreen .word-card.has-swipe-learning {
+    margin-bottom: 88px;
+  }
   #gameScreen .swipe-hint.is-learning {
-    top: auto;
-    bottom: 12px;
-    padding: 4px 10px;
-    font-size: 16px;
+    bottom: -70px;
+    max-width: calc(100% - 18px);
+    padding: 8px 12px;
+    font-size: 14px;
     line-height: 1.3;
   }
 }
-@media (min-width: 600px) and (min-height: 521px) {
-  body[data-mode="explain"] #gameScreen .word-card.has-swipe-learning .word-card-motion {
-    bottom: 90px;
+@media (max-height: 520px) and (orientation: landscape) {
+  #gameScreen .word-card.has-swipe-learning {
+    margin-bottom: 62px;
   }
-  #gameScreen .swipe-hint.is-learning { font-size: 18px; }
-}
-@media (max-height: 520px) {
   #gameScreen .swipe-hint.is-learning {
-    font-size: 12px;
-    padding: 2px 6px;
+    bottom: -50px;
+    padding: 4px 9px;
+    font-size: 11px;
+    line-height: 1.2;
     white-space: normal;
     text-align: center;
   }
@@ -17489,7 +17497,7 @@ body[data-theme="dark"] .word-meta-kids {
   --kids-illustration-scale: 1;
   position: absolute;
   z-index: 1;
-  width: clamp(72px, 16vw, 118px);
+  width: clamp(92px, 20vw, 138px);
   aspect-ratio: 1;
   pointer-events: none;
   user-select: none;
@@ -17517,19 +17525,257 @@ body[data-theme="dark"] .word-meta-kids {
 
 @media (max-width: 599px) {
   #gameScreen .kids-word-illustration {
-    width: clamp(66px, 18vw, 88px);
+    width: clamp(92px, 27vw, 126px);
   }
   #gameScreen .kids-word-illustration-left-upper,
-  #gameScreen .kids-word-illustration-left-lower { left: -14%; }
+  #gameScreen .kids-word-illustration-left-lower { left: -18%; }
   #gameScreen .kids-word-illustration-right-upper,
-  #gameScreen .kids-word-illustration-right-lower { right: -14%; }
+  #gameScreen .kids-word-illustration-right-lower { right: -18%; }
   #gameScreen .word-meta-kids { font-size: 9px; padding-left: 6px; padding-right: 6px; }
 }
 
 @media (max-height: 700px) and (orientation: landscape) {
-  #gameScreen .kids-word-illustration { width: clamp(56px, 10vw, 76px); }
+  #gameScreen .kids-word-illustration { width: clamp(70px, 12vw, 92px); }
   #gameScreen .kids-word-illustration-left-upper,
   #gameScreen .kids-word-illustration-right-upper { top: 38%; }
   #gameScreen .kids-word-illustration-left-lower,
   #gameScreen .kids-word-illustration-right-lower { top: 62%; }
+}
+
+
+/* c9: Kids mode controls available directly in game setup. */
+.kids-setup-panel {
+  border: 1px solid rgba(95, 111, 131, 0.18);
+  background: rgba(255, 255, 255, 0.5);
+}
+body[data-theme="dark"] .kids-setup-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.kids-setup-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.kids-setup-heading h2 { margin: 0; }
+.kids-setup-heading p { margin: 5px 0 0; font-size: 0.88rem; line-height: 1.35; opacity: 0.72; }
+.kids-setup-switch { position: relative; flex: 0 0 auto; width: 50px; height: 30px; cursor: pointer; }
+.kids-setup-switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.kids-setup-switch span {
+  position: absolute; inset: 0; border-radius: 999px; background: rgba(95, 111, 131, 0.28);
+  transition: background 0.18s ease;
+}
+.kids-setup-switch span::after {
+  content: ""; position: absolute; width: 24px; height: 24px; left: 3px; top: 3px; border-radius: 50%;
+  background: #fff; box-shadow: 0 2px 7px rgba(0,0,0,0.16); transition: transform 0.18s ease;
+}
+.kids-setup-switch input:checked + span { background: var(--accent, #6757d9); }
+.kids-setup-switch input:checked + span::after { transform: translateX(20px); }
+.kids-setup-switch input:focus-visible + span { outline: 3px solid rgba(103, 87, 217, 0.28); outline-offset: 2px; }
+.kids-setup-switch input:disabled + span { opacity: 0.55; cursor: default; }
+.kids-setup-age-row {
+  margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  font-weight: 700;
+}
+.kids-setup-age-row[hidden] { display: none !important; }
+.kids-setup-age-row select {
+  min-width: 112px; border: 1px solid rgba(95, 111, 131, 0.24); border-radius: 12px; padding: 8px 30px 8px 10px;
+  background: var(--card-bg, #fff); color: inherit; font: inherit;
+}
+.slovesnyi-kids-panel { margin: 2px 0 4px; }
+@media (max-width: 430px) {
+  .kids-setup-heading { align-items: flex-start; }
+  .kids-setup-panel { padding: 14px; }
+}
+
+/* c9 UX polish 2: compact Kids flip, aligned setup actions, safe learning hint and illustration zone. */
+#settingsScreen .settings-sticky-panel {
+  box-sizing: border-box;
+}
+
+.kids-setup-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 6px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body[data-theme="dark"] .kids-setup-panel {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.kids-setup-heading.kids-setup-flip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  min-height: 34px;
+}
+.kids-setup-mode-label {
+  font-size: 13px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.kids-setup-mode-kids {
+  color: var(--color-text);
+}
+.kids-setup-switch {
+  width: 42px;
+  height: 24px;
+}
+.kids-setup-switch span::after {
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+}
+.kids-setup-switch input:checked + span::after {
+  transform: translateX(18px);
+}
+.kids-setup-age-row,
+.kids-illustrations-row {
+  margin-top: 0;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 7px;
+  padding: 3px 8px;
+  border: 1px solid rgba(95, 111, 131, 0.16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.44);
+  font-size: 12px;
+  font-weight: 800;
+  box-sizing: border-box;
+}
+body[data-theme="dark"] .kids-setup-age-row,
+body[data-theme="dark"] .kids-illustrations-row {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+.kids-illustrations-row[hidden],
+.kids-setup-age-row[hidden] {
+  display: none !important;
+}
+.kids-setup-age-row select {
+  min-width: 92px;
+  height: 28px;
+  padding: 3px 26px 3px 8px;
+  border-radius: 9px;
+  font-size: 12px;
+}
+.kids-setup-switch-small {
+  width: 38px;
+  height: 22px;
+}
+.kids-setup-switch-small span::after {
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  top: 3px;
+}
+.kids-setup-switch-small input:checked + span::after {
+  transform: translateX(16px);
+}
+.kids-difficulty-note {
+  flex: 1 1 100%;
+  margin: 0 !important;
+  padding: 0 2px;
+  font-size: 11px !important;
+  line-height: 1.25;
+  opacity: 0.62;
+}
+.slovesnyi-kids-panel {
+  margin: 0 0 4px;
+}
+
+#gameScreen .word-card.has-swipe-learning {
+  margin-bottom: 2px !important;
+}
+#gameScreen .swipe-hint.is-learning {
+  display: none !important;
+}
+#gameScreen .swipe-learning-row {
+  grid-column: 1 / -1;
+  position: static;
+  min-height: 0;
+  margin: 0 0 2px;
+  padding: 7px 12px;
+  border: 1px solid rgba(111, 106, 168, .14);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, .78);
+  color: #343052;
+  box-shadow: 0 4px 12px rgba(54, 49, 94, .07);
+  font-size: 14px;
+  line-height: 1.25;
+  font-weight: 800;
+  text-align: center;
+  white-space: pre-line;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+#gameScreen .swipe-learning-row[hidden] {
+  display: none !important;
+}
+body[data-theme="dark"] #gameScreen .swipe-learning-row {
+  background: rgba(40, 43, 65, .94);
+  border-color: rgba(220, 225, 255, .12);
+  color: #f5f2ff;
+}
+
+#gameScreen .kids-word-illustration {
+  width: clamp(110px, 15vw, 154px);
+  top: var(--kids-illustration-y, 52%);
+}
+#gameScreen .kids-word-illustration-left-middle {
+  left: -10%;
+}
+#gameScreen .kids-word-illustration-right-middle {
+  right: -10%;
+}
+
+@media (max-width: 599px) {
+  .kids-setup-panel {
+    gap: 7px 8px;
+  }
+  .kids-setup-heading.kids-setup-flip {
+    flex: 1 1 100%;
+  }
+  .kids-setup-age-row,
+  .kids-illustrations-row {
+    flex: 0 1 auto;
+  }
+  .kids-difficulty-note {
+    font-size: 10px !important;
+  }
+  #gameScreen .kids-word-illustration {
+    width: clamp(108px, 31vw, 148px);
+  }
+  #gameScreen .kids-word-illustration-left-middle { left: -19%; }
+  #gameScreen .kids-word-illustration-right-middle { right: -19%; }
+  #gameScreen .swipe-learning-row {
+    padding: 6px 9px;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  #gameScreen .kids-word-illustration {
+    width: clamp(82px, 13vw, 108px);
+  }
+  #gameScreen .kids-word-illustration-left-middle { left: -8%; }
+  #gameScreen .kids-word-illustration-right-middle { right: -8%; }
+  #gameScreen .swipe-learning-row {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }

@@ -13,15 +13,15 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260913-c8" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260914-c9" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260913-c8" />
-  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260913-c8" />
-  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260913-c8" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260914-c9" />
+  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260914-c9" />
+  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260914-c9" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -90,7 +90,7 @@
             </select>
           </span>
         </label>
-        <p id="kidsDifficultyNote" class="kids-difficulty-note" hidden>Складність змінюється відповідно до віку.</p>
+        <p id="kidsDifficultyNote" class="kids-difficulty-note" hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
       </section>
 
       <section class="app-settings-section">
@@ -196,7 +196,7 @@
         </div>
       </section>
       <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c7</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c9</p>
     </div>
   </div>
 
@@ -289,7 +289,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c7</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c9</p>
         </div>
       </div>
     </section>
@@ -319,6 +319,32 @@
               </div>
               <p id="settingsModeDescription" class="mode-description">Пояснюй слово, не називаючи його.</p>
             </div>
+
+            <section class="settings-group settings-group-wide kids-setup-panel">
+              <div class="kids-setup-heading kids-setup-flip">
+                <span class="kids-setup-mode-label" data-kids-mode-regular>Звичайний</span>
+                <label class="kids-setup-switch">
+                  <input type="checkbox" data-kids-setup-toggle aria-label="Дитячий режим" />
+                  <span aria-hidden="true"></span>
+                </label>
+                <strong class="kids-setup-mode-label kids-setup-mode-kids" data-kids-setup-title>Дитячий режим</strong>
+              </div>
+              <label class="kids-setup-age-row" data-kids-setup-age-row hidden>
+                <span data-kids-setup-age-label>Вік дитини</span>
+                <select data-kids-setup-age aria-label="Вік дитини">
+                  <option value="5">5</option><option value="6">6</option><option value="7" selected>7</option>
+                  <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                </select>
+              </label>
+              <div class="kids-illustrations-row" data-kids-illustrations-row hidden>
+                <span data-kids-illustrations-label>Картинки</span>
+                <label class="kids-setup-switch kids-setup-switch-small">
+                  <input type="checkbox" data-kids-illustrations-toggle aria-label="Показувати картинки" checked />
+                  <span aria-hidden="true"></span>
+                </label>
+              </div>
+              <p class="kids-difficulty-note" data-kids-setup-note hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
+            </section>
 
             <div class="settings-grid">
               <section id="charadesFormatSection" class="charades-only settings-group" hidden>
@@ -428,6 +454,25 @@
           </div>
           <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
           <p id="wordGuessLanguageBadge" class="word-guess-language-badge" hidden></p>
+
+          <section class="settings-group settings-group-wide kids-setup-panel">
+              <div class="kids-setup-heading kids-setup-flip">
+                <span class="kids-setup-mode-label" data-kids-mode-regular>Звичайний</span>
+                <label class="kids-setup-switch">
+                  <input type="checkbox" data-kids-setup-toggle aria-label="Дитячий режим" />
+                  <span aria-hidden="true"></span>
+                </label>
+                <strong class="kids-setup-mode-label kids-setup-mode-kids" data-kids-setup-title>Дитячий режим</strong>
+              </div>
+              <label class="kids-setup-age-row" data-kids-setup-age-row hidden>
+                <span data-kids-setup-age-label>Вік дитини</span>
+                <select data-kids-setup-age aria-label="Вік дитини">
+                  <option value="5">5</option><option value="6">6</option><option value="7" selected>7</option>
+                  <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                </select>
+              </label>
+              <p class="kids-difficulty-note" data-kids-setup-note hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
+          </section>
 
           <div class="word-guess-summary word-guess-mode-picker" aria-label="Налаштування режиму Вгадай слово">
             <details class="word-guess-select">
@@ -590,6 +635,25 @@
             </div>
             <p class="mode-description">Один гравець не бачить свою роль, а інші відповідають на його запитання: так або ні.</p>
           </div>
+
+          <section class="settings-group settings-group-wide kids-setup-panel">
+              <div class="kids-setup-heading kids-setup-flip">
+                <span class="kids-setup-mode-label" data-kids-mode-regular>Звичайний</span>
+                <label class="kids-setup-switch">
+                  <input type="checkbox" data-kids-setup-toggle aria-label="Дитячий режим" />
+                  <span aria-hidden="true"></span>
+                </label>
+                <strong class="kids-setup-mode-label kids-setup-mode-kids" data-kids-setup-title>Дитячий режим</strong>
+              </div>
+              <label class="kids-setup-age-row" data-kids-setup-age-row hidden>
+                <span data-kids-setup-age-label>Вік дитини</span>
+                <select data-kids-setup-age aria-label="Вік дитини">
+                  <option value="5">5</option><option value="6">6</option><option value="7" selected>7</option>
+                  <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                </select>
+              </label>
+              <p class="kids-difficulty-note" data-kids-setup-note hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
+          </section>
 
           <div class="settings-grid whoami-settings-grid">
             <section class="settings-group settings-group-wide">
@@ -960,6 +1024,7 @@
           <p id="roundTimeMessage" class="message round-time-message" role="status" aria-live="polite"></p>
 
           <div class="game-buttons timed-game-ui">
+            <div id="swipeLearningHint" class="swipe-learning-row" hidden></div>
             <button id="skipBtn" class="skip-btn">Пропустити</button>
             <button id="correctBtn" class="correct-btn">Вгадано</button>
           </div>
@@ -1074,12 +1139,12 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="svitlohray-engine.js?rev=0.6.7-20260913-c8"></script>
-  <script src="svitlohray.js?rev=0.6.7-20260913-c8"></script>
-  <script src="slovesnyi-engine.js?rev=0.6.7-20260913-c8"></script>
-  <script src="slovesnyi.js?rev=0.6.7-20260913-c8"></script>
-  <script src="wordguess-session.js?rev=0.6.7-20260913-c8"></script>
-  <script src="new-mode-achievements.js?rev=0.6.7-20260913-c8"></script>
-  <script src="app.js?rev=0.6.7-20260913-c8"></script>
+  <script src="svitlohray-engine.js?rev=0.6.7-20260914-c9"></script>
+  <script src="svitlohray.js?rev=0.6.7-20260914-c9"></script>
+  <script src="slovesnyi-engine.js?rev=0.6.7-20260914-c9"></script>
+  <script src="slovesnyi.js?rev=0.6.7-20260914-c9"></script>
+  <script src="wordguess-session.js?rev=0.6.7-20260914-c9"></script>
+  <script src="new-mode-achievements.js?rev=0.6.7-20260914-c9"></script>
+  <script src="app.js?rev=0.6.7-20260914-c9"></script>
 </body>
 </html>

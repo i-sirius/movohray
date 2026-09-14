@@ -162,6 +162,42 @@ var Slovesnyi = (function () {
     input.addEventListener("change", function () { onChange(input.value); });
     return input;
   }
+  function renderKidsSetup(parent) {
+    var current = kidsSettings();
+    var panel = el("div", "kids-setup-panel slovesnyi-kids-panel", undefined, parent);
+    var headingRow = el("div", "kids-setup-heading kids-setup-flip", undefined, panel);
+    el("span", "kids-setup-mode-label", typeof getWordGuessText === "function" ? getWordGuessText("kidsModeRegular") : "Regular", headingRow);
+    var switchLabel = el("label", "kids-setup-switch", undefined, headingRow);
+    var toggle = el("input", "", undefined, switchLabel); toggle.type = "checkbox"; toggle.checked = current.enabled;
+    toggle.setAttribute("aria-label", typeof getWordGuessText === "function" ? getWordGuessText("kidsModeTitle") : "Kids mode");
+    el("span", "", undefined, switchLabel).setAttribute("aria-hidden", "true");
+    el("strong", "kids-setup-mode-label kids-setup-mode-kids", typeof getWordGuessText === "function" ? getWordGuessText("kidsModeTitle") : "Kids mode", headingRow);
+    toggle.addEventListener("change", function () {
+      if (typeof setKidsModeEnabled !== "function") return;
+      toggle.disabled = true;
+      setKidsModeEnabled(toggle.checked).then(function () { topics = null; renderSetup(); })
+        .catch(function () { toggle.disabled = false; });
+    });
+    if (current.enabled) {
+      var ageRow = el("label", "kids-setup-age-row", undefined, panel);
+      el("span", "", typeof getWordGuessText === "function" ? getWordGuessText("kidsAgeLabel") : "Child's age", ageRow);
+      var ageSelect = el("select", "", undefined, ageRow);
+      for (var age = 5; age <= 10; age += 1) {
+        var option = el("option", "", String(age) + " " + (typeof getWordGuessText === "function" ? getWordGuessText("kidsAgeSuffix") : "years"), ageSelect);
+        option.value = String(age);
+      }
+      ageSelect.value = String(current.age);
+      ageSelect.addEventListener("change", function () {
+        if (typeof setKidsAge !== "function") return;
+        ageSelect.disabled = true;
+        setKidsAge(ageSelect.value).then(function () { topics = null; renderSetup(); })
+          .catch(function () { ageSelect.disabled = false; });
+      });
+      var note = el("p", "kids-difficulty-note", typeof getWordGuessText === "function" ? getWordGuessText("kidsDifficultyNote") : "Age and difficulty are configured separately.", panel);
+      note.hidden = false;
+    }
+  }
+
   function renderSetup() {
     if (topicsProfileKey !== profileKey()) topics = null;
     if (!topics) { load(); return; }
@@ -171,6 +207,7 @@ var Slovesnyi = (function () {
     el("p", "slovesnyi-copy", text("rules"), box);
     var form = el("form", "slovesnyi-form", undefined, box);
     form.addEventListener("submit", function (event) { event.preventDefault(); start(); });
+    renderKidsSetup(form);
     select(form, "language", ["uk", "ru", "en"], lang(), function (value) { language = value; renderSetup(); }, ["Українська", "Русский", "English"]);
     select(form, "players", [2, 3, 4, 5, 6, 7, 8], draft.names.length, function (value) {
       var n = Number(value);
@@ -193,34 +230,33 @@ var Slovesnyi = (function () {
     });
     var levels = el("fieldset", "slovesnyi-levels", undefined, form);
     el("legend", "", text("levels"), levels);
-    var childMode = kidsSettings().enabled;
     E.defaults.levels.forEach(function (level) {
       var label = el("label", "slovesnyi-level", undefined, levels);
       var checkbox = el("input", "", undefined, label); checkbox.type = "checkbox"; checkbox.value = level;
-      checkbox.checked = childMode || draft.settings.levels.indexOf(level) >= 0;
-      checkbox.disabled = childMode;
+      checkbox.checked = draft.settings.levels.indexOf(level) >= 0;
       checkbox.addEventListener("change", function () {
         draft.settings.levels = Array.from(levels.querySelectorAll("input:checked")).map(function (input) { return input.value; });
       });
       el("span", "", text(level), label);
     });
-    if (childMode) {
-      var kidsNote = el("p", "slovesnyi-copy", undefined, form);
-      kidsNote.textContent = typeof getWordGuessText === "function" ? getWordGuessText("kidsDifficultyNote") : "Difficulty follows the selected child age.";
-    }
     var message = el("p", "message", "", form); message.id = "slovesnyiSetupMessage"; message.setAttribute("role", "alert");
     var submit = el("button", "primary-btn", text("start"), form); submit.type = "submit"; submit.id = "slovesnyiStart";
   }
   function start() {
     var names = draft.names.map(function (name, i) { return name.trim() || text("player") + " " + (i + 1); });
     var unique = names.map(function (name) { return name.toLocaleLowerCase(); });
-    var childMode = kidsSettings().enabled;
-    if ((!childMode && !draft.settings.levels.length) || unique.some(function (name, i) { return unique.indexOf(name) !== i; })) {
+    if (!draft.settings.levels.length || unique.some(function (name, i) { return unique.indexOf(name) !== i; })) {
       document.getElementById("slovesnyiSetupMessage").textContent = text("invalid"); return;
+    }
+    var hasAvailableLevel = topics.some(function (topic) { return draft.settings.levels.indexOf(topic.level) >= 0; });
+    if (!hasAvailableLevel) {
+      document.getElementById("slovesnyiSetupMessage").textContent = typeof getWordGuessText === "function"
+        ? getWordGuessText("kidsDifficultyNote")
+        : "No topics are available for this age and difficulty.";
+      return;
     }
     language = lang();
     var gameSettings = E.snapshot(draft.settings);
-    if (childMode) gameSettings.levels = E.defaults.levels.slice();
     state = E.create(names, gameSettings, exposure, Date.now());
     state.settings.language = language;
     manualPause = false; next();

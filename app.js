@@ -10,11 +10,11 @@ let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
-const DATA_BUILD = "2026-09-13";
-const DATA_CANDIDATE = 8;
+const DATA_BUILD = "2026-09-14";
+const DATA_CANDIDATE = 9;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.7-b20260913-c8";
+const DATA_CACHE = "movohray-cache-v0.6.7-b20260914-c9";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -24,6 +24,7 @@ const REQUIRED_UPDATE_RELOAD_GUARD_KEY = "movohray-required-update-reload-v1";
 const SERVICE_WORKER_REVISION_QUERY_TIMEOUT_MS = 2500;
 const KIDS_MODE_STORAGE_KEY = "movohray-kids-mode-v1";
 const KIDS_AGE_STORAGE_KEY = "movohray-kids-age-v1";
+const KIDS_ILLUSTRATIONS_STORAGE_KEY = "movohray-kids-illustrations-v1";
 const KIDS_DICTIONARY_FILE = "kids-dictionary.json";
 const KIDS_ILLUSTRATIONS_FILE = "kids-illustrations.json";
 const KIDS_DEFAULT_AGE = 7;
@@ -223,7 +224,7 @@ const WORD_GUESS_HINT_NUDGE_VISIBLE_MS = 6500;
 const WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS = 9000;
 const WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS = 650;
 const WORD_GUESS_FUTURE_FEATURES = Object.freeze({ timedModeUi: false, multiplayerUi: false, developerFeedbackPlaceholder: true });
-const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
+const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, KIDS_ILLUSTRATIONS_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
 const WORD_GUESS_ACHIEVEMENTS = [
   { id: "first-win", reward: "🏆", titleKey: "achievementFirstWinTitle", descriptionKey: "achievementFirstWinDescription", category: "milestones" },
   { id: "first-try", reward: "🎯", titleKey: "achievementFirstTryTitle", descriptionKey: "achievementFirstTryDescription", category: "skill" },
@@ -796,7 +797,7 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Хто я?",
     achievementGameSvitlohray: "Світлограй",
     achievementGameSlovesnyi: "Словесний",
-    kidsModeTitle: "Дитячий режим", kidsModeDescription: "Лише слова й теми, що підходять дітям.", kidsAgeLabel: "Вік дитини", kidsAgeSuffix: "років", kidsDifficultyNote: "Складність підбирається за віком.",
+    kidsModeTitle: "Дитячий режим", kidsModeRegular: "Звичайний", kidsIllustrationsLabel: "Картинки", kidsModeDescription: "Лише слова й теми, що підходять дітям.", kidsAgeLabel: "Вік дитини", kidsAgeSuffix: "років", kidsDifficultyNote: "Вік обмежує дитячий словник, а складність обирається окремо. Для молодшого віку деякі рівні можуть не мати слів.",
     updateEyebrow: "ОНОВЛЕННЯ", updateTitle: "Оновлюємо Мовограй", updateText: "Є нова версія. Це займе кілька секунд.", updateFinishText: "Нові файли вже завантажені. Завершуємо оновлення перед грою.", updateButton: "Оновити гру", updatePending: "Оновлюємо...", updateRetry: "Спробувати ще раз", updateNote: "Після оновлення сторінка перезавантажиться автоматично.", updateFailed: "Не вдалося завершити оновлення. Перевір з’єднання та спробуй ще раз.", updateRecoveryBrowser: "Не вдалося завершити оновлення. Закрий інші вкладки Мовограю та спробуй ще раз.", updateRecoveryPwa: "Не вдалося завершити оновлення. Закрий Мовограй, відкрий його знову або спробуй ще раз.",
     achievementAliasGooseAnyaTitle: "Ань-ань-ань? АНЯ?", achievementAliasGooseAnyaDescription: "П’ять гусячих появ — і це вже не випадковість.", achievementAliasGooseAnyaHint: "Дослухайся до гусей.",
     achievementSvitlohrayFirstWinTitle: "Хай буде світло!",
@@ -1771,7 +1772,7 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Кто я?",
     achievementGameSvitlohray: "Цветоигра",
     achievementGameSlovesnyi: "Словесный",
-    kidsModeTitle: "Детский режим", kidsModeDescription: "Только слова и темы, подходящие детям.", kidsAgeLabel: "Возраст ребёнка", kidsAgeSuffix: "лет", kidsDifficultyNote: "Сложность подбирается по возрасту.",
+    kidsModeTitle: "Детский режим", kidsModeRegular: "Обычный", kidsIllustrationsLabel: "Картинки", kidsModeDescription: "Только слова и темы, подходящие детям.", kidsAgeLabel: "Возраст ребёнка", kidsAgeSuffix: "лет", kidsDifficultyNote: "Возраст ограничивает детский словарь, а сложность выбирается отдельно. Для младшего возраста некоторые уровни могут быть без слов.",
     updateEyebrow: "ОБНОВЛЕНИЕ", updateTitle: "Обновляем Мовограй", updateText: "Доступна новая версия. Это займёт несколько секунд.", updateFinishText: "Новые файлы уже загружены. Завершаем обновление перед игрой.", updateButton: "Обновить игру", updatePending: "Обновляем...", updateRetry: "Попробовать ещё раз", updateNote: "После обновления страница перезагрузится автоматически.", updateFailed: "Не удалось завершить обновление. Проверь соединение и попробуй ещё раз.", updateRecoveryBrowser: "Не удалось завершить обновление. Закрой другие вкладки Мовограю и попробуй ещё раз.", updateRecoveryPwa: "Не удалось завершить обновление. Закрой Мовограй, открой его снова или попробуй ещё раз.",
     achievementAliasGooseAnyaTitle: "Ань-ань-ань? АНЯ?", achievementAliasGooseAnyaDescription: "Пять гусиных появлений — и это уже не совпадение.", achievementAliasGooseAnyaHint: "Прислушайся к гусям.",
     achievementSvitlohrayFirstWinTitle: "Да будет свет!",
@@ -2744,7 +2745,7 @@ const WORD_GUESS_TEXT = {
     achievementGameWhoAmI: "Who am I?",
     achievementGameSvitlohray: "Lightplay",
     achievementGameSlovesnyi: "Word Duel",
-    kidsModeTitle: "Kids mode", kidsModeDescription: "Only kid-friendly words and topics.", kidsAgeLabel: "Child's age", kidsAgeSuffix: "years", kidsDifficultyNote: "Difficulty follows the child's age.",
+    kidsModeTitle: "Kids mode", kidsModeRegular: "Regular", kidsIllustrationsLabel: "Pictures", kidsModeDescription: "Only kid-friendly words and topics.", kidsAgeLabel: "Child's age", kidsAgeSuffix: "years", kidsDifficultyNote: "Age limits the kids dictionary, while difficulty is chosen separately. Some levels may have no entries for younger ages.",
     updateEyebrow: "UPDATE", updateTitle: "Updating Movohray", updateText: "A new version is available. This will take a few seconds.", updateFinishText: "The new files are already downloaded. Finishing the update before play.", updateButton: "Update game", updatePending: "Updating...", updateRetry: "Try again", updateNote: "The page will reload automatically after the update.", updateFailed: "Could not finish the update. Check your connection and try again.", updateRecoveryBrowser: "Could not finish the update. Close other Movohray tabs and try again.", updateRecoveryPwa: "Could not finish the update. Close Movohray, open it again, or try again.",
     achievementAliasGooseAnyaTitle: "An-an-an? ANYA?", achievementAliasGooseAnyaDescription: "Five goose encounters later, you can hear it too.", achievementAliasGooseAnyaHint: "Listen closely to the geese.",
     achievementSvitlohrayFirstWinTitle: "Let There Be Light!",
@@ -4207,6 +4208,7 @@ let requiredUpdateAttemptGeneration = 0;
 let cancelRequiredUpdateActivation = null;
 let kidsModeEnabled = readKidsModePreference();
 let kidsAge = readKidsAgePreference();
+let kidsIllustrationsEnabled = readKidsIllustrationsPreference();
 let kidsDictionaryData = null;
 let kidsDictionaryPromise = null;
 let kidsIllustrationsData = null;
@@ -4438,6 +4440,17 @@ const kidsAgeRow = document.getElementById("kidsAgeRow");
 const kidsAgeLabel = document.getElementById("kidsAgeLabel");
 const kidsAgeSelect = document.getElementById("kidsAgeSelect");
 const kidsDifficultyNote = document.getElementById("kidsDifficultyNote");
+const kidsSetupToggles = Array.from(document.querySelectorAll("[data-kids-setup-toggle]"));
+const kidsSetupAgeRows = Array.from(document.querySelectorAll("[data-kids-setup-age-row]"));
+const kidsSetupAgeSelects = Array.from(document.querySelectorAll("[data-kids-setup-age]"));
+const kidsSetupTitles = Array.from(document.querySelectorAll("[data-kids-setup-title]"));
+const kidsSetupDescriptions = Array.from(document.querySelectorAll("[data-kids-setup-description]"));
+const kidsSetupAgeLabels = Array.from(document.querySelectorAll("[data-kids-setup-age-label]"));
+const kidsSetupRegularLabels = Array.from(document.querySelectorAll("[data-kids-mode-regular]"));
+const kidsIllustrationRows = Array.from(document.querySelectorAll("[data-kids-illustrations-row]"));
+const kidsIllustrationToggles = Array.from(document.querySelectorAll("[data-kids-illustrations-toggle]"));
+const kidsIllustrationLabels = Array.from(document.querySelectorAll("[data-kids-illustrations-label]"));
+const kidsSetupNotes = Array.from(document.querySelectorAll("[data-kids-setup-note]"));
 const wordCardUseAllShapesToggle = document.getElementById("wordCardUseAllShapesToggle");
 const wordCardRandomColorsToggle = document.getElementById("wordCardRandomColorsToggle");
 const wordCardShapeCheckboxes = Array.from(document.querySelectorAll("[data-word-card-shape]"));
@@ -4561,6 +4574,7 @@ const kidsWordIllustration = document.getElementById("kidsWordIllustration");
 const kidsWordIllustrationImage = document.getElementById("kidsWordIllustrationImage");
 const wordModeHint = document.getElementById("wordModeHint");
 const swipeHint = document.getElementById("swipeHint");
+const swipeLearningHint = document.getElementById("swipeLearningHint");
 const singleCardActions = document.getElementById("singleCardActions");
 const singleNextBtn = document.getElementById("singleNextBtn");
 const singleSettingsBtn = document.getElementById("singleSettingsBtn");
@@ -6172,15 +6186,21 @@ function readKidsAgePreference() {
   } catch (error) { return KIDS_DEFAULT_AGE; }
 }
 
+function readKidsIllustrationsPreference() {
+  try { return localStorage.getItem(KIDS_ILLUSTRATIONS_STORAGE_KEY) !== "false"; }
+  catch (error) { return true; }
+}
+
 function persistKidsSettings() {
   try {
     localStorage.setItem(KIDS_MODE_STORAGE_KEY, kidsModeEnabled ? "true" : "false");
     localStorage.setItem(KIDS_AGE_STORAGE_KEY, String(kidsAge));
+    localStorage.setItem(KIDS_ILLUSTRATIONS_STORAGE_KEY, kidsIllustrationsEnabled ? "true" : "false");
   } catch (error) { /* in-memory fallback */ }
 }
 
 function isKidsModeEnabled() { return Boolean(kidsModeEnabled); }
-function getKidsModeSettings() { return { enabled: Boolean(kidsModeEnabled), age: kidsAge }; }
+function getKidsModeSettings() { return { enabled: Boolean(kidsModeEnabled), age: kidsAge, illustrations: Boolean(kidsIllustrationsEnabled) }; }
 
 function getKidsDifficultyWeights() {
   const table = kidsDictionaryData && kidsDictionaryData.difficultyWeights;
@@ -6194,11 +6214,11 @@ function getKidsDifficultyWeight(difficulty) {
 }
 
 function getEffectivePartyDifficulties() {
-  return kidsModeEnabled ? ["easy", "medium", "hard"] : selectedDifficulties;
+  return selectedDifficulties;
 }
 
 function getEffectiveWhoAmIDifficulties() {
-  return kidsModeEnabled ? ["easy", "medium", "hard"] : whoAmISelectedDifficulties;
+  return whoAmISelectedDifficulties;
 }
 
 async function loadKidsDictionary() {
@@ -6250,6 +6270,7 @@ function isKidsEntryEligible(entry) {
 function initializeKidsSettings() {
   kidsModeEnabled = readKidsModePreference();
   kidsAge = readKidsAgePreference();
+  kidsIllustrationsEnabled = readKidsIllustrationsPreference();
   syncKidsModeUi();
 }
 
@@ -6265,24 +6286,46 @@ function syncKidsModeUi() {
     kidsAgeSelect.value = String(kidsAge);
     kidsAgeSelect.disabled = settingsLocked;
   }
+  kidsSetupToggles.forEach(function (toggle) {
+    toggle.checked = kidsModeEnabled;
+    toggle.disabled = settingsLocked;
+  });
+  kidsSetupAgeRows.forEach(function (row) { row.hidden = !kidsModeEnabled; });
+  kidsSetupAgeSelects.forEach(function (select) {
+    select.value = String(kidsAge);
+    select.disabled = settingsLocked;
+  });
+  kidsIllustrationRows.forEach(function (row) { row.hidden = !kidsModeEnabled; });
+  kidsIllustrationToggles.forEach(function (toggle) {
+    toggle.checked = kidsIllustrationsEnabled;
+    toggle.disabled = settingsLocked || !kidsModeEnabled;
+  });
+  const kidsAgeRangeNote = getKidsAgeRangeNoteText();
+  kidsSetupNotes.forEach(function (note) {
+    note.hidden = !kidsModeEnabled;
+    note.textContent = kidsAgeRangeNote;
+  });
+  if (kidsDifficultyNote) {
+    kidsDifficultyNote.hidden = !kidsModeEnabled;
+    kidsDifficultyNote.textContent = kidsAgeRangeNote;
+  }
   document.body.classList.toggle("kids-mode-active", kidsModeEnabled);
   difficultyButtons.forEach(function (button) {
-    button.disabled = kidsModeEnabled;
-    const active = kidsModeEnabled || selectedDifficulties.indexOf(button.dataset.difficulty) >= 0;
+    const active = selectedDifficulties.indexOf(button.dataset.difficulty) >= 0;
+    button.disabled = settingsLocked;
     button.classList.toggle("selected", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
-    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
-    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
+    button.setAttribute("aria-disabled", settingsLocked ? "true" : "false");
+    button.title = "";
   });
   whoAmIDifficultyButtons.forEach(function (button) {
-    button.disabled = kidsModeEnabled;
-    const active = kidsModeEnabled || whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    const active = whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    button.disabled = settingsLocked;
     button.classList.toggle("selected", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
-    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
-    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
+    button.setAttribute("aria-disabled", settingsLocked ? "true" : "false");
+    button.title = "";
   });
-  if (kidsDifficultyNote) kidsDifficultyNote.hidden = !kidsModeEnabled;
 }
 
 async function refreshContentForKidsSettings() {
@@ -6317,6 +6360,15 @@ async function setKidsAge(value) {
   kidsAge = Number.isFinite(parsed) ? Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, parsed)) : KIDS_DEFAULT_AGE;
   persistKidsSettings();
   await refreshContentForKidsSettings();
+}
+
+function setKidsIllustrationsEnabled(enabled) {
+  kidsIllustrationsEnabled = Boolean(enabled);
+  persistKidsSettings();
+  syncKidsModeUi();
+  if (!kidsIllustrationsEnabled) {
+    clearKidsWordIllustration();
+  }
 }
 
 async function loadModeCategories(modeId = selectedMode) {
@@ -6825,13 +6877,23 @@ function hasLearnedAliasSwipes() {
 }
 
 function renderAliasSwipeHint() {
-  if (!swipeHint || selectedMode !== "explain") return;
+  if (!swipeHint) return;
+  if (selectedMode !== "explain") {
+    wordCard.classList.remove("has-swipe-learning");
+    if (swipeLearningHint) swipeLearningHint.hidden = true;
+    return;
+  }
   const large = !hasLearnedAliasSwipes();
   wordCard.classList.toggle("has-swipe-learning", large);
-  swipeHint.classList.toggle("is-learning", large);
-  swipeHint.textContent = large
-    ? getWordGuessText("aliasSwipeUp") + "\n" + getWordGuessText("aliasSwipeDown")
-    : getWordGuessText("aliasSwipeCompact");
+  swipeHint.classList.remove("is-learning");
+  swipeHint.hidden = large;
+  swipeHint.textContent = getWordGuessText("aliasSwipeCompact");
+  if (swipeLearningHint) {
+    swipeLearningHint.hidden = !large;
+    swipeLearningHint.textContent = large
+      ? getWordGuessText("aliasSwipeUp") + "\n" + getWordGuessText("aliasSwipeDown")
+      : "";
+  }
 }
 
 function persistAliasSwipeLearning() {
@@ -8037,6 +8099,18 @@ function applyWordGuessLanguageUi() {
     kidsAgeSelect.setAttribute("aria-label", text.kidsAgeLabel);
     Array.from(kidsAgeSelect.options).forEach(function (option) { option.textContent = `${option.value} ${text.kidsAgeSuffix}`; });
   }
+  kidsSetupTitles.forEach(function (node) { node.textContent = text.kidsModeTitle; });
+  kidsSetupToggles.forEach(function (toggle) { toggle.setAttribute("aria-label", text.kidsModeTitle); });
+  kidsSetupDescriptions.forEach(function (node) { node.textContent = text.kidsModeDescription; });
+  kidsSetupAgeLabels.forEach(function (node) { node.textContent = text.kidsAgeLabel; });
+  kidsSetupRegularLabels.forEach(function (node) { node.textContent = text.kidsModeRegular; });
+  kidsIllustrationLabels.forEach(function (node) { node.textContent = text.kidsIllustrationsLabel; });
+  kidsIllustrationToggles.forEach(function (toggle) { toggle.setAttribute("aria-label", text.kidsIllustrationsLabel); });
+  kidsSetupNotes.forEach(function (node) { node.textContent = text.kidsDifficultyNote; });
+  kidsSetupAgeSelects.forEach(function (select) {
+    select.setAttribute("aria-label", text.kidsAgeLabel);
+    Array.from(select.options).forEach(function (option) { option.textContent = `${option.value} ${text.kidsAgeSuffix}`; });
+  });
   syncKidsModeUi();
   if (appUpcomingModesEyebrow) appUpcomingModesEyebrow.textContent = text.upcomingEyebrow;
   if (appUpcomingModesTitle) appUpcomingModesTitle.textContent = text.upcomingTitle;
@@ -11160,12 +11234,12 @@ function syncWhoAmIButtons() {
     button.classList.toggle("selected", Number(button.dataset.whoamiPlayers) === whoAmIPlayerCount);
   });
   whoAmIDifficultyButtons.forEach((button) => {
-    const active = kidsModeEnabled || whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
-    button.disabled = kidsModeEnabled;
+    const active = whoAmISelectedDifficulties.indexOf(button.dataset.whoamiDifficulty) >= 0;
+    button.disabled = false;
     button.classList.toggle("selected", active);
     button.setAttribute("aria-pressed", active ? "true" : "false");
-    button.setAttribute("aria-disabled", kidsModeEnabled ? "true" : "false");
-    button.title = kidsModeEnabled ? getWordGuessText("kidsDifficultyNote") : "";
+    button.setAttribute("aria-disabled", "false");
+    button.title = "";
   });
   whoAmIDurationButtons.forEach((button) => {
     button.classList.toggle("selected", Number(button.dataset.whoamiSeconds) === whoAmIDuration);
@@ -11188,7 +11262,7 @@ function updateWhoAmISettingsVisibility() {
 
 function validateWhoAmISettings() {
   const pool = getWhoAmIRolePool();
-  if (!kidsModeEnabled && whoAmISelectedDifficulties.length === 0) {
+  if (whoAmISelectedDifficulties.length === 0) {
     whoAmISettingsMessage.textContent = "Оберіть хоча б один рівень складності.";
     return false;
   }
@@ -11197,7 +11271,9 @@ function validateWhoAmISettings() {
     return false;
   }
   if (pool.length === 0) {
-    whoAmISettingsMessage.textContent = "Для цих категорій немає ролей.";
+    whoAmISettingsMessage.textContent = kidsModeEnabled
+      ? "Для цього віку й вибраної складності немає ролей. Оберіть інший рівень або змініть вік."
+      : "Для цих категорій немає ролей.";
     return false;
   }
   if (whoAmIPartyMode === "turns" && pool.length < whoAmIPlayerCount) {
@@ -13262,6 +13338,21 @@ function setupEvents() {
       setKidsAge(event.currentTarget.value).catch(function (error) { console.warn("Kids age refresh failed", error); });
     });
   }
+  kidsSetupToggles.forEach(function (toggle) {
+    toggle.addEventListener("change", function (event) {
+      setKidsModeEnabled(event.currentTarget.checked).catch(function (error) { console.warn("Kids mode refresh failed", error); });
+    });
+  });
+  kidsSetupAgeSelects.forEach(function (select) {
+    select.addEventListener("change", function (event) {
+      setKidsAge(event.currentTarget.value).catch(function (error) { console.warn("Kids age refresh failed", error); });
+    });
+  });
+  kidsIllustrationToggles.forEach(function (toggle) {
+    toggle.addEventListener("change", function (event) {
+      setKidsIllustrationsEnabled(event.currentTarget.checked);
+    });
+  });
 
   if (appSettingsVersion) {
     appSettingsVersion.addEventListener("click", handleWordGuessLabsVersionTap);
@@ -14237,9 +14328,11 @@ function updateModeLabels() {
   if (swipeHint) {
     swipeHint.classList.remove("is-learning");
     wordCard.classList.remove("has-swipe-learning");
+    swipeHint.hidden = false;
     swipeHint.textContent = isSingleMode
       ? "Свайп вгору або вниз — наступне слово"
       : "Свайп вгору — вгадано, вниз — пропустити";
+    if (swipeLearningHint) swipeLearningHint.hidden = true;
     renderAliasSwipeHint();
   }
 
@@ -14659,10 +14752,34 @@ function renderGameSummary() {
   renderThemesPopover();
 }
 
-function getKidsCardBadgeLabel(minAge) {
-  const age = Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, Number(minAge) || KIDS_MIN_AGE));
+function getKidsSelectedAgeRangeLabel() {
+  const age = Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, Number(kidsAge) || KIDS_DEFAULT_AGE));
+  if (selectedWordGuessLanguage === "en") {
+    return age === KIDS_MIN_AGE ? `${age} y` : `${KIDS_MIN_AGE}–${age} y`;
+  }
+  if (selectedWordGuessLanguage === "ru") {
+    return age === KIDS_MIN_AGE ? `${age} л.` : `${KIDS_MIN_AGE}–${age} л.`;
+  }
+  return age === KIDS_MIN_AGE ? `${age} р.` : `${KIDS_MIN_AGE}–${age} р.`;
+}
+
+function getKidsAgeRangeNoteText() {
+  const age = Math.max(KIDS_MIN_AGE, Math.min(KIDS_MAX_AGE, Number(kidsAge) || KIDS_DEFAULT_AGE));
+  if (selectedWordGuessLanguage === "en") {
+    const range = age === KIDS_MIN_AGE ? `age ${age}` : `ages ${KIDS_MIN_AGE}–${age}`;
+    return `Kids dictionary: ${range}. Difficulty is selected separately.`;
+  }
+  if (selectedWordGuessLanguage === "ru") {
+    const range = age === KIDS_MIN_AGE ? `${age} лет` : `${KIDS_MIN_AGE}–${age} лет`;
+    return `Детский словарь: ${range}. Сложность выбирается отдельно.`;
+  }
+  const range = age === KIDS_MIN_AGE ? `${age} років` : `${KIDS_MIN_AGE}–${age} років`;
+  return `Дитячий словник: ${range}. Складність обирається окремо.`;
+}
+
+function getKidsCardBadgeLabel() {
   const prefix = selectedWordGuessLanguage === "ru" ? "ДЕТСКОЕ" : (selectedWordGuessLanguage === "en" ? "KIDS" : "ДИТЯЧЕ");
-  return `${prefix} · ${age}+`;
+  return `${prefix} · ${getKidsSelectedAgeRangeLabel()}`;
 }
 
 function renderWordMeta(entry) {
@@ -14692,7 +14809,7 @@ function renderWordMeta(entry) {
   if (kidsModeEnabled) {
     const kidsBadge = document.createElement("span");
     kidsBadge.className = "word-meta-badge word-meta-kids";
-    kidsBadge.textContent = getKidsCardBadgeLabel(entry.minAge);
+    kidsBadge.textContent = getKidsCardBadgeLabel();
     leftGroup.appendChild(kidsBadge);
   }
 
@@ -14837,7 +14954,7 @@ function validateGameSettings() {
     missingSettings.push("ціль гри");
   }
 
-  if (!kidsModeEnabled && selectedDifficulties.length === 0) {
+  if (selectedDifficulties.length === 0) {
     settingsMessage.textContent = "Оберіть хоча б один рівень складності.";
     return false;
   }
@@ -14848,9 +14965,11 @@ function validateGameSettings() {
   }
 
   if (getCurrentWordPool().length === 0) {
-    settingsMessage.textContent = isCharades()
-      ? "Для цих тем і фільтрів немає завдань."
-      : "Для цих тем, складності та фільтра словосполучень немає слів.";
+    settingsMessage.textContent = kidsModeEnabled
+      ? "Для цього віку й вибраної складності немає достатньо слів. Оберіть інший рівень або змініть вік."
+      : (isCharades()
+        ? "Для цих тем і фільтрів немає завдань."
+        : "Для цих тем, складності та фільтра словосполучень немає слів.");
     return false;
   }
 
@@ -15344,14 +15463,6 @@ function markSessionContentExposure(namespace, value) {
 function buildWeightedSessionDeck(entries, namespace, valueGetter) {
   const getter = typeof valueGetter === "function" ? valueGetter : function (entry) { return entry && entry.word ? entry.word : entry; };
   const recencyBucketSize = 4;
-  const difficultyCounts = {};
-  if (kidsModeEnabled) {
-    entries.forEach(function (entry) {
-      if (!entry || !entry.difficulty) return;
-      difficultyCounts[entry.difficulty] = (difficultyCounts[entry.difficulty] || 0) + 1;
-    });
-  }
-
   return entries.map(function (entry) {
     const value = getter(entry);
     const seen = getSessionContentExposureCount(namespace, value);
@@ -15359,15 +15470,7 @@ function buildWeightedSessionDeck(entries, namespace, valueGetter) {
     const ageBucket = Number.isFinite(age)
       ? Math.floor(age / recencyBucketSize)
       : Number.MAX_SAFE_INTEGER;
-    let randomJitter = Math.random();
-    if (kidsModeEnabled && entry && entry.difficulty) {
-      // Normalize the per-item probability by pool size. Otherwise a large Medium
-      // pool would swamp Easy/Hard regardless of the selected child's age. This
-      // only breaks ties inside the same exposure + recency bucket.
-      const difficultyCount = Math.max(1, difficultyCounts[entry.difficulty] || 1);
-      const unitWeight = Math.max(0.000001, getKidsDifficultyWeight(entry.difficulty) / difficultyCount);
-      randomJitter = Math.pow(Math.random(), 1 / unitWeight);
-    }
+    const randomJitter = Math.random();
 
     return {
       entry,
@@ -15495,6 +15598,7 @@ function clearKidsWordIllustration() {
   kidsWordIllustration.className = "kids-word-illustration";
   kidsWordIllustration.style.removeProperty("--kids-illustration-rotate");
   kidsWordIllustration.style.removeProperty("--kids-illustration-scale");
+  kidsWordIllustration.style.removeProperty("--kids-illustration-y");
   kidsWordIllustrationImage.removeAttribute("src");
   kidsWordIllustrationImage.alt = "";
 }
@@ -15507,19 +15611,21 @@ function getKidsIllustrationRecord(value) {
 
 function showKidsWordIllustration(entry) {
   clearKidsWordIllustration();
-  if (!kidsModeEnabled || (selectedMode !== "explain" && selectedMode !== "charades") || !entry) return;
+  if (!kidsModeEnabled || !kidsIllustrationsEnabled || (selectedMode !== "explain" && selectedMode !== "charades") || !entry) return;
   if (!kidsWordIllustration || !kidsWordIllustrationImage) return;
   const record = getKidsIllustrationRecord(entry.word);
   if (!record || !record.asset) return;
 
-  const anchors = ["left-upper", "right-upper", "left-lower", "right-lower"];
+  const anchors = ["left-middle", "right-middle"];
   const anchor = anchors[Math.floor(Math.random() * anchors.length)] || anchors[0];
-  const rotation = Math.round((Math.random() * 12) - 6);
-  const scale = (0.92 + Math.random() * 0.16).toFixed(3);
+  const rotation = Math.round((Math.random() * 10) - 5);
+  const scale = (0.94 + Math.random() * 0.12).toFixed(3);
+  const verticalPercent = 48 + Math.round(Math.random() * 8);
   const base = kidsIllustrationsData.assetsBase || "assets/kids-illustrations/";
   kidsWordIllustration.className = `kids-word-illustration kids-word-illustration-${anchor}`;
   kidsWordIllustration.style.setProperty("--kids-illustration-rotate", `${rotation}deg`);
   kidsWordIllustration.style.setProperty("--kids-illustration-scale", scale);
+  kidsWordIllustration.style.setProperty("--kids-illustration-y", `${verticalPercent}%`);
   kidsWordIllustration.dataset.concept = record.concept || "";
   kidsWordIllustrationImage.onerror = function () { clearKidsWordIllustration(); };
   kidsWordIllustrationImage.src = getRevisionedAssetUrl(`${base}${record.asset}`);
