@@ -1,5 +1,12 @@
 # Word list sources
 
+## Daily Word v1
+
+`daily-words.json` freezes curated subsets of Movohray's existing five-letter
+answer pools in `wordguess.json`, `wordguess-ru.json` and `wordguess-en.json`.
+It adds no external dictionary or translated word list. The source attributions
+and license notices below continue to apply to the reused vocabulary.
+
 ## RU Labs — Russian-Nouns
 
 The RU Labs allowed-guess vocabulary includes filtered 5–7 letter entries derived from **Harrix/Russian-Nouns**.

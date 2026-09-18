@@ -1,8 +1,11 @@
-const MOVOHRAY_REVISION = "0.6.7-20260914-c9";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260914-c9";
+const MOVOHRAY_REVISION = "0.6.7-20260918-c10";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260918-c10";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   MOVOHRAY_OFFLINE_DOCUMENT,
+  `./daily-word.js?rev=${MOVOHRAY_REVISION}`,
+  `./daily-word-ui.js?rev=${MOVOHRAY_REVISION}`,
+  `./daily-words.json?rev=${MOVOHRAY_REVISION}`,
   `./new-mode-achievements.js?rev=${MOVOHRAY_REVISION}`,
   `./svitlohray-engine.js?rev=${MOVOHRAY_REVISION}`,
   `./svitlohray.js?rev=${MOVOHRAY_REVISION}`,

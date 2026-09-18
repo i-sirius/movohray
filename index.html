@@ -13,15 +13,15 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260914-c9" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260918-c10" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260914-c9" />
-  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260914-c9" />
-  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260914-c9" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260918-c10" />
+  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260918-c10" />
+  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260918-c10" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -33,7 +33,7 @@
   </button>
   <button id="menuAchievementsBtn" class="app-achievements-btn" type="button" aria-haspopup="dialog" aria-controls="achievementsModal" aria-label="Досягнення">
     <span class="app-achievements-icon" aria-hidden="true">🏆</span>
-    <span id="menuAchievementsProgress" class="app-achievements-badge">0/210</span>
+    <span id="menuAchievementsProgress" class="app-achievements-badge">0/439</span>
     <span id="menuAchievementsTitle" class="app-achievements-label">Досягнення</span>
     <span id="menuAchievementsProgressBar" hidden></span>
   </button>
@@ -167,7 +167,7 @@
               <p id="appLabsAchievementsEyebrow" class="app-settings-section-eyebrow">Achievements · Labs</p>
               <h4 id="appLabsAchievementsTitle">Нагороди й досягнення</h4>
             </div>
-            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/210</strong>
+            <strong id="appLabsAchievementsProgress" class="app-labs-achievements-progress">0/439</strong>
           </div>
           <p id="appLabsAchievementsCopy" class="app-labs-achievements-copy">Локальні нагороди зберігаються на цьому пристрої.</p>
           <button id="appLabsAchievementsOpenBtn" class="app-labs-achievements-open" type="button">Відкрити колекцію →</button>
@@ -196,7 +196,7 @@
         </div>
       </section>
       <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c9</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c10</p>
     </div>
   </div>
 
@@ -209,9 +209,12 @@
           <p id="achievementsModalEyebrow" class="app-settings-section-eyebrow">Вгадай слово</p>
           <h2 id="achievementsModalTitle">Досягнення</h2>
         </div>
-        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/210</strong>
+        <strong id="achievementsModalProgress" class="app-labs-achievements-progress">0/439</strong>
       </div>
-      <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+      <div class="achievements-modal-copy-block">
+        <p id="achievementsModalCopy" class="achievements-modal-copy">Збирай нагороди за майстерність, серії, експерименти й кумедні ситуації у грі.</p>
+        <p id="dailyWordCollectionStats" class="daily-word-collection-stats"></p>
+      </div>
       <div id="achievementsModalGameNav" class="achievements-modal-game-nav" role="tablist" aria-label="Ігри та нові досягнення"></div>
       <div class="achievements-modal-tools">
         <label id="achievementsModalSearchLabel" class="achievements-search-label" for="achievementsModalSearch">Пошук досягнень</label>
@@ -275,6 +278,15 @@
           <p id="menuModeNote" class="menu-mode-note">Режими: Поясни слово, Покажи слово, Вгадай слово, Хто я? та Словесний</p>
 
           <div id="modeList" class="mode-grid"></div>
+          <section class="daily-word-card" aria-labelledby="dailyWordTitle">
+            <span class="daily-word-icon" aria-hidden="true">☀</span>
+            <div class="daily-word-copy">
+              <h2><span id="dailyWordTitle"></span> <span id="dailyWordLanguage" class="daily-word-language"></span></h2>
+              <p id="dailyWordSubtitle"></p>
+              <p id="dailyWordStreak" class="daily-word-streak" hidden></p>
+            </div>
+            <button id="dailyWordStartBtn" class="secondary-btn" type="button"></button>
+          </section>
 
 
           <div class="rules-box">
@@ -289,7 +301,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c9</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c10</p>
         </div>
       </div>
     </section>
@@ -514,6 +526,7 @@
 
     <section id="wordGuessGameScreen" class="screen">
       <h1 id="wordGuessGameTitle" class="word-guess-screen-title">Вгадай слово</h1>
+      <time id="dailyWordContext" class="daily-word-context" hidden></time>
       <div class="card center bubble-card word-guess-game-card">
         <div class="decor-dot dot-a"></div>
         <div class="decor-dot dot-c"></div>
@@ -566,6 +579,7 @@
               <section class="word-guess-result-summary-block" aria-labelledby="wordGuessResultTitle">
                 <h2 id="wordGuessResultTitle">Слово відгадано</h2>
                 <div id="wordGuessResultText" class="word-guess-result-text"></div>
+                <p id="dailyWordResultStats" class="daily-word-result-stats" role="status" hidden></p>
                 <div id="wordGuessResultStats" class="word-guess-result-stats" aria-label="Статистика гри"></div>
               </section>
               <section id="wordGuessResultAttempts" class="word-guess-result-attempts word-guess-result-board" aria-label="Перевірені спроби"></section>
@@ -1139,12 +1153,14 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="svitlohray-engine.js?rev=0.6.7-20260914-c9"></script>
-  <script src="svitlohray.js?rev=0.6.7-20260914-c9"></script>
-  <script src="slovesnyi-engine.js?rev=0.6.7-20260914-c9"></script>
-  <script src="slovesnyi.js?rev=0.6.7-20260914-c9"></script>
-  <script src="wordguess-session.js?rev=0.6.7-20260914-c9"></script>
-  <script src="new-mode-achievements.js?rev=0.6.7-20260914-c9"></script>
-  <script src="app.js?rev=0.6.7-20260914-c9"></script>
+  <script src="svitlohray-engine.js?rev=0.6.7-20260918-c10"></script>
+  <script src="svitlohray.js?rev=0.6.7-20260918-c10"></script>
+  <script src="slovesnyi-engine.js?rev=0.6.7-20260918-c10"></script>
+  <script src="slovesnyi.js?rev=0.6.7-20260918-c10"></script>
+  <script src="wordguess-session.js?rev=0.6.7-20260918-c10"></script>
+  <script src="new-mode-achievements.js?rev=0.6.7-20260918-c10"></script>
+  <script src="daily-word.js?rev=0.6.7-20260918-c10"></script>
+  <script src="daily-word-ui.js?rev=0.6.7-20260918-c10"></script>
+  <script src="app.js?rev=0.6.7-20260918-c10"></script>
 </body>
 </html>

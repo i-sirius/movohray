@@ -10,11 +10,11 @@ let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
-const DATA_BUILD = "2026-09-14";
-const DATA_CANDIDATE = 9;
+const DATA_BUILD = "2026-09-18";
+const DATA_CANDIDATE = 10;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.7-b20260914-c9";
+const DATA_CACHE = "movohray-cache-v0.6.7-b20260918-c10";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -224,7 +224,7 @@ const WORD_GUESS_HINT_NUDGE_VISIBLE_MS = 6500;
 const WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS = 9000;
 const WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS = 650;
 const WORD_GUESS_FUTURE_FEATURES = Object.freeze({ timedModeUi: false, multiplayerUi: false, developerFeedbackPlaceholder: true });
-const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, KIDS_ILLUSTRATIONS_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY];
+const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, KIDS_ILLUSTRATIONS_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY, DailyWord.storageKey];
 const WORD_GUESS_ACHIEVEMENTS = [
   { id: "first-win", reward: "🏆", titleKey: "achievementFirstWinTitle", descriptionKey: "achievementFirstWinDescription", category: "milestones" },
   { id: "first-try", reward: "🎯", titleKey: "achievementFirstTryTitle", descriptionKey: "achievementFirstTryDescription", category: "skill" },
@@ -663,6 +663,12 @@ const WORD_GUESS_ACHIEVEMENTS = [
   {"id": "slovesnyi-crazy-win", "game": "slovesnyi", "reward": "🤪", "titleKey": "achievementSlovesnyiCrazyWinTitle", "descriptionKey": "achievementSlovesnyiCrazyWinDescription", "category": "skill"},
   {"id": "slovesnyi-three-streak", "game": "slovesnyi", "reward": "🔥", "titleKey": "achievementSlovesnyiThreeStreakTitle", "descriptionKey": "achievementSlovesnyiThreeStreakDescription", "category": "streaks"},
   {"id": "slovesnyi-both-sides", "game": "slovesnyi", "reward": "⚖️", "titleKey": "achievementSlovesnyiBothSidesTitle", "descriptionKey": "achievementSlovesnyiBothSidesDescription", "category": "skill"},
+  // Daily v1: appended without changing existing IDs or order.
+  { id: "daily-word-first", game: "wordguess", reward: "🌅", titleKey: "achievementDailyFirstTitle", descriptionKey: "achievementDailyFirstDescription", category: "milestones" },
+  { id: "daily-word-streak-3", game: "wordguess", reward: "🔥", titleKey: "achievementDailyThreeTitle", descriptionKey: "achievementDailyThreeDescription", category: "streaks" },
+  { id: "daily-word-streak-7", game: "wordguess", reward: "📅", titleKey: "achievementDailyWeekTitle", descriptionKey: "achievementDailyWeekDescription", category: "streaks" },
+  { id: "daily-word-streak-30", game: "wordguess", reward: "🌟", titleKey: "achievementDailyHabitTitle", descriptionKey: "achievementDailyHabitDescription", category: "streaks" },
+  { id: "daily-word-total-50", game: "wordguess", reward: "🏅", titleKey: "achievementDailyRegularTitle", descriptionKey: "achievementDailyRegularDescription", category: "milestones" },
 ];
 const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
   { id: "all", titleKey: "achievementCategoryAll" },
@@ -763,6 +769,27 @@ const WORD_GUESS_LANGUAGES = {
 };
 const WORD_GUESS_TEXT = {
   uk: {
+    dailyTitle: "Слово дня",
+    dailySubtitle: "Нове завдання щодня",
+    dailyStart: "Спробувати",
+    dailyCompleted: "Виконано сьогодні ✓",
+    dailySuccess: "Слово дня виконано! 🎉",
+    dailyPlayMore: "Грати ще",
+    dailyRetry: "Спробувати ще раз",
+    dailyRetryCopy: "Спробуйте ще раз — сьогоднішнє слово залишається тим самим. Невдала спроба не обриває серію.",
+    dailyLoadError: "Не вдалося завантажити слово дня. Спробуйте ще раз.",
+    achievementDailyFirstTitle: "Новий ритуал",
+    achievementDailyFirstDescription: "Виконайте перше завдання «Слово дня».",
+    achievementDailyThreeTitle: "Три дні поспіль",
+    achievementDailyThreeDescription: "Виконайте «Слово дня» 3 дні поспіль однією мовою.",
+    achievementDailyWeekTitle: "Тиждень у грі",
+    achievementDailyWeekDescription: "Виконайте «Слово дня» 7 днів поспіль однією мовою.",
+    achievementDailyHabitTitle: "Звичка",
+    achievementDailyHabitDescription: "Виконайте «Слово дня» 30 днів поспіль однією мовою.",
+    achievementDailyRegularTitle: "Завсідник",
+    achievementDailyRegularDescription: "Виконайте 50 завдань «Слово дня» загалом, будь-якими мовами.",
+    dailyStreak: (n) => `Серія: ${n} ${n % 10 === 1 && n % 100 !== 11 ? "день" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? "дні" : "днів"}`,
+    dailyBest: (n) => `Найкраща серія: ${n}`, dailyTotal: (n) => `Усього виконано: ${n}`,
     brand: "Мовограй", title: "Вгадай слово", menuDescription: "Відгадай слово за кольоровими підказками.", soloMode: "Одиночний режим", rules: "Правила", showRules: "Показати правила", howToPlay: "Як грати", hintsTitle: "Підказки",
     start: "Почати гру", backMenu: "← У меню", mainMenu: "У головне меню", newGame: "Нова гра",
     enter: "Ввести", erase: "Стерти літеру", loading: "Завантажуємо словник...", loadError: "Не вдалося завантажити словник.",
@@ -1738,6 +1765,27 @@ const WORD_GUESS_TEXT = {
     invalidReactions: ["Ой!", "Не-а 😄", "Ще раз!", "Хитре слово 🤨", "Словник сумнівається"],
   },
   ru: {
+    dailyTitle: "Слово дня",
+    dailySubtitle: "Новое задание каждый день",
+    dailyStart: "Попробовать",
+    dailyCompleted: "Выполнено сегодня ✓",
+    dailySuccess: "Слово дня выполнено! 🎉",
+    dailyPlayMore: "Играть ещё",
+    dailyRetry: "Попробовать ещё раз",
+    dailyRetryCopy: "Попробуйте ещё раз — сегодняшнее слово остаётся тем же. Неудачная попытка не прерывает серию.",
+    dailyLoadError: "Не удалось загрузить слово дня. Попробуйте ещё раз.",
+    achievementDailyFirstTitle: "Новый ритуал",
+    achievementDailyFirstDescription: "Выполните первое задание «Слово дня».",
+    achievementDailyThreeTitle: "Три дня подряд",
+    achievementDailyThreeDescription: "Выполните «Слово дня» 3 дня подряд на одном языке.",
+    achievementDailyWeekTitle: "Неделя в игре",
+    achievementDailyWeekDescription: "Выполните «Слово дня» 7 дней подряд на одном языке.",
+    achievementDailyHabitTitle: "Привычка",
+    achievementDailyHabitDescription: "Выполните «Слово дня» 30 дней подряд на одном языке.",
+    achievementDailyRegularTitle: "Завсегдатай",
+    achievementDailyRegularDescription: "Выполните 50 заданий «Слово дня» суммарно, на любых языках.",
+    dailyStreak: (n) => `Серия: ${n} ${n % 10 === 1 && n % 100 !== 11 ? "день" : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? "дня" : "дней"}`,
+    dailyBest: (n) => `Лучшая серия: ${n}`, dailyTotal: (n) => `Всего выполнено: ${n}`,
     brand: "Мовограй", title: "Угадай слово", menuDescription: "Угадай слово по цветным подсказкам.", soloMode: "Одиночный режим · Labs", rules: "Правила", showRules: "Показать правила", howToPlay: "Как играть", hintsTitle: "Подсказки",
     start: "Начать игру", backMenu: "← В меню", mainMenu: "В главное меню", newGame: "Новая игра",
     enter: "Ввести", erase: "Стереть букву", loading: "Загружаем словарь...", loadError: "Не удалось загрузить словарь.",
@@ -2711,6 +2759,27 @@ const WORD_GUESS_TEXT = {
     invalidReactions: ["Ой!", "Не-а 😄", "Ещё раз!", "Хитро 🤨", "Словарь сомневается"],
   },
   en: {
+    dailyTitle: "Word of the Day",
+    dailySubtitle: "A new challenge every day",
+    dailyStart: "Try it",
+    dailyCompleted: "Completed today ✓",
+    dailySuccess: "Daily word completed! 🎉",
+    dailyPlayMore: "Play more",
+    dailyRetry: "Try again",
+    dailyRetryCopy: "Try again — today’s word stays the same. An unsuccessful attempt does not break your streak.",
+    dailyLoadError: "Could not load the daily word. Please try again.",
+    achievementDailyFirstTitle: "A new ritual",
+    achievementDailyFirstDescription: "Complete your first Word of the Day.",
+    achievementDailyThreeTitle: "Three days running",
+    achievementDailyThreeDescription: "Complete Word of the Day 3 days in a row in one language.",
+    achievementDailyWeekTitle: "A week of play",
+    achievementDailyWeekDescription: "Complete Word of the Day 7 days in a row in one language.",
+    achievementDailyHabitTitle: "A habit",
+    achievementDailyHabitDescription: "Complete Word of the Day 30 days in a row in one language.",
+    achievementDailyRegularTitle: "A regular",
+    achievementDailyRegularDescription: "Complete 50 daily word challenges in total, across any languages.",
+    dailyStreak: (n) => `Streak: ${n} ${n === 1 ? "day" : "days"}`,
+    dailyBest: (n) => `Best streak: ${n}`, dailyTotal: (n) => `Total completed: ${n}`,
     brand: "Movohray", title: "Guess the word", menuDescription: "Guess the word using color clues.", soloMode: "Solo mode · Labs", rules: "Rules", showRules: "Show rules", howToPlay: "How to play", hintsTitle: "Hints",
     start: "Start game", backMenu: "← Menu", mainMenu: "Main menu", newGame: "New game",
     enter: "Enter", erase: "Erase letter", loading: "Loading dictionary...", loadError: "Could not load dictionary.",
@@ -4805,6 +4874,7 @@ async function init() {
   renderWordGuessBoard();
   renderWordGuessKeyboard();
   setupEvents();
+  initializeDailyWord();
   initializeAppHistory();
   flushPendingAppToast();
   setupEdgeSwipeNavigation();
@@ -8031,6 +8101,7 @@ function resetWordGuessDictionaryData() {
 }
 
 function selectWordGuessLanguage(languageId) {
+  if (dailyWordStartPending || (dailyWordSession && getCurrentAppScreenName() === "wordGuessGame")) return;
   const normalizedLanguage = String(languageId || "").toLowerCase();
   if (!WORD_GUESS_LANGUAGES[normalizedLanguage]) {
     return;
@@ -8218,10 +8289,11 @@ function applyWordGuessLanguageUi() {
   applySoundSetting(isGameSoundEnabled);
   applyHapticSetting(isHapticFeedbackEnabled);
   renderDeveloperSupportUi();
+  renderDailyWordUi();
 }
 
-async function loadWordGuessDictionary() {
-  const selectedModeKey = getSelectedWordGuessModeKey();
+async function loadWordGuessDictionary(dailyChallenge) {
+  const selectedModeKey = dailyChallenge ? "daily-v1-" + dailyChallenge.language + "-" + dailyChallenge.date : getSelectedWordGuessModeKey();
   const profile = getWordGuessLanguageProfile();
 
   if (
@@ -8266,22 +8338,23 @@ async function loadWordGuessDictionary() {
     }
 
     const data = wordGuessDictionaryData;
-    if (selectedModeKey !== getSelectedWordGuessModeKey()) {
+    if (dailyChallenge ? dailyChallenge.language !== selectedWordGuessLanguage : selectedModeKey !== getSelectedWordGuessModeKey()) {
       return false;
     }
-    const dictionaryModeKey = getSelectedWordGuessDictionaryKey();
+    const dictionaryModeKey = dailyChallenge ? "5" : getSelectedWordGuessDictionaryKey();
     const modeData = getWordGuessModeData(data, dictionaryModeKey);
-    const wordLength = selectedWordGuessLength;
-    const attempts = selectedWordGuessAttempts;
-    const allowRepeats = selectedWordGuessAllowRepeats;
-    const rawAnswerWords = Array.isArray(modeData.answers) ? modeData.answers : modeData.words || [];
+    const wordLength = dailyChallenge ? 5 : selectedWordGuessLength;
+    const attempts = dailyChallenge ? 6 : selectedWordGuessAttempts;
+    const allowRepeats = dailyChallenge ? true : selectedWordGuessAllowRepeats;
+    const rawAnswerWords = dailyChallenge ? [dailyChallenge.word] : (Array.isArray(modeData.answers) ? modeData.answers : modeData.words || []);
     let answerWords = normalizeWordGuessList(rawAnswerWords, wordLength, allowRepeats)
       .filter(function (word) {
+        if (dailyChallenge) return true;
         if (selectedWordGuessLanguage === "uk") return !WORD_GUESS_BLOCKED_TARGETS.has(word);
         if (selectedWordGuessLanguage === "ru") return !WORD_GUESS_BLOCKED_RU_TARGETS.has(word);
         return true;
       });
-    if (kidsModeEnabled) {
+    if (kidsModeEnabled && !dailyChallenge) {
       const kidsData = await loadKidsDictionary();
       const entries = kidsData.games.wordguess && kidsData.games.wordguess[selectedWordGuessLanguage]
         ? kidsData.games.wordguess[selectedWordGuessLanguage][String(wordLength)] || [] : [];
@@ -8480,7 +8553,7 @@ function renderWordGuessGameTags() {
     return;
   }
 
-  const { wordLength, attempts, allowRepeats } = getSelectedWordGuessModeNumbers();
+  const { wordLength, attempts, allowRepeats } = dailyWordSession && wordGuessConfig ? wordGuessConfig : getSelectedWordGuessModeNumbers();
   const labels = [
     { text: getWordGuessGameLanguageTag(), labs: selectedWordGuessLanguage !== "uk" },
     { text: `${wordLength} ${getLetterWord(wordLength)}`, labs: false },
@@ -8488,7 +8561,7 @@ function renderWordGuessGameTags() {
     { text: getWordGuessShortRepeatLabel(allowRepeats), labs: false },
   ];
 
-  if (wordGuessAnswerWords.length > 0) {
+  if (wordGuessAnswerWords.length > 0 && !dailyWordSession) {
     labels.push({ text: getWordGuessTargetCountLabel(wordGuessAnswerWords.length), labs: false });
   }
 
@@ -8710,39 +8783,59 @@ function getWordGuessDebugLabel() {
   return `v${DATA_VERSION} · ${languageLabel} · ${getWordGuessText("targetsShort")}: ${answerCount} · ${getWordGuessText("guessesShort")}: ${allowedCount}`;
 }
 
-function isWordGuessStartContextValid(startRequestId, startScreenName) {
+function isWordGuessStartContextValid(startRequestId, startScreenName, isDaily) {
   if (startRequestId !== wordGuessStartRequestId || !isWordGuess()) {
     return false;
   }
   const isSettingsStart = startScreenName === "wordGuessSettings";
   const isResultStart = startScreenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden;
-  return Boolean((isSettingsStart || isResultStart) && getCurrentAppScreenName() === startScreenName);
+  const isDailyStart = isDaily && startScreenName === "menu";
+  return Boolean((isSettingsStart || isResultStart || isDailyStart) && getCurrentAppScreenName() === startScreenName);
 }
 
-async function startWordGuessGame() {
+async function startWordGuessGame(options) {
+  const isDaily = Boolean(options && options.daily);
   const startScreenName = getCurrentAppScreenName();
   const startRequestId = ++wordGuessStartRequestId;
-  if (!isWordGuessStartContextValid(startRequestId, startScreenName)) {
+  if (!isWordGuessStartContextValid(startRequestId, startScreenName, isDaily)) {
     return false;
   }
   if (wordGuessStartBtn) {
     wordGuessStartBtn.disabled = true;
   }
+  document.getElementById("dailyWordStartBtn").disabled = true;
+  dailyWordStartPending = isDaily;
+  renderDailyWordUi();
+  wordGuessNewBtn.disabled = true;
   setWordGuessBackgroundLocked(false);
   clearWordGuessFinaleEffect();
   try {
-    const isDictionaryReady = await loadWordGuessDictionary();
-    if (!isWordGuessStartContextValid(startRequestId, startScreenName)) {
+    let dailyChallenge = null;
+    if (isDaily) {
+      const date = DailyWord.localDate();
+      const language = selectedWordGuessLanguage;
+      dailyChallenge = DailyWord.select(await loadDailyWordPool(), date, language);
+      if (!isWordGuessStartContextValid(startRequestId, startScreenName, isDaily) || language !== selectedWordGuessLanguage) return false;
+      if (dailyWordStore.status(language, date).completed) {
+        showAppToast(getWordGuessText("dailyCompleted"));
+        return false;
+      }
+    }
+    const isDictionaryReady = await loadWordGuessDictionary(dailyChallenge);
+    if (!isWordGuessStartContextValid(startRequestId, startScreenName, isDaily)) {
       return false;
     }
     if (!isDictionaryReady) {
-      showScreen("wordGuessSettings");
+      if (isDaily) showAppToast(getWordGuessText("dailyLoadError"));
+      else showScreen("wordGuessSettings");
       return false;
     }
 
+  dailyWordSession = dailyChallenge;
+  if (dailyChallenge) dailyWordStore.begin(dailyChallenge.language, dailyChallenge.date);
   cancelWordGuessReveal();
   clearWordGuessInvalidClearTimer();
-  wordGuessTarget = pickWeightedSessionValue(
+  wordGuessTarget = dailyChallenge ? dailyChallenge.word : pickWeightedSessionValue(
     wordGuessAnswerWords,
     `wordguess:${selectedWordGuessLanguage}:${getSelectedWordGuessModeKey()}`
   );
@@ -8802,14 +8895,22 @@ async function startWordGuessGame() {
   renderWordGuessHistory();
   updateWordGuessHintState();
   renderWordGuessGameTags();
+  renderDailyWordUi();
     showScreen("wordGuessGame");
     clearWordGuessHintNudgeTimers();
     clearWordGuessHintNudgeVisual();
     scheduleWordGuessHintNudge(WORD_GUESS_HINT_NUDGE_DELAY_MS);
     return true;
+  } catch (error) {
+    if (!isDaily) throw error;
+    showAppToast(getWordGuessText("dailyLoadError"));
+    return false;
   } finally {
     if (wordGuessStartBtn && startRequestId === wordGuessStartRequestId) {
       wordGuessStartBtn.disabled = false;
+      wordGuessNewBtn.disabled = false;
+      dailyWordStartPending = false;
+      renderDailyWordUi();
     }
   }
 }
@@ -9503,7 +9604,8 @@ function buildWordGuessShareText() {
   const grid = getWordGuessShareGrid();
   const modeLine = formatWordGuessText("shareModeCompact", wordLength, resultLabel, getWordGuessAllowsRepeats());
   return [
-    `${getWordGuessText("brand")} · ${getWordGuessText("title")} · ${getWordGuessLanguageProfile().shortLabel}`,
+    `${getWordGuessText("brand")} · ${getWordGuessText(dailyWordSession ? "dailyTitle" : "title")} · ${getWordGuessLanguageProfile().shortLabel}`,
+    dailyWordSession ? dailyWordSession.date : "",
     modeLine,
     getWordGuessHintResultLabel(),
     grid,
@@ -9643,7 +9745,7 @@ function createWordGuessShareImageBlob() {
 
       context.fillStyle = colors.text;
       context.font = '900 58px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
-      context.fillText(getWordGuessText("title"), width / 2, 220);
+      context.fillText(dailyWordSession ? getWordGuessText("dailyTitle") + " · " + dailyWordSession.date : getWordGuessText("title"), width / 2, 220);
 
       const isWon = wordGuessGuesses.some(function (guess) {
         const guessedWord = guess && typeof guess === "object" ? guess.word : guess;
@@ -9787,6 +9889,7 @@ async function shareWordGuessResult() {
 }
 
 function finishWordGuessGame(isWon) {
+  if (wordGuessFinished) return;
   wordGuessFinished = true;
   clearWordGuessHintNudgeTimers();
   clearWordGuessHintNudgeVisual();
@@ -9796,7 +9899,8 @@ function finishWordGuessGame(isWon) {
   const totalAttempts = wordGuessAttemptLog.length;
   const invalidAttempts = wordGuessAttemptLog.filter((attempt) => attempt.status === "invalid").length;
   const validAttempts = wordGuessGuesses.length;
-  recordWordGuessAchievements(isWon);
+  if (dailyWordSession) recordDailyWordResult(isWon);
+  else recordWordGuessAchievements(isWon);
 
   if (wordGuessResultTitle) {
     wordGuessResultTitle.textContent = isWon ? getWordGuessText("guessed") : getWordGuessText("attemptsOver");
@@ -9852,6 +9956,7 @@ function finishWordGuessGame(isWon) {
     wordGuessResult.hidden = false;
   }
 
+  renderDailyWordResult(isWon);
   syncAppHistory("wordGuessGame", "push", "result");
   setWordGuessBackgroundLocked(true);
   playGameCompleteSound(isWon ? "win" : "loss");
@@ -12817,6 +12922,9 @@ function closeTopAppOverlay() {
 
 function cancelPendingWordGuessStart() {
   wordGuessStartRequestId += 1;
+  dailyWordStartPending = false;
+  wordGuessNewBtn.disabled = false;
+  renderDailyWordUi();
   if (wordGuessStartBtn) {
     wordGuessStartBtn.disabled = false;
   }
@@ -12842,6 +12950,8 @@ function leaveWordGuessGame() {
     wordGuessResult.hidden = true;
   }
   wordGuessFinished = false;
+  dailyWordSession = null;
+  renderDailyWordUi();
 }
 
 function navigateAfterAppBack(destination, historyMode) {
@@ -12926,11 +13036,11 @@ function requestAppBack(options) {
 
   if (screenName === "wordGuessGame") {
     if (wordGuessResult && !wordGuessResult.hidden) {
-      navigateAfterAppBack("wordGuessSettings", historyMode);
+      navigateAfterAppBack(dailyWordSession ? "menu" : "wordGuessSettings", historyMode);
       return true;
     }
 
-    openExitMenuModal(settings.destination === "menu" ? "menu" : "wordGuessSettings", source === "popstate");
+    openExitMenuModal(dailyWordSession || settings.destination === "menu" ? "menu" : "wordGuessSettings", source === "popstate");
     return true;
   }
 
@@ -13535,7 +13645,7 @@ function setupEvents() {
 
   if (wordGuessNewBtn) {
     wordGuessNewBtn.addEventListener("click", () => {
-      startWordGuessGame();
+      startWordGuessGame({ daily: Boolean(dailyWordSession && !wordGuessResult.classList.contains("is-won")) });
     });
   }
 
@@ -14199,6 +14309,7 @@ function renderModes() {
 
     button.addEventListener("click", async () => {
       const selectionRequestId = ++modeSelectionRequestId;
+      cancelPendingWordGuessStart();
       selectedMode = mode.id;
       selectedCategories = [];
       selectedCategory = null;
@@ -16818,6 +16929,7 @@ function showScreen(screenName, options) {
   if (screenName === "menu") {
     settingsMessage.textContent = "";
     menuScreen.classList.add("active");
+    renderDailyWordUi();
   }
 
   if (screenName === "settings") {

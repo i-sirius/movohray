@@ -39,6 +39,46 @@
   --radius-word-card: 44% 56% 49% 51% / 28% 24% 33% 27%;
 }
 
+/* Daily Word: a secondary entry aligned with the existing mode grid. */
+.daily-word-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-align: left;
+}
+
+.daily-word-icon { color: var(--color-accent); font-size: 30px; }
+.daily-word-copy { flex: 1 1 160px; min-width: 0; }
+.daily-word-copy h2 { margin: 0; font-size: 18px; overflow-wrap: break-word; }
+.daily-word-copy p { margin: 4px 0 0; color: var(--color-muted); font-size: 13px; }
+.daily-word-copy .daily-word-streak { color: var(--color-text); }
+.daily-word-language { color: var(--color-muted); font-size: 11px; white-space: nowrap; }
+.daily-word-card button { width: auto; min-height: 44px; max-width: 100%; white-space: normal; }
+.daily-word-card button:disabled { opacity: 1; color: var(--color-muted); cursor: default; }
+.daily-word-card button:focus { outline: 3px solid var(--color-primary); outline-offset: 3px; }
+.daily-word-context { display: block; text-align: center; color: var(--color-muted); font-size: 14px; margin: -4px 0 12px; }
+body.word-guess-result-open .daily-word-context { display: none; }
+.daily-word-collection-stats { margin: 0; padding: 8px 0; color: var(--color-muted); font-size: 12px; line-height: 1.5; }
+.achievements-modal-copy-block { grid-area: copy; flex: 0 0 auto; min-width: 0; }
+.word-guess-result .daily-word-result-stats { margin: 10px 0; font-size: 14px; line-height: 1.6; overflow-wrap: break-word; }
+
+@media (max-width: 380px) {
+  .daily-word-card { gap: 8px; padding: 12px; }
+  .daily-word-card button { width: 100%; }
+}
+
+/* Leave room to reach the collection after its stats and filters on short phones. */
+@media (max-width: 760px) and (max-height: 700px) {
+  .achievements-modal .achievements-modal-card { overflow-y: auto; }
+  .achievements-modal .achievements-modal-sections { flex: 0 0 240px; min-height: 240px; }
+}
+
 * {
   box-sizing: border-box;
 }

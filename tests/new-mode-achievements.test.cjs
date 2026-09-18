@@ -51,12 +51,12 @@ function harness(saved, unavailable=false) {
   return {c,run,data,queued,sv,party,has:id=>!!c.wordGuessAchievementsState.unlocked[id],state:()=>JSON.parse(JSON.stringify(c.wordGuessAchievementsState))};
 }
 const board=(rows,cols)=>({rows,cols,cells:Array(rows*cols).fill(1)});
-test('417 legacy definitions and their copy unchanged; 433 total, exact +16 copy, groups',()=>{
+test('417 legacy definitions and their copy unchanged; 439 total including daily awards, exact +16 copy, groups',()=>{
   const h=harness(), old=cp.execFileSync('git',['show','095a8d9:app.js'],{encoding:'utf8'}), baseline=vm.createContext({});
   vm.runInContext(constant(old,'WORD_GUESS_ACHIEVEMENTS','\n];')+'\n'+constant(old,'WORD_GUESS_TEXT','\n};'),baseline);
   const oldDefs=JSON.parse(vm.runInContext('JSON.stringify(WORD_GUESS_ACHIEVEMENTS)',baseline));
   const defs=JSON.parse(h.run('JSON.stringify(WORD_GUESS_ACHIEVEMENTS)'));
-  assert.equal(oldDefs.length,417);assert.equal(defs.length,433);assert.equal(new Set(defs.map(d=>d.id)).size,433);
+  assert.equal(oldDefs.length,417);assert.equal(defs.length,439);assert.equal(new Set(defs.map(d=>d.id)).size,439);
   for(const d of oldDefs) {
     assert.deepEqual(defs.find(n=>n.id===d.id),d);
     for(const lang of ['uk','ru','en']) for(const key of [d.titleKey,d.descriptionKey,d.hintKey].filter(Boolean)) {
