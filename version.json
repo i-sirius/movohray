@@ -1,8 +1,8 @@
 {
   "version": "0.6.7",
-  "build": "2026-09-18",
-  "candidate": "c10",
+  "build": "2026-09-20",
+  "candidate": "c11",
   "required": true,
-  "revision": "0.6.7-20260918-c10",
-  "cache": "movohray-cache-v0.6.7-b20260918-c10"
+  "revision": "0.6.7-20260920-c11",
+  "cache": "movohray-cache-v0.6.7-b20260920-c11"
 }

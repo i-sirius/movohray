@@ -13,15 +13,15 @@
   <meta name="apple-mobile-web-app-title" content="Мовограй" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="format-detection" content="telephone=no" />
-  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260918-c10" />
+  <link rel="manifest" href="manifest.webmanifest?rev=0.6.7-20260920-c11" />
   <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="icon" type="image/png" href="favicon-light.png" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="favicon-dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="favicon-light.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="favicon-light.png" />
-  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260918-c10" />
-  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260918-c10" />
-  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260918-c10" />
+  <link rel="stylesheet" href="styles.css?rev=0.6.7-20260920-c11" />
+  <link rel="stylesheet" href="svitlohray.css?rev=0.6.7-20260920-c11" />
+  <link rel="stylesheet" href="slovesnyi.css?rev=0.6.7-20260920-c11" />
 </head>
 <body data-mode="explain" data-screen="menu">
   <div class="game-ambient-pattern" aria-hidden="true"></div>
@@ -196,7 +196,7 @@
         </div>
       </section>
       <p id="appSettingsNote" class="app-settings-note">Нові форми, рандомні кольори та окантовка працюють для великих карток слова в Alias і Крокодилі.</p>
-      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c10</p>
+      <p id="appSettingsVersion" class="app-settings-version app-settings-version-unlock" role="button" tabindex="0" aria-label="Версія Мовограю">v0.6.7-c11</p>
     </div>
   </div>
 
@@ -278,15 +278,6 @@
           <p id="menuModeNote" class="menu-mode-note">Режими: Поясни слово, Покажи слово, Вгадай слово, Хто я? та Словесний</p>
 
           <div id="modeList" class="mode-grid"></div>
-          <section class="daily-word-card" aria-labelledby="dailyWordTitle">
-            <span class="daily-word-icon" aria-hidden="true">☀</span>
-            <div class="daily-word-copy">
-              <h2><span id="dailyWordTitle"></span> <span id="dailyWordLanguage" class="daily-word-language"></span></h2>
-              <p id="dailyWordSubtitle"></p>
-              <p id="dailyWordStreak" class="daily-word-streak" hidden></p>
-            </div>
-            <button id="dailyWordStartBtn" class="secondary-btn" type="button"></button>
-          </section>
 
 
           <div class="rules-box">
@@ -301,7 +292,7 @@
             </p>
           </div>
 
-          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c10</p>
+          <p id="menuVersionInfo" class="menu-version-info">v0.6.7-c11</p>
         </div>
       </div>
     </section>
@@ -464,60 +455,73 @@
               <button id="wordGuessSettingsRulesBtn" class="setup-rules-btn mode-rules-button" type="button" aria-label="Показати правила">?</button>
             </div>
           </div>
-          <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
-          <p id="wordGuessLanguageBadge" class="word-guess-language-badge" hidden></p>
+          <div id="wordGuessSetupTabs" class="word-guess-setup-tabs" role="tablist" aria-label="Режим гри">
+            <button id="wordGuessNormalTab" type="button" role="tab" aria-selected="true" aria-controls="wordGuessNormalPanel" tabindex="0">Звичайна</button>
+            <button id="wordGuessDailyTab" type="button" role="tab" aria-selected="false" aria-controls="wordGuessDailyPanel" tabindex="-1">Слово дня</button>
+          </div>
+          <div id="wordGuessNormalPanel" class="word-guess-setup-panel" role="tabpanel" aria-labelledby="wordGuessNormalTab">
+            <p id="wordGuessModeDescription" class="mode-description">Відгадай українське слово з 5 літер за 5 спроб.</p>
+            <p id="wordGuessLanguageBadge" class="word-guess-language-badge" hidden></p>
 
-          <section class="settings-group settings-group-wide kids-setup-panel">
-              <div class="kids-setup-heading kids-setup-flip">
-                <span class="kids-setup-mode-label" data-kids-mode-regular>Звичайний</span>
-                <label class="kids-setup-switch">
-                  <input type="checkbox" data-kids-setup-toggle aria-label="Дитячий режим" />
-                  <span aria-hidden="true"></span>
+            <section class="settings-group settings-group-wide kids-setup-panel">
+                <div class="kids-setup-heading kids-setup-flip">
+                  <span class="kids-setup-mode-label" data-kids-mode-regular>Звичайний</span>
+                  <label class="kids-setup-switch">
+                    <input type="checkbox" data-kids-setup-toggle aria-label="Дитячий режим" />
+                    <span aria-hidden="true"></span>
+                  </label>
+                  <strong class="kids-setup-mode-label kids-setup-mode-kids" data-kids-setup-title>Дитячий режим</strong>
+                </div>
+                <label class="kids-setup-age-row" data-kids-setup-age-row hidden>
+                  <span data-kids-setup-age-label>Вік дитини</span>
+                  <select data-kids-setup-age aria-label="Вік дитини">
+                    <option value="5">5</option><option value="6">6</option><option value="7" selected>7</option>
+                    <option value="8">8</option><option value="9">9</option><option value="10">10</option>
+                  </select>
                 </label>
-                <strong class="kids-setup-mode-label kids-setup-mode-kids" data-kids-setup-title>Дитячий режим</strong>
-              </div>
-              <label class="kids-setup-age-row" data-kids-setup-age-row hidden>
-                <span data-kids-setup-age-label>Вік дитини</span>
-                <select data-kids-setup-age aria-label="Вік дитини">
-                  <option value="5">5</option><option value="6">6</option><option value="7" selected>7</option>
-                  <option value="8">8</option><option value="9">9</option><option value="10">10</option>
-                </select>
-              </label>
-              <p class="kids-difficulty-note" data-kids-setup-note hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
-          </section>
+                <p class="kids-difficulty-note" data-kids-setup-note hidden>Вік обмежує дитячий словник, а складність обирається окремо.</p>
+            </section>
 
-          <div class="word-guess-summary word-guess-mode-picker" aria-label="Налаштування режиму Вгадай слово">
-            <details class="word-guess-select">
-              <summary id="wordGuessLengthSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> літер</summary>
-              <div class="word-guess-select-menu" role="group" aria-label="Довжина слова">
-                <button class="word-guess-select-option is-active" type="button" data-word-guess-length="5" aria-pressed="true">5 літер</button>
-                <button class="word-guess-select-option" type="button" data-word-guess-length="6" aria-pressed="false">6 літер</button>
-                <button class="word-guess-select-option" type="button" data-word-guess-length="7" aria-pressed="false">7 літер</button>
-              </div>
-            </details>
+            <div class="word-guess-summary word-guess-mode-picker" aria-label="Налаштування режиму Вгадай слово">
+              <details class="word-guess-select">
+                <summary id="wordGuessLengthSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> літер</summary>
+                <div class="word-guess-select-menu" role="group" aria-label="Довжина слова">
+                  <button class="word-guess-select-option is-active" type="button" data-word-guess-length="5" aria-pressed="true">5 літер</button>
+                  <button class="word-guess-select-option" type="button" data-word-guess-length="6" aria-pressed="false">6 літер</button>
+                  <button class="word-guess-select-option" type="button" data-word-guess-length="7" aria-pressed="false">7 літер</button>
+                </div>
+              </details>
 
-            <details class="word-guess-select">
-              <summary id="wordGuessAttemptsSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> спроб</summary>
-              <div class="word-guess-select-menu" role="group" aria-label="Кількість спроб">
-                <button class="word-guess-select-option is-active" type="button" data-word-guess-attempts="5" aria-pressed="true">5 спроб</button>
-                <button class="word-guess-select-option" type="button" data-word-guess-attempts="6" aria-pressed="false">6 спроб</button>
-                <button class="word-guess-select-option" type="button" data-word-guess-attempts="7" aria-pressed="false">7 спроб</button>
-              </div>
-            </details>
+              <details class="word-guess-select">
+                <summary id="wordGuessAttemptsSummary" class="setting-chip word-guess-select-summary"><strong>5</strong> спроб</summary>
+                <div class="word-guess-select-menu" role="group" aria-label="Кількість спроб">
+                  <button class="word-guess-select-option is-active" type="button" data-word-guess-attempts="5" aria-pressed="true">5 спроб</button>
+                  <button class="word-guess-select-option" type="button" data-word-guess-attempts="6" aria-pressed="false">6 спроб</button>
+                  <button class="word-guess-select-option" type="button" data-word-guess-attempts="7" aria-pressed="false">7 спроб</button>
+                </div>
+              </details>
 
-            <details class="word-guess-select word-guess-repeat-select">
-              <summary id="wordGuessRepeatsSummary" class="setting-chip word-guess-select-summary">Без повторення літер</summary>
-              <div class="word-guess-select-menu" role="group" aria-label="Повтори літер">
-                <button class="word-guess-select-option is-active" type="button" data-word-guess-repeats="false" aria-pressed="true">Без повторення літер</button>
-                <button class="word-guess-select-option" type="button" data-word-guess-repeats="true" aria-pressed="false">З повторами літер</button>
-              </div>
-            </details>
+              <details class="word-guess-select word-guess-repeat-select">
+                <summary id="wordGuessRepeatsSummary" class="setting-chip word-guess-select-summary">Без повторення літер</summary>
+                <div class="word-guess-select-menu" role="group" aria-label="Повтори літер">
+                  <button class="word-guess-select-option is-active" type="button" data-word-guess-repeats="false" aria-pressed="true">Без повторення літер</button>
+                  <button class="word-guess-select-option" type="button" data-word-guess-repeats="true" aria-pressed="false">З повторами літер</button>
+                </div>
+              </details>
+            </div>
+          </div>
+          <div id="wordGuessDailyPanel" class="word-guess-setup-panel word-guess-daily-panel" role="tabpanel" aria-labelledby="wordGuessDailyTab" hidden>
+            <h2 id="dailyWordTitle"></h2>
+            <time id="dailyWordSetupDate"></time>
+            <p id="dailyWordStatus" role="status" aria-live="polite"></p>
+            <p id="dailyWordStreak" hidden></p>
           </div>
 
           <p id="wordGuessSettingsMessage" class="message" role="status" aria-live="polite"></p>
 
           <div class="mode-setup-actions word-guess-setup-actions">
             <button id="wordGuessStartBtn" class="primary-btn mode-start-button" type="button">Почати гру</button>
+            <button id="dailyWordStartBtn" class="primary-btn mode-start-button" type="button" hidden></button>
             <button id="wordGuessBackBtn" class="secondary-btn mode-menu-button" type="button">← У меню</button>
           </div>
         </div>
@@ -569,7 +573,10 @@
 
           <div id="wordGuessResult" class="word-guess-result word-guess-result-screen" hidden>
             <header class="word-guess-result-header">
-              <span id="wordGuessResultAppTitle" class="word-guess-result-app-title">Вгадай слово</span>
+              <div class="word-guess-result-identity">
+                <span id="wordGuessResultAppTitle" class="word-guess-result-app-title">Вгадай слово</span>
+                <span id="dailyWordResultContext" class="daily-word-result-context" hidden></span>
+              </div>
               <button id="wordGuessShareBtn" class="secondary-btn word-guess-share-btn word-guess-share-compact" type="button" aria-label="Поділитися результатом">
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 16V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <span id="wordGuessShareLabel">Поділитися</span>
@@ -1153,14 +1160,14 @@
 
   <div id="appToast" class="app-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 
-  <script src="svitlohray-engine.js?rev=0.6.7-20260918-c10"></script>
-  <script src="svitlohray.js?rev=0.6.7-20260918-c10"></script>
-  <script src="slovesnyi-engine.js?rev=0.6.7-20260918-c10"></script>
-  <script src="slovesnyi.js?rev=0.6.7-20260918-c10"></script>
-  <script src="wordguess-session.js?rev=0.6.7-20260918-c10"></script>
-  <script src="new-mode-achievements.js?rev=0.6.7-20260918-c10"></script>
-  <script src="daily-word.js?rev=0.6.7-20260918-c10"></script>
-  <script src="daily-word-ui.js?rev=0.6.7-20260918-c10"></script>
-  <script src="app.js?rev=0.6.7-20260918-c10"></script>
+  <script src="svitlohray-engine.js?rev=0.6.7-20260920-c11"></script>
+  <script src="svitlohray.js?rev=0.6.7-20260920-c11"></script>
+  <script src="slovesnyi-engine.js?rev=0.6.7-20260920-c11"></script>
+  <script src="slovesnyi.js?rev=0.6.7-20260920-c11"></script>
+  <script src="wordguess-session.js?rev=0.6.7-20260920-c11"></script>
+  <script src="new-mode-achievements.js?rev=0.6.7-20260920-c11"></script>
+  <script src="daily-word.js?rev=0.6.7-20260920-c11"></script>
+  <script src="daily-word-ui.js?rev=0.6.7-20260920-c11"></script>
+  <script src="app.js?rev=0.6.7-20260920-c11"></script>
 </body>
 </html>

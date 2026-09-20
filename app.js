@@ -10,11 +10,11 @@ let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
 const DATA_VERSION = "0.6.7";
-const DATA_BUILD = "2026-09-18";
-const DATA_CANDIDATE = 10;
+const DATA_BUILD = "2026-09-20";
+const DATA_CANDIDATE = 11;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.7-b20260918-c10";
+const DATA_CACHE = "movohray-cache-v0.6.7-b20260920-c11";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -769,12 +769,15 @@ const WORD_GUESS_LANGUAGES = {
 };
 const WORD_GUESS_TEXT = {
   uk: {
+    wordGuessNormalTab: "Звичайна",
+    wordGuessNormalGame: "Звичайна гра",
+    wordGuessModesAria: "Режим гри Вгадай слово",
+    dailyCardNew: "☀ Слово дня · нове",
+    dailyCardCompleted: "✓ Слово дня виконано",
     dailyTitle: "Слово дня",
     dailySubtitle: "Нове завдання щодня",
-    dailyStart: "Спробувати",
     dailyCompleted: "Виконано сьогодні ✓",
     dailySuccess: "Слово дня виконано! 🎉",
-    dailyPlayMore: "Грати ще",
     dailyRetry: "Спробувати ще раз",
     dailyRetryCopy: "Спробуйте ще раз — сьогоднішнє слово залишається тим самим. Невдала спроба не обриває серію.",
     dailyLoadError: "Не вдалося завантажити слово дня. Спробуйте ще раз.",
@@ -1765,12 +1768,15 @@ const WORD_GUESS_TEXT = {
     invalidReactions: ["Ой!", "Не-а 😄", "Ще раз!", "Хитре слово 🤨", "Словник сумнівається"],
   },
   ru: {
+    wordGuessNormalTab: "Обычная",
+    wordGuessNormalGame: "Обычная игра",
+    wordGuessModesAria: "Режим игры Угадай слово",
+    dailyCardNew: "☀ Слово дня · новое",
+    dailyCardCompleted: "✓ Слово дня выполнено",
     dailyTitle: "Слово дня",
     dailySubtitle: "Новое задание каждый день",
-    dailyStart: "Попробовать",
     dailyCompleted: "Выполнено сегодня ✓",
     dailySuccess: "Слово дня выполнено! 🎉",
-    dailyPlayMore: "Играть ещё",
     dailyRetry: "Попробовать ещё раз",
     dailyRetryCopy: "Попробуйте ещё раз — сегодняшнее слово остаётся тем же. Неудачная попытка не прерывает серию.",
     dailyLoadError: "Не удалось загрузить слово дня. Попробуйте ещё раз.",
@@ -2759,12 +2765,15 @@ const WORD_GUESS_TEXT = {
     invalidReactions: ["Ой!", "Не-а 😄", "Ещё раз!", "Хитро 🤨", "Словарь сомневается"],
   },
   en: {
+    wordGuessNormalTab: "Normal",
+    wordGuessNormalGame: "Normal game",
+    wordGuessModesAria: "Word Guess mode",
+    dailyCardNew: "☀ Daily word · new",
+    dailyCardCompleted: "✓ Daily word completed",
     dailyTitle: "Word of the Day",
     dailySubtitle: "A new challenge every day",
-    dailyStart: "Try it",
     dailyCompleted: "Completed today ✓",
     dailySuccess: "Daily word completed! 🎉",
-    dailyPlayMore: "Play more",
     dailyRetry: "Try again",
     dailyRetryCopy: "Try again — today’s word stays the same. An unsuccessful attempt does not break your streak.",
     dailyLoadError: "Could not load the daily word. Please try again.",
@@ -8787,10 +8796,9 @@ function isWordGuessStartContextValid(startRequestId, startScreenName, isDaily) 
   if (startRequestId !== wordGuessStartRequestId || !isWordGuess()) {
     return false;
   }
-  const isSettingsStart = startScreenName === "wordGuessSettings";
+  const isSettingsStart = startScreenName === "wordGuessSettings" && (isDaily ? wordGuessSetupMode === "daily" : wordGuessSetupMode === "normal");
   const isResultStart = startScreenName === "wordGuessGame" && wordGuessResult && !wordGuessResult.hidden;
-  const isDailyStart = isDaily && startScreenName === "menu";
-  return Boolean((isSettingsStart || isResultStart || isDailyStart) && getCurrentAppScreenName() === startScreenName);
+  return Boolean((isSettingsStart || isResultStart) && getCurrentAppScreenName() === startScreenName);
 }
 
 async function startWordGuessGame(options) {
@@ -9604,8 +9612,8 @@ function buildWordGuessShareText() {
   const grid = getWordGuessShareGrid();
   const modeLine = formatWordGuessText("shareModeCompact", wordLength, resultLabel, getWordGuessAllowsRepeats());
   return [
-    `${getWordGuessText("brand")} · ${getWordGuessText(dailyWordSession ? "dailyTitle" : "title")} · ${getWordGuessLanguageProfile().shortLabel}`,
-    dailyWordSession ? dailyWordSession.date : "",
+    `${getWordGuessText("brand")} · ${getWordGuessText("title")} · ${getWordGuessLanguageProfile().shortLabel}`,
+    dailyWordSession ? getWordGuessText("dailyTitle") + " · " + dailyWordSession.date : "",
     modeLine,
     getWordGuessHintResultLabel(),
     grid,
@@ -9745,7 +9753,11 @@ function createWordGuessShareImageBlob() {
 
       context.fillStyle = colors.text;
       context.font = '900 58px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
-      context.fillText(dailyWordSession ? getWordGuessText("dailyTitle") + " · " + dailyWordSession.date : getWordGuessText("title"), width / 2, 220);
+      context.fillText(getWordGuessText("title"), width / 2, 220);
+      if (dailyWordSession) {
+        context.font = '600 24px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif';
+        context.fillText(getWordGuessText("dailyTitle") + " · " + dailyWordSession.date, width / 2, 250);
+      }
 
       const isWon = wordGuessGuesses.some(function (guess) {
         const guessedWord = guess && typeof guess === "object" ? guess.word : guess;
@@ -10335,6 +10347,9 @@ function getSetupRules(modeId) {
   }
 
   if (modeId === "wordguess") {
+    if (wordGuessSetupMode === "daily") {
+      return { eyebrow: getWordGuessText("title") + " · " + getWordGuessText("dailyTitle"), title: getWordGuessText("shortRulesTitle"), text: formatWordGuessText("fullRules", 5, getLetterWord(5), 6, getAttemptWord(6), true) };
+    }
     return { eyebrow: getWordGuessText("title"), title: getWordGuessText("shortRulesTitle"), text: getWordGuessText("shortRulesText") };
   }
 
@@ -12934,6 +12949,7 @@ function cancelPendingWordGuessStart() {
 }
 
 function leaveWordGuessGame() {
+  const wasDaily = Boolean(dailyWordSession);
   cancelPendingWordGuessStart();
   clearWordGuessHintNudgeTimers();
   clearWordGuessHintNudgeVisual();
@@ -12951,6 +12967,10 @@ function leaveWordGuessGame() {
   }
   wordGuessFinished = false;
   dailyWordSession = null;
+  if (wasDaily) {
+    resetWordGuessDictionaryCache();
+    wordGuessTarget = "";
+  }
   renderDailyWordUi();
 }
 
@@ -13036,11 +13056,11 @@ function requestAppBack(options) {
 
   if (screenName === "wordGuessGame") {
     if (wordGuessResult && !wordGuessResult.hidden) {
-      navigateAfterAppBack(dailyWordSession ? "menu" : "wordGuessSettings", historyMode);
+      navigateAfterAppBack("wordGuessSettings", historyMode);
       return true;
     }
 
-    openExitMenuModal(dailyWordSession || settings.destination === "menu" ? "menu" : "wordGuessSettings", source === "popstate");
+    openExitMenuModal(settings.destination === "menu" ? "menu" : "wordGuessSettings", source === "popstate");
     return true;
   }
 
@@ -13645,6 +13665,10 @@ function setupEvents() {
 
   if (wordGuessNewBtn) {
     wordGuessNewBtn.addEventListener("click", () => {
+      if (dailyWordSession && wordGuessResult.classList.contains("is-won")) {
+        returnToNormalWordGuessSetup();
+        return;
+      }
       startWordGuessGame({ daily: Boolean(dailyWordSession && !wordGuessResult.classList.contains("is-won")) });
     });
   }
@@ -14306,6 +14330,10 @@ function renderModes() {
     const renderedDescription = mode.id === "battle" ? Slovesnyi.text("description", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
     appendTextElement(button, "strong", "", renderedTitle);
     appendTextElement(button, "span", "mode-card-description", renderedDescription);
+    if (mode.id === "wordguess") {
+      const dailyStatus = appendTextElement(button, "span", "word-guess-daily-status", getDailyWordCardStatus());
+      dailyStatus.setAttribute("data-word-guess-daily-status", "");
+    }
 
     button.addEventListener("click", async () => {
       const selectionRequestId = ++modeSelectionRequestId;
@@ -14325,6 +14353,7 @@ function renderModes() {
       }
 
       if (isWordGuess()) {
+        wordGuessSetupMode = "normal";
         resetActiveGameState();
         document.body.dataset.mode = mode.id;
         document.body.classList.remove("single-card-mode");
@@ -16938,6 +16967,7 @@ function showScreen(screenName, options) {
 
   if (screenName === "wordGuessSettings") {
     wordGuessSettingsScreen && wordGuessSettingsScreen.classList.add("active");
+    renderDailyWordUi();
   }
 
   if (screenName === "wordGuessGame") {

@@ -1,4 +1,4 @@
-"""c10 checks using an installed Chromium/Edge and Python's standard library.
+"""c11 checks using an installed Chromium/Edge and Python's standard library.
 
 No browser/Node/package download. An isolated temporary profile is used.
 Run: python -X utf8 tests/daily-word-browser.py
@@ -20,8 +20,8 @@ import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-REV = '0.6.7-20260918-c10'
-CACHE = 'movohray-cache-v0.6.7-b20260918-c10'
+REV = '0.6.7-20260920-c11'
+CACHE = 'movohray-cache-v0.6.7-b20260920-c11'
 
 
 class CDP:
@@ -137,13 +137,23 @@ def check(name, condition):
     print('PASS', name, flush=True)
 
 
+def open_daily(page, start=True):
+    if page.js('getCurrentAppScreenName()')=='menu':
+        page.click('.mode-card-wordguess')
+        page.wait("getCurrentAppScreenName()==='wordGuessSettings'")
+        assert page.js('wordGuessSetupMode')=='normal', 'Main card must open Normal'
+    page.click('#wordGuessDailyTab')
+    if start:
+        page.click('#dailyWordStartBtn')
+
+
 def run():
     browser = os.environ.get('MOVOHRAY_BROWSER', r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe')
     assert Path(browser).exists(), 'Set MOVOHRAY_BROWSER to an installed Chromium browser'
     server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(Handler, directory=str(ROOT)))
     threading.Thread(target=server.serve_forever, daemon=True).start()
-    profile = tempfile.mkdtemp(prefix='movohray-daily-c10-')
-    artifacts = Path(tempfile.gettempdir())/'movohray-daily-c10-results'
+    profile = tempfile.mkdtemp(prefix='movohray-daily-c11-')
+    artifacts = Path(tempfile.gettempdir())/'movohray-daily-c11-results'
     artifacts.mkdir(exist_ok=True)
     proc = subprocess.Popen([browser, '--headless=new', '--no-first-run', '--no-default-browser-check',
                              '--remote-debugging-port=0', '--user-data-dir='+profile, 'about:blank'],
@@ -190,21 +200,44 @@ def run():
         page.wait("Boolean(navigator.serviceWorker.controller)")
         check('release', page.js('getLocalReleaseInfo().revision')==REV)
         check('439 unique achievements', page.js('WORD_GUESS_ACHIEVEMENTS.length === 439 && new Set(WORD_GUESS_ACHIEVEMENTS.map(d=>d.id)).size === 439'))
-        baseline = subprocess.check_output(['git','show','df861c893b5deb6ee8212d7bf29ec3daf75e2b69:app.js'],cwd=ROOT).decode('utf-8')
+        baseline = subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:app.js'],cwd=ROOT).decode('utf-8')
         definitions = baseline.split('const WORD_GUESS_ACHIEVEMENTS = ',1)[1].split('\n];',1)[0]+']'
-        check('all 434 c9 definitions unchanged and in original order', page.js('JSON.stringify(WORD_GUESS_ACHIEVEMENTS.slice(0,434))===JSON.stringify('+definitions+')'))
+        check('all 439 c10 definitions unchanged and in original order', page.js('JSON.stringify(WORD_GUESS_ACHIEVEMENTS.slice(0,439))===JSON.stringify('+definitions+')'))
         check('all daily translations', page.js("['ru','en'].every(l=>Object.keys(WORD_GUESS_TEXT.uk).every(k=>typeof WORD_GUESS_TEXT[l][k] !== 'undefined'))"))
         check('new assets precached', page.js("Promise.all(['daily-word.js','daily-word-ui.js','daily-words.json'].map(f=>caches.match(getRevisionedAssetUrl(f)).then(Boolean))).then(a=>a.every(Boolean))"))
         page.call('Emulation.setDeviceMetricsOverride', {'width':1280,'height':900,'deviceScaleFactor':1,'mobile':False})
         screenshot(page, artifacts/'desktop-menu.png')
-        page.click('#dailyWordStartBtn')
+        check('five primary cards and no standalone daily',page.js("document.querySelectorAll('#modeList .mode-card-active').length===5 && !document.querySelector('.daily-word-card') && !document.querySelector('#menuScreen #dailyWordStartBtn')"))
+        check('informational badge without nested controls',page.js("!!document.querySelector('.mode-card-wordguess [data-word-guess-daily-status]') && !document.querySelector('.mode-card-wordguess button, .mode-card-wordguess a')"))
+        check('unique DOM IDs',page.js("(() => {const ids=Array.from(document.querySelectorAll('[id]')).map(n=>n.id);return new Set(ids).size===ids.length;})()"))
+        check('daily core unchanged from c10',(ROOT/'daily-word.js').read_text(encoding='utf-8').replace('\r\n','\n')==subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:daily-word.js'],cwd=ROOT).decode().replace('\r\n','\n'))
+        page.click('.mode-card-wordguess');page.wait("getCurrentAppScreenName()==='wordGuessSettings'")
+        check('default Normal tab and unchanged controls',page.js("wordGuessSetupMode==='normal' && !document.querySelector('#wordGuessNormalPanel').hidden && !!document.querySelector('#wordGuessNormalPanel [data-kids-setup-toggle]') && document.querySelector('#wordGuessLengthSummary').getBoundingClientRect().height>0"))
+        history_length=page.js('history.length')
+        page.js("document.querySelector('#wordGuessNormalTab').focus()")
+        page.call('Input.dispatchKeyEvent',{'type':'keyDown','key':'ArrowRight'})
+        check('keyboard tabs preserve Word Guess route',page.js("wordGuessSetupMode==='daily' && selectedMode==='wordguess' && getCurrentAppScreenName()==='wordGuessSettings' && document.activeElement.id==='wordGuessDailyTab' && document.querySelector('#wordGuessDailyTab').getAttribute('aria-selected')==='true'") and page.js('history.length')==history_length)
+        check('irrelevant Daily controls hidden',page.js("document.querySelector('#wordGuessNormalPanel').hidden && document.querySelector('#wordGuessLengthSummary').getBoundingClientRect().height===0 && document.querySelector('#wordGuessNormalPanel [data-kids-setup-toggle]').getBoundingClientRect().height===0 && wordGuessStartBtn.hidden"))
+        for lang in ['uk','ru','en']:
+            page.js("wordGuessLabsUnlocked=true;selectWordGuessLanguage("+json.dumps(lang)+")")
+            for width,height in [(1280,900),(320,568),(667,375)]:
+                page.call('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':width<800})
+                for mode in ['normal','daily']:
+                    page.click('#wordGuessNormalTab' if mode=='normal' else '#wordGuessDailyTab')
+                    check(f'{lang} {mode} setup fits {width}x{height}',page.js("(() => {const t=document.querySelector('#wordGuessSetupTabs'),b=document.querySelector(wordGuessSetupMode==='daily'?'#dailyWordStartBtn':'#wordGuessStartBtn');return document.documentElement.scrollWidth<=innerWidth && t.scrollWidth<=t.clientWidth+1 && b.getBoundingClientRect().height>=44 && Array.from(t.children).every(n=>n.scrollWidth<=n.clientWidth+1);})()"))
+                    if lang=='uk': screenshot(page,artifacts/f'setup-{mode}-{width}x{height}.png')
+        page.js("selectWordGuessLanguage('uk')")
+        page.call('Emulation.setDeviceMetricsOverride',{'width':1280,'height':900,'deviceScaleFactor':1,'mobile':False})
+
+        open_daily(page)
         page.wait("getCurrentAppScreenName() === 'wordGuessGame'")
         target = page.js('wordGuessTarget')
+        check('gameplay retains parent identity',page.js("wordGuessGameTitle.textContent===getWordGuessText('title') && document.querySelector('#dailyWordContext').textContent.includes(getWordGuessText('dailyTitle'))"))
         check('daily configuration and no pregame answer', page.js("getWordGuessLength()===5 && getWordGuessAttempts()===6 && getWordGuessAllowsRepeats() && !document.querySelector('#wordGuessBoard').textContent.trim() && document.querySelector('#wordGuessResult').hidden"))
         screenshot(page, artifacts/'desktop-daily.png')
         page.call('Page.reload')
         page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized")
-        page.click('#dailyWordStartBtn')
+        open_daily(page)
         page.wait("getCurrentAppScreenName()==='wordGuessGame'")
         check('unfinished reload keeps the same word', page.js('wordGuessTarget')==target)
         # Real accepted guesses/reveal/finish path: loss, retry, then physical-keyboard win.
@@ -225,25 +258,36 @@ def run():
         page.js('finishWordGuessGame(true)')
         check('duplicate finish ignored', page.js("dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===1"))
         screenshot(page, artifacts/'desktop-result.png')
+        check('completion synchronizes menu, Daily panel and result',page.js("document.querySelector('[data-word-guess-daily-status]').textContent===getWordGuessText('dailyCardCompleted') && document.querySelector('#dailyWordStatus').textContent===getWordGuessText('dailyCompleted') && wordGuessNewBtn.textContent===getWordGuessText('wordGuessNormalGame') && wordGuessResultAppTitle.textContent===getWordGuessText('title')"))
+
         page.click('#wordGuessNewBtn')
-        page.wait('!wordGuessFinished && wordGuessResult.hidden')
-        check('play more uses normal settings', page.js('dailyWordSession===null && getWordGuessAttempts()===selectedWordGuessAttempts && getWordGuessAllowsRepeats()===selectedWordGuessAllowRepeats'))
+        page.wait("getCurrentAppScreenName()==='wordGuessSettings' && wordGuessSetupMode==='normal' && dailyWordSession===null")
+        check('explicit Normal game returns to setup', page.js("!document.querySelector('#wordGuessNormalPanel').hidden && document.querySelector('#wordGuessDailyPanel').hidden"))
+        page.click('#wordGuessStartBtn')
+        page.wait("getCurrentAppScreenName()==='wordGuessGame' && !wordGuessFinished")
+        check('normal setup uses normal settings', page.js('dailyWordSession===null && getWordGuessAttempts()===selectedWordGuessAttempts && getWordGuessAllowsRepeats()===selectedWordGuessAllowRepeats'))
         before_games = page.js('wordGuessAchievementsState.games')
         page.js('wordGuessCurrentGuess=wordGuessTarget;submitWordGuess()')
         page.wait('wordGuessFinished')
         check('normal win keeps daily total unchanged', page.js("dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===1 && wordGuessAchievementsState.games==="+str(before_games+1)))
         page.js('leaveWordGuessGame();showScreen("menu")')
-        check('completed home state', page.js("document.querySelector('#dailyWordStartBtn').disabled && document.querySelector('#dailyWordStartBtn').textContent===getWordGuessText('dailyCompleted')"))
+        check('completed home state', page.js("document.querySelector('[data-word-guess-daily-status]').textContent===getWordGuessText('dailyCardCompleted')"))
         page.call('Page.reload')
-        page.wait("typeof dailyWordSession!=='undefined' && document.querySelector('#dailyWordStartBtn').disabled && document.querySelector('#dailyWordStartBtn').textContent")
+        page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized")
         check('daily state survives reload', page.js("dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===1"))
+        open_daily(page,start=False)
+        check('completed Daily tab offers explicit Normal game',page.js("document.querySelector('#dailyWordStatus').textContent===getWordGuessText('dailyCompleted') && document.querySelector('#dailyWordStartBtn').textContent===getWordGuessText('wordGuessNormalGame')"))
+        page.click('#dailyWordStartBtn')
+        check('completed action returns to Normal without awarding',page.js("wordGuessSetupMode==='normal' && dailyWordSession===null && dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===1"))
+        page.click('#wordGuessBackBtn')
+
         # More flows below are deliberately isolated by language/date, not system-clock changes.
         page.js("wordGuessLabsUnlocked=true;selectWordGuessLanguage('en')")
-        page.click('#dailyWordStartBtn')
+        open_daily(page)
         page.wait("getCurrentAppScreenName()==='wordGuessGame'")
         en_target = page.js('wordGuessTarget')
         page.js('leaveWordGuessGame();showScreen("menu");kidsModeEnabled=true;kidsAge=5;resetWordGuessDictionaryCache()')
-        page.click('#dailyWordStartBtn')
+        open_daily(page)
         page.wait("getCurrentAppScreenName()==='wordGuessGame'")
         check('Kids independent target and hints', page.js('wordGuessTarget')==en_target and page.js('getWordGuessAttempts()')==6)
         page.js("selectWordGuessLanguage('ru')")
@@ -261,14 +305,14 @@ def run():
             screenshot(page, artifacts/f'result-{width}x{height}.png')
         page.js('leaveWordGuessGame();showScreen("menu")')
         page.call('Emulation.setDeviceMetricsOverride', {'width':320,'height':568,'deviceScaleFactor':1,'mobile':True})
-        check('narrow menu no overflow', page.js("document.documentElement.scrollWidth<=innerWidth && document.querySelector('.daily-word-card').scrollWidth<=document.querySelector('.daily-word-card').clientWidth"))
+        check('narrow menu no overflow', page.js("document.documentElement.scrollWidth<=innerWidth && document.querySelector('.mode-card-wordguess').scrollWidth<=document.querySelector('.mode-card-wordguess').clientWidth"))
         screenshot(page, artifacts/'narrow-menu.png')
         # Offline reload and an uncompleted language: data must come from the SW.
         page.js("selectWordGuessLanguage('ru');localStorage.setItem(WORD_GUESS_LABS_STORAGE_KEY,'true');persistWordGuessLanguagePreference()")
         page.call('Network.emulateNetworkConditions', {'offline':True,'latency':0,'downloadThroughput':0,'uploadThroughput':0})
         page.call('Page.reload')
         page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized && !document.body.classList.contains('required-update-open')")
-        page.click('#dailyWordStartBtn')
+        open_daily(page)
         page.wait("getCurrentAppScreenName()==='wordGuessGame'")
         check('offline daily launch', page.js('dailyWordSession.language')=='ru')
         page.js('wordGuessCurrentGuess=wordGuessTarget;submitWordGuess()')
@@ -277,9 +321,9 @@ def run():
         check('daily share identifies date', page.js("buildWordGuessShareText().includes(dailyWordSession.date) && buildWordGuessShareText().includes(getWordGuessText('dailyTitle'))"))
         page.call('Network.emulateNetworkConditions', {'offline':False,'latency':0,'downloadThroughput':-1,'uploadThroughput':-1})
         page.js('leaveWordGuessGame();showScreen("menu");applyTheme("dark")')
-        page.js("document.querySelector('.daily-word-card').scrollIntoView({block:'center'})")
+        page.js("document.querySelector('.mode-card-wordguess').scrollIntoView({block:'center'})")
         screenshot(page, artifacts/'narrow-dark-menu.png')
-        check('dark streak follows readable theme text',page.js("getComputedStyle(document.querySelector('#dailyWordStreak')).color === getComputedStyle(document.body).getPropertyValue('--color-text').trim() || getComputedStyle(document.querySelector('#dailyWordStreak')).color === getComputedStyle(document.querySelector('#dailyWordTitle')).color"))
+
         # Threshold awards exercise the real adapter, with isolated daily test data.
         thresholds = page.js('''(() => {
           const original=dailyWordStore, values={}, passed=[];
@@ -297,17 +341,19 @@ def run():
         })()''')
         for name in thresholds:
             check(name, True)
-        # c9 -> c10 required update in two tabs, with real service workers.
-        for name in ['index.html','app.js','styles.css','version.json','service-worker.js']:
-            UpgradeHandler.baseline[name] = subprocess.check_output(['git','show','df861c893b5deb6ee8212d7bf29ec3daf75e2b69:'+name],cwd=ROOT)
+        # c10 -> c11 required update in two tabs, with real service workers.
+        for name in ['index.html','app.js','styles.css','version.json','service-worker.js','daily-word-ui.js']:
+            UpgradeHandler.baseline[name] = subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:'+name],cwd=ROOT)
         upgrade = http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(UpgradeHandler,directory=str(ROOT)))
         threading.Thread(target=upgrade.serve_forever,daemon=True).start()
         try:
             upgrade_url=f'http://127.0.0.1:{upgrade.server_port}/'
             page.call('Page.navigate', {'url':upgrade_url})
             page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized && !!navigator.serviceWorker.controller")
-            check('c9 worker active before upgrade', page.js("getActiveServiceWorkerInfo().then(s=>s.revision)")=='0.6.7-20260914-c9')
+            check('c10 worker active before upgrade', page.js("getActiveServiceWorkerInfo().then(s=>s.revision)")=='0.6.7-20260918-c10')
             page.js("wordGuessAchievementsState.games=123;wordGuessAchievementsState.unlocked['first-win']={unlockedAt:'2026-01-01T12:00:00.000Z',reward:'🏆'};persistWordGuessAchievementsState();localStorage.setItem('movohray-alias-swipe-learning-v1',JSON.stringify({usedSwipeUp:true,usedSwipeDown:true,totalSwipeGestures:12,completedAliasRounds:4}));")
+            page.js("(() => {const d=new Date(); d.setDate(d.getDate()-1); dailyWordStore.complete('uk',DailyWord.localDate(d)); for(let i=75;i>0;i--) {const x=new Date();x.setDate(x.getDate()-i);dailyWordStore.complete('en',DailyWord.localDate(x));}})()")
+            legacy_daily=page.js('localStorage.getItem(DailyWord.storageKey)')
             tab_id=page.call('Target.createTarget',{'url':upgrade_url})['targetId']
             targets=json.load(urllib.request.urlopen(f'http://127.0.0.1:{port}/json'))
             tab=CDP(next(t['webSocketDebuggerUrl'] for t in targets if t['id']==tab_id))
@@ -317,19 +363,21 @@ def run():
             check('required gate blocks old candidate', page.js("document.body.classList.contains('required-update-open') && !!document.querySelector('#requiredUpdateOverlay')"))
             page.click('#requiredUpdateBtn')
             page.wait("typeof DATA_REVISION!=='undefined' && DATA_REVISION==='"+REV+"' && appHistoryInitialized && !document.body.classList.contains('required-update-open')",timeout=60)
-            check('c10 GET_REVISION/cache handshake',page.js('getActiveServiceWorkerInfo()')=={'revision':REV,'cache':CACHE})
+            check('c11 GET_REVISION/cache handshake',page.js('getActiveServiceWorkerInfo()')=={'revision':REV,'cache':CACHE})
+            check('c10 daily storage byte-for-byte preserved',page.js('localStorage.getItem(DailyWord.storageKey)')==legacy_daily)
+            check('c10 streaks, totals and 62-day history retained',page.js("dailyWordStore.status('uk',DailyWord.localDate()).currentStreak===1 && dailyWordStore.status('en',DailyWord.localDate()).bestStreak===75 && dailyWordStore.status('en',DailyWord.localDate()).totalCompleted===75 && Object.keys(JSON.parse(localStorage.getItem(DailyWord.storageKey)).languages.en.days).length===62"))
             check('old achievements, statistics and Alias learning survive upgrade',page.js("wordGuessAchievementsState.games===123 && !!wordGuessAchievementsState.unlocked['first-win'] && JSON.parse(localStorage.getItem('movohray-alias-swipe-learning-v1')).totalSwipeGestures===12"))
             tab.js('checkRequiredUpdate({startup:false})')
             tab.wait("document.body.classList.contains('required-update-open')")
             tab.click('#requiredUpdateBtn')
             tab.wait("typeof DATA_REVISION!=='undefined' && DATA_REVISION==='"+REV+"' && appHistoryInitialized && !document.body.classList.contains('required-update-open')",timeout=60)
             check('second tab upgrades safely',tab.js('getActiveServiceWorkerInfo()')=={'revision':REV,'cache':CACHE})
-            # Fresh c10 daily page receives completion from the other tab.
-            page.click('#dailyWordStartBtn');page.wait("getCurrentAppScreenName()==='wordGuessGame'")
-            tab.click('#dailyWordStartBtn');tab.wait("getCurrentAppScreenName()==='wordGuessGame'")
+            # Fresh c11 daily page receives completion from the other tab.
+            open_daily(page);page.wait("getCurrentAppScreenName()==='wordGuessGame'")
+            open_daily(tab);tab.wait("getCurrentAppScreenName()==='wordGuessGame'")
             page.js('wordGuessCurrentGuess=wordGuessTarget;submitWordGuess()');page.wait('wordGuessFinished')
             tab.js('wordGuessCurrentGuess=wordGuessTarget;submitWordGuess()');tab.wait('wordGuessFinished')
-            check('two tabs cannot double-complete the same daily',page.js("dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===1"))
+            check('two tabs cannot double-complete the same daily',page.js("dailyWordStore.status('uk',DailyWord.localDate()).totalCompleted===2 && dailyWordStore.status('uk',DailyWord.localDate()).currentStreak===2"))
             page.call('Target.closeTarget',{'targetId':tab_id})
             page.js('leaveWordGuessGame();showScreen("menu")')
             for width,height in [(1280,900),(320,568),(667,375)]:

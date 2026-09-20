@@ -2,6 +2,7 @@
 var dailyWordSession = null;
 var dailyWordPoolPromise = null;
 var dailyWordStartPending = false;
+var wordGuessSetupMode = "normal";
 var dailyWordStore = DailyWord.createStore({
   getItem: function (key) { return window.localStorage.getItem(key); },
   setItem: function (key, value) { window.localStorage.setItem(key, value); }
@@ -32,44 +33,85 @@ function dailyWordStatsText(status) {
 }
 
 function renderDailyWordUi() {
-  var status = dailyWordStore.status(selectedWordGuessLanguage, DailyWord.localDate());
+  var today = DailyWord.localDate();
+  var status = dailyWordStore.status(selectedWordGuessLanguage, today);
+  var isDaily = wordGuessSetupMode === "daily";
+  document.querySelectorAll("[data-word-guess-daily-status]").forEach(function (node) {
+    node.textContent = getDailyWordCardStatus(status);
+  });
+  document.getElementById("wordGuessSetupTabs").setAttribute("aria-label", getWordGuessText("wordGuessModesAria"));
+  ["normal", "daily"].forEach(function (mode) {
+    var tab = document.getElementById(mode === "normal" ? "wordGuessNormalTab" : "wordGuessDailyTab");
+    var selected = wordGuessSetupMode === mode;
+    tab.textContent = getWordGuessText(mode === "normal" ? "wordGuessNormalTab" : "dailyTitle");
+    tab.setAttribute("aria-selected", selected ? "true" : "false");
+    tab.tabIndex = selected ? 0 : -1;
+  });
+  document.getElementById("wordGuessNormalPanel").hidden = isDaily;
+  document.getElementById("wordGuessDailyPanel").hidden = !isDaily;
+  wordGuessStartBtn.hidden = isDaily;
   document.getElementById("dailyWordTitle").textContent = getWordGuessText("dailyTitle");
-  document.getElementById("dailyWordSubtitle").textContent = getWordGuessText("dailySubtitle");
+  var date = document.getElementById("dailyWordSetupDate");
+  date.textContent = dailyWordDateLabel(today);
+  date.setAttribute("datetime", today);
+  document.getElementById("dailyWordStatus").textContent = getWordGuessText(status.completed ? "dailyCompleted" : "dailySubtitle");
   var start = document.getElementById("dailyWordStartBtn");
-  start.textContent = getWordGuessText(status.completed ? "dailyCompleted" : "dailyStart");
-  start.disabled = status.completed || dailyWordStartPending;
+  start.hidden = !isDaily;
+  start.textContent = getWordGuessText(status.completed ? "wordGuessNormalGame" : "start");
+  start.disabled = dailyWordStartPending;
   start.setAttribute("aria-busy", dailyWordStartPending ? "true" : "false");
   var streak = document.getElementById("dailyWordStreak");
   streak.textContent = status.currentStreak ? "🔥 " + formatWordGuessText("dailyStreak", status.currentStreak) : "";
   streak.hidden = !status.currentStreak;
-  document.getElementById("dailyWordLanguage").textContent = getWordGuessLanguageProfile().shortLabel;
   document.getElementById("dailyWordCollectionStats").textContent = getWordGuessText("dailyTitle") + " · "
     + getWordGuessLanguageProfile().shortLabel + " — " + dailyWordStatsText(status);
   var context = document.getElementById("dailyWordContext");
   context.hidden = !dailyWordSession;
-  context.textContent = dailyWordSession ? dailyWordDateLabel(dailyWordSession.date) : "";
+  var dailyContext = dailyWordSession ? getWordGuessText("dailyTitle") + " · " + dailyWordDateLabel(dailyWordSession.date) : "";
+  context.textContent = dailyContext;
   if (dailyWordSession) context.setAttribute("datetime", dailyWordSession.date);
   else context.removeAttribute("datetime");
-  wordGuessGameTitle.textContent = getWordGuessText(dailyWordSession ? "dailyTitle" : "title");
-  wordGuessResultAppTitle.textContent = dailyWordSession
-    ? getWordGuessText("dailyTitle") + " · " + dailyWordDateLabel(dailyWordSession.date)
-    : getWordGuessText("title");
+  wordGuessGameTitle.textContent = getWordGuessText("title");
+  wordGuessResultAppTitle.textContent = getWordGuessText("title");
+  var resultContext = document.getElementById("dailyWordResultContext");
+  resultContext.hidden = !dailyWordSession;
+  resultContext.textContent = dailyContext;
   var won = wordGuessResult.classList.contains("is-won");
-  wordGuessNewBtn.textContent = getWordGuessText(dailyWordSession ? (won ? "dailyPlayMore" : "dailyRetry") : "newGame");
+  wordGuessNewBtn.textContent = getWordGuessText(dailyWordSession ? (won ? "wordGuessNormalGame" : "dailyRetry") : "newGame");
   if (!dailyWordSession) document.getElementById("dailyWordResultStats").hidden = true;
   wordGuessLanguageButtons.forEach(function (button) {
     button.disabled = Boolean(dailyWordStartPending || (dailyWordSession && getCurrentAppScreenName() === "wordGuessGame"));
   });
 }
 
+function getDailyWordCardStatus(status) {
+  var progress = status || dailyWordStore.status(selectedWordGuessLanguage, DailyWord.localDate());
+  return getWordGuessText(progress.completed ? "dailyCardCompleted" : "dailyCardNew");
+}
+
+function selectWordGuessSetupMode(mode) {
+  if (getCurrentAppScreenName() !== "wordGuessSettings" || document.body.classList.contains("required-update-open")) return;
+  cancelPendingWordGuessStart();
+  closeWordGuessStartPickers();
+  wordGuessSetupMode = mode === "daily" ? "daily" : "normal";
+  wordGuessSettingsMessage.textContent = "";
+  renderDailyWordUi();
+}
+
+function returnToNormalWordGuessSetup() {
+  navigateAfterAppBack("wordGuessSettings", "replace");
+  selectWordGuessSetupMode("normal");
+  renderWordGuessModeSelector();
+  document.getElementById("wordGuessNormalTab").focus();
+}
+
 function startDailyWordGame() {
-  if (document.body.classList.contains("required-update-open")) return;
-  modeSelectionRequestId += 1;
-  selectedMode = "wordguess";
-  resetActiveGameState();
-  clearWhoAmITimer();
-  document.body.dataset.mode = "wordguess";
-  document.body.classList.remove("single-card-mode");
+  if (document.body.classList.contains("required-update-open") || getCurrentAppScreenName() !== "wordGuessSettings" || wordGuessSetupMode !== "daily") return;
+  if (dailyWordStore.status(selectedWordGuessLanguage, DailyWord.localDate()).completed) {
+    selectWordGuessSetupMode("normal");
+    document.getElementById("wordGuessNormalTab").focus();
+    return;
+  }
   return startWordGuessGame({ daily: true });
 }
 
@@ -106,6 +148,20 @@ function renderDailyWordResult(isWon) {
 
 function initializeDailyWord() {
   document.getElementById("dailyWordStartBtn").addEventListener("click", startDailyWordGame);
+  var tabs = [document.getElementById("wordGuessNormalTab"), document.getElementById("wordGuessDailyTab")];
+  tabs.forEach(function (tab, index) {
+    tab.addEventListener("click", function () { selectWordGuessSetupMode(index === 0 ? "normal" : "daily"); });
+    tab.addEventListener("keydown", function (event) {
+      var next;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") next = 1 - index;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = 1;
+      else return;
+      event.preventDefault();
+      selectWordGuessSetupMode(next === 0 ? "normal" : "daily");
+      tabs[next].focus();
+    });
+  });
   function refresh() {
     if (!document.hidden) renderDailyWordUi();
   }
@@ -114,7 +170,7 @@ function initializeDailyWord() {
   window.addEventListener("storage", function (event) {
     if (event.key === DailyWord.storageKey || event.key === null) refresh();
   });
-  // A menu left open across midnight must become playable without a reload.
+  // Refresh both the informational menu badge and the setup panel across midnight.
   window.setInterval(refresh, 30000);
   evaluateDailyWordAchievements();
   renderDailyWordUi();
