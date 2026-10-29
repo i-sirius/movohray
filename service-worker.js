@@ -1,5 +1,5 @@
-const MOVOHRAY_REVISION = "0.6.8a-20261030";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.8a-b20261030";
+const MOVOHRAY_REVISION = "0.6.8b-20261030";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.8b-b20261030";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
   `./word-circle/levels.js?rev=${MOVOHRAY_REVISION}`,

@@ -17843,3 +17843,24 @@ body[data-theme="dark"] #gameScreen .swipe-learning-row {
     font-size: 11px;
   }
 }
+
+/* Slovokolo — mint and turquoise identity. */
+#menuScreen .mode-card-slovokolo {
+  --mode-card-bg: linear-gradient(135deg, #d1f6e8, #a7dfdd);
+  --mode-card-hover: linear-gradient(135deg, #c0f2df, #91d8d5);
+  --mode-card-border: #68bfb3;
+  --mode-card-title: #07565f;
+  --mode-card-shadow: rgba(20, 115, 107, .18);
+  background: var(--mode-card-bg) !important;
+  border-color: var(--mode-card-border);
+}
+#menuScreen .mode-card-slovokolo strong { color: var(--mode-card-title); }
+#menuScreen .mode-card-slovokolo .mode-card-description { color: #285f65; }
+#menuScreen .mode-card-slovokolo:hover { background: var(--mode-card-hover) !important; }
+body[data-theme="dark"] #menuScreen .mode-card-slovokolo {
+  --mode-card-bg: linear-gradient(135deg, #164c49, #153c4b);
+  --mode-card-hover: linear-gradient(135deg, #1c6058, #1c4c59);
+  --mode-card-border: #438e85;
+  --mode-card-title: #b4f5df;
+}
+body[data-theme="dark"] #menuScreen .mode-card-slovokolo .mode-card-description { color: #b6dcd5; }
