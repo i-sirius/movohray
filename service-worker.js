@@ -1,7 +1,14 @@
-const MOVOHRAY_REVISION = "0.6.7-20260920-c11";
-const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.7-b20260920-c11";
+const MOVOHRAY_REVISION = "0.6.8-20261029";
+const MOVOHRAY_CACHE_NAME = "movohray-cache-v0.6.8-b20261029";
 const MOVOHRAY_OFFLINE_DOCUMENT = `./index.html?rev=${MOVOHRAY_REVISION}`;
 const MOVOHRAY_CRITICAL_ASSETS = [
+  `./word-circle/levels.js?rev=${MOVOHRAY_REVISION}`,
+  `./word-circle/achievements.js?rev=${MOVOHRAY_REVISION}`,
+  `./word-circle/view.js?rev=${MOVOHRAY_REVISION}`,
+  `./word-circle/game.js?rev=${MOVOHRAY_REVISION}`,
+  `./word-circle/integration.js?rev=${MOVOHRAY_REVISION}`,
+  `./word-circle/style.css?rev=${MOVOHRAY_REVISION}`,
+
   MOVOHRAY_OFFLINE_DOCUMENT,
   `./daily-word.js?rev=${MOVOHRAY_REVISION}`,
   `./daily-word-ui.js?rev=${MOVOHRAY_REVISION}`,

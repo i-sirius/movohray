@@ -20,8 +20,8 @@ import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-REV = '0.6.7-20260920-c11'
-CACHE = 'movohray-cache-v0.6.7-b20260920-c11'
+REV = '0.6.8-20261029'
+CACHE = 'movohray-cache-v0.6.8-b20261029'
 
 
 class CDP:
@@ -199,7 +199,7 @@ def run():
         page.wait("typeof dailyWordSession !== 'undefined' && document.querySelector('#dailyWordStartBtn').textContent && !document.body.classList.contains('required-update-open')")
         page.wait("Boolean(navigator.serviceWorker.controller)")
         check('release', page.js('getLocalReleaseInfo().revision')==REV)
-        check('439 unique achievements', page.js('WORD_GUESS_ACHIEVEMENTS.length === 439 && new Set(WORD_GUESS_ACHIEVEMENTS.map(d=>d.id)).size === 439'))
+        check('446 unique achievements', page.js('WORD_GUESS_ACHIEVEMENTS.length === 446 && new Set(WORD_GUESS_ACHIEVEMENTS.map(d=>d.id)).size === 446'))
         baseline = subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:app.js'],cwd=ROOT).decode('utf-8')
         definitions = baseline.split('const WORD_GUESS_ACHIEVEMENTS = ',1)[1].split('\n];',1)[0]+']'
         check('all 439 c10 definitions unchanged and in original order', page.js('JSON.stringify(WORD_GUESS_ACHIEVEMENTS.slice(0,439))===JSON.stringify('+definitions+')'))
@@ -207,7 +207,7 @@ def run():
         check('new assets precached', page.js("Promise.all(['daily-word.js','daily-word-ui.js','daily-words.json'].map(f=>caches.match(getRevisionedAssetUrl(f)).then(Boolean))).then(a=>a.every(Boolean))"))
         page.call('Emulation.setDeviceMetricsOverride', {'width':1280,'height':900,'deviceScaleFactor':1,'mobile':False})
         screenshot(page, artifacts/'desktop-menu.png')
-        check('five primary cards and no standalone daily',page.js("document.querySelectorAll('#modeList .mode-card-active').length===5 && !document.querySelector('.daily-word-card') && !document.querySelector('#menuScreen #dailyWordStartBtn')"))
+        check('six primary cards and no standalone daily',page.js("document.querySelectorAll('#modeList .mode-card-active').length===6 && !document.querySelector('.daily-word-card') && !document.querySelector('#menuScreen #dailyWordStartBtn')"))
         check('informational badge without nested controls',page.js("!!document.querySelector('.mode-card-wordguess [data-word-guess-daily-status]') && !document.querySelector('.mode-card-wordguess button, .mode-card-wordguess a')"))
         check('unique DOM IDs',page.js("(() => {const ids=Array.from(document.querySelectorAll('[id]')).map(n=>n.id);return new Set(ids).size===ids.length;})()"))
         check('daily core unchanged from c10',(ROOT/'daily-word.js').read_text(encoding='utf-8').replace('\r\n','\n')==subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:daily-word.js'],cwd=ROOT).decode().replace('\r\n','\n'))

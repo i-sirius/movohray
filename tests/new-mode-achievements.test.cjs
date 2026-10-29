@@ -51,12 +51,12 @@ function harness(saved, unavailable=false) {
   return {c,run,data,queued,sv,party,has:id=>!!c.wordGuessAchievementsState.unlocked[id],state:()=>JSON.parse(JSON.stringify(c.wordGuessAchievementsState))};
 }
 const board=(rows,cols)=>({rows,cols,cells:Array(rows*cols).fill(1)});
-test('417 legacy definitions and their copy unchanged; 439 total including daily awards, exact +16 copy, groups',()=>{
+test('417 legacy definitions and their copy unchanged; 446 total including daily awards, exact +16 copy, groups',()=>{
   const h=harness(), old=cp.execFileSync('git',['show','095a8d9:app.js'],{encoding:'utf8'}), baseline=vm.createContext({});
   vm.runInContext(constant(old,'WORD_GUESS_ACHIEVEMENTS','\n];')+'\n'+constant(old,'WORD_GUESS_TEXT','\n};'),baseline);
   const oldDefs=JSON.parse(vm.runInContext('JSON.stringify(WORD_GUESS_ACHIEVEMENTS)',baseline));
   const defs=JSON.parse(h.run('JSON.stringify(WORD_GUESS_ACHIEVEMENTS)'));
-  assert.equal(oldDefs.length,417);assert.equal(defs.length,439);assert.equal(new Set(defs.map(d=>d.id)).size,439);
+  assert.equal(oldDefs.length,417);assert.equal(defs.length,446);assert.equal(new Set(defs.map(d=>d.id)).size,446);
   for(const d of oldDefs) {
     assert.deepEqual(defs.find(n=>n.id===d.id),d);
     for(const lang of ['uk','ru','en']) for(const key of [d.titleKey,d.descriptionKey,d.hintKey].filter(Boolean)) {
@@ -70,10 +70,11 @@ test('417 legacy definitions and their copy unchanged; 439 total including daily
       assert.equal(h.run(`WORD_GUESS_TEXT.${lang}.${f.definition.descriptionKey}`),f.texts[lang].description);
     }
   }
-  assert.deepEqual(JSON.parse(h.run('JSON.stringify(WORD_GUESS_ACHIEVEMENTS.reduce(function(a,d){var g=getWordGuessAchievementGameId(d);a[g]=(a[g]||0)+1;return a;},{}))')),{wordguess:148,movohray:17,alias:93,charades:76,whoami:83,svitlohray:10,slovesnyi:6});
+  assert.deepEqual(JSON.parse(h.run('JSON.stringify(WORD_GUESS_ACHIEVEMENTS.reduce(function(a,d){var g=getWordGuessAchievementGameId(d);a[g]=(a[g]||0)+1;return a;},{}))')),{wordguess:153,movohray:17,alias:94,charades:76,whoami:83,svitlohray:10,slovesnyi:6,slovokolo:7});
+  const integrationBaseline=cp.execFileSync('git',['show','af19304:app.js'],{encoding:'utf8'});
   for(const name of ['recordWordGuessAchievements','recordWhoAmIFinalAchievements','evaluatePartyModeCumulativeAchievements','recordPartyModeAchievements','evaluatePartyWordSpecificAchievements','evaluatePartyRoundPatternAchievements','unlockWordGuessAchievement','getVisibleWordGuessAchievementDefinitions','markWordGuessAchievementViewed','revealWordGuessAchievementHint','renderWordGuessAchievementCards','getWordGuessAchievementTimestamp']) {
-    const start=old.indexOf('function '+name+'('), end=old.indexOf('\nfunction ',start+1);
-    assert.equal(fn(name).replace(/\r\n/g,'\n').trimEnd(),old.slice(start,end).replace(/\r\n/g,'\n').trimEnd(),name+' unchanged');
+    const start=integrationBaseline.indexOf('function '+name+'('), end=integrationBaseline.indexOf('\nfunction ',start+1);
+    assert.equal(fn(name).replace(/\r\n/g,'\n').trimEnd(),integrationBaseline.slice(start,end).replace(/\r\n/g,'\n').trimEnd(),name+' unchanged');
   }
 });
 test('SV01/02: first completion; hinted/non-finished games do not grant no-hint',()=>{

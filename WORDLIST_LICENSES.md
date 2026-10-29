@@ -48,3 +48,8 @@ The expanded EN Labs target pool is frequency-ranked using **hermitdave/Frequenc
 - Repository code license: MIT
 
 Only 5–7 letter entries that pass Movohray's target filters are added to the target pool.
+
+## Slovokolo / Word Circle
+
+Expanded word-form dictionaries, pinned sources, original notices, build instructions
+and the exhaustive-check scope are documented in [word-circle/LEXICON_LICENSE.md](word-circle/LEXICON_LICENSE.md).

@@ -9,12 +9,12 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.7";
-const DATA_BUILD = "2026-09-20";
-const DATA_CANDIDATE = 11;
+const DATA_VERSION = "0.6.8";
+const DATA_BUILD = "2026-10-29";
+const DATA_CANDIDATE = 0;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.7-b20260920-c11";
+const DATA_CACHE = "movohray-cache-v0.6.8-b20261029";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -224,7 +224,9 @@ const WORD_GUESS_HINT_NUDGE_VISIBLE_MS = 6500;
 const WORD_GUESS_ACHIEVEMENT_TOAST_HOLD_MS = 9000;
 const WORD_GUESS_ACHIEVEMENT_TOAST_EXIT_MS = 650;
 const WORD_GUESS_FUTURE_FEATURES = Object.freeze({ timedModeUi: false, multiplayerUi: false, developerFeedbackPlaceholder: true });
-const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY, KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, KIDS_ILLUSTRATIONS_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY, DailyWord.storageKey];
+const MOVOHRAY_USER_RESET_STORAGE_KEYS = [ALIAS_SWIPE_LEARNING_KEY,
+  "movohray-word-circle-achievements-v1", "slovokolo-v5-locale",
+  ...["uk","ru","en"].flatMap(lang=>["slovokolo-v5-current-"+lang,...["all","easy","medium","hard"].map(d=>"slovokolo-v5-recent-"+lang+"-"+d)]), KIDS_MODE_STORAGE_KEY, KIDS_AGE_STORAGE_KEY, KIDS_ILLUSTRATIONS_STORAGE_KEY, THEME_STORAGE_KEY, SOUND_STORAGE_KEY, HAPTIC_STORAGE_KEY, WORD_CARD_SETTINGS_STORAGE_KEY, WORD_GUESS_MODE_STORAGE_KEY, WORD_GUESS_LENGTH_STORAGE_KEY, WORD_GUESS_ATTEMPTS_STORAGE_KEY, WORD_GUESS_REPEATS_STORAGE_KEY, WORD_GUESS_LANGUAGE_STORAGE_KEY, WORD_GUESS_LABS_STORAGE_KEY, WORD_GUESS_LABS_VISIBILITY_STORAGE_KEY, WORD_GUESS_ACHIEVEMENTS_STORAGE_KEY, DailyWord.storageKey];
 const WORD_GUESS_ACHIEVEMENTS = [
   { id: "first-win", reward: "🏆", titleKey: "achievementFirstWinTitle", descriptionKey: "achievementFirstWinDescription", category: "milestones" },
   { id: "first-try", reward: "🎯", titleKey: "achievementFirstTryTitle", descriptionKey: "achievementFirstTryDescription", category: "skill" },
@@ -669,6 +671,14 @@ const WORD_GUESS_ACHIEVEMENTS = [
   { id: "daily-word-streak-7", game: "wordguess", reward: "📅", titleKey: "achievementDailyWeekTitle", descriptionKey: "achievementDailyWeekDescription", category: "streaks" },
   { id: "daily-word-streak-30", game: "wordguess", reward: "🌟", titleKey: "achievementDailyHabitTitle", descriptionKey: "achievementDailyHabitDescription", category: "streaks" },
   { id: "daily-word-total-50", game: "wordguess", reward: "🏅", titleKey: "achievementDailyRegularTitle", descriptionKey: "achievementDailyRegularDescription", category: "milestones" },
+  {id:"wordcircle-wfirst",game:"slovokolo",reward:"🌱",titleKey:"wc_wfirst_title",descriptionKey:"wc_wfirst_description",category:"milestones"},
+  {id:"wordcircle-w5",game:"slovokolo",reward:"📚",titleKey:"wc_w5_title",descriptionKey:"wc_w5_description",category:"milestones"},
+  {id:"wordcircle-w10",game:"slovokolo",reward:"🏆",titleKey:"wc_w10_title",descriptionKey:"wc_w10_description",category:"milestones"},
+  {id:"wordcircle-bonus10",game:"slovokolo",reward:"⭐",titleKey:"wc_bonus10_title",descriptionKey:"wc_bonus10_description",category:"skill"},
+  {id:"wordcircle-nohint3",game:"slovokolo",reward:"🧠",titleKey:"wc_nohint3_title",descriptionKey:"wc_nohint3_description",category:"hints"},
+  {id:"wordcircle-polyglot",game:"slovokolo",reward:"🌍",titleKey:"wc_polyglot_title",descriptionKey:"wc_polyglot_description",category:"languages"},
+  {id:"wordcircle-longword",game:"slovokolo",reward:"🦒",titleKey:"wc_longword_title",descriptionKey:"wc_longword_description",category:"skill"},
+
 ];
 const WORD_GUESS_ACHIEVEMENT_CATEGORIES = [
   { id: "all", titleKey: "achievementCategoryAll" },
@@ -689,6 +699,7 @@ const WORD_GUESS_ACHIEVEMENT_GAMES = [
   { id: "charades", titleKey: "achievementGameCharades", icon: "🎭" },
   { id: "whoami", titleKey: "achievementGameWhoAmI", icon: "🕵️" },
   { id: "svitlohray", titleKey: "achievementGameSvitlohray", icon: "💡" },
+  { id: "slovokolo", titleKey: "achievementGameSlovokolo", icon: "🔤" },
   { id: "slovesnyi", titleKey: "achievementGameSlovesnyi", icon: "🗣️" },
   { id: "movohray", titleKey: "achievementGameMovohray", icon: "✨" },
 ];
@@ -4410,6 +4421,7 @@ let wordActionTimeoutId = null;
 let wordCardTransitionToken = 0;
 
 const modeConfigs = [
+  {id:"slovokolo",title:"Словоколо",description:"Літерниця",available:true},
   {
     id: "explain",
     title: "Поясни слово (Alias)",
@@ -6769,6 +6781,7 @@ function getWordGuessAchievementGameCopy(definition) {
     charades: { icon: "🎭", label: getWordGuessText("achievementGameCharades") },
     whoami: { icon: "🕵️", label: getWordGuessText("achievementGameWhoAmI") },
     svitlohray: { icon: "💡", label: getWordGuessText("achievementGameSvitlohray") },
+    slovokolo: { icon: "🔤", label: getWordGuessText("achievementGameSlovokolo") },
     slovesnyi: { icon: "🗣️", label: getWordGuessText("achievementGameSlovesnyi") },
     movohray: { icon: "✨", label: getWordGuessText("achievementGameMovohray") },
   };
@@ -8124,6 +8137,7 @@ function selectWordGuessLanguage(languageId) {
   wordGuessAchievementsState.languageSwitches = (Number(wordGuessAchievementsState.languageSwitches) || 0) + 1;
   persistWordGuessAchievementsState();
   evaluateWordGuessMetaAchievements();
+  if(getCurrentAppScreenName()==="slovokolo")Slovokolo.onScreen("menu");
   selectedWordGuessLanguage = normalizedLanguage;
   persistWordGuessLanguagePreference();
   resetWordGuessDictionaryData();
@@ -8138,6 +8152,7 @@ function selectWordGuessLanguage(languageId) {
   renderWordGuessLabsControls();
   renderModes();
   renderAliasSwipeHint();
+  if(getCurrentAppScreenName()==="slovokolo")Slovokolo.open();
 }
 
 function initializeWordGuessLabs() {
@@ -14284,6 +14299,8 @@ function setupEvents() {
 }
 
 function renderModes() {
+  Slovokolo.configure();
+  if(menuModeNote)menuModeNote.textContent=getWordGuessText("menuModeNote")+" · "+Slovokolo.copy(selectedWordGuessLanguage)[0];
   modeList.innerHTML = "";
   const activeModes = modeConfigs.filter((mode) => mode.available);
   const upcomingModes = modeConfigs.filter((mode) => !mode.available);
@@ -14305,7 +14322,7 @@ function renderModes() {
     const iconWrap = document.createElement("span");
     iconWrap.className = "mode-card-icon";
     iconWrap.setAttribute("aria-hidden", "true");
-    const iconFallback = appendTextElement(iconWrap, "span", "mode-card-icon-fallback", mode.id === "battle" ? "☏" : "?");
+    const iconFallback = appendTextElement(iconWrap, "span", "mode-card-icon-fallback", mode.id === "slovokolo" ? "🔤" : mode.id === "battle" ? "☏" : "?");
     if (modeIcons[mode.id]) {
       const icon = document.createElement("img");
       icon.src = getRevisionedAssetUrl(modeIcons[mode.id]);
@@ -14326,8 +14343,8 @@ function renderModes() {
       whoami: ["modeWhoAmITitle", "modeWhoAmIDescription"],
     };
     const localeKeys = modeLocaleKeys[mode.id];
-    const renderedTitle = mode.id === "battle" ? Slovesnyi.text("title", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
-    const renderedDescription = mode.id === "battle" ? Slovesnyi.text("description", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
+    const renderedTitle = mode.id === "slovokolo" ? Slovokolo.copy(selectedWordGuessLanguage)[0] : mode.id === "battle" ? Slovesnyi.text("title", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[0]) : mode.title;
+    const renderedDescription = mode.id === "slovokolo" ? Slovokolo.copy(selectedWordGuessLanguage)[1] : mode.id === "battle" ? Slovesnyi.text("description", selectedWordGuessLanguage) : localeKeys ? getWordGuessText(localeKeys[1]) : mode.description;
     appendTextElement(button, "strong", "", renderedTitle);
     appendTextElement(button, "span", "mode-card-description", renderedDescription);
     if (mode.id === "wordguess") {
@@ -14343,6 +14360,9 @@ function renderModes() {
       selectedCategory = null;
       areCategoriesExpanded = false;
 
+      if (mode.id === "slovokolo") {
+        resetActiveGameState();clearWhoAmITimer();document.body.dataset.mode=mode.id;document.body.classList.remove("single-card-mode");Slovokolo.open();return;
+      }
       if (mode.id === "battle") {
         resetActiveGameState();
         clearWhoAmITimer();
@@ -16918,6 +16938,7 @@ function showWinnerScreen() {
 }
 
 function showScreen(screenName, options) {
+  Slovokolo.onScreen(screenName);
   Svitlohray.onScreen(screenName);
   Slovesnyi.onScreen(screenName);
   ["slovesnyiSetup", "slovesnyiGame", "slovesnyiFinal"].forEach(function (name) {

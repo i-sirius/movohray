@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="uk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Мовограй · Словоколо</title><link rel="stylesheet" href="word-circle/style.css"></head><body>
+<main>
+<header><div class="brand">Мово<span>грай</span> · Словоколо</div><div class="pill">Мовограй · 0.6.8</div></header>
+<section class="card" aria-label="Гра Словоколо">
+<h1 data-i18n="game">Словоколо</h1><div class="mode-alias" id="alias">Літерниця</div>
+<p class="subtitle" data-i18n="subtitle"></p>
+<div class="settings"><label for="language"><span data-i18n="language">Мова</span>: <select id="language"><option value="uk">Українська</option><option value="ru">Русский</option><option value="en">English</option></select></label><label for="difficulty"><span data-i18n="difficulty">Складність</span>: <select id="difficulty"><option data-i18n-option="any" value="all">Будь-яка</option><option data-i18n-option="easy" value="easy">4–5 літер</option><option data-i18n-option="medium" value="medium">6 літер</option><option data-i18n-option="hard" value="hard">7 літер</option></select></label><span id="pack" class="pack">Завантаження…</span></div>
+<div class="meta"><span id="progressLabel">0 із 0 слів</span><div class="bar"><div id="progressBar"></div></div></div>
+<div class="grid-wrap" id="gridWrap"><div class="crossword" id="crossword" aria-label="Кросвордна сітка"></div></div>
+<div id="message" class="message" role="status" aria-live="polite">Проведи по літерах або натискай на них</div>
+<div id="current" class="current" aria-label="Набрані літери — натисни на літеру, щоб прибрати"></div>
+<div class="bonus-area"><div id="bonusLabel" class="bonus-label">Бонусні слова: 0</div><div id="bonusList" class="bonus-list"><span class="bonus-empty">Знайди інші правильні слова</span></div></div>
+<div class="wheel" id="wheel" aria-label="Коло літер. Проведи пальцем чи вибирай натисканнями"><div class="wheel-bg"></div><svg id="lines" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+<div class="controls"><button type="button" class="control primary" id="submit" data-i18n="submit">✓ Скласти слово</button><button type="button" class="control" id="clear" data-i18n="clear">↺ Скинути</button><button type="button" class="control" id="shuffle" data-i18n="shuffle">⇄ Літери</button><button type="button" class="control" id="hint" data-i18n="hint">💡 Підказка</button><button type="button" class="control" id="newLayout" data-i18n="layout">▦ Інша сітка</button><button type="button" class="control new" id="newPuzzle" data-i18n="new">✦ Новий кросворд</button></div>
+<p class="note" data-i18n="help"></p>
+<div class="awards"><h2 id="achTitle">Досягнення</h2><div class="award-list" id="achievementList"></div><small id="achCount"></small></div><div id="stats" class="stats"></div>
+</section>
+</main>
+<script src="word-circle/levels.js"></script><script src="word-circle/achievements.js"></script><script src="word-circle/game.js"></script></body></html>

@@ -52,9 +52,9 @@ test('corrupt/missing/unavailable storage defaults safely; writes are optional',
   assert.equal(h.run('aliasSwipeLearning.totalSwipeGestures'),1);
   assert.equal(setup(null,true).run('hasLearnedAliasSwipes()'),false);
 });
-test('global reset includes learning storage; achievement core equals c5', () => {
+test('global reset includes learning storage; achievement core equals integration baseline', () => {
   assert.match(app, /MOVOHRAY_USER_RESET_STORAGE_KEYS = \[ALIAS_SWIPE_LEARNING_KEY,/);
-  const old=require('node:child_process').execFileSync('git',['show','2d5ce60:app.js'],{encoding:'utf8',maxBuffer:3000000});
+  const old=require('node:child_process').execFileSync('git',['show','af19304:app.js'],{encoding:'utf8',maxBuffer:3000000});
   for (const name of ['unlockWordGuessAchievement','readWordGuessAchievementsState','persistWordGuessAchievementsState','isWordGuessAchievementNew','markWordGuessAchievementViewed','revealWordGuessAchievementHint']) {
     const start=old.indexOf('function '+name+'(');
     assert.equal(fn(name).replace(/\r/g,'').trim(),old.slice(start,old.indexOf('\nfunction ',start+1)).replace(/\r/g,'').trim(),name);

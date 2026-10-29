@@ -1,0 +1,85 @@
+{
+  "uk": [],
+  "ru": [
+    {
+      "word": "бан",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "бана",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "бану",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "баном",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "бане",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "баны",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "банов",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "банам",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "банами",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    },
+    {
+      "word": "банах",
+      "source": "https://gramota.ru/storage/public/normdicts/slovar_inostr_slov.pdf",
+      "lemma": "бан",
+      "bonusOnly": true
+    }
+  ],
+  "en": [
+    {
+      "word": "rumen",
+      "source": "https://www.merriam-webster.com/dictionary/rumen",
+      "lemma": "rumen",
+      "bonusOnly": true
+    },
+    {
+      "word": "rumens",
+      "source": "https://www.merriam-webster.com/dictionary/rumen",
+      "lemma": "rumen",
+      "bonusOnly": true
+    },
+    {
+      "word": "rumina",
+      "source": "https://www.merriam-webster.com/dictionary/rumen",
+      "lemma": "rumen",
+      "bonusOnly": true
+    }
+  ]
+}
