@@ -157,4 +157,3 @@ with zipfile.ZipFile(out/'sources/frequency.zip','w',zipfile.ZIP_DEFLATED) as z:
  z.writestr('README.md',(BUILD/'frequency-readme.md').read_bytes());z.writestr('LICENSE-CC-BY-SA-4.0.txt',(BUILD/'frequency-license.txt').read_bytes());z.writestr('REVISION',(BUILD/'frequency-revision.txt').read_bytes())
 (out/'licenses/frequency.txt').write_bytes((BUILD/'frequency-license.txt').read_bytes())
 print('DONE',flush=True)
-

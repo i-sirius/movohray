@@ -162,7 +162,7 @@ function buildNew(){
   const bonus=getBonus(p,main);
   state={pack:p,packIndex:i,board,main,bonus,solved:new Set(),hinted:new Set(),bonusFound:new Set(),tiles:shuffle([...p.letters]),usedHint:false,startedAt:Date.now()};
   selected=[];shownPuzzleCount++;updatePack();
-  
+
   renderWheel();setStatus(tr('newmsg'));saveSession();
 }
 function rerollGrid(){
@@ -179,7 +179,7 @@ function rerollGrid(){
   for(const k of state.hinted){const placement=oldBoard.words.find(p=>cellsOf(p).includes(k));if(!placement)continue;const index=cellsOf(placement).indexOf(k);const replacement=board.words.find(p=>p.word===placement.word);if(replacement)newHints.add(cellsOf(replacement)[index]);}
   state.hinted=newHints;
   selected=[];state.tiles=shuffle([...state.pack.letters]);updatePack();
-  
+
   renderWheel();setStatus(tr('gridmsg'));saveSession();
 }
 function isOpen(k){return state.hinted.has(k)||state.board.words.some(p=>state.solved.has(p.word)&&cellsOf(p).includes(k));}
