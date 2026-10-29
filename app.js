@@ -9,12 +9,12 @@ let selectedCharadesKind = "noun";
 let selectedDuration = 60;
 let selectedTargetScore = 30;
 let selectedMode = "explain";
-const DATA_VERSION = "0.6.8";
-const DATA_BUILD = "2026-10-29";
+const DATA_VERSION = "0.6.8a";
+const DATA_BUILD = "2026-10-30";
 const DATA_CANDIDATE = 0;
 const DATA_REVISION = `${DATA_VERSION}-${DATA_BUILD.replace(/-/g, "")}${DATA_CANDIDATE ? `-c${DATA_CANDIDATE}` : ""}`;
 const ASSET_REVISION = DATA_REVISION;
-const DATA_CACHE = "movohray-cache-v0.6.8-b20261029";
+const DATA_CACHE = "movohray-cache-v0.6.8a-b20261030";
 const VERSION_CHECK_FILE = "version.json";
 const VERSION_CHECK_TIMEOUT_MS = 4500;
 const SERVICE_WORKER_UPDATE_TIMEOUT_MS = 15000;
@@ -4421,7 +4421,6 @@ let wordActionTimeoutId = null;
 let wordCardTransitionToken = 0;
 
 const modeConfigs = [
-  {id:"slovokolo",title:"Словоколо",description:"Літерниця",available:true},
   {
     id: "explain",
     title: "Поясни слово (Alias)",
@@ -4460,6 +4459,7 @@ const modeConfigs = [
     dataFile: "debates.json",
     available: true,
   },
+  {id:"slovokolo",title:"Словоколо",description:"Літерниця",available:true},
 ];
 
 const difficultyLevels = [

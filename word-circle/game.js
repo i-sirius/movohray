@@ -319,12 +319,12 @@ listen(window,'pointerup',finishGesture);
 listen(window,'blur',()=>{
   if(activeGesture){activeGesture=null;selected=[];if(state){render();setStatus(tr('interrupted'));}}
 });
-function submitWord(){if(!selected.length)return;const w=selected.map(i=>state.tiles[i]).join('');if(state.main.has(w)&&!state.solved.has(w)){state.solved.add(w);feedback('correct');setStatus(tr('found',{word:w}),'good');if(w.length>=7)recordAchievement('long_word');}
+function submitWord(){if(!selected.length)return;const wasComplete=state.solved.size===state.main.size;const w=selected.map(i=>state.tiles[i]).join('');if(state.main.has(w)&&!state.solved.has(w)){state.solved.add(w);feedback('correct');setStatus(tr('found',{word:w}),'good');if(w.length>=7)recordAchievement('long_word');}
   else if(state.main.has(w))setStatus(tr('duplicate',{word:w}));
   else if(state.bonus.has(w)&&!state.bonusFound.has(w)){state.bonusFound.add(w);feedback('bonus');setStatus(tr('bonusfound',{word:w}),'good');recordAchievement('bonus',{word:w});}
   else if(state.bonus.has(w))setStatus(tr('bonusduplicate',{word:w}));
   else {feedback('wrong');setStatus(tr('unknown',{word:w}),'bad');}
-  selected=[];render();if(state.solved.size===state.main.size){recordAchievement('complete',{usedHint:state.usedHint});setStatus(tr('win'),'good');render();}saveSession();}
+  selected=[];render();if(!wasComplete&&state.solved.size===state.main.size){recordAchievement('complete',{usedHint:state.usedHint});setStatus(tr('win'),'good');render();}saveSession();}
 listen(current,'click',e=>{const b=e.target.closest('button[data-pos]');if(!b)return;selected.splice(+b.dataset.pos,1);render();setStatus(tr('removed'));});
 listen($('submit'),'click',submitWord);
 listen($('clear'),'click',()=>{selected=[];render();setStatus(tr('cleared'));});
