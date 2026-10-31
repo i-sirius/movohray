@@ -142,7 +142,8 @@ try:
  # Real touch events use the same physical tile positions and do not reuse tiles.
  page.call('Emulation.setTouchEmulationEnabled',{'enabled':True,'maxTouchPoints':1})
  click('newPuzzle');data=saved('en');word=data['board'][0]['word'];used=set()
- wc("r.getElementById('wheel').scrollIntoView({block:'center'});return true")
+ # Physical touches must use settled viewport coordinates, not a smooth-scroll frame.
+ wc("r.getElementById('wheel').scrollIntoView({block:'center',behavior:'instant'});return true");time.sleep(.3)
  for ch in word:
   idx=next(i for i,c in enumerate(data['tiles']) if c==ch and i not in used);used.add(idx)
   point=wc("const x=r.querySelectorAll('.letter')["+str(idx)+"].getBoundingClientRect();return {x:x.x+x.width/2,y:x.y+x.height/2}")
