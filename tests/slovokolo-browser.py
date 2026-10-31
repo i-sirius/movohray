@@ -43,6 +43,9 @@ try:
  print(json.dumps(stats),flush=True)
  check('new game follows the existing five menu cards',page.js("modeConfigs.filter(m=>m.available).map(m=>m.id)")==['explain','charades','wordguess','whoami','battle','slovokolo'])
  check('RAB is a main word in the BRAK circle',page.js("WordCircleData.uk.some(p=>p.id==='uk:\u0430\u0431\u043a\u0440'&&p.main.includes('\u0420\u0410\u0411'))"))
+ check('every circle has a valid word difficulty',page.js("Object.entries(WordCircleData).every(([l,packs])=>packs.every(p=>['easy','medium','hard'].includes(WordCircleDifficulty[l][p.id])))"))
+ check('obscure required words are excluded from easy',page.js("WordCircleData.uk.filter(p=>p.main.some(w=>['АКР','КАР','УТІШТЕ'].includes(w))).every(p=>WordCircleDifficulty.uk[p.id]!=='easy')"))
+ check('familiar morning circle is easy',page.js("WordCircleData.uk.some(p=>p.main.includes('РАНОК')&&WordCircleDifficulty.uk[p.id]==='easy')"))
  original=page.js('WORD_GUESS_ACHIEVEMENTS.length')
  check('446 unique shared achievements',original==446 and page.js('new Set(WORD_GUESS_ACHIEVEMENTS.map(x=>x.id)).size===446'))
  # Exercise all languages through the existing global language selector.
@@ -53,6 +56,7 @@ try:
   page.click('.mode-card-slovokolo')
   page.wait("Boolean(document.getElementById('slovokoloScreen').shadowRoot?.querySelector('.letter'))")
   check(lang+' inherits global language',wc("return r.querySelector('h1').textContent")==title and wc("return r.getElementById('language').hidden"))
+  check(lang+' defaults to easy words',wc("return r.getElementById('difficulty').value==='easy'"))
   check(lang+' playable grid',wc("return r.querySelectorAll('.cell:not(.blank)').length>0"))
   # Require a pack with an explicit bonus so every language exercises bonus scoring.
   for attempt in range(100):
@@ -61,7 +65,7 @@ try:
    click('newPuzzle')
   else:raise AssertionError('No bonus pack for '+lang)
   time.sleep(.3) # Allow the stylesheet and screen scroll to settle before physical coordinates.
-  data=saved(lang);word=data['board'][0]['word']
+  data=saved(lang);word=data['board'][0]['word'];grid_balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
   # Pointer taps use real browser mouse input; all later words also exercise accessible click.
   click('clear')
   used=set()
@@ -73,6 +77,7 @@ try:
   click('submit')
   if word not in saved(lang)['solved']:print('POINTER FAILURE',word,wc("return {message:r.getElementById('message').textContent,selected:r.getElementById('current').textContent}"),flush=True)
   check(lang+' physical pointer taps accepted',word in saved(lang)['solved'])
+  check(lang+' new grid word earns points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==grid_balance+1)
   # selected tile removal and Backspace.
   click('clear');wc("r.querySelector('.letter').click();r.querySelector('.letter').click();return true")
   check(lang+' tap again removes tile',wc("return r.querySelectorAll('.chosen').length===0"))
@@ -182,7 +187,7 @@ try:
   page.js('showScreen("menu")');page.click(selector);page.wait('getCurrentAppScreenName()==='+json.dumps(screen));check('other mode '+selector)
  page.js('showScreen("menu");Slovokolo.open()')
  # All critical assets must be available before testing offline restart.
- check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js','definitions.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
+ check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js','definitions.js','difficulty.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
  page.call('Network.emulateNetworkConditions',{'offline':True,'latency':0,'downloadThroughput':0,'uploadThroughput':0})
  page.call('Page.reload');page.wait("Boolean(document.querySelector('.mode-card-slovokolo'))")
  page.click('.mode-card-slovokolo');page.wait("Boolean(document.getElementById('slovokoloScreen').shadowRoot?.querySelector('.letter'))")
@@ -215,6 +220,49 @@ try:
   check('found word opens meaning with source',wc("return !r.querySelector('.meaning-panel').hidden && r.querySelector('.meaning-panel a').href.startsWith('https://en.wiktionary.org/wiki/')"))
  # Extractor strips embedded markup rather than rendering remote HTML in the app.
  check('definition content is plain text',page.js("WordCircleDefinitions.extract('<h3>Значение</h3><ol><li><b>Смысл</b><sup>1</sup><dl><dd>пример</dd></dl></li></ol>','ru')")=="Смысл")
+ for tier,multiplier in [('easy',1),('medium',2),('hard',3)]:
+  wc("r.getElementById('difficulty').value="+json.dumps(tier)+";r.getElementById('difficulty').dispatchEvent(new Event('change'));return true")
+  data=saved('en');check(tier+' selection filters by word familiarity',page.js('WordCircleDifficulty.en['+json.dumps(data['packId'])+']')==tier)
+  pack=page.js('WordCircleData.en['+str(data['packIndex'])+']')
+  # Keep the circle and choose a previously unearned main or bonus word deterministically.
+  for attempt in range(60):
+   earned=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).earned")
+   word=next((w for w in pack['main']+pack['bonus'] if 'en:'+w not in earned),None)
+   if word:break
+   click('newPuzzle');data=saved('en');pack=page.js('WordCircleData.en['+str(data['packIndex'])+']')
+  assert word,'No unearned word available in '+tier
+  balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+  pick(word);check(tier+' pays correct multiplier',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance+multiplier)
+  pick(word);check(tier+' duplicate does not multiply rewards',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance+multiplier)
+  check(tier+' count is outside word flex row',wc("return r.getElementById('wordbookRemaining').parentNode!==r.getElementById('wordbookWords')"))
+  check(tier+' all words have cards',wc("return r.getElementById('wordbookWords').children.length")==len(pack['main'])+len(pack['bonus']))
+  hidden=set(pack['main']+pack['bonus'])-set(saved('en')['solved']+saved('en')['bonusFound'])
+  attributes=wc("return [...r.querySelectorAll('.word-mask')].map(n=>n.outerHTML).join(' ')")
+  check(tier+' masked cards contain no answers',all(w not in attributes for w in hidden))
+  check(tier+' masks visibly blur placeholders',wc("const n=r.querySelector('.word-mask > span');return !n||getComputedStyle(n).filter.includes('blur')"))
+ page.call('Page.reload');page.wait("Boolean(document.querySelector('.mode-card-slovokolo')) && !document.body.classList.contains('required-update-open')");page.click('.mode-card-slovokolo')
+ check('word difficulty survives reload',wc("return r.getElementById('difficulty').value==='hard'"))
+ # Random selection draws actual tiers, rather than labelling every round x3.
+ wc("r.getElementById('difficulty').value='all';r.getElementById('difficulty').dispatchEvent(new Event('change'));return true")
+ random_tiers=set()
+ for _ in range(24):
+  data=saved('en');random_tiers.add(page.js('WordCircleDifficulty.en['+json.dumps(data['packId'])+']'));click('newPuzzle')
+ check('random mode includes multiple word difficulty tiers',len(random_tiers)>1)
+ # Existing v6 boards migrate without losing their solved words or wallet.
+ previous=saved('en');balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+ page.js("showScreen('menu');const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-en'));v.v=6;localStorage.setItem('slovokolo-v5-current-en',JSON.stringify(v));Slovokolo.open()")
+ check('v6 round migrates preserving board and balance',saved('en')['board']==previous['board'] and saved('en')['solved']==previous['solved'] and page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+ # Review the expanded dictionary at mobile and desktop sizes, in both themes.
+ wc("r.getElementById('wordbook').open=true;return true")
+ for width,height in [(390,844),(1280,1000)]:
+  page.call('Emulation.setDeviceMetricsOverride',{'width':width,'height':height,'deviceScaleFactor':1,'mobile':width<600})
+  for theme in ['light','dark']:
+   page.js('document.body.dataset.theme='+json.dumps(theme));time.sleep(.15)
+   wc("r.getElementById('wordbook').scrollIntoView({block:'center',behavior:'instant'});return true")
+   check(str(width)+' '+theme+' dictionary fits',page.js('document.documentElement.scrollWidth<=innerWidth') and wc("return r.getElementById('wordbookWords').scrollWidth<=r.getElementById('wordbookWords').clientWidth+1"))
+   image=page.call('Page.captureScreenshot',{'format':'png','captureBeyondViewport':False})
+   import base64
+   (p/'test-results'/('slovokolo-dictionary-'+str(width)+'-'+theme+'.png')).write_bytes(base64.b64decode(image['data']))
  check('no uncaught browser errors',not page.errors)
  print('ALL INTEGRATION CHECKS PASSED',flush=True)
 finally:

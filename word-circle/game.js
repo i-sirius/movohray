@@ -14,6 +14,9 @@ function tr(k,vars={}){return (I18N[locale][k]||I18N.uk[k]||k).replace(/\{(\w+)\
 Object.assign(I18N.uk,{"bonushelp": "Знайди слово поза сіткою: +1 бал за кожне нове слово. Натисни знайдене слово, щоб дізнатися значення.", "wordbookhelp": "Тут лише знайдені слова. Решта бонусних слів прихована: їх можна шукати й після заповнення сітки. Натисни слово для тлумачення.", "win": "🎉 Сітку заповнено! Шукай бонусні слова або переходь до наступного кола.", "wallet": "★ {n} балів · підказка: 3 бали", "wallethelp": "Старт: 5 балів. +1 за унікальне бонусне слово цією мовою, навіть у різних колах. Повтори не дають балів. Бали зберігаються між раундами й витрачаються на відкриття літер.", "hint": "💡 Літера · 3 бали", "poor": "Потрібно 3 бали. Знаходь нові бонусні слова: кожне дає 1 бал.", "meaning": "Тлумачення", "loading": "Шукаю тлумачення…", "missing": "Вбудованого тлумачення немає. Відкрий словникову статтю; для словоформи може знадобитися початкова форма.", "source": "Стаття у Вікісловнику ↗", "online": "Тлумачення з Вікісловника · CC BY-SA. Для завантаження потрібен інтернет.", "hiddenbonus": "Ще приховано бонусних слів: {n}."});
 Object.assign(I18N.ru,{"bonushelp": "Слово вне сетки: +1 балл за каждое новое слово. Нажми найденное слово, чтобы узнать значение.", "wordbookhelp": "Только найденные слова. Остальные бонусы скрыты: ищи их и после заполнения сетки. Нажми слово для толкования.", "win": "🎉 Сетка заполнена! Ищи бонусные слова или переходи к следующему кругу.", "wallet": "★ {n} баллов · подсказка: 3 балла", "wallethelp": "Старт: 5 баллов. +1 за уникальное бонусное слово на этом языке, даже в разных кругах. Повторы не дают баллов. Баллы сохраняются и тратятся на открытие букв.", "hint": "💡 Буква · 3 балла", "poor": "Нужно 3 балла. Находи новые бонусные слова: каждое даёт 1 балл.", "meaning": "Толкование", "loading": "Ищу толкование…", "missing": "Встроенного толкования нет. Открой словарную статью; для словоформы может понадобиться начальная форма.", "source": "Статья в Викисловаре ↗", "online": "Толкование из Викисловаря · CC BY-SA. Для загрузки нужен интернет.", "hiddenbonus": "Ещё скрыто бонусных слов: {n}."});
 Object.assign(I18N.en,{"bonushelp": "An extra word earns +1 point when first discovered. Tap a found word for its meaning.", "wordbookhelp": "Only discovered words appear here. Unfound bonus words stay hidden, even after completing the grid. Tap a word for its meaning.", "win": "🎉 Grid complete! Keep hunting bonus words or start the next circle.", "wallet": "★ {n} points · letter hint: 3 points", "wallethelp": "Start with 5 points. Each unique bonus word in a language earns +1, across all circles. Repeats earn nothing. Points persist and pay for letter hints.", "hint": "💡 Letter · 3 points", "poor": "You need 3 points. Discover new bonus words to earn 1 point each.", "meaning": "Meaning", "loading": "Looking up meaning…", "missing": "No built-in definition. Open the dictionary entry; inflected words may require the base form.", "source": "Wiktionary entry ↗", "online": "Definitions from Wiktionary · CC BY-SA. Internet required to load.", "hiddenbonus": "Bonus words still hidden: {n}."});
+Object.assign(I18N.uk,{"any": "🎲 Випадкова", "easy": "Легко · ×1", "medium": "Середньо · ×2", "hard": "Складно · ×3", "bonushelp": "Шукай додаткові слова або натискай знайдені для тлумачення. Нове слово приносить бали за складністю кола.", "wallethelp": "Старт: 5 балів. Нове слово в сітці чи бонусах: +{points} балів у цьому колі. Легко ×1, середньо ×2, складно ×3. Повтор того самого слова цією мовою не дає балів, навіть в іншому колі. Підказка коштує 3 бали.", "poor": "Потрібно 3 бали. Нові слова в сітці й бонусах дають бали.", "wordbookhelp": "Знайдені слова відкриті — натисни для тлумачення. Приховані картки показують лише довжину; шукай бонуси й після заповнення сітки.", "hiddenbonus": "Ще бонусних слів: {n}", "hiddenword": "Невідгадане слово: {n} літер", "found": "Чудово! {word} — у кросворді ✓ {reward}", "bonusfound": "★ {word} — бонусне слово! {reward}", "reward": "+{n} балів"});
+Object.assign(I18N.ru,{"any": "🎲 Случайная", "easy": "Легко · ×1", "medium": "Средне · ×2", "hard": "Сложно · ×3", "bonushelp": "Ищи дополнительные слова или нажми найденное для толкования. Новое слово приносит баллы по сложности круга.", "wallethelp": "Старт: 5 баллов. Новое слово в сетке или бонусах: +{points} баллов в этом круге. Легко ×1, средне ×2, сложно ×3. Повтор слова на этом языке не даёт баллов, даже в другом круге. Подсказка стоит 3 балла.", "poor": "Нужно 3 балла. Новые слова в сетке и бонусах дают баллы.", "wordbookhelp": "Найденные слова открыты: нажми для толкования. Скрытые карточки показывают только длину. Бонусы можно искать и после заполнения сетки.", "hiddenbonus": "Ещё бонусных слов: {n}", "hiddenword": "Неугаданное слово: {n} букв", "found": "Отлично! {word} — в сетке ✓ {reward}", "bonusfound": "★ {word} — бонусное слово! {reward}", "reward": "+{n} баллов"});
+Object.assign(I18N.en,{"any": "🎲 Random", "easy": "Easy · ×1", "medium": "Medium · ×2", "hard": "Hard · ×3", "bonushelp": "Find extra words or tap a discovered word for its meaning. New words earn points at this circle’s difficulty.", "wallethelp": "Start with 5 points. Each new grid or bonus word earns +{points} points in this circle. Easy ×1, medium ×2, hard ×3. Repeating a word in this language earns nothing, even in another circle. A letter hint costs 3 points.", "poor": "You need 3 points. Find new grid or bonus words to earn points.", "wordbookhelp": "Tap discovered words for meanings. Hidden cards reveal only word length. Keep finding bonuses after completing the grid.", "hiddenbonus": "Bonus words remaining: {n}", "hiddenword": "Unfound word: {n} letters", "found": "Great! {word} is on the board ✓ {reward}", "bonusfound": "★ {word} is a bonus word! {reward}", "reward": "+{n} points"});
 function updateTexts(){
   if(root===document)document.documentElement.lang=locale;
   if(root===document)document.title='Мовограй · '+tr('game');
@@ -27,20 +30,22 @@ const walletKey='slovokolo-wallet-v1';
 function readWallet(){try{const x=JSON.parse(localStorage.getItem(walletKey));if(Number.isSafeInteger(x?.balance)&&x.balance>=0&&Array.isArray(x.earned))return x;}catch{}return {balance:5,earned:window.WordCircleAchievements.get().bonuses.slice()};}
 let wallet=readWallet();
 function persistWallet(){try{localStorage.setItem(walletKey,JSON.stringify(wallet));}catch{}}
-function awardBonus(word){const id=locale+':'+word;if(wallet.earned.includes(id))return;wallet.earned.push(id);wallet.balance++;persistWallet();}
+function preferredDifficulty(){try{const v=localStorage.getItem('slovokolo-difficulty-v1');return ['all','easy','medium','hard'].includes(v)?v:'easy';}catch{return 'easy';}}
+function roundPoints(){return {easy:1,medium:2,hard:3}[difficultyOf(state.pack)];}
+function awardWord(word){const id=locale+':'+word;if(wallet.earned.includes(id))return '';wallet.earned.push(id);const n=roundPoints();wallet.balance+=n;persistWallet();return tr('reward',{n});}
 function saveSession(){
   if(!state)return;
-  try{localStorage.setItem('slovokolo-v5-current-'+locale,JSON.stringify({v:6,packId:state.pack.id,packIndex:state.packIndex,board:state.board.words,tiles:state.tiles,solved:[...state.solved],bonusFound:[...state.bonusFound],hinted:[...state.hinted],difficulty:$('difficulty').value,usedHint:state.usedHint,startedAt:state.startedAt}));}catch{}
+  try{localStorage.setItem('slovokolo-v5-current-'+locale,JSON.stringify({v:7,packId:state.pack.id,packIndex:state.packIndex,board:state.board.words,tiles:state.tiles,solved:[...state.solved],bonusFound:[...state.bonusFound],hinted:[...state.hinted],difficulty:$('difficulty').value,usedHint:state.usedHint,startedAt:state.startedAt}));}catch{}
 }
 function restoreSession(){
   try{
     const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-'+locale)||'null');
-    if(!v||![5,6].includes(v.v)||!Array.isArray(v.board)||!Array.isArray(v.tiles))return false;
+    if(!v||![5,6,7].includes(v.v)||!Array.isArray(v.board)||!Array.isArray(v.tiles))return false;
     v.packIndex=v.packId?LEVELS.findIndex(p=>p.id===v.packId):LEVELS.findIndex(p=>[...p.letters].sort().join('')===v.tiles.slice().sort().join(''));
     if(!LEVELS[v.packIndex])return false;
     const pack=LEVELS[v.packIndex];
     if(!['all','easy','medium','hard'].includes(v.difficulty||'all'))return false;
-    $('difficulty').value=v.difficulty||'all';
+    $('difficulty').value=v.v===7?(v.difficulty||'easy'):difficultyOf(pack);
     if(v.board.length!==pack.main.length||new Set(v.board.map(p=>p.word)).size!==pack.main.length)return false;if(v.tiles.slice().sort().join('')!==[...pack.letters].sort().join(''))return false;
     const cells=new Map();let maxR=0,maxC=0;
     for(const p of v.board){if(!pack.main.includes(p.word)||!['H','V'].includes(p.d)||!Number.isInteger(p.r)||!Number.isInteger(p.c)||p.r<0||p.c<0)return false;
@@ -55,7 +60,7 @@ function restoreSession(){
   }catch{return false;}
 }
 function getBonus(pack,main){return new Set(pack.bonus.filter(w=>!main.has(w)&&playable(w,pack.letters)&&w.length>=3));}
-function updatePack(){ $('pack').textContent=tr('pack',{n:state.packIndex+1,total:LEVELS.length,letters:state.pack.letters.length});$('stats').textContent=tr('stats',{total:LEVELS.length,words:state.board.words.length}); }
+function updatePack(){ $('pack').textContent=tr('pack',{n:state.packIndex+1,total:LEVELS.length,letters:state.pack.letters.length});$('pack').textContent+=' · '+tr(difficultyOf(state.pack));$('stats').textContent=tr('stats',{total:LEVELS.length,words:state.board.words.length}); }
 function recordAchievement(type,detail={}){
   const newly=window.WordCircleAchievements.record(type,{locale,packKey:state.pack.id||locale+':'+[...state.pack.letters.toLowerCase()].sort().join(''),...detail});
   if(newly.length)setStatus(tr('achunlocked',{name:tr(newly[0])}),'good');
@@ -177,18 +182,21 @@ function generateCrossword(words){
   const out=new Map();for(const p of finalWords){for(let i=0;i<p.word.length;i++)out.set(key(p.r+(p.d==='V'?i:0),p.c+(p.d==='H'?i:0)),p.word[i]);}
   return {words:finalWords,cells:out,rows:transpose?b.maxC-b.minC+1:b.maxR-b.minR+1,cols:transpose?b.maxR-b.minR+1:b.maxC-b.minC+1};
 }
-function difficultyOf(p){return p.letters.length<=5?'easy':p.letters.length===6?'medium':'hard';}
+function difficultyOf(p){return window.WordCircleDifficulty?.[locale]?.[p.id]||'hard';}
 function choosePack(){
   const filter=$('difficulty').value;
   const candidates=LEVELS.map((p,i)=>({p,i})).filter(v=>filter==='all'||difficultyOf(v.p)===filter).sort((a,b)=>a.p.letters.length-b.p.letters.length||a.i-b.i);
   if(!candidates.length)throw new Error('No packs for this difficulty');
   const completed=new Set(window.WordCircleAchievements.get().completed);
-  let history=[];try{history=JSON.parse(localStorage.getItem('slovokolo-v5-recent-'+locale+'-'+filter)||'[]');if(!Array.isArray(history))history=[];}catch{}
+  let history=[];try{history=JSON.parse(localStorage.getItem('slovokolo-v7-recent-'+locale+'-'+filter)||'[]');if(!Array.isArray(history))history=[];}catch{}
   const unfinished=candidates.filter(v=>!completed.has(v.p.id));
   const pool=unfinished.length?unfinished:candidates;
-  let options=pool.filter(v=>!history.includes(v.i)&&v.i!==state?.packIndex);
-  if(!options.length)options=pool.filter(v=>v.i!==state?.packIndex);
-  if(!options.length)options=pool;
+  const tiers=[...new Set(pool.map(v=>difficultyOf(v.p)))];
+  const roundTier=filter==='all'?tiers[Math.floor(Math.random()*tiers.length)]:filter;
+  const tierPool=pool.filter(v=>difficultyOf(v.p)===roundTier);
+  let options=tierPool.filter(v=>!history.includes(v.i)&&v.i!==state?.packIndex);
+  if(!options.length)options=tierPool.filter(v=>v.i!==state?.packIndex);
+  if(!options.length)options=tierPool;
   let recent=[];try{recent=JSON.parse(localStorage.getItem('slovokolo-variety-'+locale)||'[]');if(!Array.isArray(recent))recent=[];}catch{}
   const recentWords=new Set(recent.flatMap(id=>LEVELS.find(p=>p.id===id)?.main||[]));
   const last=LEVELS.find(p=>p.id===recent[0]);
@@ -197,7 +205,7 @@ function choosePack(){
   const chosen=options.map(v=>({v,score:score(v)})).sort((a,b)=>a.score-b.score)[0].v;
   history=[chosen.i,...history.filter(i=>i!==chosen.i)].slice(0,Math.max(1,candidates.length-1));
   recent=[chosen.p.id,...recent.filter(id=>id!==chosen.p.id)].slice(0,8);
-  try{localStorage.setItem('slovokolo-v5-recent-'+locale+'-'+filter,JSON.stringify(history));localStorage.setItem('slovokolo-variety-'+locale,JSON.stringify(recent));}catch{}
+  try{localStorage.setItem('slovokolo-v7-recent-'+locale+'-'+filter,JSON.stringify(history));localStorage.setItem('slovokolo-variety-'+locale,JSON.stringify(recent));}catch{}
   return chosen;
 }
 function buildNew(){
@@ -258,8 +266,20 @@ function render(){
   const done=state.solved.size===state.main.size;
   $('newPuzzle').textContent=tr(done?'next':'new');
   if($('journey'))$('journey').textContent=tr('journey',{n:window.WordCircleAchievements.get().completed.filter(k=>k.startsWith(locale+':')).length,total:LEVELS.length});
-  walletTop.textContent='★ '+wallet.balance;walletTop.title=tr('wallet',{n:wallet.balance});$('walletBalance').textContent=tr('wallet',{n:wallet.balance});$('walletHelp').textContent=tr('wallethelp');
-  if($('wordbook')){const book=$('wordbook');book.hidden=false;const list=$('wordbookWords');list.replaceChildren();for(const word of [...state.solved,...state.bonusFound].sort())list.append(wordButton(word));const hidden=document.createElement('p');hidden.className='note';hidden.textContent=tr('hiddenbonus',{n:state.bonus.size-state.bonusFound.size});list.append(hidden);}
+  walletTop.textContent='★ '+wallet.balance;walletTop.title=tr('wallet',{n:wallet.balance});$('walletBalance').textContent=tr('wallet',{n:wallet.balance});$('walletHelp').textContent=tr('wallethelp',{points:roundPoints()});
+  if($('wordbook')){
+    const book=$('wordbook');book.hidden=false;const list=$('wordbookWords');
+    let count=$('wordbookRemaining');if(!count){count=document.createElement('p');count.id='wordbookRemaining';count.className='wordbook-count';list.before(count);}
+    count.textContent=tr('hiddenbonus',{n:state.bonus.size-state.bonusFound.size});
+    const signature=locale+':'+state.pack.id+':'+[...state.solved,...state.bonusFound].sort().join('|');
+    if(list.dataset.signature!==signature){list.dataset.signature=signature;list.replaceChildren();
+      for(const word of [...state.main,...state.bonus].sort((a,b)=>a.length-b.length||a.localeCompare(b,locale))){
+        if(state.solved.has(word)||state.bonusFound.has(word)){list.append(wordButton(word));continue;}
+        const mask=document.createElement('span');mask.className='word-mask';mask.setAttribute('aria-label',tr('hiddenword',{n:word.length}));
+        const dots=document.createElement('span');dots.setAttribute('aria-hidden','true');dots.textContent='●'.repeat(word.length);mask.append(dots);list.append(mask);
+      }
+    }
+  }
   const list=$('bonusList');list.replaceChildren();if(!state.bonusFound.size){const empty=document.createElement('span');empty.className='bonus-empty';empty.textContent=tr('bonushelp');list.append(empty);}else for(const w of state.bonusFound)list.append(wordButton(w));
   renderGrid();
 }
@@ -366,9 +386,9 @@ listen(window,'pointerup',finishGesture);
 listen(window,'blur',()=>{
   if(activeGesture){activeGesture=null;selected=[];if(state){render();setStatus(tr('interrupted'));}}
 });
-function submitWord(){if(!selected.length)return;const wasComplete=state.solved.size===state.main.size;const w=selected.map(i=>state.tiles[i]).join('');if(state.main.has(w)&&!state.solved.has(w)){state.solved.add(w);feedback('correct');setStatus(tr('found',{word:w}),'good');if(w.length>=7)recordAchievement('long_word');}
+function submitWord(){if(!selected.length)return;const wasComplete=state.solved.size===state.main.size;const w=selected.map(i=>state.tiles[i]).join('');if(state.main.has(w)&&!state.solved.has(w)){state.solved.add(w);feedback('correct');setStatus(tr('found',{word:w,reward:awardWord(w)}),'good');if(w.length>=7)recordAchievement('long_word');}
   else if(state.main.has(w))setStatus(tr('duplicate',{word:w}));
-  else if(state.bonus.has(w)&&!state.bonusFound.has(w)){state.bonusFound.add(w);awardBonus(w);feedback('bonus');setStatus(tr('bonusfound',{word:w}),'good');recordAchievement('bonus',{word:w});}
+  else if(state.bonus.has(w)&&!state.bonusFound.has(w)){state.bonusFound.add(w);const reward=awardWord(w);feedback('bonus');setStatus(tr('bonusfound',{word:w,reward}),'good');recordAchievement('bonus',{word:w});}
   else if(state.bonus.has(w))setStatus(tr('bonusduplicate',{word:w}));
   else {feedback('wrong');setStatus(tr('unknown',{word:w}),'bad');}
   if(state.solved.has(w)||state.bonusFound.has(w))showMeaning(w);
@@ -378,12 +398,12 @@ listen($('submit'),'click',submitWord);
 listen($('clear'),'click',()=>{selected=[];render();setStatus(tr('cleared'));});
 listen($('shuffle'),'click',()=>{shuffle(state.tiles);selected=[];renderWheel();setStatus(tr('shuffled'));saveSession();});
 listen($('hint'),'click',()=>{const w=state.board.words.find(p=>!state.solved.has(p.word)&&cellsOf(p).some(k=>!isOpen(k)));if(!w){setStatus(tr('nohint'));return;}if(wallet.balance<3){setStatus(tr('poor'));return;}wallet.balance-=3;persistWallet();const k=cellsOf(w).find(k=>!isOpen(k));state.hinted.add(k);state.usedHint=true;render();setStatus(tr('hintused'));saveSession();});
-listen($('newLayout'),'click',rerollGrid);listen($('newPuzzle'),'click',buildNew);listen($('difficulty'),'change',buildNew);
+listen($('newLayout'),'click',rerollGrid);listen($('newPuzzle'),'click',buildNew);listen($('difficulty'),'change',()=>{try{localStorage.setItem('slovokolo-difficulty-v1',$('difficulty').value);}catch{}buildNew();});
 listen(document,'keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.composedPath()[0].tagName))return;if(e.key==='Backspace'&&selected.length){e.preventDefault();selected.pop();render();setStatus(tr('back'));}else if(e.key==='Escape'&&selected.length){e.preventDefault();selected=[];render();setStatus(tr('cleared'));}else if(e.key==='Enter'&&selected.length&&(e.target===document.body||e.target===root.host)){e.preventDefault();submitWord();}});
 listen(window,'resize',()=>{if(state)renderGrid();});
-listen($('language'),'change',e=>{saveSession();meaningRequest++;meaning.hidden=true;locale=e.target.value;try{localStorage.setItem('slovokolo-v5-locale',locale);}catch{}LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('difficulty').value='all';updateTexts();if(!restoreSession())buildNew();});
+listen($('language'),'change',e=>{saveSession();meaningRequest++;meaning.hidden=true;locale=e.target.value;try{localStorage.setItem('slovokolo-v5-locale',locale);}catch{}LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('difficulty').value=preferredDifficulty();updateTexts();if(!restoreSession())buildNew();});
 try{const preference=options.locale||localStorage.getItem('slovokolo-v5-locale');if(window.WordCircleData[preference])locale=preference;}catch{}
-LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('language').value=locale;updateTexts();if(!restoreSession())buildNew();
+LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('language').value=locale;$('difficulty').value=preferredDifficulty();updateTexts();if(!restoreSession())buildNew();
 return {destroy(){saveSession();controller.abort();activeGesture=null;},refresh(){renderGrid();},text:key=>tr(key)};
 };
 if(document.getElementById('wheel'))window.mountWordCircle();
