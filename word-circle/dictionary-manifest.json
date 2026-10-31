@@ -4,13 +4,13 @@
   "spylls": "0.1.7",
   "languages": {
     "uk": {
-      "levels": 282,
-      "coreWords": 975,
+      "levels": 830,
+      "coreWords": 3892,
       "editorialBonusForms": 0,
       "frequencySha256": "881686fe66a168b79f6a9ee2f6cbbf944cfb12bfb7040913ef535cb29bd86ec9",
       "lexiconWords": 233252,
-      "playableWords": 5831,
-      "mainWords": 509,
+      "playableWords": 12282,
+      "mainWords": 1980,
       "removedSeedEntries": [
         "КОН",
         "КОРАН",
@@ -28,13 +28,13 @@
       }
     },
     "ru": {
-      "levels": 275,
-      "coreWords": 2287,
+      "levels": 825,
+      "coreWords": 6796,
       "editorialBonusForms": 10,
       "frequencySha256": "6095f507cc167488ec66ada5a85ac50433503a08ad24a07c6eabdf54352c4e7f",
       "lexiconWords": 157105,
-      "playableWords": 5287,
-      "mainWords": 583,
+      "playableWords": 11324,
+      "mainWords": 2590,
       "removedSeedEntries": [
         "ГРИП",
         "КАМИ",
@@ -49,13 +49,13 @@
       }
     },
     "en": {
-      "levels": 248,
-      "coreWords": 3987,
+      "levels": 798,
+      "coreWords": 11610,
       "editorialBonusForms": 3,
       "frequencySha256": "5351ff405b1126ef555791dd4d9798a48e3e9a501a9fc481a9da957752cfb458",
       "lexiconWords": 28497,
-      "playableWords": 3350,
-      "mainWords": 684,
+      "playableWords": 6318,
+      "mainWords": 3095,
       "removedSeedEntries": [],
       "sha256": {
         "index.aff": "8ae1f19d4840d957728ad90555d5a8dff6cc5c046279c95ff0c00fc0a0136c7b",

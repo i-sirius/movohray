@@ -20,8 +20,8 @@ import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-REV = '0.6.8b-20261030'
-CACHE = 'movohray-cache-v0.6.8b-b20261030'
+REV = '0.6.9-20261031'
+CACHE = 'movohray-cache-v0.6.9-b20261031'
 
 
 class CDP:

@@ -34,6 +34,9 @@ try:
  def click(id):wc("r.getElementById("+json.dumps(id)+").click();return true")
  def pick(word):
   wc("const used=new Set();for(const ch of "+json.dumps(word)+"){const b=[...r.querySelectorAll('.letter')].find(b=>b.textContent===ch&&!used.has(b));if(!b)throw Error('Missing tile '+ch);used.add(b);b.click();}r.getElementById('submit').click();return true")
+ check('definition parser extracts Ukrainian meaning',page.js("WordCircleDefinitions.extract('<h3>Значення</h3><ol><li>Рідкісне слово.<dl><dd>Приклад</dd></dl></li></ol><h3>Переклад</h3>','uk')")=="Рідкісне слово.")
+ check('definition parser restricts English language',page.js("WordCircleDefinitions.extract('<h2>English</h2><h3>Noun</h3><ol><li>A steep inlet.</li></ol><h3>References</h3><ol><li>Citation.</li></ol><h2>French</h2><ol><li>Autre sens.</li></ol>','en')")=="A steep inlet.")
+ check('offline brief meaning available',page.js("WordCircleDefinitions.lookup('uk','КАР',new AbortController().signal)").startswith('Чашоподібна'))
  stats=page.js("Object.fromEntries(Object.entries(WordCircleData).map(([l,p])=>[l,{packs:p.length,words:new Set(p.flatMap(x=>[...x.main,...x.bonus])).size}]))")
  manifest=json.loads((p/'word-circle/dictionary-manifest.json').read_text(encoding='utf-8'))
  check('audited dictionary counts',all(stats[l]['packs']==manifest['languages'][l]['levels'] and stats[l]['words']==manifest['languages'][l]['playableWords'] for l in stats))
@@ -46,6 +49,7 @@ try:
  page.js('wordGuessLabsUnlocked=true;localStorage.setItem(WORD_GUESS_LABS_STORAGE_KEY,"true")')
  for lang,title in [('uk','Словоколо'),('ru','Словокруг'),('en','Word Circle')]:
   page.js('wordGuessLabsUnlocked=true;showScreen("menu");selectWordGuessLanguage('+json.dumps(lang)+')')
+  page.js("localStorage.setItem('slovokolo-wallet-v1',JSON.stringify({balance:5,earned:WordCircleAchievements.get().bonuses}))")
   page.click('.mode-card-slovokolo')
   page.wait("Boolean(document.getElementById('slovokoloScreen').shadowRoot?.querySelector('.letter'))")
   check(lang+' inherits global language',wc("return r.querySelector('h1').textContent")==title and wc("return r.getElementById('language').hidden"))
@@ -75,11 +79,20 @@ try:
   wc("r.querySelector('.letter').click();return true")
   page.call('Input.dispatchKeyEvent',{'type':'keyDown','key':'Backspace'})
   check(lang+' Backspace removes tile',wc("return r.querySelectorAll('.chosen').length===0"))
-  click('hint');before=saved(lang);click('newLayout');after=saved(lang)
+  wallet_before=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+  click('hint');check(lang+' hint spends 3 points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==wallet_before-3);before=saved(lang);click('newLayout');after=saved(lang)
   check(lang+' layout preserves solves and hint usage',after['solved']==before['solved'] and after['usedHint'] is True)
   click('shuffle');check(lang+' shuffle preserves solves',saved(lang)['solved']==before['solved'])
   pack=page.js('WordCircleData['+json.dumps(lang)+']['+str(after['packIndex'])+']')
-  for bonus in pack['bonus'][:1]:pick(bonus);check(lang+' bonus accepted',bonus in saved(lang)['bonusFound'])
+  for bonus in pack['bonus'][:1]:
+   balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+   pick(bonus);check(lang+' bonus accepted',bonus in saved(lang)['bonusFound'])
+   check(lang+' new bonus earns one point',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance+1)
+   pick(bonus);check(lang+' duplicate bonus earns nothing',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance+1)
+  if lang=='uk':
+   click('hint');hinted=saved(lang)['hinted'];balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+   click('hint');check('insufficient points never reveal a letter',saved(lang)['hinted']==hinted and page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+
   before=saved(lang)
   # Exit uses shared back navigation; confirm dialog when applicable.
   click('back')
@@ -89,6 +102,8 @@ try:
   check(lang+' reentry restores progress',saved(lang)['solved']==before['solved'] and saved(lang)['bonusFound']==before['bonusFound'] and saved(lang)['usedHint'])
   for w in pack['main']:pick(w)
   check(lang+' completed once',len(WordCircleCompleted:=page.js('WordCircleAchievements.get().completed'))==(['uk','ru','en'].index(lang)+1))
+  displayed=wc("return [...r.getElementById('wordbookWords').querySelectorAll('button')].map(b=>b.textContent)")
+  check(lang+' unfound bonuses remain hidden after completion',set(displayed)==set(saved(lang)['solved']+saved(lang)['bonusFound']))
   check(lang+' completed circle exposes dictionary',wc("return !r.getElementById('wordbook').hidden && r.getElementById('wordbookWords').children.length>0"))
   check(lang+' journey progress visible',wc("return r.getElementById('journey').textContent.includes('1')"))
   n=len(WordCircleCompleted);pick(pack['main'][0])
@@ -166,7 +181,7 @@ try:
   page.js('showScreen("menu")');page.click(selector);page.wait('getCurrentAppScreenName()==='+json.dumps(screen));check('other mode '+selector)
  page.js('showScreen("menu");Slovokolo.open()')
  # All critical assets must be available before testing offline restart.
- check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
+ check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js','definitions.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
  page.call('Network.emulateNetworkConditions',{'offline':True,'latency':0,'downloadThroughput':0,'uploadThroughput':0})
  page.call('Page.reload');page.wait("Boolean(document.querySelector('.mode-card-slovokolo'))")
  page.click('.mode-card-slovokolo');page.wait("Boolean(document.getElementById('slovokoloScreen').shadowRoot?.querySelector('.letter'))")
@@ -189,6 +204,16 @@ try:
  for _ in range(12):
   data=saved('en');ids.append(data['packId']);click('newPuzzle')
  check('progression does not repeat circles prematurely',len(set(ids))==len(ids))
+ # A bonus must never earn twice after starting another session of the same circle.
+ data=saved('en');pack=page.js('WordCircleData.en['+str(data['packIndex'])+']')
+ if pack['bonus']:
+  bonus=pack['bonus'][0];pick(bonus)
+  balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+  page.js("showScreen('menu');const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-en'));v.bonusFound=[];localStorage.setItem('slovokolo-v5-current-en',JSON.stringify(v));Slovokolo.open()")
+  pick(bonus);check('replayed bonus cannot farm points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+  check('found word opens meaning with source',wc("return !r.querySelector('.meaning-panel').hidden && r.querySelector('.meaning-panel a').href.startsWith('https://en.wiktionary.org/wiki/')"))
+ # Extractor strips embedded markup rather than rendering remote HTML in the app.
+ check('definition content is plain text',page.js("WordCircleDefinitions.extract('<h3>Значение</h3><ol><li><b>Смысл</b><sup>1</sup><dl><dd>пример</dd></dl></li></ol>','ru')")=="Смысл")
  check('no uncaught browser errors',not page.errors)
  print('ALL INTEGRATION CHECKS PASSED',flush=True)
 finally:

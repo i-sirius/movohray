@@ -101,6 +101,12 @@ for lang in ['uk','ru','en']:
   block=app.split('const '+label+' = new Set([',1)[1].split(']);',1)[0]
   blocked_main.update(re.findall(r'"([^"]+)"',block))
  if lang=='en':blocked_main.update('apt amp awl bra cad cob cog con coo cor cos cur dab dub dud dun ebb eon ere err fen gab gal gnu gob hag hap hew hob huh imp ire irk jab jib ken lea lee lei lye mar maw mew mod nab nay nib nip nit nix nub oft ova pap par pew ply pow pro pry pug pun pus ref roe rue rut rye sax sop sot sow sty sup tat tee thy tic tog tor tot urn vie wad wan yap yaw yea yen yew yin zen'.split())
+ # Include frequency-attested dictionary lemmas, with a broader editorial discovery pool.
+ dic=Dictionary.from_files(str(BUILD/lang))
+ stems={e.stem for e in dic.dic.words if e.stem==e.stem.lower() and ok(e.stem,lang)}
+ discovery={'uk':'фіакр фрегат фазан фікус флейта флюгер фреска фосфор фольга фахівець ховрах хрущ хміль хурма хижак хмара халва хітон хлор хром хребет хустка хаща щавель щебет щиглик щогла щедрик щипці щітка борсук бобер брунат бурштин бублик бандура барвінок багор багряне габро гафній гейзер глечик гобой гравій графіт гриф грифон гусла ґанок ґедзь ґніт ґрунт ґудзик жорна жупан зяблик кобза кресало леміш личак малахіт охра пектораль рапіра сафір скіф сфера тхір чабан чапля яшма'.split(),'ru':'фрегат фазан фикус флейта флюгер фреска фосфор фольга хруст хром хлор хорёк хребет хижина щавель щегол щебет щётка барсук бобёр бурштин бублик габбро гафний гейзер гобой гравий графит гриф грифон гусли'.split(),'en':'quartz quiver quail quirky glyph sphinx zephyr zircon jigsaw jackal fjord foxglove fuchsia waxwing hyphen hazelnut'.split()}[lang]
+ core.update(stems & {w for w,n in frequency.items() if n>= {'uk':12,'ru':80,'en':100}[lang]})
+ core.update(set(discovery)&stems)
  core={w for w in core if w not in editorial and ok(w,lang) and w in lex and frequency.get(w,0)>=threshold and w not in blocked_main}
  def ranking(w):return (-len(w),-frequency.get(w,0),w)
 
@@ -114,16 +120,13 @@ for lang in ['uk','ru','en']:
    found.update(groups.get(sig,[]))
   return found
  levels=[];seen=set();audit=[]
+ previous=json.loads((out/'released-levels-v6.json').read_text(encoding='utf-8'))[lang]
+ for old in previous:
+  levels.append(old);seen.add(''.join(sorted(old['letters'].lower())))
  for pack in seeds[lang]:
   wheel=pack['letters'].lower();found=subwords(wheel)
   removed=[w for w in pack['main']+pack['bonus'] if w.lower() not in lex]
   audit.extend(removed)
-  main=[w.lower() for w in pack['main'] if w.lower() in core]
-  if len(main)<3:main=sorted(found&core,key=ranking)[:4]
-  if len(main)<3:continue
-  sig=''.join(sorted(wheel))
-  if sig in seen:continue
-  seen.add(sig);levels.append({'id':lang+':'+sig,'letters':wheel.upper(),'main':[w.upper() for w in main],'bonus':[w.upper() for w in sorted(found-set(main))]})
  # Grow stable, progressively ordered packs with 3–7 familiar main answers.
  choices=[]
  for wheel in sorted(core,key=lambda w:(len(w),w)):
@@ -136,8 +139,16 @@ for lang in ['uk','ru','en']:
   # Avoid requiring two different inflections of the same long base as separate targets.
   choices.append((len(wheel),-len(common),wheel,main,found))
  selected=[]
- for size,quota in [(4,20),(5,60),(6,80),(7,100)]:
-  for item in sorted((v for v in choices if v[0]==size),key=lambda v:(v[1],-frequency.get(v[2],0),v[2]))[:quota]:selected.append(item)
+ # Greedy coverage adds new vocabulary and rare letters rather than more dense anagrams.
+ used=collections.Counter(w.lower() for level in levels for w in level['main'])
+ rare={'uk':'фхщбгґжцчшїє','ru':'фхщбгжцчшэё','en':'qzxjvkwy'}[lang]
+ for size,quota in [(4,50),(5,120),(6,180),(7,200)]:
+  pool=[v for v in choices if v[0]==size]
+  for _ in range(min(quota,len(pool))):
+   def diversity(v):
+    return sum(1/(1+used[w]) for w in v[3])*3+sum(1 for c in set(v[2]) if c in rare)*2+(1 if v[2] in discovery else 0)
+   item=max(pool,key=lambda v:(diversity(v),frequency.get(v[2],0),v[2]))
+   selected.append(item);pool.remove(item);used.update(item[3])
  for size,_,wheel,main,found in sorted(selected,key=lambda v:(v[0],v[2])):
   sig=''.join(sorted(wheel))
   if sig in seen:continue
@@ -146,14 +157,9 @@ for lang in ['uk','ru','en']:
  vocabulary=sorted({w for pack in levels for w in pack['main']+pack['bonus']})
  (out/('lexicon-'+lang+'.json')).write_text(json.dumps(sorted(w.upper() for w in lex),ensure_ascii=False,separators=(',',':')),encoding='utf-8')
  (out/'licenses'/(lang+'.txt')).write_bytes((BUILD/(lang+'-license')).read_bytes())
- with zipfile.ZipFile(out/'sources'/(lang+'-hunspell.zip'),'w',zipfile.ZIP_DEFLATED) as z:
-  for file,name in [(lang+'-index.aff','index.aff'),(lang+'-index.dic','index.dic'),(lang+'-license','LICENSE'),(lang+'-readme.md','README.md')]:z.writestr(name,(BUILD/file).read_bytes())
  manifest['languages'][lang]={'levels':len(levels),'coreWords':len(core),'editorialBonusForms':len(editorial),'frequencySha256':hashlib.sha256((BUILD/(lang+'-frequency.txt')).read_bytes()).hexdigest(),'lexiconWords':len(lex),'playableWords':len(vocabulary),'mainWords':len({w for p in levels for w in p['main']}),'removedSeedEntries':sorted(set(audit)),'sha256':{name:hashlib.sha256((BUILD/(lang+'-'+name)).read_bytes()).hexdigest() for name in ['index.aff','index.dic','license']}}
  print(lang,manifest['languages'][lang],flush=True)
 (out/'levels.js').write_text('/* Generated by tools/build-word-circle.py. Dictionary-derived data: see licenses and sources. */\nwindow.WordCircleData = '+json.dumps(all_levels,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
 (out/'dictionary-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
-with zipfile.ZipFile(out/'sources/frequency.zip','w',zipfile.ZIP_DEFLATED) as z:
- for lang in ['uk','ru','en']:z.writestr(lang+'_50k.txt',(BUILD/(lang+'-frequency.txt')).read_bytes())
- z.writestr('README.md',(BUILD/'frequency-readme.md').read_bytes());z.writestr('LICENSE-CC-BY-SA-4.0.txt',(BUILD/'frequency-license.txt').read_bytes());z.writestr('REVISION',(BUILD/'frequency-revision.txt').read_bytes())
 (out/'licenses/frequency.txt').write_bytes((BUILD/'frequency-license.txt').read_bytes())
 print('DONE',flush=True)

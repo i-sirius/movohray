@@ -4,13 +4,16 @@ const controller=new AbortController();
 const listen=(target,type,fn)=>target.addEventListener(type,fn,{signal:controller.signal});
 'use strict';
 // Редакторський добір загальновживаних слів; кожен головний набір має одну множину літер.
-// Це прототипний словник, а не повний тлумачний/морфологічний словник української мови.
+// Перевірені кола та словоформи: джерела й ліцензії у LEXICON_LICENSE.md.
 let locale='uk';
 let LEVELS=window.WordCircleData.uk;
 const I18N={"uk":{"game":"Словоколо","subtitle":"З’єднуй літери, знаходь слова та заповнюй кросворд.","language":"Мова","difficulty":"Складність","any":"Будь-яка","easy":"4–5 літер","medium":"6 літер","hard":"7 літер","submit":"✓ Скласти слово","clear":"↺ Скинути","shuffle":"⇄ Літери","hint":"💡 Підказка","layout":"▦ Інша сітка","new":"✦ Новий кросворд","ach":"Досягнення","help":"Затисни й проведи через літери: слово перевіриться після відпускання. Або натискай їх по черзі. Повторне натискання прибирає літеру; Backspace — прибрати останню, Enter — перевірити.","pack":"Набір {n} із {total} · {letters} літер","stats":"{total} наборів · {words} слів у кросворді","newmsg":"Новий кросворд! Знайди всі слова.","gridmsg":"Сітку перебудовано.","hidden":"Закрита клітинка","letter":"Літера {ch}","empty":"Тут з’явиться складене слово","remove":"Прибрати літеру","removepos":"Прибрати {ch}, позиція {n}","progress":"{n} із {total} слів","bonus":"Бонусні слова: {n}","bonushelp":"Слова поза кросвордом приносять бонуси","removed":"Літеру прибрано","submithelp":"Натисни «Скласти слово», коли закінчиш","continue":"Натискай літери далі","ambig":"«{word}» — правильне слово! Можна продовжити або підтвердити.","cancel":"Проведення перервано","interrupted":"Введення перервано","found":"Чудово! {word} — у кросворді ✓","duplicate":"«{word}» вже знайдено","bonusfound":"★ {word} — бонусне слово!","bonusduplicate":"«{word}» вже в бонусах","unknown":"«{word}» немає в словнику цього набору","win":"🎉 Усі слова знайдено! Обери новий кросворд.","cleared":"Набір очищено","shuffled":"Літери перемішано","nohint":"Більше немає закритих клітинок","hintused":"Відкрито одну літеру 💡","back":"Останню літеру прибрано","achunlocked":"🏆 Досягнення відкрито: {name}!","wfirst":"Перший кросворд","w5":"Знавець слів","w10":"Майстер кросвордів","bonus10":"Мисливець за словами","nohint3":"Без підказок","polyglot":"Поліглот","longword":"Довге слово","count":"Здобуто {n} із {total}","alias":"Літерниця"},"ru":{"game":"Словокруг","subtitle":"Соединяй буквы, находи слова и заполняй кроссворд.","language":"Язык","difficulty":"Сложность","any":"Любая","easy":"4–5 букв","medium":"6 букв","hard":"7 букв","submit":"✓ Проверить слово","clear":"↺ Сбросить","shuffle":"⇄ Буквы","hint":"💡 Подсказка","layout":"▦ Другая сетка","new":"✦ Новый кроссворд","ach":"Достижения","help":"Зажми и проведи через буквы: слово проверится после отпускания. Или нажимай по одной. Повторное нажатие убирает букву; Backspace — удалить последнюю, Enter — проверить.","pack":"Набор {n} из {total} · {letters} букв","stats":"{total} наборов · {words} слов в кроссворде","newmsg":"Новый кроссворд! Найди все слова.","gridmsg":"Сетка перестроена.","hidden":"Закрытая клетка","letter":"Буква {ch}","empty":"Здесь появится составленное слово","remove":"Убрать букву","removepos":"Убрать {ch}, позиция {n}","progress":"{n} из {total} слов","bonus":"Бонусные слова: {n}","bonushelp":"Слова вне кроссворда приносят бонусы","removed":"Буква удалена","submithelp":"Нажми «Проверить слово», когда закончишь","continue":"Нажимай буквы дальше","ambig":"«{word}» — слово найдено! Можно продолжить или подтвердить.","cancel":"Жест прерван","interrupted":"Ввод прерван","found":"Отлично! {word} — в кроссворде ✓","duplicate":"«{word}» уже найдено","bonusfound":"★ {word} — бонусное слово!","bonusduplicate":"«{word}» уже в бонусах","unknown":"«{word}» нет в словаре этого набора","win":"🎉 Все слова найдены! Выбери новый кроссворд.","cleared":"Набор очищен","shuffled":"Буквы перемешаны","nohint":"Больше нет закрытых клеток","hintused":"Открыта одна буква 💡","back":"Последняя буква удалена","achunlocked":"🏆 Достижение открыто: {name}!","wfirst":"Первый кроссворд","w5":"Знаток слов","w10":"Мастер кроссвордов","bonus10":"Охотник за словами","nohint3":"Без подсказок","polyglot":"Полиглот","longword":"Длинное слово","count":"Получено {n} из {total}","alias":"Литерница"},"en":{"game":"Word Circle","subtitle":"Connect letters, discover words and complete the crossword.","language":"Language","difficulty":"Difficulty","any":"Any","easy":"4–5 letters","medium":"6 letters","hard":"7 letters","submit":"✓ Submit word","clear":"↺ Clear","shuffle":"⇄ Shuffle","hint":"💡 Hint","layout":"▦ New layout","new":"✦ New crossword","ach":"Achievements","help":"Hold and swipe through letters, then release to submit. Or tap letters one at a time. Tap a selected letter again to remove it; Backspace removes the last letter, Enter submits.","pack":"Pack {n} of {total} · {letters} letters","stats":"{total} packs · {words} crossword words","newmsg":"New crossword! Find all words.","gridmsg":"Crossword layout changed.","hidden":"Hidden square","letter":"Letter {ch}","empty":"Your selected letters appear here","remove":"Remove this letter","removepos":"Remove {ch}, position {n}","progress":"{n} of {total} words","bonus":"Bonus words: {n}","bonushelp":"Extra valid words earn bonuses","removed":"Letter removed","submithelp":"Tap Submit word when ready","continue":"Keep choosing letters","ambig":"“{word}” is valid! Continue or submit it.","cancel":"Swipe interrupted","interrupted":"Input interrupted","found":"Great! {word} is on the board ✓","duplicate":"“{word}” already found","bonusfound":"★ {word} is a bonus word!","bonusduplicate":"“{word}” already collected","unknown":"“{word}” is not in this pack’s dictionary","win":"🎉 All words found! Start a new crossword.","cleared":"Selection cleared","shuffled":"Letters shuffled","nohint":"No hidden squares remain","hintused":"One letter revealed 💡","back":"Last letter removed","achunlocked":"🏆 Achievement unlocked: {name}!","wfirst":"First crossword","w5":"Word Explorer","w10":"Crossword Master","bonus10":"Bonus Hunter","nohint3":"No Hints Needed","polyglot":"Polyglot","longword":"Long Word","count":"Earned {n} of {total}","alias":"Letter Weave"}};
 const EXTRA_COPY={"uk": {"journey": "Пройдено {n} із {total} наборів", "bonus": "Бонусні слова: {n} / {total}", "wordbook": "Словник цього кола", "wordbookhelp": "Тут є основні слова та додаткові словоформи. Перегляд не зараховує бонуси.", "next": "Наступний рівень →", "stats": "{total} наборів · {words} основних слів", "help": "Проведи через літери й відпусти або натискай їх по черзі. Повторне натискання прибирає літеру. Enter — перевірити, Backspace — видалити. Відмінки, множина й інші словоформи приносять бонуси."}, "ru": {"journey": "Пройдено {n} из {total} наборов", "bonus": "Бонусные слова: {n} / {total}", "wordbook": "Словарь этого круга", "wordbookhelp": "Основные слова и дополнительные словоформы. Просмотр не начисляет бонусы.", "next": "Следующий уровень →", "stats": "{total} наборов · {words} основных слов", "help": "Проведи через буквы и отпусти или нажимай по очереди. Повторное нажатие удаляет букву. Enter — проверить, Backspace — удалить. Падежи, множественное число и другие словоформы приносят бонусы."}, "en": {"journey": "Completed {n} of {total} packs", "bonus": "Bonus words: {n} / {total}", "wordbook": "This circle’s dictionary", "wordbookhelp": "Main words and extra word forms. Viewing this list does not award bonuses.", "next": "Next level →", "stats": "{total} packs · {words} main words", "help": "Swipe through letters and release, or tap one at a time. Tap again to remove a letter. Enter submits; Backspace removes. Plurals, inflections and other word forms earn bonuses."}};
 for(const lang of Object.keys(EXTRA_COPY))Object.assign(I18N[lang],EXTRA_COPY[lang]);
 function tr(k,vars={}){return (I18N[locale][k]||I18N.uk[k]||k).replace(/\{(\w+)\}/g,(_,x)=>String(vars[x]??''));}
+Object.assign(I18N.uk,{"bonushelp": "Знайди слово поза сіткою: +1 бал за кожне нове слово. Натисни знайдене слово, щоб дізнатися значення.", "wordbookhelp": "Тут лише знайдені слова. Решта бонусних слів прихована: їх можна шукати й після заповнення сітки. Натисни слово для тлумачення.", "win": "🎉 Сітку заповнено! Шукай бонусні слова або переходь до наступного кола.", "wallet": "★ {n} балів · підказка: 3 бали", "wallethelp": "Старт: 5 балів. +1 за унікальне бонусне слово цією мовою, навіть у різних колах. Повтори не дають балів. Бали зберігаються між раундами й витрачаються на відкриття літер.", "hint": "💡 Літера · 3 бали", "poor": "Потрібно 3 бали. Знаходь нові бонусні слова: кожне дає 1 бал.", "meaning": "Тлумачення", "loading": "Шукаю тлумачення…", "missing": "Вбудованого тлумачення немає. Відкрий словникову статтю; для словоформи може знадобитися початкова форма.", "source": "Стаття у Вікісловнику ↗", "online": "Тлумачення з Вікісловника · CC BY-SA. Для завантаження потрібен інтернет.", "hiddenbonus": "Ще приховано бонусних слів: {n}."});
+Object.assign(I18N.ru,{"bonushelp": "Слово вне сетки: +1 балл за каждое новое слово. Нажми найденное слово, чтобы узнать значение.", "wordbookhelp": "Только найденные слова. Остальные бонусы скрыты: ищи их и после заполнения сетки. Нажми слово для толкования.", "win": "🎉 Сетка заполнена! Ищи бонусные слова или переходи к следующему кругу.", "wallet": "★ {n} баллов · подсказка: 3 балла", "wallethelp": "Старт: 5 баллов. +1 за уникальное бонусное слово на этом языке, даже в разных кругах. Повторы не дают баллов. Баллы сохраняются и тратятся на открытие букв.", "hint": "💡 Буква · 3 балла", "poor": "Нужно 3 балла. Находи новые бонусные слова: каждое даёт 1 балл.", "meaning": "Толкование", "loading": "Ищу толкование…", "missing": "Встроенного толкования нет. Открой словарную статью; для словоформы может понадобиться начальная форма.", "source": "Статья в Викисловаре ↗", "online": "Толкование из Викисловаря · CC BY-SA. Для загрузки нужен интернет.", "hiddenbonus": "Ещё скрыто бонусных слов: {n}."});
+Object.assign(I18N.en,{"bonushelp": "An extra word earns +1 point when first discovered. Tap a found word for its meaning.", "wordbookhelp": "Only discovered words appear here. Unfound bonus words stay hidden, even after completing the grid. Tap a word for its meaning.", "win": "🎉 Grid complete! Keep hunting bonus words or start the next circle.", "wallet": "★ {n} points · letter hint: 3 points", "wallethelp": "Start with 5 points. Each unique bonus word in a language earns +1, across all circles. Repeats earn nothing. Points persist and pay for letter hints.", "hint": "💡 Letter · 3 points", "poor": "You need 3 points. Discover new bonus words to earn 1 point each.", "meaning": "Meaning", "loading": "Looking up meaning…", "missing": "No built-in definition. Open the dictionary entry; inflected words may require the base form.", "source": "Wiktionary entry ↗", "online": "Definitions from Wiktionary · CC BY-SA. Internet required to load.", "hiddenbonus": "Bonus words still hidden: {n}."});
 function updateTexts(){
   if(root===document)document.documentElement.lang=locale;
   if(root===document)document.title='Мовограй · '+tr('game');
@@ -20,6 +23,11 @@ function updateTexts(){
   $('achTitle').textContent=tr('ach');$('alias').textContent=tr('alias');
   updateAchievementList();
 }
+const walletKey='slovokolo-wallet-v1';
+function readWallet(){try{const x=JSON.parse(localStorage.getItem(walletKey));if(Number.isSafeInteger(x?.balance)&&x.balance>=0&&Array.isArray(x.earned))return x;}catch{}return {balance:5,earned:window.WordCircleAchievements.get().bonuses.slice()};}
+let wallet=readWallet();
+function persistWallet(){try{localStorage.setItem(walletKey,JSON.stringify(wallet));}catch{}}
+function awardBonus(word){const id=locale+':'+word;if(wallet.earned.includes(id))return;wallet.earned.push(id);wallet.balance++;persistWallet();}
 function saveSession(){
   if(!state)return;
   try{localStorage.setItem('slovokolo-v5-current-'+locale,JSON.stringify({v:6,packId:state.pack.id,packIndex:state.packIndex,board:state.board.words,tiles:state.tiles,solved:[...state.solved],bonusFound:[...state.bonusFound],hinted:[...state.hinted],difficulty:$('difficulty').value,usedHint:state.usedHint,startedAt:state.startedAt}));}catch{}
@@ -68,6 +76,21 @@ let vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));
 let state=null,selected=[],positions=[],activeGesture=null;
 let shownPuzzleCount=0;
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const walletBox=document.createElement('div');walletBox.className='wallet-box';walletBox.innerHTML='<strong id="walletBalance"></strong><p id="walletHelp" class="note"></p>';$('bonusList').parentNode.prepend(walletBox);
+const walletTop=document.createElement('strong');walletTop.className='wallet-pill';root.querySelector('.settings').append(walletTop);
+const meaning=document.createElement('section');meaning.className='meaning-panel';meaning.hidden=true;meaning.setAttribute('aria-live','polite');$('bonusList').parentNode.append(meaning);
+let meaningRequest=0;
+async function showMeaning(word){
+ const request=++meaningRequest,language=locale;meaning.hidden=false;meaning.replaceChildren();
+ const title=document.createElement('h3');title.textContent=word+' · '+tr('meaning');
+ const text=document.createElement('p');text.textContent=tr('loading');
+ const link=document.createElement('a');link.href='https://'+language+'.wiktionary.org/wiki/'+encodeURIComponent(word.toLocaleLowerCase(language));link.target='_blank';link.rel='noopener noreferrer';link.textContent=tr('source');
+ const credit=document.createElement('small');credit.textContent=window.WordCircleDefinitions.isLocal(language,word)?({uk:'Коротке пояснення Мовограю · доступне без інтернету.',ru:'Краткое пояснение Мовограя · доступно без интернета.',en:'Movohray brief definition · available offline.'}[language]):tr('online');meaning.append(title,text,link,credit);if(language==='uk'){const extra=document.createElement('a');extra.href='https://slovnyk.ua/index.php?swrd='+encodeURIComponent(word.toLowerCase());extra.target='_blank';extra.rel='noopener noreferrer';extra.textContent='Тлумачення на СЛОВНИК.ua ↗';extra.style.display='block';meaning.append(extra);}
+ const result=await window.WordCircleDefinitions.lookup(language,word,controller.signal);
+ if(request!==meaningRequest||controller.signal.aborted)return;
+ text.textContent=result||tr('missing');
+}
+function wordButton(word){const b=document.createElement('button');b.type='button';b.className='bonus-chip collected';b.textContent=word;b.title=tr('meaning');b.addEventListener('click',()=>showMeaning(word),{signal:controller.signal});return b;}
 function playable(word,letters){const pool=[...letters];for(const ch of word){const i=pool.indexOf(ch);if(i<0)return false;pool.splice(i,1);}return true;}
 // Аварійна перевірка словників, щоб у кросворд не потрапляло неможливе слово.
 const bad=LEVELS.flatMap((pack,i)=>[...pack.main,...pack.bonus].filter(w=>!playable(w,pack.letters)).map(w=>`${i}:${w}`));
@@ -132,6 +155,22 @@ function generateCrossword(words){
     if(!best||score>best.score)best={grid,placed,b,score};
     if(placed.length===unique.length&&trial>12)break;
   }
+  // Greedy layouts can strand a word with a repeated stem. Search alternate crossings
+  // before accepting a partial board; the finite budget keeps input responsive.
+  if(best.placed.length<unique.length){
+    let budget=12000;
+    function complete(grid,placed,pending){
+      if(!pending.length)return {grid,placed,b:bounds(placed)};
+      if(--budget<0)return null;
+      const next=pending.map(word=>({word,opts:choices(grid,placed,word)})).filter(v=>v.opts.length).sort((a,b)=>a.opts.length-b.opts.length);
+      for(const {word,opts} of next)for(const {p} of opts.slice(0,32)){
+        const found=complete(apply(grid,p),[...placed,p],pending.filter(w=>w!==word));if(found)return found;if(budget<0)return null;
+      }
+      return null;
+    }
+    const first={word:unique[0],r:Math.floor(MAX/2),c:Math.floor(MAX/2)-Math.floor(unique[0].length/2),d:'H'};
+    const full=complete(apply(new Map(),first),[first],unique.slice(1));if(full)best=full;
+  }
   // Перенесення всіх слів із незмінним напрямком читання і необов'язковим поворотом.
   const b=best.b;const transpose=Math.random()<.5;
   const finalWords=best.placed.map(p=>({word:p.word,r:transpose?p.c-b.minC:p.r-b.minR,c:transpose?p.r-b.minR:p.c-b.minC,d:transpose?(p.d==='H'?'V':'H'):p.d}));
@@ -150,12 +189,19 @@ function choosePack(){
   let options=pool.filter(v=>!history.includes(v.i)&&v.i!==state?.packIndex);
   if(!options.length)options=pool.filter(v=>v.i!==state?.packIndex);
   if(!options.length)options=pool;
-  const chosen=options[0];
+  let recent=[];try{recent=JSON.parse(localStorage.getItem('slovokolo-variety-'+locale)||'[]');if(!Array.isArray(recent))recent=[];}catch{}
+  const recentWords=new Set(recent.flatMap(id=>LEVELS.find(p=>p.id===id)?.main||[]));
+  const last=LEVELS.find(p=>p.id===recent[0]);
+  const rare={uk:'ФХЩБГҐЖЦЧШЇЄ',ru:'ФХЩБГЖЦЧШЭЁ',en:'QZXJVKWY'}[locale];
+  function score(v){const shared=v.p.main.filter(w=>recentWords.has(w)).length/v.p.main.length;const repeatedLetters=last?[...new Set(v.p.letters)].filter(ch=>last.letters.includes(ch)).length/Math.max(last.letters.length,v.p.letters.length):0;return shared*8+repeatedLetters*2-[...new Set(v.p.letters)].filter(ch=>rare.includes(ch)).length*.18+Math.random()*1.2;}
+  const chosen=options.map(v=>({v,score:score(v)})).sort((a,b)=>a.score-b.score)[0].v;
   history=[chosen.i,...history.filter(i=>i!==chosen.i)].slice(0,Math.max(1,candidates.length-1));
-  try{localStorage.setItem('slovokolo-v5-recent-'+locale+'-'+filter,JSON.stringify(history));}catch{}
+  recent=[chosen.p.id,...recent.filter(id=>id!==chosen.p.id)].slice(0,8);
+  try{localStorage.setItem('slovokolo-v5-recent-'+locale+'-'+filter,JSON.stringify(history));localStorage.setItem('slovokolo-variety-'+locale,JSON.stringify(recent));}catch{}
   return chosen;
 }
 function buildNew(){
+  meaningRequest++;meaning.hidden=true;
   const {p,i}=choosePack();const board=generateCrossword(p.main);
   const main=new Set(board.words.map(x=>x.word));
   // Пропущені генератором слова теж приймаються як бонусні, а не як помилки.
@@ -212,8 +258,9 @@ function render(){
   const done=state.solved.size===state.main.size;
   $('newPuzzle').textContent=tr(done?'next':'new');
   if($('journey'))$('journey').textContent=tr('journey',{n:window.WordCircleAchievements.get().completed.filter(k=>k.startsWith(locale+':')).length,total:LEVELS.length});
-  if($('wordbook')){const book=$('wordbook');book.hidden=!done;const list=$('wordbookWords');list.replaceChildren();if(done)for(const word of [...state.main,...state.bonus].sort()){const item=document.createElement('span');item.className='bonus-chip'+(state.solved.has(word)||state.bonusFound.has(word)?' collected':'');item.textContent=word;list.append(item);}}
-  const list=$('bonusList');list.replaceChildren();if(!state.bonusFound.size){const empty=document.createElement('span');empty.className='bonus-empty';empty.textContent=tr('bonushelp');list.append(empty);}else for(const w of state.bonusFound){const chip=document.createElement('span');chip.className='bonus-chip';chip.textContent=w;list.append(chip);}
+  walletTop.textContent='★ '+wallet.balance;walletTop.title=tr('wallet',{n:wallet.balance});$('walletBalance').textContent=tr('wallet',{n:wallet.balance});$('walletHelp').textContent=tr('wallethelp');
+  if($('wordbook')){const book=$('wordbook');book.hidden=false;const list=$('wordbookWords');list.replaceChildren();for(const word of [...state.solved,...state.bonusFound].sort())list.append(wordButton(word));const hidden=document.createElement('p');hidden.className='note';hidden.textContent=tr('hiddenbonus',{n:state.bonus.size-state.bonusFound.size});list.append(hidden);}
+  const list=$('bonusList');list.replaceChildren();if(!state.bonusFound.size){const empty=document.createElement('span');empty.className='bonus-empty';empty.textContent=tr('bonushelp');list.append(empty);}else for(const w of state.bonusFound)list.append(wordButton(w));
   renderGrid();
 }
 function feedback(kind){if(options.feedback)options.feedback(kind);}
@@ -321,19 +368,20 @@ listen(window,'blur',()=>{
 });
 function submitWord(){if(!selected.length)return;const wasComplete=state.solved.size===state.main.size;const w=selected.map(i=>state.tiles[i]).join('');if(state.main.has(w)&&!state.solved.has(w)){state.solved.add(w);feedback('correct');setStatus(tr('found',{word:w}),'good');if(w.length>=7)recordAchievement('long_word');}
   else if(state.main.has(w))setStatus(tr('duplicate',{word:w}));
-  else if(state.bonus.has(w)&&!state.bonusFound.has(w)){state.bonusFound.add(w);feedback('bonus');setStatus(tr('bonusfound',{word:w}),'good');recordAchievement('bonus',{word:w});}
+  else if(state.bonus.has(w)&&!state.bonusFound.has(w)){state.bonusFound.add(w);awardBonus(w);feedback('bonus');setStatus(tr('bonusfound',{word:w}),'good');recordAchievement('bonus',{word:w});}
   else if(state.bonus.has(w))setStatus(tr('bonusduplicate',{word:w}));
   else {feedback('wrong');setStatus(tr('unknown',{word:w}),'bad');}
+  if(state.solved.has(w)||state.bonusFound.has(w))showMeaning(w);
   selected=[];render();if(!wasComplete&&state.solved.size===state.main.size){recordAchievement('complete',{usedHint:state.usedHint});setStatus(tr('win'),'good');render();}saveSession();}
 listen(current,'click',e=>{const b=e.target.closest('button[data-pos]');if(!b)return;selected.splice(+b.dataset.pos,1);render();setStatus(tr('removed'));});
 listen($('submit'),'click',submitWord);
 listen($('clear'),'click',()=>{selected=[];render();setStatus(tr('cleared'));});
 listen($('shuffle'),'click',()=>{shuffle(state.tiles);selected=[];renderWheel();setStatus(tr('shuffled'));saveSession();});
-listen($('hint'),'click',()=>{const w=state.board.words.find(p=>!state.solved.has(p.word)&&cellsOf(p).some(k=>!isOpen(k)));if(!w){setStatus(tr('nohint'));return;}const k=cellsOf(w).find(k=>!isOpen(k));state.hinted.add(k);state.usedHint=true;render();setStatus(tr('hintused'));saveSession();});
+listen($('hint'),'click',()=>{const w=state.board.words.find(p=>!state.solved.has(p.word)&&cellsOf(p).some(k=>!isOpen(k)));if(!w){setStatus(tr('nohint'));return;}if(wallet.balance<3){setStatus(tr('poor'));return;}wallet.balance-=3;persistWallet();const k=cellsOf(w).find(k=>!isOpen(k));state.hinted.add(k);state.usedHint=true;render();setStatus(tr('hintused'));saveSession();});
 listen($('newLayout'),'click',rerollGrid);listen($('newPuzzle'),'click',buildNew);listen($('difficulty'),'change',buildNew);
 listen(document,'keydown',e=>{if(['INPUT','TEXTAREA','SELECT'].includes(e.composedPath()[0].tagName))return;if(e.key==='Backspace'&&selected.length){e.preventDefault();selected.pop();render();setStatus(tr('back'));}else if(e.key==='Escape'&&selected.length){e.preventDefault();selected=[];render();setStatus(tr('cleared'));}else if(e.key==='Enter'&&selected.length&&(e.target===document.body||e.target===root.host)){e.preventDefault();submitWord();}});
 listen(window,'resize',()=>{if(state)renderGrid();});
-listen($('language'),'change',e=>{saveSession();locale=e.target.value;try{localStorage.setItem('slovokolo-v5-locale',locale);}catch{}LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('difficulty').value='all';updateTexts();if(!restoreSession())buildNew();});
+listen($('language'),'change',e=>{saveSession();meaningRequest++;meaning.hidden=true;locale=e.target.value;try{localStorage.setItem('slovokolo-v5-locale',locale);}catch{}LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('difficulty').value='all';updateTexts();if(!restoreSession())buildNew();});
 try{const preference=options.locale||localStorage.getItem('slovokolo-v5-locale');if(window.WordCircleData[preference])locale=preference;}catch{}
 LEVELS=window.WordCircleData[locale];vocabulary=new Set(LEVELS.flatMap(p=>[...p.main,...p.bonus]));$('language').value=locale;updateTexts();if(!restoreSession())buildNew();
 return {destroy(){saveSession();controller.abort();activeGesture=null;},refresh(){renderGrid();},text:key=>tr(key)};
