@@ -252,6 +252,25 @@ try:
  previous=saved('en');balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
  page.js("showScreen('menu');const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-en'));v.v=6;localStorage.setItem('slovokolo-v5-current-en',JSON.stringify(v));Slovokolo.open()")
  check('v6 round migrates preserving board and balance',saved('en')['board']==previous['board'] and saved('en')['solved']==previous['solved'] and page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+ # A real old round whose required БУДЕ became an optional bonus must migrate.
+ old=json.loads((p/'tests/fixtures/slovokolo-v7-family.json').read_text(encoding='utf-8'))
+ source=(p/'word-circle/game.js').read_text(encoding='utf-8');engine=source[source.index('function key('):source.index('function difficultyOf(')]
+ page.js("window.makeOldBoard=new Function('MAX','shuffle',"+json.dumps(engine+';return generateCrossword;')+")(23,a=>a.sort(()=>Math.random()-.5));true")
+ board=page.js('makeOldBoard('+json.dumps(old['main'])+').words')
+ current=page.js('WordCircleData.uk.find(p=>p.id==='+json.dumps(old['id'])+')')
+ balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
+ legacy={'v':7,'packId':old['id'],'board':board,'tiles':list(old['letters']),'difficulty':'hard','solved':['БУДЕ',current['main'][0]],'bonusFound':[],'hinted':[],'usedHint':False}
+ page.js("showScreen('menu');selectWordGuessLanguage('uk');localStorage.setItem('slovokolo-v5-current-uk',"+json.dumps(json.dumps(legacy,ensure_ascii=False))+");Slovokolo.open()")
+ migrated=saved('uk')
+ check('changed grid keeps found main words',current['main'][0] in migrated['solved'])
+ check('demoted solved word remains a found bonus','БУДЕ' in migrated['bonusFound'])
+ check('changed grid contains only independent main answers',set(p['word'] for p in migrated['board'])==set(current['main']))
+ check('migration does not award or spend points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+ retired={'v':7,'packId':'uk:етухчші','board':[],'tiles':[],'difficulty':'hard'}
+ page.js("showScreen('menu');localStorage.setItem('slovokolo-v5-current-uk',"+json.dumps(json.dumps(retired,ensure_ascii=False))+");Slovokolo.open()")
+ check('retired comparative-only circle is replaced',saved('uk')['packId']!='uk:етухчші' and len(saved('uk')['board'])>=3)
+ check('retired circle recovery preserves wallet',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
+ check('robot and work retain separate meanings',page.js("WordCircleData.uk.some(p=>p.main.includes('РОБОТ')&&p.main.includes('РОБОТА'))"))
  # Review the expanded dictionary at mobile and desktop sizes, in both themes.
  wc("r.getElementById('wordbook').open=true;return true")
  for width,height in [(390,844),(1280,1000)]:

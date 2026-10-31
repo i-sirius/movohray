@@ -163,5 +163,5 @@ for lang in ['uk','ru','en']:
 (out/'dictionary-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
 (out/'licenses/frequency.txt').write_bytes((BUILD/'frequency-license.txt').read_bytes())
 import runpy
-runpy.run_path(str(ROOT/'tools/classify-word-circle.py'),run_name='__main__')
+runpy.run_path(str(ROOT/'tools/curate-word-circle.py'),run_name='__main__')
 print('DONE',flush=True)

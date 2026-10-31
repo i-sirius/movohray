@@ -46,17 +46,20 @@ function restoreSession(){
     const pack=LEVELS[v.packIndex];
     if(!['all','easy','medium','hard'].includes(v.difficulty||'all'))return false;
     $('difficulty').value=v.v===7?(v.difficulty||'easy'):difficultyOf(pack);
-    if(v.board.length!==pack.main.length||new Set(v.board.map(p=>p.word)).size!==pack.main.length)return false;if(v.tiles.slice().sort().join('')!==[...pack.letters].sort().join(''))return false;
+    if(!v.board.length||new Set(v.board.map(p=>p.word)).size!==v.board.length)return false;if(v.tiles.slice().sort().join('')!==[...pack.letters].sort().join(''))return false;
     const cells=new Map();let maxR=0,maxC=0;
-    for(const p of v.board){if(!pack.main.includes(p.word)||!['H','V'].includes(p.d)||!Number.isInteger(p.r)||!Number.isInteger(p.c)||p.r<0||p.c<0)return false;
+    for(const p of v.board){if(![...pack.main,...pack.bonus].includes(p.word)||!['H','V'].includes(p.d)||!Number.isInteger(p.r)||!Number.isInteger(p.c)||p.r<0||p.c<0)return false;
       for(let i=0;i<p.word.length;i++){const r=p.r+(p.d==='V'?i:0),c=p.c+(p.d==='H'?i:0);if(r>22||c>22)return false;const k=key(r,c),old=cells.get(k);if(old&&old!==p.word[i])return false;cells.set(k,p.word[i]);maxR=Math.max(maxR,r);maxC=Math.max(maxC,c);}
     }
     if(!cells.size)return false;
-    const board={words:v.board,cells,rows:maxR+1,cols:maxC+1};
+    const changed=v.board.length!==pack.main.length||v.board.some(p=>!pack.main.includes(p.word));
+    const board=changed?generateCrossword(pack.main):{words:v.board,cells,rows:maxR+1,cols:maxC+1};
+    const keptHints=changed?(v.hinted||[]).flatMap(k=>{return v.board.filter(p=>cellsOf(p).includes(k)).flatMap(old=>{const next=board.words.find(p=>p.word===old.word);return next?[cellsOf(next)[cellsOf(old).indexOf(k)]]:[];});}):(v.hinted||[]);
+    const discovered=[...(v.solved||[]),...(v.bonusFound||[])];
     const main=new Set(board.words.map(x=>x.word));
     const bonus=getBonus(pack,main);
-    state={pack,packIndex:v.packIndex,board,main,bonus,solved:new Set((v.solved||[]).filter(w=>main.has(w))),hinted:new Set((v.hinted||[]).filter(k=>cells.has(k))),bonusFound:new Set((v.bonusFound||[]).filter(w=>bonus.has(w))),tiles:v.tiles,usedHint:!!v.usedHint,startedAt:v.startedAt||Date.now()};
-    selected=[];updatePack();renderWheel();setStatus(tr('newmsg'));return true;
+    state={pack,packIndex:v.packIndex,board,main,bonus,solved:new Set(discovered.filter(w=>main.has(w))),hinted:new Set(keptHints.filter(k=>board.cells.has(k))),bonusFound:new Set(discovered.filter(w=>bonus.has(w))),tiles:v.tiles,usedHint:!!v.usedHint,startedAt:v.startedAt||Date.now()};
+    selected=[];updatePack();renderWheel();setStatus(tr('newmsg'));saveSession();return true;
   }catch{return false;}
 }
 function getBonus(pack,main){return new Set(pack.bonus.filter(w=>!main.has(w)&&playable(w,pack.letters)&&w.length>=3));}
@@ -265,7 +268,7 @@ function render(){
   $('bonusLabel').textContent=tr('bonus',{n:state.bonusFound.size,total:state.bonus.size});
   const done=state.solved.size===state.main.size;
   $('newPuzzle').textContent=tr(done?'next':'new');
-  if($('journey'))$('journey').textContent=tr('journey',{n:window.WordCircleAchievements.get().completed.filter(k=>k.startsWith(locale+':')).length,total:LEVELS.length});
+  if($('journey'))$('journey').textContent=tr('journey',{n:window.WordCircleAchievements.get().completed.filter(k=>LEVELS.some(p=>p.id===k)).length,total:LEVELS.length});
   walletTop.textContent='★ '+wallet.balance;walletTop.title=tr('wallet',{n:wallet.balance});$('walletBalance').textContent=tr('wallet',{n:wallet.balance});$('walletHelp').textContent=tr('wallethelp',{points:roundPoints()});
   if($('wordbook')){
     const book=$('wordbook');book.hidden=false;const list=$('wordbookWords');
