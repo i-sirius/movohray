@@ -164,4 +164,6 @@ for lang in ['uk','ru','en']:
 (out/'licenses/frequency.txt').write_bytes((BUILD/'frequency-license.txt').read_bytes())
 import runpy
 runpy.run_path(str(ROOT/'tools/curate-word-circle.py'),run_name='__main__')
+runpy.run_path(str(ROOT/'tools/filter-word-circle-headwords.py'),run_name='__main__')
+runpy.run_path(str(ROOT/'tools/cache-word-circle-definitions.py'))['build']()
 print('DONE',flush=True)

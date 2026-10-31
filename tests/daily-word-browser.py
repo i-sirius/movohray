@@ -20,8 +20,8 @@ import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-REV = '0.6.11-20261031'
-CACHE = 'movohray-cache-v0.6.11-b20261031'
+REV = '0.6.12-20261031'
+CACHE = 'movohray-cache-v0.6.12-b20261031'
 
 
 class CDP:
@@ -341,6 +341,14 @@ def run():
         })()''')
         for name in thresholds:
             check(name, True)
+        # Start the legacy fixture in a clean target. Previous scenarios deliberately
+        # changed offline emulation, viewport and tab lifecycle; these are not upgrade inputs.
+        previous_target=page.call('Target.getTargetInfo')['targetInfo']['targetId']
+        upgrade_target=page.call('Target.createTarget',{'url':'about:blank'})['targetId']
+        targets=json.load(urllib.request.urlopen(f'http://127.0.0.1:{port}/json'))
+        page=CDP(next(t['webSocketDebuggerUrl'] for t in targets if t['id']==upgrade_target))
+        page.call('Runtime.enable');page.call('Page.enable');page.call('Network.enable')
+        page.call('Target.closeTarget',{'targetId':previous_target})
         # c10 -> c11 required update in two tabs, with real service workers.
         for name in ['index.html','app.js','styles.css','version.json','service-worker.js','daily-word-ui.js']:
             UpgradeHandler.baseline[name] = subprocess.check_output(['git','show','f99758ce94f111cd88002ae84d617b4ad9ed650d:'+name],cwd=ROOT)
@@ -349,7 +357,11 @@ def run():
         try:
             upgrade_url=f'http://127.0.0.1:{upgrade.server_port}/'
             page.call('Page.navigate', {'url':upgrade_url})
-            page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized && !!navigator.serviceWorker.controller")
+            try:
+                page.wait("typeof appHistoryInitialized!=='undefined' && appHistoryInitialized && !!navigator.serviceWorker.controller")
+            except AssertionError:
+                print('UPGRADE BASELINE STATE',page.js("({ready:document.readyState,history:typeof appHistoryInitialized==='undefined'?null:appHistoryInitialized,controller:Boolean(navigator.serviceWorker.controller),gate:document.body.classList.contains('required-update-open')})"),page.errors,flush=True)
+                raise
             check('c10 worker active before upgrade', page.js("getActiveServiceWorkerInfo().then(s=>s.revision)")=='0.6.7-20260918-c10')
             page.js("wordGuessAchievementsState.games=123;wordGuessAchievementsState.unlocked['first-win']={unlockedAt:'2026-01-01T12:00:00.000Z',reward:'🏆'};persistWordGuessAchievementsState();localStorage.setItem('movohray-alias-swipe-learning-v1',JSON.stringify({usedSwipeUp:true,usedSwipeDown:true,totalSwipeGestures:12,completedAliasRounds:4}));")
             page.js("(() => {const d=new Date(); d.setDate(d.getDate()-1); dailyWordStore.complete('uk',DailyWord.localDate(d)); for(let i=75;i>0;i--) {const x=new Date();x.setDate(x.getDate()-i);dailyWordStore.complete('en',DailyWord.localDate(x));}})()")

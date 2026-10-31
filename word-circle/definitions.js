@@ -7,32 +7,50 @@ Object.assign(local.uk,{"фазан": "Птах із родини фазанов
 const memory=new Map();
 function extract(html,lang){
  const doc=new DOMParser().parseFromString(html,'text/html');
- const headings=[...doc.querySelectorAll('h2,h3,h4,h5,h6')];let items=[];
+ const headings=[...doc.querySelectorAll('h1,h2,h3,h4,h5,h6')];let items=[];
+ const languageName={uk:'Українська',ru:'Русский',en:'English'}[lang];
+ const languageStart=headings.find(h=>h.id===languageName||h.textContent.replace(/\[.*?\]/g,'').trim()===languageName);
+ const languageEnd=languageStart&&headings.find(h=>h!==languageStart&&Number(h.tagName[1])<=Number(languageStart.tagName[1])&&(languageStart.compareDocumentPosition(h)&Node.DOCUMENT_POSITION_FOLLOWING));
+ const inLanguage=node=>!languageStart||Boolean((languageStart.compareDocumentPosition(node)&Node.DOCUMENT_POSITION_FOLLOWING)&&(!languageEnd||(node.compareDocumentPosition(languageEnd)&Node.DOCUMENT_POSITION_FOLLOWING)));
+ if(!languageStart&&doc.querySelector('h1'))return null;
  if(lang==='en'){
   const start=headings.find(h=>h.textContent.trim().replace(/\[.*?\]/g,'')==='English');
   if(!start)return null;
-  const boundary=headings.find(h=>h.tagName==='H2'&&(start.compareDocumentPosition(h)&Node.DOCUMENT_POSITION_FOLLOWING));
+  const boundary=headings.find(h=>Number(h.tagName[1])<=Number(start.tagName[1])&&(start.compareDocumentPosition(h)&Node.DOCUMENT_POSITION_FOLLOWING));
   items=[...doc.querySelectorAll('ol > li')].filter(li=>(start.compareDocumentPosition(li)&Node.DOCUMENT_POSITION_FOLLOWING)&&(!boundary||(li.compareDocumentPosition(boundary)&Node.DOCUMENT_POSITION_FOLLOWING))&&!li.parentElement.closest('li'));
  }else{
-  for(const h of headings.filter(h=>/^(Значення|Значение)(\s|$|\[)/.test(h.textContent.trim()))){
+  for(const h of headings.filter(h=>inLanguage(h)&&/^(Значення|Значение)(\s|$|\[)/.test(h.textContent.trim()))){
    const end=headings.find(n=>n!==h&&Number(n.tagName[1])<=Number(h.tagName[1])&&(h.compareDocumentPosition(n)&Node.DOCUMENT_POSITION_FOLLOWING));
    items.push(...[...doc.querySelectorAll('ol > li')].filter(li=>(h.compareDocumentPosition(li)&Node.DOCUMENT_POSITION_FOLLOWING)&&(!end||(li.compareDocumentPosition(end)&Node.DOCUMENT_POSITION_FOLLOWING))&&!li.parentElement.closest('li')));
    if(items.length)break;
   }
  }
- return items.filter(li=>!li.closest('.references,.reflist,.reference-text')).filter(li=>{if(lang!=='en')return true;const h=headings.filter(h=>h.compareDocumentPosition(li)&Node.DOCUMENT_POSITION_FOLLOWING).at(-1);return /^(Noun|Verb|Adjective|Adverb|Pronoun|Determiner|Numeral|Preposition|Conjunction|Interjection|Participle|Article|Suffix|Prefix|Symbol|Proper noun)(\s|$|\[)/.test(h?.textContent.trim()||'');}).map(li=>{const c=li.cloneNode(true);c.querySelectorAll('ul,ol,dl,table,sup,.mw-editsection').forEach(n=>n.remove());return c.textContent.split('◆')[0].replace(/\s+/g,' ').trim();}).filter(t=>t.length>3).slice(0,3).join('\n\n')||null;
+ return items.filter(inLanguage).filter(li=>!li.closest('.references,.reflist,.reference-text')).filter(li=>{if(lang!=='en')return true;const h=headings.filter(h=>h.compareDocumentPosition(li)&Node.DOCUMENT_POSITION_FOLLOWING).at(-1);return /^(Noun|Verb|Adjective|Adverb|Pronoun|Determiner|Numeral|Preposition|Conjunction|Interjection|Participle|Article|Suffix|Prefix|Symbol|Proper noun)(\s|$|\[)/.test(h?.textContent.trim()||'');}).map(li=>{const c=li.cloneNode(true);c.querySelectorAll('ul,ol,dl,table,sup,.mw-editsection').forEach(n=>n.remove());return c.textContent.split('◆')[0].replace(/\s+/g,' ').trim();}).filter(t=>t.length>3).slice(0,3).join('\n\n')||null;
 }
-async function lookup(lang,word,signal){
- const key=lang+':'+word.toLocaleLowerCase(lang);if(local[lang]?.[word.toLowerCase()])return local[lang][word.toLowerCase()];
- if(memory.has(key))return memory.get(key);
- try{const saved=JSON.parse(localStorage.getItem('wc-definition:'+key));if(saved?.text&&saved.time>Date.now()-30*86400000){memory.set(key,saved.text);return saved.text;}}catch{}
+function normalize(word){return word.normalize('NFD').replace(/[\u0301\u0341]/g,'').normalize('NFC').trim().toLowerCase();}
+function exact(entry,word){return entry?.status==='exact'&&normalize(entry.word)===normalize(word)&&normalize(entry.headword)===normalize(word)&&typeof entry.text==='string'&&entry.text.trim().length>0;}
+function fromWiktionary(data,lang,word){
+ const page=data?.parse;
+ // A redirect or a page merely containing the word is not an exact dictionary entry.
+ if(!page||normalize(page.title||'')!==normalize(word)||page.redirects?.length)return null;
+ const text=extract(page.text||'',lang);if(!text)return null;
+ return {status:'exact',word,headword:page.title,text,source:'Wiktionary · CC BY-SA',url:'https://'+lang+'.wiktionary.org/wiki/'+encodeURIComponent(page.title),kind:'definition'};
+}
+async function lookupEntry(lang,word,signal){
+ const key=lang+':'+normalize(word);
+ const bundled=window.WordCircleEntries?.[lang]?.[normalize(word)];
+ if(bundled){const entry={...bundled,status:'exact'};if(exact(entry,word))return entry;}
+ const own=local[lang]?.[normalize(word)];if(own)return {status:'exact',word,headword:normalize(word),text:own,source:'Мовограй',url:null,kind:'local'};
+ if(exact(memory.get(key),word))return memory.get(key);
+ try{const saved=JSON.parse(localStorage.getItem('wc-definition-v2:'+key));if(saved?.time>Date.now()-30*86400000&&exact(saved.entry,word)){memory.set(key,saved.entry);return saved.entry;}}catch{}
  try{
-  const url='https://'+lang+'.wiktionary.org/w/api.php?'+new URLSearchParams({action:'parse',page:word.toLocaleLowerCase(lang),prop:'text',format:'json',formatversion:'2',redirects:'1',origin:'*'});
-  const response=await fetch(url,{signal:AbortSignal.any([signal,AbortSignal.timeout(8000)])});if(!response.ok)return null;
-  const data=await response.json();const text=extract(data.parse?.text||'',lang);
-  if(text){memory.set(key,text);try{localStorage.setItem('wc-definition:'+key,JSON.stringify({time:Date.now(),text}));}catch{}}
-  return text;
- }catch{return null;}
+  const url='https://'+lang+'.wiktionary.org/w/api.php?'+new URLSearchParams({action:'parse',page:normalize(word),prop:'text',format:'json',formatversion:'2',origin:'*'});
+  const response=await fetch(url,{signal:AbortSignal.any([signal,AbortSignal.timeout(6000)])});if(!response.ok)return null;
+  const entry=fromWiktionary(await response.json(),lang,word);
+  if(exact(entry,word)){memory.set(key,entry);try{localStorage.setItem('wc-definition-v2:'+key,JSON.stringify({time:Date.now(),entry}));}catch{}return entry;}
+ }catch{}
+ return null;
 }
-return {lookup,extract,isLocal:(lang,word)=>Boolean(local[lang]?.[word.toLowerCase()])};
+async function lookup(lang,word,signal){return (await lookupEntry(lang,word,signal))?.text||null;}
+return {lookup,lookupEntry,extract,normalize,exact,fromWiktionary,isLocal:(lang,word)=>Boolean(local[lang]?.[normalize(word)])};
 })();

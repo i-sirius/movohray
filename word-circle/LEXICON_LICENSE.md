@@ -70,3 +70,39 @@ These uncommon/specialist forms are bonus-only. This restores valid V5 entries s
 as English *rumen* (including the explicitly attested plurals *rumens*, *rumina*)
 and Russian *бан*, which the pinned general-purpose spelling dictionaries omit.
 Russian noun forms follow the regular declension of the attested lemma.
+
+
+## Exact headword gate (0.6.12)
+
+Only initial forms are playable. Ukrainian and Russian candidates are checked by
+pymorphy3 2.0.6 with DictionaryAnalyzer only (no prediction and no character
+substitutions), requiring a known analysis whose normal form equals the exact
+candidate and excluding proper-name/abbreviation analyses.
+
+Bundled sources and complete package notices:
+
+- `sources/lemmas-uk.whl`: pymorphy2-dicts-uk 2.4.1.1.1460299261, dictionary data
+  CC BY-SA 3.0; package code MIT; see `licenses/lemmas-uk.txt`.
+- `sources/lemmas-ru.whl`: pymorphy3-dicts-ru 2.4.417150.4580142, OpenCorpora data
+  CC BY-SA 3.0; package code MIT; see `licenses/lemmas-ru.txt`.
+- `sources/wordnet-3.0.zip`: Princeton WordNet 3.0 via NLTK data; see
+  `licenses/wordnet.txt`. English allows exact WordNet index headwords and an
+  explicit editorial list of function words. No substring or fuzzy matching.
+
+The generated `headwords-*.json` lists and headword-filtered portions of
+`levels.js` are modified derivatives under the corresponding data licenses.
+Source archive SHA-256 values are recorded in dictionary-manifest.json.
+The archives are build sources; the game does not download them.
+
+## Definition provenance
+
+`definition-data.js` contains short attributed excerpts (at most 20 words per
+article) from exact SLOVNYK.ua entries. Each retains its exact headword and direct
+source URL. These excerpts are not relicensed as Wiktionary material; the source
+and its underlying dictionary retain their rights. The full articles, examples,
+inflection tables and HTML are not redistributed. Snapshot:
+`sources/definitions-uk-slovnyk.json`; builder: `tools/cache-word-circle-definitions.py`.
+
+Other definitions come from exact Wiktionary pages under their CC BY-SA terms or
+from the application's own brief explanations. Runtime redirects to another
+headword are rejected. Old unverified browser definition caches are ignored.

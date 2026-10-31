@@ -46,6 +46,14 @@ try:
  check('every circle has a valid word difficulty',page.js("Object.entries(WordCircleData).every(([l,packs])=>packs.every(p=>['easy','medium','hard'].includes(WordCircleDifficulty[l][p.id])))"))
  check('obscure required words are excluded from easy',page.js("WordCircleData.uk.filter(p=>p.main.some(w=>['АКР','КАР','УТІШТЕ'].includes(w))).every(p=>WordCircleDifficulty.uk[p.id]!=='easy')"))
  check('familiar morning circle is easy',page.js("WordCircleData.uk.some(p=>p.main.includes('РАНОК')&&WordCircleDifficulty.uk[p.id]==='easy')"))
+ check('only base form ZHABA can be played',page.js("!WordCircleData.uk.some(p=>[...p.main,...p.bonus].includes('ЖАБ'))&&WordCircleData.uk.some(p=>[...p.main,...p.bonus].includes('ЖАБА'))"))
+ check('exact matching preserves distinct letters',page.js("WordCircleDefinitions.normalize('їжа')!==WordCircleDefinitions.normalize('іжа')&&WordCircleDefinitions.normalize('край')!==WordCircleDefinitions.normalize('краи')"))
+ check('same spelling in another language is not used',page.js("WordCircleDefinitions.extract('<h1 id=\"Білоруська\">Білоруська</h1><h3>Значення</h3><ol><li>Чуже значення.</li></ol><h1 id=\"Українська\">Українська</h1><h3>Значення</h3><ol><li>Правильне значення.</li></ol>','uk')")=="Правильне значення.")
+ check('redirect to longer word is rejected',page.js("WordCircleDefinitions.fromWiktionary({parse:{title:'жаба',text:'<h3>Значення</h3><ol><li>Тварина.</li></ol>'}},'uk','жаб')===null"))
+ check('redirect flag never becomes exact definition',page.js("WordCircleDefinitions.fromWiktionary({parse:{title:'жаба',redirects:[{}],text:'<h3>Значення</h3><ol><li>Тварина.</li></ol>'}},'uk','жаба')===null"))
+ check('cached frog definition has exact source',page.js("WordCircleDefinitions.lookupEntry('uk','ЖАБА',new AbortController().signal).then(e=>e?.headword==='жаба'&&e.source.includes('СЛОВНИК.ua')&&new URL(e.url).searchParams.get('swrd')==='жаба')"))
+ check('cached GABA definition is immediately available',page.js("WordCircleDefinitions.lookupEntry('uk','ГАБА',new AbortController().signal).then(e=>e?.headword==='габа'&&e.text.includes('сукно'))"))
+ check('stale unverified meaning and mismatched title are ignored',page.js("(async()=>{const old=window.fetch;localStorage.setItem('wc-definition:uk:абракадабр',JSON.stringify({text:'Wrong definition',time:Date.now()}));window.fetch=async()=>({ok:true,json:async()=>({parse:{title:'абракадабра',text:'<h3>Значення</h3><ol><li>Wrong definition.</li></ol>'}})});try{return await WordCircleDefinitions.lookupEntry('uk','абракадабр',new AbortController().signal)===null;}finally{window.fetch=old;}})()"))
  original=page.js('WORD_GUESS_ACHIEVEMENTS.length')
  check('446 unique shared achievements',original==446 and page.js('new Set(WORD_GUESS_ACHIEVEMENTS.map(x=>x.id)).size===446'))
  # Exercise all languages through the existing global language selector.
@@ -187,7 +195,7 @@ try:
   page.js('showScreen("menu")');page.click(selector);page.wait('getCurrentAppScreenName()==='+json.dumps(screen));check('other mode '+selector)
  page.js('showScreen("menu");Slovokolo.open()')
  # All critical assets must be available before testing offline restart.
- check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js','definitions.js','difficulty.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
+ check('word-circle assets precached',page.js("caches.open(DATA_CACHE).then(c=>Promise.all(['style.css','view.js','game.js','levels.js','achievements.js','integration.js','definitions.js','definition-data.js','difficulty.js'].map(f=>c.match('./word-circle/'+f+'?rev='+ASSET_REVISION)))).then(v=>v.every(Boolean))"))
  page.call('Network.emulateNetworkConditions',{'offline':True,'latency':0,'downloadThroughput':0,'uploadThroughput':0})
  page.call('Page.reload');page.wait("Boolean(document.querySelector('.mode-card-slovokolo'))")
  page.click('.mode-card-slovokolo');page.wait("Boolean(document.getElementById('slovokoloScreen').shadowRoot?.querySelector('.letter'))")
@@ -217,7 +225,7 @@ try:
   balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
   page.js("showScreen('menu');const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-en'));v.bonusFound=[];localStorage.setItem('slovokolo-v5-current-en',JSON.stringify(v));Slovokolo.open()")
   pick(bonus);check('replayed bonus cannot farm points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
-  check('found word opens meaning with source',wc("return !r.querySelector('.meaning-panel').hidden && r.querySelector('.meaning-panel a').href.startsWith('https://en.wiktionary.org/wiki/')"))
+  check('found word opens meaning panel',wc("return !r.querySelector('.meaning-panel').hidden"))
  # Extractor strips embedded markup rather than rendering remote HTML in the app.
  check('definition content is plain text',page.js("WordCircleDefinitions.extract('<h3>Значение</h3><ol><li><b>Смысл</b><sup>1</sup><dl><dd>пример</dd></dl></li></ol>','ru')")=="Смысл")
  for tier,multiplier in [('easy',1),('medium',2),('hard',3)]:
@@ -253,17 +261,17 @@ try:
  page.js("showScreen('menu');const v=JSON.parse(localStorage.getItem('slovokolo-v5-current-en'));v.v=6;localStorage.setItem('slovokolo-v5-current-en',JSON.stringify(v));Slovokolo.open()")
  check('v6 round migrates preserving board and balance',saved('en')['board']==previous['board'] and saved('en')['solved']==previous['solved'] and page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
  # A real old round whose required БУДЕ became an optional bonus must migrate.
- old=json.loads((p/'tests/fixtures/slovokolo-v7-family.json').read_text(encoding='utf-8'))
+ fixture=json.loads((p/'tests/fixtures/slovokolo-v7-headword.json').read_text(encoding='utf-8'));old=fixture['pack'];rejected=fixture['rejected'][0]
  source=(p/'word-circle/game.js').read_text(encoding='utf-8');engine=source[source.index('function key('):source.index('function difficultyOf(')]
  page.js("window.makeOldBoard=new Function('MAX','shuffle',"+json.dumps(engine+';return generateCrossword;')+")(23,a=>a.sort(()=>Math.random()-.5));true")
  board=page.js('makeOldBoard('+json.dumps(old['main'])+').words')
  current=page.js('WordCircleData.uk.find(p=>p.id==='+json.dumps(old['id'])+')')
  balance=page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")
- legacy={'v':7,'packId':old['id'],'board':board,'tiles':list(old['letters']),'difficulty':'hard','solved':['БУДЕ',current['main'][0]],'bonusFound':[],'hinted':[],'usedHint':False}
+ legacy={'v':7,'packId':old['id'],'board':board,'tiles':list(old['letters']),'difficulty':'hard','solved':[rejected,current['main'][0]],'bonusFound':[],'hinted':[],'usedHint':False}
  page.js("showScreen('menu');selectWordGuessLanguage('uk');localStorage.setItem('slovokolo-v5-current-uk',"+json.dumps(json.dumps(legacy,ensure_ascii=False))+");Slovokolo.open()")
  migrated=saved('uk')
  check('changed grid keeps found main words',current['main'][0] in migrated['solved'])
- check('demoted solved word remains a found bonus','БУДЕ' in migrated['bonusFound'])
+ check('non-headword removed from restored discoveries',rejected not in migrated['bonusFound']+migrated['solved'])
  check('changed grid contains only independent main answers',set(p['word'] for p in migrated['board'])==set(current['main']))
  check('migration does not award or spend points',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
  retired={'v':7,'packId':'uk:етухчші','board':[],'tiles':[],'difficulty':'hard'}
@@ -271,6 +279,22 @@ try:
  check('retired comparative-only circle is replaced',saved('uk')['packId']!='uk:етухчші' and len(saved('uk')['board'])>=3)
  check('retired circle recovery preserves wallet',page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==balance)
  check('robot and work retain separate meanings',page.js("WordCircleData.uk.some(p=>p.main.includes('РОБОТ')&&p.main.includes('РОБОТА'))"))
+ # Reproduce the reported БАГАЖ wheel with its old bonus ЖАБ and retained balance.
+ frog=page.js("WordCircleData.uk.find(p=>p.letters.split('').sort().join('')==='ААБГЖ')")
+ assert frog,'The frog circle remains playable with valid headwords'
+ wc("r.getElementById('clear').click();return true")
+ source=(p/'word-circle/game.js').read_text(encoding='utf-8');engine=source[source.index('function key('):source.index('function difficultyOf(')]
+ page.js("window.makeOldBoard=new Function('MAX','shuffle',"+json.dumps(engine+';return generateCrossword;')+")(23,a=>a.sort(()=>Math.random()-.5));true")
+ board=page.js('makeOldBoard('+json.dumps(frog['main'])+').words')
+ previous={'v':7,'packId':frog['id'],'board':board,'tiles':list(frog['letters']),'difficulty':'hard','solved':[],'bonusFound':['ЖАБ','ГАБА'],'hinted':[],'usedHint':False}
+ page.js("showScreen('menu');selectWordGuessLanguage('uk');localStorage.setItem('slovokolo-wallet-v1',JSON.stringify({balance:25,earned:['uk:ЖАБ','uk:ГАБА']}));localStorage.setItem('slovokolo-v5-current-uk',"+json.dumps(json.dumps(previous,ensure_ascii=False))+");Slovokolo.open()")
+ check('old ZHAB bonus is removed while GABA remains',saved('uk')['bonusFound']==['ГАБА'])
+ pick('ЖАБ');check('ZHAB is rejected without points','ЖАБ' not in saved('uk')['bonusFound'] and page.js("JSON.parse(localStorage.getItem('slovokolo-wallet-v1')).balance")==25)
+ wc("[...r.getElementById('bonusList').querySelectorAll('button')].find(b=>b.textContent==='ГАБА').click();return true")
+ page.wait("document.getElementById('slovokoloScreen').shadowRoot.querySelector('.meaning-panel').textContent.includes('сукно')")
+ check('GABA panel links its exact article',wc("return new URL(r.querySelector('.meaning-panel a').href).searchParams.get('swrd')==='габа'"))
+ pick('ЖАБА');page.wait("document.getElementById('slovokoloScreen').shadowRoot.querySelector('.meaning-panel').textContent.includes('земноводна')")
+ check('ZHABA panel links its exact article',wc("return new URL(r.querySelector('.meaning-panel a').href).searchParams.get('swrd')==='жаба'"))
  # Review the expanded dictionary at mobile and desktop sizes, in both themes.
  wc("r.getElementById('wordbook').open=true;return true")
  for width,height in [(390,844),(1280,1000)]:

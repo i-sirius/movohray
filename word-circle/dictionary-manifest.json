@@ -4,13 +4,13 @@
   "spylls": "0.1.7",
   "languages": {
     "uk": {
-      "levels": 827,
+      "levels": 767,
       "coreWords": 3892,
       "editorialBonusForms": 0,
       "frequencySha256": "881686fe66a168b79f6a9ee2f6cbbf944cfb12bfb7040913ef535cb29bd86ec9",
       "lexiconWords": 233252,
-      "playableWords": 12262,
-      "mainWords": 1954,
+      "playableWords": 4138,
+      "mainWords": 1705,
       "removedSeedEntries": [
         "КОН",
         "КОРАН",
@@ -25,16 +25,21 @@
         "index.aff": "4243327a3aa19c6db5a4fb2e0c4e3eba6ad26e7ccb8a3f4e634c28d9a2d18956",
         "index.dic": "48cbe32567a2c3c98f83d437bcd84ad3c11310e9df4d6c15d888b1e67654be31",
         "license": "d62f065830aa3739cc031156b9690805c7b2e811b4a178c8b4acd8725d561c94"
+      },
+      "headwordSource": {
+        "file": "lemmas-uk.whl",
+        "sha256": "b8f713eb32c704e97347361c20cfc1782731600ce187fe2d66fd427c71481d0e",
+        "policy": "exact-known-lemma-only"
       }
     },
     "ru": {
-      "levels": 825,
+      "levels": 682,
       "coreWords": 6796,
       "editorialBonusForms": 10,
       "frequencySha256": "6095f507cc167488ec66ada5a85ac50433503a08ad24a07c6eabdf54352c4e7f",
       "lexiconWords": 157105,
-      "playableWords": 11324,
-      "mainWords": 2588,
+      "playableWords": 3508,
+      "mainWords": 1842,
       "removedSeedEntries": [
         "ГРИП",
         "КАМИ",
@@ -46,21 +51,31 @@
         "index.aff": "38ce7d4af78e211e9bafe4bf7e3d6a2c420591136cb738ec6648f8fdf6524cd7",
         "index.dic": "f6047416a0204adbecf3a451b874ec8a97ee37e2cbc714466ef04d8dbcc0d6fc",
         "license": "262af2f6ad70a61e5ee1332ff44fa8ee50edca819cf33207d8ad6ba6a0c9be52"
+      },
+      "headwordSource": {
+        "file": "lemmas-ru.whl",
+        "sha256": "718bac64c73c10c16073a199402657283d9b64c04188b694f6d3e9b0d85440f4",
+        "policy": "exact-known-lemma-only"
       }
     },
     "en": {
-      "levels": 796,
+      "levels": 753,
       "coreWords": 11610,
       "editorialBonusForms": 3,
       "frequencySha256": "5351ff405b1126ef555791dd4d9798a48e3e9a501a9fc481a9da957752cfb458",
       "lexiconWords": 28497,
-      "playableWords": 6313,
-      "mainWords": 3033,
+      "playableWords": 4412,
+      "mainWords": 2686,
       "removedSeedEntries": [],
       "sha256": {
         "index.aff": "8ae1f19d4840d957728ad90555d5a8dff6cc5c046279c95ff0c00fc0a0136c7b",
         "index.dic": "f0b1a234bd178bdd01875b2a392a9647f888b8fe879f79c52aae62c2759b3647",
         "license": "2a7e8d8ae9e8facc84818546ae2a8d83aec5e9c80a675ff789acd1c338b53b3d"
+      },
+      "headwordSource": {
+        "file": "wordnet-3.0.zip",
+        "sha256": "cbda5ea6eef7f36a97a43d4a75f85e07fccbb4f23657d27b4ccbc93e2646ab59",
+        "policy": "exact-known-lemma-only"
       }
     }
   }
